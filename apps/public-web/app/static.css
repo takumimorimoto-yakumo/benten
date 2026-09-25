@@ -220,8 +220,14 @@
   --safe-area-left: env(safe-area-inset-left, 0px);
   /* Header row and bottom tab bar row. */
   --app-header-height: 3.5rem;
-  /* The app mark before the Benten name in the header (the favicon file, shown smaller). */
-  --app-header-mark-size: 1.75rem;
+  /*
+   * The app mark before the Benten name in the header (the transparent
+   * favicon file, shown smaller). The mark has no ground fill and sits well
+   * inside its 1024 canvas (docs/ui-design/app-icon-design.md's safe area),
+   * so at a given box size it reads smaller than the former opaque square
+   * did; sized up from that square's 1.75rem to keep a similar visual weight.
+   */
+  --app-header-mark-size: 2.25rem;
   --app-tab-bar-height: 3.5rem;
   /* The pill behind the current tab's icon on the tab bar. */
   --app-tab-indicator-height: 1.75rem;

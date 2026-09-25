@@ -12,18 +12,31 @@
 
 import { readFileSync } from "node:fs";
 import { crc32, deflateSync, inflateSync } from "node:zlib";
-import { APP_ICONS, type AppIconFile, type AppIconTheme } from "./pwa-config.js";
+import { APP_ICONS, type AppIconBackground, type AppIconFile, type AppIconTheme } from "./pwa-config.js";
 
-/** Repository-relative paths of the masters; each must be the current image of its manifest identity. */
+/** Repository-relative paths of the opaque masters (a flat ground behind the mark); each must be the current image of its manifest identity. */
 export const APP_ICON_MASTERS: Readonly<Record<AppIconTheme, string>> = {
   dark: "docs/ui-design/assets/2609242333_benten_app-icon_roiro-konjiki.png",
   light: "docs/ui-design/assets/2609242333_benten_app-icon_gofun-kincha.png",
 };
 
 /**
+ * Repository-relative paths of the transparent masters: the same mark, same
+ * colours, no ground fill (alpha = the opaque masters' coverage). Generated
+ * by `scripts/design/transparent-app-icon.py` from the same source as the
+ * opaque masters, so both draw the identical mark
+ * (docs/ui-design/app-icon-design.md).
+ */
+export const APP_ICON_TRANSPARENT_MASTERS: Readonly<Record<AppIconTheme, string>> = {
+  dark: "docs/ui-design/assets/2609251422_benten_app-icon_konjiki-transparent.png",
+  light: "docs/ui-design/assets/2609251422_benten_app-icon_kincha-transparent.png",
+};
+
+/**
  * The two flat colours of each master (sRGB). Dark is the official icon:
  * roiro (lacquer black) ground, konjiki (gold) mark. Light: gofun (shell
  * white) ground, kincha (gold-brown) mark, darker than konjiki so the mark keeps 3:1 on white.
+ * The transparent masters draw the same mark colours with no ground.
  */
 export const APP_ICON_COLORS = {
   dark: { ground: "#0c0c0c", mark: "#e6b422" },
@@ -161,21 +174,24 @@ export function encodePng(size: number, pixels: Uint8Array): Buffer {
   return Buffer.concat([PNG_SIGNATURE, pngChunk("IHDR", header), pngChunk("IDAT", deflateSync(scanlines, { level: 9 })), pngChunk("IEND", new Uint8Array())]);
 }
 
-const masters = new Map<AppIconTheme, Raster>();
+const masters = new Map<string, Raster>();
 
-export function appIconMaster(theme: AppIconTheme): Raster {
-  let raster = masters.get(theme);
+/** Decoded raster of one theme's master, opaque by default (the manifest icons' art) or transparent (the tab icon and header mark's art). Cached per theme and background. */
+export function appIconMaster(theme: AppIconTheme, background: AppIconBackground = "opaque"): Raster {
+  const key = `${background}:${theme}`;
+  let raster = masters.get(key);
   if (!raster) {
-    raster = decodePng(readRepositoryFile(APP_ICON_MASTERS[theme]));
-    masters.set(theme, raster);
+    const path = background === "opaque" ? APP_ICON_MASTERS[theme] : APP_ICON_TRANSPARENT_MASTERS[theme];
+    raster = decodePng(readRepositoryFile(path));
+    masters.set(key, raster);
   }
   return raster;
 }
 
-/** RGBA pixels of one icon file, reduced from its theme's master. */
+/** RGBA pixels of one icon file, reduced from its theme's master (opaque or transparent, per the file's `background`). */
 export function appIconPixels(file: AppIconFile): Uint8Array {
-  const { size, theme } = APP_ICONS[file];
-  return reduceRaster(appIconMaster(theme), size);
+  const { size, theme, background } = APP_ICONS[file];
+  return reduceRaster(appIconMaster(theme, background), size);
 }
 
 export function appIconPng(file: AppIconFile): Buffer {

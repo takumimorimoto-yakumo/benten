@@ -10,6 +10,10 @@ snapped to 0 or 1 within 6% of either end so flat areas become exactly flat),
 reduces the mask to 1024 by area averaging, and composes the same mask in each
 theme's two colours. Both outputs therefore draw the identical mark.
 Standard library only; the outputs are 8-bit RGB PNGs with no metadata.
+
+`mask_1024` is exported so transparent-app-icon.py (the transparent-background
+variant, same directory) reduces the identical mask instead of recomputing it
+independently.
 """
 
 import statistics
@@ -75,7 +79,10 @@ def hex_rgb(value):
     return [int(value[i:i + 2], 16) for i in (1, 3, 5)]
 
 
-def main(source, out_dark, out_light):
+def mask_1024(source):
+    """The mark's coverage at each pixel of a 1024 square: 0 on the ground, 1 on
+    the mark, reduced from the source by area averaging. Shared with
+    transparent-app-icon.py so both scripts read the identical mask."""
     width, height, px = read_png(source)
     assert width == height, "the source must be square"
     count = width * height
@@ -103,6 +110,11 @@ def main(source, out_dark, out_light):
                     xx += 1
                 yy += 1
             reduced[oy * SIZE + ox] = total / (step * step)
+    return reduced
+
+
+def main(source, out_dark, out_light):
+    reduced = mask_1024(source)
     for path, (ground_hex, mark_hex) in ((out_dark, THEMES["dark"]), (out_light, THEMES["light"])):
         g, m = hex_rgb(ground_hex), hex_rgb(mark_hex)
         rgb = bytearray(SIZE * SIZE * 3)

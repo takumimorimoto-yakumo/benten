@@ -32,9 +32,9 @@ export function SiteHeader({ locale, page, parentHref }: { locale: PublicWebLoca
             data-app-home=""
             className="flex min-h-(--app-header-control-size) min-w-(--app-header-control-size) shrink items-center justify-center gap-2 text-lg font-semibold tracking-tight md:min-h-8 md:min-w-8"
           >
-            {/* The mark follows the app theme (the `dark:` variant), not the tab strip: it sits on the app's own background. */}
-            <img src={appIconPath(FAVICONS.light)} alt="" className="size-(--app-header-mark-size) shrink-0 rounded-md dark:hidden" />
-            <img src={appIconPath(FAVICONS.dark)} alt="" className="hidden size-(--app-header-mark-size) shrink-0 rounded-md dark:block" />
+            {/* The mark follows the app theme (the `dark:` variant), not the tab strip: it sits on the app's own background. Transparent, no ground fill, so no corner radius to clip. */}
+            <img src={appIconPath(FAVICONS.light)} alt="" className="size-(--app-header-mark-size) shrink-0 dark:hidden" />
+            <img src={appIconPath(FAVICONS.dark)} alt="" className="hidden size-(--app-header-mark-size) shrink-0 dark:block" />
             <span className="min-w-0 truncate max-md:hidden">Benten</span>
           </Link>
         </div>

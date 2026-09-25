@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { inflateSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
-import { APP_ICON_COLORS, APP_ICON_MASTERS, appIconMaster, appIconPixels, appIconPng, decodePng, readRepositoryFile } from "@/features/pwa/app-icon.server";
+import { APP_ICON_COLORS, APP_ICON_MASTERS, APP_ICON_TRANSPARENT_MASTERS, appIconMaster, appIconPixels, appIconPng, decodePng, readRepositoryFile } from "@/features/pwa/app-icon.server";
 import { installFiles } from "@/features/pwa/install-files.server";
 import { APP_ICONS, FAVICON_ICO, manifestPath, PWA_COLORS, type AppIconFile, type AppIconTheme } from "@/features/pwa/pwa-config";
 import { webManifestFor } from "@/features/pwa/web-manifest.server";
@@ -142,11 +142,33 @@ function coverage(pixels: Uint8Array, index: number, theme: AppIconTheme): numbe
   return dot / length;
 }
 
+/** Coverage read straight from a transparent master's alpha: 0 fully clear, 1 fully the mark colour. */
+function transparentCoverage(pixels: Uint8Array, index: number): number {
+  return pixels[index * 4 + 3] / 255;
+}
+
+/**
+ * Worst-case gap between the two independent quantisations of the same
+ * coverage value: the opaque master rounds each of the three RGB channels to
+ * a byte, and `coverage()` recovers an estimate by projecting that rounded
+ * colour back onto the ground-to-mark line (up to `sum(|span|) * 0.5 / length`
+ * off); the transparent master rounds coverage straight to one alpha byte (up
+ * to `0.5 / 255` off). The two errors are independent and can both land at
+ * their worst case on the same pixel, so the bound is their sum, not `1/255`.
+ */
+function quantisationBound(theme: AppIconTheme): number {
+  const ground = hexBytes(APP_ICON_COLORS[theme].ground);
+  const mark = hexBytes(APP_ICON_COLORS[theme].mark);
+  const span = mark.map((value, index) => value - ground[index]);
+  const length = span.reduce((sum, value) => sum + value * value, 0);
+  const rgbBound = (span.reduce((sum, value) => sum + Math.abs(value), 0) * 0.5) / length;
+  return rgbBound + 0.5 / 255;
+}
+
 describe("app icon masters", () => {
   const manifest = JSON.parse(readRepositoryFile("docs/ui-design/generated-image-manifest.v1.json").toString("utf8")) as { artifacts: ManifestArtifact[] };
 
-  it.each(THEMES)("the %s master is the current registered image of its identity, byte for byte", (theme) => {
-    const path = APP_ICON_MASTERS[theme];
+  function expectRegistered(path: string) {
     const artifact = manifest.artifacts.find((entry) => entry.path === path);
     expect(artifact).toBeDefined();
     expect(createHash("sha256").update(readRepositoryFile(path)).digest("hex")).toBe(artifact!.sha256);
@@ -158,6 +180,14 @@ describe("app icon masters", () => {
       .sort((a, b) => minute(a).localeCompare(minute(b)) || a.sequence - b.sequence)
       .at(-1);
     expect(latest?.path).toBe(path);
+  }
+
+  it.each(THEMES)("the %s opaque master is the current registered image of its identity, byte for byte", (theme) => {
+    expectRegistered(APP_ICON_MASTERS[theme]);
+  });
+
+  it.each(THEMES)("the %s transparent master is the current registered image of its identity, byte for byte", (theme) => {
+    expectRegistered(APP_ICON_TRANSPARENT_MASTERS[theme]);
   });
 
   it.each(THEMES)("the %s master is an opaque 1024 square of its two flat colours", (theme) => {
@@ -179,7 +209,26 @@ describe("app icon masters", () => {
     expect([...rgba.subarray(0, 3)]).toEqual(ground);
   });
 
-  it("both masters draw the same mark", () => {
+  it.each(THEMES)("the %s transparent master is a 1024 square of one flat mark colour, alpha only", (theme) => {
+    const { width, height, rgba } = appIconMaster(theme, "transparent");
+    expect([width, height]).toEqual([1024, 1024]);
+    const mark = hexBytes(APP_ICON_COLORS[theme].mark);
+    let flat = 0;
+    let offMark = 0;
+    for (let index = 0; index < width * height; index += 1) {
+      const [red, green, blue, alpha] = rgba.subarray(index * 4, index * 4 + 4);
+      // No ground fill: fully transparent pixels carry no colour information, so only check RGB where alpha > 0.
+      if (alpha > 0 && !(red === mark[0] && green === mark[1] && blue === mark[2])) offMark += 1;
+      if (alpha === 0 || alpha === 255) flat += 1;
+    }
+    expect(offMark).toBe(0);
+    // Only anti-aliased edge pixels have partial alpha: no gradient, gloss or shadow.
+    expect(flat / (width * height)).toBeGreaterThan(0.98);
+    // Full bleed to the transparent side: the corners carry no coverage.
+    expect(rgba[3]).toBe(0);
+  });
+
+  it("both opaque masters draw the same mark", () => {
     const dark = appIconMaster("dark").rgba;
     const light = appIconMaster("light").rgba;
     let largest = 0;
@@ -187,6 +236,17 @@ describe("app icon masters", () => {
       largest = Math.max(largest, Math.abs(coverage(dark, index, "dark") - coverage(light, index, "light")));
     }
     expect(largest).toBeLessThan(0.02);
+  });
+
+  it.each(THEMES)("the %s transparent master draws the same mark as its opaque master", (theme) => {
+    const opaque = appIconMaster(theme, "opaque").rgba;
+    const transparent = appIconMaster(theme, "transparent").rgba;
+    let largest = 0;
+    for (let index = 0; index < opaque.length / 4; index += 1) {
+      largest = Math.max(largest, Math.abs(coverage(opaque, index, theme) - transparentCoverage(transparent, index)));
+    }
+    // Both are rounded from the identical mask independently (one to a composited byte per RGB channel, one straight to alpha): bounded quantisation, not a drawing mismatch (see quantisationBound).
+    expect(largest).toBeLessThanOrEqual(quantisationBound(theme) + 1e-9);
   });
 
   it("decodes a filtered RGB PNG to RGBA", () => {
@@ -198,8 +258,8 @@ describe("app icon masters", () => {
 });
 
 describe("app icons", () => {
-  it.each(Object.keys(APP_ICONS) as AppIconFile[])("%s is an opaque RGBA PNG of its size with no metadata", (file) => {
-    const { size, theme } = APP_ICONS[file];
+  it.each(Object.keys(APP_ICONS) as AppIconFile[])("%s is an RGBA PNG of its size with no metadata", (file) => {
+    const { size, theme, background } = APP_ICONS[file];
     const png = appIconPng(file);
     const chunks = pngChunks(png);
     expect(chunks.map(({ kind }) => kind)).toEqual(["IHDR", "IDAT", "IEND"]);
@@ -215,9 +275,18 @@ describe("app icons", () => {
     // Compare the pixel bytes natively: a deep toEqual over a 1 MiB buffer walks it element by element.
     const drawn = Buffer.concat(Array.from({ length: size }, (_, row) => scanlines.subarray(row * stride + 1, (row + 1) * stride)));
     expect(drawn.equals(pixels)).toBe(true);
-    // Full bleed: the corners are the ground colour, fully opaque.
-    expect([...pixels.subarray(0, 4)]).toEqual([...hexBytes(APP_ICON_COLORS[theme].ground), 255]);
-    expect(pixels.every((value, index) => index % 4 !== 3 || value === 255)).toBe(true);
+    if (background === "opaque") {
+      // Full bleed: the corners are the ground colour, fully opaque.
+      expect([...pixels.subarray(0, 4)]).toEqual([...hexBytes(APP_ICON_COLORS[theme].ground), 255]);
+      expect(pixels.every((value, index) => index % 4 !== 3 || value === 255)).toBe(true);
+    } else {
+      // No ground fill: every pixel (drawn or not) is the flat mark colour, and the corners carry no coverage.
+      const mark = hexBytes(APP_ICON_COLORS[theme].mark);
+      expect(pixels[3]).toBe(0);
+      for (let index = 0; index < pixels.length / 4; index += 1) {
+        expect([...pixels.subarray(index * 4, index * 4 + 3)]).toEqual(mark);
+      }
+    }
   });
 
   it("writes the same bytes on every build", () => {

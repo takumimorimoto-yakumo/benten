@@ -6,7 +6,7 @@ Product precedence: [agent-first investing](../decisions/agent-first-investing.m
 
 NVDAx purchase (P1-2 of the [Stocklana submission plan](../../specs/stocklana-submission-plan-2026-09-23.md)): the 2026-09-23 user decision replaced the no-purchase-UI boundary for this one route. Its design contract is [purchase-panel-design.md](purchase-panel-design.md) (images `review_pending`) with the independent [screenshot rubric](purchase-panel-screenshot-rubric.md). The statements below remain in force for every other token and route.
 
-App icon: the biwa-and-wave mark, its colours, masters and consumers are in [app-icon-design.md](app-icon-design.md) (images `review_pending`).
+App icon: the biwa-and-wave mark, its colours, masters and consumers are in [app-icon-design.md](app-icon-design.md) (the two opaque masters `approved`; the two transparent masters added for the tab icon and header mark are `review_pending`).
 
 Company comparison (P2-1, Phase 2): the read-only `/company/{slug}` page and the reviewed company map in `packages/registry` are specified in [company-comparison-design.md](company-comparison-design.md) (images `review_pending`) with its [screenshot rubric](company-comparison-screenshot-rubric.md). It adds no purchase capability.
 

@@ -285,7 +285,7 @@
       "timestamp_basis": "generated_at",
       "sequence": 0,
       "verification_status": "verified",
-      "review_status": "review_pending",
+      "review_status": "approved",
       "provenance": {
         "kind": "generated",
         "generated_at": "2026-09-24T23:33:57+09:00",
@@ -303,11 +303,47 @@
       "timestamp_basis": "generated_at",
       "sequence": 0,
       "verification_status": "verified",
-      "review_status": "review_pending",
+      "review_status": "approved",
       "provenance": {
         "kind": "generated",
         "generated_at": "2026-09-24T23:33:57+09:00",
         "tool": "Codex built-in image generation, then processed locally by scripts/design/flatten-app-icon.py: coverage mask from the dark generation docs/ui-design/assets/2609242332_benten_app-icon_roiro-konjiki.png (sha256 23b9e5139eb3eb5686496e49cc5f80ac68e2533e35b116b071b8d4178b7f7901), area-reduced to 1024 and recomposed in two flat colours (gofun #FFFFFC ground, kincha #C47222 mark)"
+      }
+    },
+    {
+      "id": "benten-app-icon-konjiki-transparent-2609251422",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "konjiki-transparent",
+      "path": "docs/ui-design/assets/2609251422_benten_app-icon_konjiki-transparent.png",
+      "sha256": "e796695a4c6e31d8c8861cb7858bed66ebaa27f8c81b87e22fc7365ccbbfd09e",
+      "recorded_at": "2026-09-25T14:22:00+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "approved",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-25T14:22:00+09:00",
+        "tool": "Codex built-in image generation, then processed locally by scripts/design/transparent-app-icon.py: the identical coverage mask as docs/ui-design/assets/2609242333_benten_app-icon_roiro-konjiki.png (reduced from the same source, docs/ui-design/assets/2609242332_benten_app-icon_roiro-konjiki.png, sha256 23b9e5139eb3eb5686496e49cc5f80ac68e2533e35b116b071b8d4178b7f7901), written to the alpha channel of one flat colour (konjiki #E6B422) with no ground fill"
+      }
+    },
+    {
+      "id": "benten-app-icon-kincha-transparent-2609251422",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "kincha-transparent",
+      "path": "docs/ui-design/assets/2609251422_benten_app-icon_kincha-transparent.png",
+      "sha256": "420340f39a27cfb9ab3b6bfa3c5853880cb4dff6eee175fe5371ac5faf03e4cc",
+      "recorded_at": "2026-09-25T14:22:00+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "approved",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-25T14:22:00+09:00",
+        "tool": "Codex built-in image generation, then processed locally by scripts/design/transparent-app-icon.py: the identical coverage mask as docs/ui-design/assets/2609242333_benten_app-icon_roiro-konjiki.png (reduced from the same source, docs/ui-design/assets/2609242332_benten_app-icon_roiro-konjiki.png, sha256 23b9e5139eb3eb5686496e49cc5f80ac68e2533e35b116b071b8d4178b7f7901), written to the alpha channel of one flat colour (kincha #C47222) with no ground fill"
       }
     }
   ],
@@ -403,6 +439,20 @@
       "page": "app-icon",
       "theme": "gofun-kincha",
       "marker": "generated-image-current:benten/app-icon/gofun-kincha"
+    },
+    {
+      "path": "docs/ui-design/app-icon-design.md",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "konjiki-transparent",
+      "marker": "generated-image-current:benten/app-icon/konjiki-transparent"
+    },
+    {
+      "path": "docs/ui-design/app-icon-design.md",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "kincha-transparent",
+      "marker": "generated-image-current:benten/app-icon/kincha-transparent"
     }
   ]
 }

@@ -37,19 +37,29 @@ export const PWA_COLORS = {
 export type AppIconTheme = "dark" | "light";
 
 /**
+ * Whether an icon file is reduced from the opaque master (a flat ground
+ * behind the mark) or the transparent one (the mark colour only, alpha =
+ * coverage, no ground fill). Home-screen icons stay opaque: a manifest icon
+ * cannot rely on the app's own background showing through on every platform's
+ * home screen. The tab icon and header mark use the transparent master so no
+ * square shows behind the mark (docs/ui-design/app-icon-design.md).
+ */
+export type AppIconBackground = "opaque" | "transparent";
+
+/**
  * Every icon file, reduced at build time from its theme's master. The mark
  * already sits inside the maskable safe circle with a margin, so the
  * maskable icon is the same art as the `any` ones. Home-screen icons use the
  * dark master: manifests cannot switch icons by colour scheme reliably.
  */
 export const APP_ICONS = {
-  "icon-192.png": { size: 192, purpose: "any", theme: "dark" },
-  "icon-512.png": { size: 512, purpose: "any", theme: "dark" },
-  "icon-maskable-512.png": { size: 512, purpose: "maskable", theme: "dark" },
-  "apple-touch-icon.png": { size: 180, purpose: "any", theme: "dark" },
-  "favicon-light.png": { size: 64, purpose: "any", theme: "light" },
-  "favicon-dark.png": { size: 64, purpose: "any", theme: "dark" },
-} as const satisfies Record<string, { size: number; purpose: "any" | "maskable"; theme: AppIconTheme }>;
+  "icon-192.png": { size: 192, purpose: "any", theme: "dark", background: "opaque" },
+  "icon-512.png": { size: 512, purpose: "any", theme: "dark", background: "opaque" },
+  "icon-maskable-512.png": { size: 512, purpose: "maskable", theme: "dark", background: "opaque" },
+  "apple-touch-icon.png": { size: 180, purpose: "any", theme: "dark", background: "opaque" },
+  "favicon-light.png": { size: 64, purpose: "any", theme: "light", background: "transparent" },
+  "favicon-dark.png": { size: 64, purpose: "any", theme: "dark", background: "transparent" },
+} as const satisfies Record<string, { size: number; purpose: "any" | "maskable"; theme: AppIconTheme; background: AppIconBackground }>;
 
 export type AppIconFile = keyof typeof APP_ICONS;
 
