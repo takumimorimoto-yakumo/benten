@@ -16,6 +16,8 @@ export type ProductRouteView = {
   readonly pool: string;
   /** The fixed slippage tolerance, formatted for the locale. */
   readonly slippage: string;
+  /** The pool's recorded liquidity and the date it was read, formatted for the locale; `null` when none was recorded. */
+  readonly liquidity: { readonly amount: string; readonly date: string } | null;
 };
 
 export type StockProductView = {

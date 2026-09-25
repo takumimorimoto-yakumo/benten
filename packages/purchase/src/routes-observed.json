@@ -1,0 +1,213 @@
+{
+  "NVDA": {
+    "pool": "F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a",
+    "reserveX": "86FWMceL1zy5agA4HxyDAZxRHR86Ky7D6AhDL8VXtvsY",
+    "reserveY": "GZj4nNXEZ67eEvbvKzkRc8aSrS2EGH2mu2hmUA3UTeBr",
+    "oracle": "AMhrVuCt6Yh98bVFSWHfFnn7L25D8QzzocfCRbQfHhB7",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.25,
+    "maxFeePct": 1.3984375,
+    "liquidityUsd": 430,
+    "observedOn": "2026-09-25"
+  },
+  "META": {
+    "pool": "D8pGWVN3vWeyexBtMZjyyPbcLhM1oeTEMibE9h3nNRYL",
+    "reserveX": "5y4mPK17wFYUK5a8ZgmkKCwp7x6ufxFVVBh78AD3FaeU",
+    "reserveY": "8E7er4htv678LMC7U8e5qteWa8BNdz3UipzVzbaemkQ8",
+    "oracle": "2fXA73Hco6YcjXaZPDwp4jsUp1HrMfQzVodrq6asgYjE",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.1,
+    "maxFeePct": 0.59,
+    "liquidityUsd": 10100,
+    "observedOn": "2026-09-25"
+  },
+  "MSTR": {
+    "pool": "CK751YkvVdjWF6cC3Mcs6ibb16DQ417ohXDZ52CRC4xS",
+    "reserveX": "68NKnY7TBqo5Wp1jR3WUEEr8b5xQTWMrEf6vjhKQxo7j",
+    "reserveY": "DwC162xNqDEF1DdkQHM1C57VyFpuW9s2T466HYqCFEyn",
+    "oracle": "5rBLpxG49pX6uFS35LXUVDVTHCeSmxT4gFN8mPsR6e7N",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.2,
+    "maxFeePct": 2.8367188,
+    "liquidityUsd": 4900,
+    "observedOn": "2026-09-25"
+  },
+  "GOOGL": {
+    "pool": "HgerAhee6opeBQZSLYALL87kBAe9sa3gXM3qj7S4Jdk5",
+    "reserveX": "6wtMNvNSHqDWG77DKq4QCM1RTdNU8rKpJGrsQtpwkNQB",
+    "reserveY": "7CJYjH4UNZvPyuJ9Uwdp7sRhERXcL9hYvDCuE2Rsup4U",
+    "oracle": "EkFrj1JScoM9nb3VDtsvYoawf3wYSfQdfXC2pgSWHvqW",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.15,
+    "maxFeePct": 1.8375,
+    "liquidityUsd": 2200,
+    "observedOn": "2026-09-25"
+  },
+  "CRCL": {
+    "pool": "DUJM3UvCd9o7CtQ771JR8x5ecn9AsbiH1GnEZAWwCinT",
+    "reserveX": "F5gkTb9TqBitWrawpAb82ony4wA9S8oU4JSatbHauTkS",
+    "reserveY": "EgR95MhG6FKnkDUvbgEoqLL3WTmxHe1QqXW8Go7HhzMS",
+    "oracle": "2esqZnEzvnVAWHCUXKZyParsC4TJxAiRnFFkipGk6EiG",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.15,
+    "maxFeePct": 1.0992188,
+    "liquidityUsd": 1400,
+    "observedOn": "2026-09-25"
+  },
+  "TSLA": {
+    "pool": "BCZLEgknvcyCsJ9ERRN38U4gBTNn4ftU11fEtV3XHnK2",
+    "reserveX": "Fb2igyoX7vgWay6C9mrcK6Eq42UrDs2DCXmmYsBkphxd",
+    "reserveY": "6wWq6D7CWdSuetdRdhz1HpNZ9NKkwymEUx4E3wrzKc7K",
+    "oracle": "2a529zrA4QGfdE3P26kwGjjzZzkZYAApiVbQPSikHdYt",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.25,
+    "maxFeePct": 1.8125,
+    "liquidityUsd": 1300,
+    "observedOn": "2026-09-25"
+  },
+  "SPY": {
+    "pool": "6uAw2iue69CTGsENLS3j2ur4NnBtbmGptFZ1ZZUje5PJ",
+    "reserveX": "f7c1WCa22RVfXbKF7KVxkVZpnyHzdojdriBXhvGDwF2",
+    "reserveY": "8q9RAYzVEjeNGY4C4K14yE1DgEZiYi61t4waJyTeuHpM",
+    "oracle": "ubLscM8FriNDZFUn5PuYhNGCEqKG4ibCU2318KK5hVR",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.05,
+    "maxFeePct": 1.6125,
+    "liquidityUsd": 1100,
+    "observedOn": "2026-09-25"
+  },
+  "HOOD": {
+    "pool": "AiKXdE3vAtCQTD9REbMEwNnuUfxHAZtBaHoVHdQirBUU",
+    "reserveX": "bQQ91tcWeEXQ2dUDqihhyQ3Hgz64GCCjyDmFkV3rHFx",
+    "reserveY": "Hr8KWKywy5Mg2XMy6LfueDDRfoSou8wu5sz7spKw71CV",
+    "oracle": "25JXDTmpsUAQbr914ozE4rWjrbvAVWjpNcJmfK6HfnXo",
+    "hasBitmapExtension": false,
+    "baseFeePct": 0.5,
+    "maxFeePct": 2.0625,
+    "liquidityUsd": 810,
+    "observedOn": "2026-09-25"
+  },
+  "AMD": {
+    "pool": "DsxZiQTsdJbGJojzbdAy9yK7absibgAgUnMLTdNaWr4c",
+    "reserveX": "4z2EneTzHVDUQMgQZFF4PQaiXvCoHSkvxCJk7m7YPnE",
+    "reserveY": "9NUf6MH3bsnMPfTYV8nx2rnfc4PhwcNR2JsEJMgdL2gM",
+    "oracle": "5o3mFjp9J5VUkmKRJJMTs1LNbX8hAKSLBWfk2YyseTa8",
+    "hasBitmapExtension": false,
+    "baseFeePct": 1,
+    "maxFeePct": 2.6875,
+    "liquidityUsd": 2200,
+    "observedOn": "2026-09-25"
+  },
+  "COIN": {
+    "dex": "raydium-clmm",
+    "pool": "w7SGmPeXoMCsjvXqgsAmUn56uypyDsjAtsxeVkaiqxa",
+    "tradeFeePct": 0.8,
+    "liquidityUsd": 1455900,
+    "observedOn": "2026-09-25"
+  },
+  "AMZN": {
+    "dex": "raydium-clmm",
+    "pool": "6m5aXAve4uh6Kt4ytKyCLWNMjd8PYP5vujwNCtycrUiD",
+    "tradeFeePct": 0.25,
+    "liquidityUsd": 399100,
+    "observedOn": "2026-09-25"
+  },
+  "MSFT": {
+    "dex": "raydium-clmm",
+    "pool": "D6bRhQUcR9B7bPbbqgxpE17MjyUjBtr8hHQCcJoHrrv1",
+    "tradeFeePct": 0.1,
+    "liquidityUsd": 352000,
+    "observedOn": "2026-09-25"
+  },
+  "QQQ": {
+    "dex": "raydium-clmm",
+    "pool": "GMjGLWzvK75LPetrgAmdeXnvxc4fUuQPwJxeQqTDU1aG",
+    "tradeFeePct": 0.1,
+    "liquidityUsd": 2272300,
+    "observedOn": "2026-09-25"
+  },
+  "GLD": {
+    "dex": "raydium-clmm",
+    "pool": "78ReVNMLGRWmjtf2HmBoHUe2pRcsctXTTbxJnbhchyze",
+    "tradeFeePct": 0.1,
+    "liquidityUsd": 1074400,
+    "observedOn": "2026-09-25"
+  },
+  "BRK.B": {
+    "dex": "raydium-clmm",
+    "pool": "B4UdLnvzCrnfRndLdgGTYZjcKTDsaFKB54cmKb2GoSne",
+    "tradeFeePct": 0.25,
+    "liquidityUsd": 110100,
+    "observedOn": "2026-09-25"
+  },
+  "AVGO": {
+    "dex": "raydium-clmm",
+    "pool": "EkpbWmPzrzFsv2xkJRdvWs61aRuDBVdrJK7WQmctBFnB",
+    "tradeFeePct": 1,
+    "liquidityUsd": 144900,
+    "observedOn": "2026-09-25"
+  },
+  "MCD": {
+    "dex": "raydium-clmm",
+    "pool": "5MGvNj9RNKNmzwp1LtZuQkZonEYtKJ3JuiyNQEUU2DsF",
+    "tradeFeePct": 1,
+    "liquidityUsd": 444500,
+    "observedOn": "2026-09-25"
+  },
+  "KO": {
+    "dex": "raydium-clmm",
+    "pool": "7HNwUP5rSUo9GfdDthJn4UCdw2Px6h2aprSedD7r7J3C",
+    "tradeFeePct": 1,
+    "liquidityUsd": 57300,
+    "observedOn": "2026-09-25"
+  },
+  "INTC": {
+    "dex": "raydium-clmm",
+    "pool": "6KoZB86BFDk6TZbB4CTBoAA8PPbpmEwSWFjCyfkt1Uw4",
+    "tradeFeePct": 1,
+    "liquidityUsd": 55200,
+    "observedOn": "2026-09-25"
+  },
+  "UNH": {
+    "dex": "raydium-clmm",
+    "pool": "5xm6QUDxRyMg3Gx59CxXB6VZnRKs4bVu44DS6DzZr3Bp",
+    "tradeFeePct": 1,
+    "liquidityUsd": 12500,
+    "observedOn": "2026-09-25"
+  },
+  "XOM": {
+    "dex": "raydium-clmm",
+    "pool": "H3qMpQnUiod9qfEMZL84nvoYd2pXrscHA6NQAb6icwxD",
+    "tradeFeePct": 1,
+    "liquidityUsd": 17600,
+    "observedOn": "2026-09-25"
+  },
+  "PLTR": {
+    "dex": "raydium-clmm",
+    "pool": "2EbY6YYKdQY9mmn9voiadgMcEnmZ5oe7qkcFVmywNrrE",
+    "tradeFeePct": 1,
+    "liquidityUsd": 49500,
+    "observedOn": "2026-09-25"
+  },
+  "GME": {
+    "dex": "raydium-clmm",
+    "pool": "1jAkn9tRpK9R72iW7MHYx6cF9nEkYnD4FYSxMYEDePL",
+    "tradeFeePct": 0.25,
+    "liquidityUsd": 54400,
+    "observedOn": "2026-09-25"
+  },
+  "STRC": {
+    "dex": "raydium-clmm",
+    "pool": "DU9dgBU6Yh2JjsYcjtRY21G14dhQxn6Xm5PT949Sa4tA",
+    "tradeFeePct": 0.1,
+    "liquidityUsd": 231600,
+    "observedOn": "2026-09-25"
+  },
+  "WMT": {
+    "dex": "raydium-clmm",
+    "pool": "36m7kUFCFheNBnvXDSvgCMt5c27VbUbhQnugCReFhet7",
+    "tradeFeePct": 1,
+    "liquidityUsd": 7200,
+    "observedOn": "2026-09-25"
+  }
+}

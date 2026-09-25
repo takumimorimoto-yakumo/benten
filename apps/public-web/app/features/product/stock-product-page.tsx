@@ -61,6 +61,7 @@ export function StockProductPage({ view, chart = null, locale }: { view: StockPr
               {view.route.routeLine}{" "}
               <CopyValue value={view.route.pool} copy={copy.route.copyPool} />
             </p>
+            {view.route.liquidity ? <p className="max-w-prose text-muted-foreground" data-product-route-liquidity="">{copy.route.liquidity(view.route.liquidity.amount, view.route.liquidity.date)}</p> : null}
             <p className="max-w-prose">{copy.route.fees(view.route.slippage)}</p>
           </SectionCard>
         ) : null}

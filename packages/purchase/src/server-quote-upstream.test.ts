@@ -13,10 +13,14 @@ const quoteOnPoolState = vi.hoisted(() => vi.fn());
 const readLegPoolState = vi.hoisted(() => vi.fn());
 const quoteLegOnPoolState = vi.hoisted(() => vi.fn());
 vi.mock("./quote", () => ({ readPoolState, quoteOnPoolState, readLegPoolState, quoteLegOnPoolState }));
+const readClmmRouteState = vi.hoisted(() => vi.fn());
+const quoteClmmOnState = vi.hoisted(() => vi.fn());
+vi.mock("./clmm-quote", () => ({ readClmmRouteState, quoteClmmOnState }));
 
-const { backoffMs, createServerQuoteReader, retryAfterMs } = await import("./server-quote");
+const { backoffMs, createServerQuoteReader, retryAfterMs, SERVER_QUOTE_STATE_COUNT, SERVER_QUOTE_UPSTREAM_BURST } = await import("./server-quote");
 const { PURCHASE_CONFIG } = await import("./config");
-const { PRODUCT_TICKERS } = await import("./routes-table");
+const { DLMM_TICKERS: PRODUCT_TICKERS } = await import("./dlmm-tickers.test-support");
+const { PRODUCT_ROUTES, PRODUCT_TICKERS: ALL_TICKERS } = await import("./routes-table");
 const { WSOL_MINT } = await import("./route");
 const { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } = await import("@benten/solana");
 
@@ -24,6 +28,8 @@ type Connection = { getSlot(): Promise<number> };
 
 /** Pool reads measured at 4 upstream requests besides the mint read (5 per refresh). */
 const POOL_READS = 4;
+/** A Raydium CLMM pool read: the pool and bitmap extension, then the config and tick arrays (3 per refresh with the mint read). */
+const CLMM_POOL_READS = 2;
 const POOL_STATE = { pool: { id: "pool" }, binArrays: [] };
 const QUOTE = { consumedInputRaw: "1", outputRaw: "1", minimumOutputRaw: "1", feeRaw: "0", protocolFeeRaw: "0", feeOnInput: true, priceImpactPct: "0" };
 
@@ -41,6 +47,18 @@ function resetPool() {
   readLegPoolState.mockImplementation(poolReads);
   quoteLegOnPoolState.mockReset();
   quoteLegOnPoolState.mockImplementation((_state: unknown, amountRaw: bigint) => ({ ...QUOTE, consumedInputRaw: amountRaw.toString(), outputRaw: "1000000", minimumOutputRaw: "990000" }));
+  readClmmRouteState.mockReset();
+  readClmmRouteState.mockImplementation(async (connection: Connection) => {
+    for (let read = 0; read < CLMM_POOL_READS; read += 1) await connection.getSlot();
+    return { pool: { id: "clmm" }, poolState: {} };
+  });
+  quoteClmmOnState.mockReset();
+  quoteClmmOnState.mockImplementation((_state: unknown, amountRaw: bigint) => ({ quote: { ...QUOTE, consumedInputRaw: amountRaw.toString() } }));
+}
+
+/** Upstream requests one cold refresh of a product's state makes: the mint read plus its pool reads. */
+function coldRefreshRequests(ticker: string): number {
+  return 1 + (PRODUCT_ROUTES[ticker as keyof typeof PRODUCT_ROUTES].dex === "raydium-clmm" ? CLMM_POOL_READS : POOL_READS);
 }
 
 function mintAccount(decimals: number, owner: string) {
@@ -73,8 +91,8 @@ function stubUpstream(clock: () => number, override?: (method: string) => Respon
 
 const BUSY = { ok: false, reason: "busy", max_amount_usdc: "10.00", retryable: true };
 
-/** Every state of the reader, one read each: eight product routes (USDC), then the SOL and SKR first legs. */
-const EVERY_STATE: readonly [string, string, string][] = [...PRODUCT_TICKERS.map((ticker): [string, string, string] => ["2", "USDC", ticker]), ["0.01", "SOL", "NVDA"], ["100", "SKR", "NVDA"]];
+/** Every state of the reader, one read each: every product route (USDC), then the SOL and SKR first legs. */
+const EVERY_STATE: readonly [string, string, string][] = [...ALL_TICKERS.map((ticker): [string, string, string] => ["2", "USDC", ticker]), ["0.01", "SOL", "NVDA"], ["100", "SKR", "NVDA"]];
 
 describe("shared upstream budget", () => {
   it("keeps every minute within the burst plus the per-minute rate, and answers busy beyond it", async () => {
@@ -91,8 +109,15 @@ describe("shared upstream budget", () => {
         if (!result.ok && result.reason === "busy") busy += 1;
       }
     }
-    const { serverQuoteUpstreamPerMinute: perMinute, serverQuoteUpstreamBurst: burst } = PURCHASE_CONFIG;
+    const { serverQuoteUpstreamPerMinute: perMinute } = PURCHASE_CONFIG;
+    const burst = SERVER_QUOTE_UPSTREAM_BURST;
     expect(perMinute).toBe(300);
+    // 25 product routes (nine Meteora DLMM, sixteen Raydium CLMM) and two pay-token legs: 27 states,
+    // whose cold refreshes (9 x 5 + 16 x 3 + 2 x 5 = 103 requests) exceed the cap of 50.
+    expect(SERVER_QUOTE_STATE_COUNT).toBe(27);
+    expect(ALL_TICKERS.reduce((sum, ticker) => sum + coldRefreshRequests(ticker), 0) + 2 * (1 + POOL_READS)).toBe(103);
+    expect(PURCHASE_CONFIG.serverQuoteUpstreamBurstMax).toBe(50);
+    expect(burst).toBe(50);
     expect(upstream.requests.length).toBeLessThanOrEqual(burst + perMinute * minutes);
     for (let start = 0; start + 60_000 <= minutes * 60_000; start += 5_000) {
       const inWindow = upstream.requests.filter(({ at }) => at >= start && at < start + 60_000).length;
@@ -107,12 +132,46 @@ describe("shared upstream budget", () => {
     const now = 0;
     const upstream = stubUpstream(() => now);
     const read = createServerQuoteReader({ env: {}, fetchImpl: upstream.fetchImpl, now: () => now });
-    // The burst covers one cold refresh of every state (10 x 5 requests) and no more.
-    for (const [amount, payToken, ticker] of EVERY_STATE) await expect(read(amount, payToken, ticker)).resolves.toMatchObject({ ok: true });
-    expect(upstream.requests).toHaveLength(PURCHASE_CONFIG.serverQuoteUpstreamBurst);
+    // The burst is capped at 50 tokens whatever the number of states: the states whose cold refreshes fit
+    // in it (the nine DLMM routes at 5 requests, then COIN at 3: 48) are served; the next one runs out part
+    // way and it and every later state answer busy until the refill.
+    expect(EVERY_STATE).toHaveLength(SERVER_QUOTE_STATE_COUNT);
+    expect(SERVER_QUOTE_UPSTREAM_BURST).toBe(50);
+    let served = 0;
+    for (let spent = 0; served < ALL_TICKERS.length && spent + coldRefreshRequests(ALL_TICKERS[served]!) <= SERVER_QUOTE_UPSTREAM_BURST; served += 1) spent += coldRefreshRequests(ALL_TICKERS[served]!);
+    expect(served).toBe(10);
+    const results = [];
+    for (const [amount, payToken, ticker] of EVERY_STATE) results.push(await read(amount, payToken, ticker));
+    expect(results.slice(0, served).every((result) => result.ok)).toBe(true);
+    expect(results.slice(served)).toEqual(EVERY_STATE.slice(served).map(() => BUSY));
+    expect(upstream.requests).toHaveLength(50);
     // Cached states are still served without any request.
     await expect(read("3", "USDC", "META")).resolves.toMatchObject({ ok: true });
-    expect(upstream.requests).toHaveLength(PURCHASE_CONFIG.serverQuoteUpstreamBurst);
+    expect(upstream.requests).toHaveLength(SERVER_QUOTE_UPSTREAM_BURST);
+  });
+
+  it("brings every state back from a fresh start within a minute of the refill, busy until then", async () => {
+    resetPool();
+    let now = 0;
+    const upstream = stubUpstream(() => now);
+    const read = createServerQuoteReader({ env: {}, fetchImpl: upstream.fetchImpl, now: () => now });
+    const readyAt = new Map<string, number>();
+    // Every state not yet served is asked again every 2 s, as a client retrying a busy answer would; a busy
+    // state holds no quote. (Asked every second from an empty bucket, a two-leg quote's two refreshes split
+    // each second's 5 tokens and both stay busy: fail-closed, but it waits for a slower retry or idle time.)
+    for (now = 0; now <= 60_000 && readyAt.size < EVERY_STATE.length; now += 2_000) {
+      for (const [amount, payToken, ticker] of EVERY_STATE) {
+        const key = `${payToken}:${ticker}`;
+        if (readyAt.has(key)) continue;
+        const result = await read(amount, payToken, ticker);
+        if (result.ok) readyAt.set(key, now);
+        else expect(result).toEqual(BUSY);
+      }
+    }
+    expect(EVERY_STATE.map(([, payToken, ticker]) => `${payToken}:${ticker}`).filter((key) => !readyAt.has(key))).toEqual([]);
+    expect(readyAt.size).toBe(SERVER_QUOTE_STATE_COUNT);
+    // 103 requests: 50 from the burst, 53 from the refill of 5 a second, so about 11 seconds.
+    expect(Math.max(...readyAt.values())).toBeLessThanOrEqual(15_000);
   });
 
   it("answers busy for a refresh that runs out of tokens part way, and does not count it as a failure", async () => {
@@ -126,7 +185,7 @@ describe("shared upstream budget", () => {
     const results = [];
     for (const ticker of PRODUCT_TICKERS) results.push(await read("2", "USDC", ticker));
     expect(results.slice(0, 5).every((result) => result.ok)).toBe(true);
-    expect(results.slice(5)).toEqual([BUSY, BUSY, BUSY]);
+    expect(results.slice(5)).toEqual(PRODUCT_TICKERS.slice(5).map(() => BUSY));
     // A busy answer leaves no failure wait behind: the state refreshes as soon as tokens are back.
     now = 5_600 + 2_000;
     await expect(read("2", "USDC", PRODUCT_TICKERS[5])).resolves.toMatchObject({ ok: true });

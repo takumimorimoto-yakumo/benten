@@ -40,12 +40,14 @@ export const PREPARE_PURCHASE_ELIGIBILITY =
  * (`PRODUCT_TICKERS` of `@benten/purchase`, an exact match) and this package
  * does not depend on it; a public-api test asserts this list equals it.
  */
-export const PREPARE_PURCHASE_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"] as const;
+export const PREPARE_PURCHASE_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD", "AMD", "COIN", "AMZN", "MSFT", "QQQ", "GLD", "BRK.B", "AVGO", "MCD", "KO", "INTC", "UNH", "XOM", "PLTR", "GME", "STRC", "WMT"] as const;
 /** The product when the call names none (the original single route). */
 export const DEFAULT_PURCHASE_TICKER = "NVDA";
 
 const rawInteger = z.string().regex(/^\d+$/);
 const decimalText = z.string().regex(/^\d+\.\d+$/);
+/** A display amount or multiplier: plain decimal text, an integer part and optional fraction (no exponent). */
+const displayDecimal = z.string().max(64).regex(/^\d+(?:\.\d+)?$/);
 
 /**
  * The pay tokens the tool advertises. SSOT exception: the host's quote reader
@@ -55,10 +57,15 @@ const decimalText = z.string().regex(/^\d+\.\d+$/);
  */
 export const PREPARE_PURCHASE_PAY_TOKENS = ["USDC", "SOL", "SKR"] as const;
 export const DEFAULT_PAY_TOKEN = "USDC";
+/**
+ * The DEX names a route may carry. SSOT exception, as for the pay tokens:
+ * the purchase package's `ROUTE_DEX_LABELS`; a public-api test compares them.
+ */
+export const PREPARE_PURCHASE_DEXES = ["Meteora DLMM", "Raydium CLMM"] as const;
 
 const routeSchema = z.strictObject({
   pool: z.string(),
-  dex: z.literal("Meteora DLMM"),
+  dex: z.enum(PREPARE_PURCHASE_DEXES),
   input_mint: z.string(),
   input_symbol: z.string(),
   input_decimals: z.number().int(),
@@ -92,6 +99,12 @@ export const purchaseQuoteResultSchema = z.union([
     first_leg: z.strictObject({ route: routeSchema, quote: readerQuoteSchema }).nullable().optional(),
     route: routeSchema,
     quote: readerQuoteSchema,
+    /**
+     * The product output in display units at the Scaled UI multiplier in effect
+     * (`null`: the mint carries none the reader could read). Absent from a
+     * reader that does not report it.
+     */
+    product_display: z.strictObject({ multiplier: displayDecimal, output: displayDecimal, minimum_output: displayDecimal }).nullable().optional(),
     quoted_at_ms: z.number().int().positive(),
     expires_at_ms: z.number().int().positive(),
     // `?amount=<decimal>`, optionally followed by one `&<name>=<lower-case letters>` (the pay token).
@@ -196,6 +209,10 @@ export const preparePurchaseOutput = z.strictObject({
         output_raw: z.string(),
         minimum_output_raw: z.string(),
         output_basis: z.literal("raw_token_units_before_display_multiplier"),
+        /** The Token-2022 Scaled UI multiplier in effect at the quote, and the output and minimum output in display units at it; `null` when not read. */
+        display_multiplier: z.string().nullable(),
+        output_display: z.string().nullable(),
+        minimum_output_display: z.string().nullable(),
         slippage_bps: z.number().int(),
         fee_raw: z.string(),
         protocol_fee_raw: z.string(),
@@ -357,6 +374,9 @@ export async function preparePurchase(args: unknown, capability: PreparePurchase
       output_raw: answer.quote.outputRaw,
       minimum_output_raw: answer.quote.minimumOutputRaw,
       output_basis: "raw_token_units_before_display_multiplier",
+      display_multiplier: answer.product_display?.multiplier ?? null,
+      output_display: answer.product_display?.output ?? null,
+      minimum_output_display: answer.product_display?.minimum_output ?? null,
       slippage_bps: answer.slippage_bps,
       fee_raw: answer.quote.feeRaw,
       protocol_fee_raw: answer.quote.protocolFeeRaw,

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { access, readdir, readFile } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import test from "node:test";
@@ -59,7 +60,8 @@ const STATIC_INFORMATION_PAGES = ["/about", "/learn/xstocks", "/learn/prestocks"
 test("the capsule has exactly one HTML document and one data artifact per generated public path", async () => {
   const catalog = publicCatalog();
   const expected = 5 * (catalog.items.length + 1) + 5 * REFERENCE_PAGES_PER_LOCALE + 5 * APP_SHELL_PAGES_PER_LOCALE + 5 * DIRECTORY_PAGES_PER_LOCALE + NOT_FOUND_BODIES + 5 * productSubpagesPerLocale(catalog) + 5 * STATIC_INFORMATION_PAGES.length;
-  assert.equal(expected, 2410);
+  // 2370 documents without the buy flow frames, plus one frame per buyable xStock (25: nine Meteora DLMM, sixteen Raydium CLMM) in each of the five locales.
+  assert.equal(expected, 2495);
   assert.equal(companyMap.companies.length, 8);
   assert.equal(listedCompanyMap.companies.length, 129);
   assert.equal(providerAssets.entries.length + PUBLISHED_COMPANIES.length, REFERENCE_PAGES_PER_LOCALE);
@@ -322,11 +324,18 @@ const LOCALE_PREFIXES = { en: "", ja: "/ja", ko: "/ko", "zh-Hans": "/zh-Hans", "
 /** The product whose buy flow and evidence page the detailed checks below read (the first route). */
 const FIXED_ROUTE_TICKER = "NVDA";
 /**
- * Every buyable xStock (one pinned pool each), written out here rather than
- * read from the purchase package so that a route added or dropped there
- * fails this test until the published pages are checked again.
+ * Every buyable xStock (one pinned pool each), in the routes table's order,
+ * written out here rather than read from the purchase package so that a
+ * route added or dropped there fails this test until the published pages are
+ * checked again. The test below ties the list to the table's observed-evidence
+ * record (plain JSON, whose keys a routes-table test requires to equal
+ * `PRODUCT_TICKERS`).
  */
-const BUYABLE_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"];
+const BUYABLE_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD", "AMD", "COIN", "AMZN", "MSFT", "QQQ", "GLD", "BRK.B", "AVGO", "MCD", "KO", "INTC", "UNH", "XOM", "PLTR", "GME", "STRC", "WMT"];
+
+test("the buyable list above is the routes table's, in its order", () => {
+  assert.deepEqual(BUYABLE_TICKERS, Object.keys(JSON.parse(readFileSync(new URL("../../../packages/purchase/src/routes-observed.json", import.meta.url), "utf8"))));
+});
 /**
  * Words the Dossier must never present: quotes, NAV, advice, recommendations.
  * Non-Latin terms are escaped (ja: advice/recommend/estimate; ko: advice/recommend/market price;
@@ -371,8 +380,11 @@ test("every product document states its language and states its capability: one 
         assert.ok(buy[0].includes(`href="${LOCALE_PREFIXES[locale]}/stock/${identity.ticker}/buy"`), `${locale} Buy opens the flow`);
         assert.equal(count(main, /[\s"]bg-primary[\s"]/g), 1, `${locale} the Buy link is the page's one filled control`);
         assert.equal(main.includes('data-product-capability="not-buyable"'), false);
+        // The pool's recorded liquidity is stated as information beside its route, never hidden.
+        assert.equal(count(main, /data-product-route-liquidity=""/g), 1, `${locale} ${identity.ticker} states its pool's recorded liquidity`);
       } else {
         assert.equal(main.includes("data-cta="), false, `${locale} ${identity.ticker} has no Buy link`);
+        assert.equal(main.includes("data-product-route-liquidity"), false, `${locale} ${identity.ticker} states no pool liquidity`);
         assert.match(main, /data-product-capability="not-buyable"/, `${locale} ${identity.ticker} not-buyable fact`);
       }
       const scanned = main.replace(PURCHASE_NOTICE_BLOCK, "");

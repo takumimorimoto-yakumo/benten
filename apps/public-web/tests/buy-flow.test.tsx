@@ -17,8 +17,9 @@ import { readDeepLink } from "../../../packages/purchase/src/deep-link.ts";
 import { PUBLIC_WEB_LOCALES, type PublicWebLocale } from "../app/i18n/locales.ts";
 import { PRODUCT_MESSAGES } from "../app/i18n/product-messages.ts";
 import { PURCHASE_MESSAGES, purchaseMessagesFor } from "../app/i18n/purchase-messages.ts";
-import { PRODUCT_ROUTES, PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
-import { createPurchaseFrame } from "../app/lib/purchase-frame.server.ts";
+import { PRODUCT_ROUTES, PRODUCT_TICKERS, SELL_ROUTE } from "../../../packages/purchase/src/routes-table.ts";
+import { ROUTE_DEX_LABELS } from "../../../packages/purchase/src/route-dex.ts";
+import { createPurchaseFrame, createSaleFrame } from "../app/lib/purchase-frame.server.ts";
 
 const HANDLERS: PanelHandlers = {
   onConnect: () => undefined, onDisconnect: () => undefined, onAmountChange: () => undefined, onAmountBlur: () => undefined,
@@ -358,8 +359,27 @@ describe("buy flow per product (routes table)", () => {
     }
   });
 
+  it.each([...PRODUCT_TICKERS])("names the %s route's own DEX in every locale's route line and two-leg note", (ticker) => {
+    const route = PRODUCT_ROUTES[ticker];
+    const dex = ROUTE_DEX_LABELS[route.dex];
+    const other = Object.values(ROUTE_DEX_LABELS).filter((label) => label !== dex);
+    for (const locale of PUBLIC_WEB_LOCALES) {
+      const line = createPurchaseFrame(locale, ticker).routeLine;
+      expect(line, locale).toContain(dex);
+      for (const label of other) expect(line, locale).not.toContain(label);
+      const note = purchaseMessagesFor(locale, route.symbol).pay.route("SOL", ROUTE_DEX_LABELS["meteora-dlmm"], dex);
+      expect(note, locale).toContain(ROUTE_DEX_LABELS["meteora-dlmm"]);
+      expect(note, locale).toContain(dex);
+    }
+  });
+
+  it("keeps the sale on the NVDAx Meteora DLMM route line", () => {
+    for (const locale of PUBLIC_WEB_LOCALES) expect(createSaleFrame(locale).routeLine, locale).toContain(ROUTE_DEX_LABELS[SELL_ROUTE.dex]);
+    expect(SELL_ROUTE.dex).toBe("meteora-dlmm");
+  });
+
   it("has no frame for a product without a route", () => {
-    expect(() => createPurchaseFrame("en", "AMZN")).toThrow(/no fixed route/);
+    expect(() => createPurchaseFrame("en", "IBM")).toThrow(/no fixed route/);
     expect(() => createPurchaseFrame("en", "meta")).toThrow(/no fixed route/);
   });
 

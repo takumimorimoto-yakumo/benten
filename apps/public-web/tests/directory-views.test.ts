@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { findCompany, listedCompanyMap, productXStockEntries, resolveTicker } from "../../../packages/registry/src/index.ts";
+import { companyForXStock, findCompany, listedCompanyMap, productXStockEntries, resolveTicker } from "../../../packages/registry/src/index.ts";
 import { buildCompanySearchIndex } from "../../../packages/registry/src/search-index-source.ts";
 import indexJson from "../../../packages/registry/src/company-search-index-v1.json" with { type: "json" };
 import { NVDAX_MINT } from "../../../packages/purchase/src/route.ts";
@@ -26,6 +26,21 @@ const explore = createExploreView();
 const directory = createCompaniesView();
 const labels = indexLabels(explore.suggestions);
 const RESTORED = { BAC: "bank-of-america", MSTR: "strategy", XOM: "exxonmobil-holdings" } as const;
+/**
+ * Published companies with a buyable xStock, and the buyable funds no company
+ * binds, A to Z: written out here, not read from the routes table, so that a
+ * route added or dropped there fails these checks until the lists are
+ * reviewed again. A test below ties both to the table.
+ */
+const BUYABLE_COMPANY_SLUGS = ["advanced-micro-devices", "alphabet", "amazon-com", "berkshire-hathaway", "broadcom", "circle-internet-group", "coca-cola", "coinbase-global", "exxonmobil-holdings", "gamestop", "intel", "mcdonalds", "meta-platforms", "microsoft", "nvidia", "palantir-technologies", "robinhood-markets", "strategy", "tesla", "unitedhealth-group", "walmart"];
+const BUYABLE_FUND_TICKERS = ["GLD", "QQQ", "SPY", "STRC"];
+
+describe("buyable lists", () => {
+  it("are the routes table's products: those the company maps bind, and the funds no company binds", () => {
+    expect(PRODUCT_TICKERS.map((ticker) => companyForXStock(ticker)?.slug).filter((slug): slug is string => slug !== undefined && isPublishedCompany(slug)).sort()).toEqual(BUYABLE_COMPANY_SLUGS);
+    expect(PRODUCT_TICKERS.filter((ticker) => companyForXStock(ticker) === undefined).sort()).toEqual(BUYABLE_FUND_TICKERS);
+  });
+});
 
 describe("published companies", () => {
   it("are the 8 reviewed private companies and the 129 US-listed companies of the generated map, in slug order", () => {
@@ -79,9 +94,11 @@ describe("directory views", () => {
     expect(directory.usListed.map((row) => row.slug)).toEqual([...directory.usListed.map((row) => row.slug)].sort());
     const names = directory.funds.map((row) => row.name.toLowerCase());
     expect(names).toEqual([...names].sort());
-    expect([...directory.private, ...directory.usListed].filter((row) => row.buyInBenten).map((row) => row.slug)).toEqual(["alphabet", "circle-internet-group", "meta-platforms", "nvidia", "robinhood-markets", "strategy", "tesla"]);
-    // SPYx is the one fund with a route; no unlinked token has one.
-    expect([...directory.unlinked, ...directory.funds].filter((row) => row.buyInBenten).map((row) => row.ticker)).toEqual(["SPY"]);
+    expect([...directory.private, ...directory.usListed].filter((row) => row.buyInBenten).map((row) => row.slug)).toEqual(BUYABLE_COMPANY_SLUGS);
+    expect(BUYABLE_COMPANY_SLUGS).toContain("nvidia");
+    // Only the funds with a route are marked; no unlinked token has one.
+    expect([...directory.unlinked, ...directory.funds].filter((row) => row.buyInBenten).map((row) => row.ticker).sort()).toEqual(BUYABLE_FUND_TICKERS);
+    expect(BUYABLE_FUND_TICKERS).toContain("SPY");
     for (const row of [...directory.private, ...directory.usListed]) expect(Object.keys(row).sort()).toEqual(["buyInBenten", "name", "products", "slug"]);
     for (const row of [...directory.unlinked, ...directory.funds]) expect(Object.keys(row).sort()).toEqual(["buyInBenten", "name", "symbol", "ticker"]);
   });
@@ -145,7 +162,7 @@ describe("Explore search", () => {
   });
 
   it("tags the buyable companies' and tokens' suggestions as in the lists, and no other", () => {
-    expect(explore.suggestions.filter((label) => label.buyInBenten).map((label) => label.slug ?? label.ticker).sort()).toEqual([...["alphabet", "circle-internet-group", "meta-platforms", "nvidia", "robinhood-markets", "strategy", "tesla"], "SPY"].sort());
+    expect(explore.suggestions.filter((label) => label.buyInBenten).map((label) => label.slug ?? label.ticker).sort()).toEqual([...BUYABLE_COMPANY_SLUGS, ...BUYABLE_FUND_TICKERS].sort());
     expect(suggestionsFor("nvidia", labels)[0]?.buyInBenten).toBe(true);
   });
 
@@ -171,7 +188,7 @@ describe("company page", () => {
     expect(nvidia.products).toEqual([expect.objectContaining({ symbol: "NVDAx", buyable: true, mint: NVDAX_MINT.toBase58() })]);
     expect(nvidia.facts.kind).toBe("verified");
     expect(createCompanyView("openai").products).toEqual([expect.objectContaining({ provider: "prestocks", routeKey: "OPENAI", buyable: false })]);
-    expect(publishedCompanies().filter((company) => createCompanyView(company.slug).products.some((product) => product.buyable)).map((company) => company.slug).sort()).toEqual(["alphabet", "circle-internet-group", "meta-platforms", "nvidia", "robinhood-markets", "strategy", "tesla"]);
+    expect(publishedCompanies().filter((company) => createCompanyView(company.slug).products.some((product) => product.buyable)).map((company) => company.slug).sort()).toEqual(BUYABLE_COMPANY_SLUGS);
     expect(purchaseEntryPath("ja", "NVDA")).toBe("/ja/stock/NVDA/buy");
   });
 

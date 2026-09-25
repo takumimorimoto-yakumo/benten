@@ -20,7 +20,7 @@ export type ProductCopy = {
   product: {
     byProvider: (name: string, provider: string) => string; company: (name: string) => string; xstockProvider: string;
     whatYouOwn: { heading: string; xstock: (underlying: string) => string; prestocks: (provider: string, company: string) => string; prestocksRights: (equity: string, voting: string) => string };
-    route: { heading: string; fees: (slippage: string) => string; copyPool: { copy: string; copied: string; unavailable: string } };
+    route: { heading: string; liquidity: (amount: string, date: string) => string; fees: (slippage: string) => string; copyPool: { copy: string; copied: string; unavailable: string } };
     capability: { buyable: string; buy: (symbol: string) => string; notBuyableHeading: string; notBuyableBody: string; compareOnlyHeading: string; compareOnlyBody: (symbol: string) => string };
     identity: { heading: string; mint: string; issuer: string; decimals: string; provider: string; copy: { copy: string; copied: string; unavailable: string }; evidence: string };
     metadata: { description: (symbol: string, name: string) => string };
@@ -48,7 +48,7 @@ const en: ProductCopy = {
       prestocks: (provider, company) => `${provider} says this token gives economic exposure to ${company} through a special-purpose vehicle. It is not a share. Benten has not verified this.`,
       prestocksRights: (equity, voting) => `As the provider states: equity ownership ${equity}, voting rights ${voting}.`,
     },
-    route: { heading: "Route and fees", fees: (slippage) => `The pool fee, the slippage tolerance (${slippage}) and the minimum you receive are shown in the swap preview before you approve. Your wallet shows the network fee in SOL.`, copyPool: { copy: "Copy address", copied: "Copied", unavailable: "Copy unavailable" } },
+    route: { heading: "Route and fees", liquidity: (amount, date) => `The pool held about ${amount} of liquidity when the route was checked on mainnet on ${date}. The preview shows what your amount receives now.`, fees: (slippage) => `The pool fee, the slippage tolerance (${slippage}) and the minimum you receive are shown in the swap preview before you approve. Your wallet shows the network fee in SOL.`, copyPool: { copy: "Copy address", copied: "Copied", unavailable: "Copy unavailable" } },
     capability: {
       buyable: "Buy in Benten", buy: (symbol) => `Buy ${symbol}`,
       notBuyableHeading: "Not buyable in Benten", notBuyableBody: "Benten builds purchases only for a fixed list of xStocks, each through one fixed pool.",
@@ -80,7 +80,7 @@ const ja: ProductCopy = {
       prestocks: (provider, company) => `${provider}によると、このトークンは特別目的事業体を通じて${company}への経済的なエクスポージャーを提供します。株式ではありません。Bentenはこれを検証していません。`,
       prestocksRights: (equity, voting) => `提供元の説明: 株式の所有 ${equity}、議決権 ${voting}。`,
     },
-    route: { heading: "経路と手数料", fees: (slippage) => `プール手数料、スリッページ許容幅（${slippage}）、最低受取額は、承認する前にスワップのプレビューに表示されます。ネットワーク手数料(SOL)はウォレットに表示されます。`, copyPool: { copy: "アドレスをコピー", copied: "コピーしました", unavailable: "コピーできません" } },
+    route: { heading: "経路と手数料", liquidity: (amount, date) => `このプールの流動性は、${date}にメインネットで経路を確認した時点で約${amount}でした。いまの金額で受け取れる量はプレビューに表示されます。`, fees: (slippage) => `プール手数料、スリッページ許容幅（${slippage}）、最低受取額は、承認する前にスワップのプレビューに表示されます。ネットワーク手数料(SOL)はウォレットに表示されます。`, copyPool: { copy: "アドレスをコピー", copied: "コピーしました", unavailable: "コピーできません" } },
     capability: {
       buyable: "Bentenで購入できます", buy: (symbol) => `${symbol}を購入`,
       notBuyableHeading: "Bentenでは購入できません", notBuyableBody: "Bentenが購入を組み立てるのは、決められた一部のxStocksを、それぞれ1つの固定プールを通じて購入する場合だけです。",
@@ -112,7 +112,7 @@ const ko: ProductCopy = {
       prestocks: (provider, company) => `${provider}에 따르면 이 토큰은 특수목적법인을 통해 ${company}에 대한 경제적 익스포저를 제공합니다. 주식이 아닙니다. Benten은 이를 검증하지 않았습니다.`,
       prestocksRights: (equity, voting) => `제공자 설명: 지분 소유 ${equity}, 의결권 ${voting}.`,
     },
-    route: { heading: "경로와 수수료", fees: (slippage) => `풀 수수료, 슬리피지 허용 범위(${slippage}), 최소 수령량은 승인하기 전에 스왑 미리보기에 표시됩니다. 네트워크 수수료(SOL)는 지갑에 표시됩니다.`, copyPool: { copy: "주소 복사", copied: "복사했습니다", unavailable: "복사할 수 없습니다" } },
+    route: { heading: "경로와 수수료", liquidity: (amount, date) => `${date}에 메인넷에서 경로를 확인했을 때 이 풀의 유동성은 약 ${amount}였습니다. 지금 금액으로 받는 양은 미리보기에 표시됩니다.`, fees: (slippage) => `풀 수수료, 슬리피지 허용 범위(${slippage}), 최소 수령량은 승인하기 전에 스왑 미리보기에 표시됩니다. 네트워크 수수료(SOL)는 지갑에 표시됩니다.`, copyPool: { copy: "주소 복사", copied: "복사했습니다", unavailable: "복사할 수 없습니다" } },
     capability: {
       buyable: "Benten에서 구매할 수 있습니다", buy: (symbol) => `${symbol} 구매`,
       notBuyableHeading: "Benten에서 구매할 수 없습니다", notBuyableBody: "Benten은 정해진 일부 xStocks를 각각 하나의 고정된 풀을 통해 구매하는 경우에만 구매를 구성합니다.",
@@ -144,7 +144,7 @@ const zhHans: ProductCopy = {
       prestocks: (provider, company) => `${provider} 称，此代币通过特殊目的载体提供对 ${company} 的经济敞口。它不是股票。Benten 未核实这一点。`,
       prestocksRights: (equity, voting) => `提供方的说明：股权 ${equity}，投票权 ${voting}。`,
     },
-    route: { heading: "路径与费用", fees: (slippage) => `池手续费、滑点容忍度（${slippage}）和最低到账数量会在你批准前显示在兑换预览中。网络费（SOL）显示在你的钱包中。`, copyPool: { copy: "复制地址", copied: "已复制", unavailable: "无法复制" } },
+    route: { heading: "路径与费用", liquidity: (amount, date) => `${date}在主网核对该路径时，此池的流动性约为 ${amount}。按你现在的金额可收到的数量显示在预览中。`, fees: (slippage) => `池手续费、滑点容忍度（${slippage}）和最低到账数量会在你批准前显示在兑换预览中。网络费（SOL）显示在你的钱包中。`, copyPool: { copy: "复制地址", copied: "已复制", unavailable: "无法复制" } },
     capability: {
       buyable: "可在 Benten 中购买", buy: (symbol) => `购买 ${symbol}`,
       notBuyableHeading: "无法在 Benten 中购买", notBuyableBody: "Benten 只为通过各自的一个固定池购买指定的几种 xStocks 构建交易。",
@@ -176,7 +176,7 @@ const zhHant: ProductCopy = {
       prestocks: (provider, company) => `${provider} 表示，此代幣透過特殊目的載體提供對 ${company} 的經濟曝險。它不是股票。Benten 未核實這一點。`,
       prestocksRights: (equity, voting) => `提供方的說明：股權 ${equity}，投票權 ${voting}。`,
     },
-    route: { heading: "路徑與費用", fees: (slippage) => `池手續費、滑點容忍度（${slippage}）和最低到帳數量會在你核准前顯示在兌換預覽中。網路費（SOL）顯示在你的錢包中。`, copyPool: { copy: "複製地址", copied: "已複製", unavailable: "無法複製" } },
+    route: { heading: "路徑與費用", liquidity: (amount, date) => `${date}在主網核對該路徑時，此池的流動性約為 ${amount}。按你現在的金額可收到的數量顯示在預覽中。`, fees: (slippage) => `池手續費、滑點容忍度（${slippage}）和最低到帳數量會在你核准前顯示在兌換預覽中。網路費（SOL）顯示在你的錢包中。`, copyPool: { copy: "複製地址", copied: "已複製", unavailable: "無法複製" } },
     capability: {
       buyable: "可在 Benten 中購買", buy: (symbol) => `購買 ${symbol}`,
       notBuyableHeading: "無法在 Benten 中購買", notBuyableBody: "Benten 只為透過各自的一個固定池購買指定的幾種 xStocks 建立交易。",

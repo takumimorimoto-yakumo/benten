@@ -20,7 +20,7 @@ import DLMM from "@meteora-ag/dlmm";
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
 
 import { USDC_MINT, type PayLeg } from "./route";
-import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
+import { DEFAULT_PRODUCT, dlmmProductRoute, type ProductTicker } from "./routes-table";
 
 const MAX_SLIPPAGE_BPS = 10_000;
 
@@ -115,7 +115,8 @@ export interface ReadPoolStateOptions {
 
 export async function readPoolState(connection: Connection, options: ReadPoolStateOptions = {}): Promise<PoolState> {
   const { product = DEFAULT_PRODUCT, swapForY = SWAP_FOR_Y } = options;
-  const route = productRoute(product);
+  const route = dlmmProductRoute(product);
+  if (!route) throw new RoutePoolMismatchError("the product has no pinned Meteora DLMM route");
   const pool = await DLMM.create(connection, route.pool);
 
   const tokenXMint = pool.tokenX.mint.address;

@@ -9,8 +9,9 @@
  * its token Y is USDC (both read back from the pool account), the product
  * mint is owned by Token-2022 with 8 decimals, carries the Scaled UI Amount
  * extension, and its transfer-hook program is unset. Liquidity at the time:
- * META about $10K, MSTR $4.9K, GOOGL $2.2K, CRCL $1.4K, TSLA $1.3K, SPY $1.1K,
- * HOOD $0.8K, NVDA $0.4K (the deepest xStock/USDC DLMM pool of each product).
+ * META about $10K, MSTR $4.9K, GOOGL $2.2K, AMD $2.2K, CRCL $1.4K, TSLA
+ * $1.3K, SPY $1.1K, HOOD $0.8K, NVDA $0.4K (the deepest xStock/USDC DLMM pool
+ * of each product).
  * The browser and the server read every pool again before quoting and stop
  * when the pool or mint no longer carries this identity.
  *
@@ -32,8 +33,10 @@
 import { PublicKey } from "@solana/web3.js";
 import { TOKEN_2022_PROGRAM_ID } from "@benten/solana";
 
-/** Registry tickers of the purchasable products, in display order. */
-export const PRODUCT_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"] as const;
+import { CLMM_PRODUCT_ROUTES, CLMM_PRODUCT_TICKERS } from "./routes-table-clmm";
+
+/** Registry tickers of the purchasable products, in display order (the Meteora DLMM routes, then the Raydium CLMM routes). */
+export const PRODUCT_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD", "AMD", ...CLMM_PRODUCT_TICKERS] as const;
 export type ProductTicker = (typeof PRODUCT_TICKERS)[number];
 
 /** The product a flow buys when none is named (the original single route). */
@@ -48,14 +51,18 @@ export const DEFAULT_PRODUCT: ProductTicker = "NVDA";
  */
 export type PoolOrientation = "product_x_usdc_y";
 
+/** The DEX program a route's pool belongs to. Each product has exactly one route. */
+export type RouteDex = "meteora-dlmm" | "raydium-clmm";
+
 export interface ProductRoute {
   /** Registry ticker (the table key). */
   readonly ticker: ProductTicker;
   /** On-chain token symbol from the registry. Display only, never used to resolve a token. */
   readonly symbol: string;
   readonly productMint: PublicKey;
-  /** The one Meteora DLMM pool this product is bought through. */
+  /** The one pool this product is bought through (a Meteora DLMM pool, or a Raydium CLMM pool state). */
   readonly pool: PublicKey;
+  readonly dex: RouteDex;
   readonly orientation: PoolOrientation;
   readonly decimals: number;
   /** Token program that owns the product mint. */
@@ -71,6 +78,7 @@ function route(ticker: ProductTicker, symbol: string, productMint: string, pool:
     productMint: new PublicKey(productMint),
     pool: new PublicKey(pool),
     orientation: "product_x_usdc_y",
+    dex: "meteora-dlmm",
     decimals: PRODUCT_DECIMALS,
     tokenProgram: TOKEN_2022_PROGRAM_ID,
   });
@@ -86,6 +94,8 @@ export const PRODUCT_ROUTES: Readonly<Record<ProductTicker, ProductRoute>> = Obj
   TSLA: route("TSLA", "TSLAx", "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB", "BCZLEgknvcyCsJ9ERRN38U4gBTNn4ftU11fEtV3XHnK2"),
   SPY: route("SPY", "SPYx", "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W", "6uAw2iue69CTGsENLS3j2ur4NnBtbmGptFZ1ZZUje5PJ"),
   HOOD: route("HOOD", "HOODx", "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg", "AiKXdE3vAtCQTD9REbMEwNnuUfxHAZtBaHoVHdQirBUU"),
+  AMD: route("AMD", "AMDx", "XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF", "DsxZiQTsdJbGJojzbdAy9yK7absibgAgUnMLTdNaWr4c"),
+  ...CLMM_PRODUCT_ROUTES,
 });
 
 /** Exact-match gate for a ticker that is already a table key (for example one read back from state). `null` otherwise. */
@@ -98,6 +108,17 @@ export function productRoute(ticker: ProductTicker): ProductRoute {
   const found = resolveProductTicker(ticker);
   if (found === null) throw new Error("product has no pinned route");
   return PRODUCT_ROUTES[found];
+}
+
+/**
+ * The pinned route of a product bought through a Meteora DLMM pool, or `null`
+ * for a product on another DEX. The DLMM reader and builders take their route
+ * from here, so a Raydium CLMM product wired to them by mistake is refused
+ * before any pool is read, never read as a DLMM pool.
+ */
+export function dlmmProductRoute(ticker: ProductTicker): ProductRoute | null {
+  const route = productRoute(ticker);
+  return route.dex === "meteora-dlmm" ? route : null;
 }
 
 /**

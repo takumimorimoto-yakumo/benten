@@ -4,6 +4,7 @@
  * limit, rate-limit window), so a page never restates a value by hand.
  */
 import { PRICING_CONFIG } from "@benten/pricing/config";
+import { PRODUCT_SYMBOLS } from "@benten/purchase/product-symbols";
 import { RATE_LIMIT_WINDOW_MS } from "@benten/solana-rpc-relay/config";
 import { ACTIVITY_CONFIG } from "@/features/activity/activity-config";
 import { PRICE_DISPLAY_CONFIG } from "@/features/pricing/price-config";
@@ -35,4 +36,5 @@ export const PAGE_FACTS: PageFacts = {
   maxValueConfidencePercent: String(PRICE_DISPLAY_CONFIG.maxValueConfidenceBps / BPS_PER_PERCENT),
   activityMaxRecords: ACTIVITY_CONFIG.maxRecords,
   rateLimitWindowSeconds: RATE_LIMIT_WINDOW_MS / MS_PER_SECOND,
+  buyableSymbols: PRODUCT_SYMBOLS,
 };

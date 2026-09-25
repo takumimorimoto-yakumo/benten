@@ -58,7 +58,21 @@ export type PageFacts = {
   readonly maxValueConfidencePercent: string;
   readonly activityMaxRecords: number;
   readonly rateLimitWindowSeconds: number;
+  /** On-chain symbols of the purchasable xStocks, in the routes table's order. */
+  readonly buyableSymbols: readonly string[];
 };
+
+const ENGLISH_COUNTS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+
+/** An English count as the prose writes it: a word up to twenty, digits above. */
+function englishCount(count: number): string {
+  return ENGLISH_COUNTS[count] ?? String(count);
+}
+
+/** `A, B and C`. */
+function englishList(items: readonly string[]): string {
+  return items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}
 
 /** Labels owned by other screens, repeated exactly. */
 export type PageLabels = {
@@ -108,7 +122,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "For each company it lists the Solana tokens that reference it, each with its provider and a short statement of what the token gives you.",
           "It shows facts with their sources: SEC filings for US-listed companies, and the provider's own statements where there are no filings.",
           "It shows each token's exact identity, its mint address, so you can check it in your wallet.",
-          purchase("It lets you buy eight xStocks (NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx and HOODx), each through one fixed route. You approve and send the purchase in your own wallet."),
+          purchase(`It lets you buy ${englishCount(f.buyableSymbols.length)} xStocks (${englishList(f.buyableSymbols)}), each through one fixed route. You approve and send the purchase in your own wallet.`),
         ],
       },
       {
@@ -199,7 +213,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "xStocks in Benten",
-          body: [purchase("Benten lists the xStocks in its registry and lets you buy eight of them: NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx and HOODx. Every other xStock is shown so you can check it.")],
+          body: [purchase(`Benten lists the xStocks in its registry and lets you buy ${englishCount(f.buyableSymbols.length)} of them: ${englishList(f.buyableSymbols)}. Every other xStock is shown so you can check it.`)],
         },
       ],
     },
@@ -342,7 +356,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "Terms of use",
       lead: ["This page describes how Benten can be used as it works today. It is a plain summary, not a reviewed legal agreement, and it can change."],
       sections: [
-        { id: "service", heading: "What Benten provides", body: ["Benten is an information and tooling service. It shows public data about companies and Solana tokens, and it can prepare a swap to one of eight xStocks, paid with USDC, SOL or SKR, for your own wallet to approve."] },
+        { id: "service", heading: "What Benten provides", body: [`Benten is an information and tooling service. It shows public data about companies and Solana tokens, and it can prepare a swap to one of ${englishCount(f.buyableSymbols.length)} xStocks, paid with USDC, SOL or SKR, for your own wallet to approve.`] },
         { id: "no-warranty", heading: "No warranty", body: ["Benten is provided as it is, without any warranty. Its data comes from public sources that Benten does not verify, audit or guarantee, and it can be incomplete, delayed, wrong or corrected later. Any part of the service can change, pause or stop at any time."] },
         { id: "not-advice", heading: negation("Not investment advice"), body: [negation("Nothing in Benten is investment advice, a recommendation, a valuation or an offer to buy or sell any asset.")] },
         {
@@ -457,7 +471,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "企業ごとに、その企業を参照するSolanaのトークンを並べ、提供元と、そのトークンで何が得られるかの短い説明を示します。",
           "事実を出典とともに示します。米国上場企業はSECへの提出書類、提出書類がない場合は提供元自身の説明です。",
           "各トークンの正確な識別情報であるミントアドレスを示すので、ウォレットで確かめられます。",
-          purchase("8つのxStocks（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx）を、それぞれ1つの固定経路で購入できます。購入はご自身のウォレットで承認し、送信します。"),
+          purchase(`${f.buyableSymbols.length}銘柄のxStocks（${f.buyableSymbols.join("、")}）を、それぞれ1つの固定経路で購入できます。購入はご自身のウォレットで承認し、送信します。`),
         ],
       },
       {
@@ -548,7 +562,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "BentenでのxStocks",
-          body: [purchase("BentenはレジストリにあるxStocksを一覧にし、そのうち8つ（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx）を購入できるようにしています。ほかのxStockは確認のために表示しています。")],
+          body: [purchase(`BentenはレジストリにあるxStocksを一覧にし、そのうち${f.buyableSymbols.length}銘柄（${f.buyableSymbols.join("、")}）を購入できるようにしています。ほかのxStockは確認のために表示しています。`)],
         },
       ],
     },
@@ -691,7 +705,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "利用条件",
       lead: ["このページは、現在の動作に即してBentenをどう利用できるかを説明するものです。法的な確認を経た契約文ではなく、平易な要約であり、変更されることがあります。"],
       sections: [
-        { id: "service", heading: "Bentenが提供するもの", body: ["Bentenは情報とツールを提供するサービスです。企業とSolanaのトークンについて公開データを示し、USDC、SOLまたはSKRで支払う、8つのxStocksのいずれかへのスワップを、あなたのウォレットが承認するために用意できます。"] },
+        { id: "service", heading: "Bentenが提供するもの", body: [`Bentenは情報とツールを提供するサービスです。企業とSolanaのトークンについて公開データを示し、USDC、SOLまたはSKRで支払う、${f.buyableSymbols.length}銘柄のxStocksのいずれかへのスワップを、あなたのウォレットが承認するために用意できます。`] },
         { id: "no-warranty", heading: "無保証", body: ["Bentenは現状のまま、いかなる保証もなく提供されます。データはBentenが検証、監査、保証しない公開情報に由来し、不完全、遅延、誤り、後日の訂正がありえます。サービスのどの部分も、いつでも変更、一時停止、終了されることがあります。"] },
         { id: "not-advice", heading: negation("投資助言ではありません"), body: [negation("Bentenのどの内容も、投資助言、推奨、評価、または資産の売買の申し込みではありません。")] },
         {
@@ -806,7 +820,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "기업마다 그 기업을 참조하는 Solana 토큰을 나열하고, 각 토큰의 제공사와 그 토큰으로 무엇을 얻는지에 대한 짧은 설명을 보여 줍니다.",
           "사실을 출처와 함께 보여 줍니다. 미국 상장 기업은 SEC 제출 서류이고, 제출 서류가 없으면 제공사 자신의 설명입니다.",
           "각 토큰의 정확한 식별 정보인 민트 주소를 보여 주므로 지갑에서 확인할 수 있습니다.",
-          purchase("8개의 xStocks(NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx, HOODx)를 각각 하나의 고정 경로로 구매할 수 있습니다. 구매는 본인의 지갑에서 승인하고 전송합니다."),
+          purchase(`${f.buyableSymbols.length}개의 xStocks(${f.buyableSymbols.join(", ")})를 각각 하나의 고정 경로로 구매할 수 있습니다. 구매는 본인의 지갑에서 승인하고 전송합니다.`),
         ],
       },
       {
@@ -897,7 +911,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten의 xStocks",
-          body: [purchase("Benten은 레지스트리에 있는 xStocks를 나열하고, 그중 8개(NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx, HOODx)를 구매할 수 있게 합니다. 다른 xStock은 확인할 수 있도록 보여 줍니다.")],
+          body: [purchase(`Benten은 레지스트리에 있는 xStocks를 나열하고, 그중 ${f.buyableSymbols.length}개(${f.buyableSymbols.join(", ")})를 구매할 수 있게 합니다. 다른 xStock은 확인할 수 있도록 보여 줍니다.`)],
         },
       ],
     },
@@ -1040,7 +1054,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "이용 조건",
       lead: ["이 페이지는 현재 작동 방식에 따라 Benten을 어떻게 이용할 수 있는지 설명합니다. 법적 검토를 거친 계약서가 아니라 알기 쉬운 요약이며, 바뀔 수 있습니다."],
       sections: [
-        { id: "service", heading: "Benten이 제공하는 것", body: ["Benten은 정보와 도구를 제공하는 서비스입니다. 기업과 Solana 토큰에 대한 공개 데이터를 보여 주고, USDC, SOL 또는 SKR로 지불하는, 8개의 xStocks 중 하나로의 스왑을 본인의 지갑이 승인하도록 준비할 수 있습니다."] },
+        { id: "service", heading: "Benten이 제공하는 것", body: [`Benten은 정보와 도구를 제공하는 서비스입니다. 기업과 Solana 토큰에 대한 공개 데이터를 보여 주고, USDC, SOL 또는 SKR로 지불하는, ${f.buyableSymbols.length}개의 xStocks 중 하나로의 스왑을 본인의 지갑이 승인하도록 준비할 수 있습니다.`] },
         { id: "no-warranty", heading: "보증 없음", body: ["Benten은 있는 그대로, 어떠한 보증도 없이 제공됩니다. 데이터는 Benten이 검증, 감사, 보증하지 않는 공개 출처에서 나오며, 불완전하거나 늦거나 틀리거나 나중에 정정될 수 있습니다. 서비스의 어느 부분이든 언제든 바뀌거나 일시 중지되거나 종료될 수 있습니다."] },
         { id: "not-advice", heading: negation("투자 자문이 아닙니다"), body: [negation("Benten의 어떤 내용도 투자 자문, 추천, 가치평가, 또는 자산을 사고팔자는 제안이 아닙니다.")] },
         {
@@ -1155,7 +1169,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "为每家公司列出引用它的 Solana 代币，并注明每种代币的提供方，以及一句话说明这种代币给你什么。",
           "展示附带来源的事实：美国上市公司来自 SEC 文件；没有文件时，来自提供方自己的说明。",
           "显示每种代币的准确身份，即它的铸币地址，便于你在钱包中核对。",
-          purchase("可以购买 8 种 xStocks（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx），每种通过一条固定路径。购买由你在自己的钱包中批准并发送。"),
+          purchase(`可以购买 ${f.buyableSymbols.length} 种 xStocks（${f.buyableSymbols.join("、")}），每种通过一条固定路径。购买由你在自己的钱包中批准并发送。`),
         ],
       },
       {
@@ -1246,7 +1260,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten 中的 xStocks",
-          body: [purchase("Benten 列出其登记册中的 xStocks，其中 8 种可以购买：NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx。其他 xStock 仅供你查看。")],
+          body: [purchase(`Benten 列出其登记册中的 xStocks，其中 ${f.buyableSymbols.length} 种可以购买：${f.buyableSymbols.join("、")}。其他 xStock 仅供你查看。`)],
         },
       ],
     },
@@ -1389,7 +1403,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "使用条件",
       lead: ["本页按照 Benten 当前的运作方式，说明可以如何使用它。它是一份简明的摘要，不是经过法律审阅的协议，并且可能会变更。"],
       sections: [
-        { id: "service", heading: "Benten 提供什么", body: ["Benten 是一项提供信息和工具的服务。它显示关于公司和 Solana 代币的公开数据，并可以准备一种兑换（用 USDC、SOL 或 SKR 支付，兑换为 8 种 xStocks 之一），供你自己的钱包批准。"] },
+        { id: "service", heading: "Benten 提供什么", body: [`Benten 是一项提供信息和工具的服务。它显示关于公司和 Solana 代币的公开数据，并可以准备一种兑换（用 USDC、SOL 或 SKR 支付，兑换为 ${f.buyableSymbols.length} 种 xStocks 之一），供你自己的钱包批准。`] },
         { id: "no-warranty", heading: "不作保证", body: ["Benten 按现状提供，不附带任何保证。其数据来自 Benten 不核实、不审计、不保证的公开来源，可能不完整、有延迟、有误或之后被更正。服务的任何部分都可能随时变更、暂停或终止。"] },
         { id: "not-advice", heading: negation("不是投资建议"), body: [negation("Benten 中的任何内容都不是投资建议、推荐、估值，也不是买入或卖出任何资产的要约。")] },
         {
@@ -1504,7 +1518,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "為每家公司列出參照它的 Solana 代幣，並註明每種代幣的提供方，以及一句話說明這種代幣給你什麼。",
           "展示附有來源的事實：美國上市公司來自 SEC 文件；沒有文件時，來自提供方自己的說明。",
           "顯示每種代幣的準確身分，也就是它的鑄幣地址，方便你在錢包中核對。",
-          purchase("可以購買 8 種 xStocks（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx），每種透過一條固定路徑。購買由你在自己的錢包中核准並傳送。"),
+          purchase(`可以購買 ${f.buyableSymbols.length} 種 xStocks（${f.buyableSymbols.join("、")}），每種透過一條固定路徑。購買由你在自己的錢包中核准並傳送。`),
         ],
       },
       {
@@ -1595,7 +1609,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten 中的 xStocks",
-          body: [purchase("Benten 列出其登記冊中的 xStocks，其中 8 種可以購買：NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx。其他 xStock 僅供你查看。")],
+          body: [purchase(`Benten 列出其登記冊中的 xStocks，其中 ${f.buyableSymbols.length} 種可以購買：${f.buyableSymbols.join("、")}。其他 xStock 僅供你查看。`)],
         },
       ],
     },
@@ -1738,7 +1752,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "使用條件",
       lead: ["本頁依照 Benten 目前的運作方式，說明可以如何使用它。它是一份簡明的摘要，不是經過法律審閱的協議，並且可能會變更。"],
       sections: [
-        { id: "service", heading: "Benten 提供什麼", body: ["Benten 是一項提供資訊和工具的服務。它顯示關於公司和 Solana 代幣的公開資料，並可以準備一種兌換（用 USDC、SOL 或 SKR 支付，兌換為 8 種 xStocks 之一），供你自己的錢包核准。"] },
+        { id: "service", heading: "Benten 提供什麼", body: [`Benten 是一項提供資訊和工具的服務。它顯示關於公司和 Solana 代幣的公開資料，並可以準備一種兌換（用 USDC、SOL 或 SKR 支付，兌換為 ${f.buyableSymbols.length} 種 xStocks 之一），供你自己的錢包核准。`] },
         { id: "no-warranty", heading: "不作保證", body: ["Benten 按現狀提供，不附帶任何保證。其資料來自 Benten 不核實、不稽核、不保證的公開來源，可能不完整、有延遲、有誤或之後被更正。服務的任何部分都可能隨時變更、暫停或終止。"] },
         { id: "not-advice", heading: negation("不是投資建議"), body: [negation("Benten 中的任何內容都不是投資建議、推薦、估值，也不是買入或賣出任何資產的要約。")] },
         {

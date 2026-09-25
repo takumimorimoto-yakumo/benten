@@ -314,10 +314,11 @@ describe("server-side quote reader", () => {
 });
 
 const { PRODUCT_ROUTES, PRODUCT_TICKERS } = await import("./routes-table");
+const { DLMM_TICKERS } = await import("./dlmm-tickers.test-support");
 const { SERVER_QUOTE_STATE_COUNT } = await import("./server-quote");
 
 describe("server-side quote reader per product", () => {
-  it.each([...PRODUCT_TICKERS])("quotes %s through its own pinned pool and names its mint and symbol", async (ticker) => {
+  it.each([...DLMM_TICKERS])("quotes %s through its own pinned pool and names its mint and symbol", async (ticker) => {
     resetPool();
     const upstream = mintsUpstream();
     const read = createServerQuoteReader({ env: {}, fetchImpl: upstream as unknown as typeof fetch });
@@ -344,7 +345,7 @@ describe("server-side quote reader per product", () => {
     const read = createServerQuoteReader({ env: {}, fetchImpl: upstream as unknown as typeof fetch });
     await expect(read("2")).resolves.toMatchObject({ ok: true, route: { output_mint: NVDAX_MINT.toBase58() } });
     const readsAfterDefault = upstream.mock.calls.length;
-    for (const ticker of ["AMZN", "meta", "METAx", "", " META"]) {
+    for (const ticker of ["AAPL", "meta", "METAx", "", " META"]) {
       await expect(read("2", "USDC", ticker)).resolves.toEqual({ ok: false, reason: "not_purchasable", max_amount_usdc: "10.00", retryable: false });
     }
     expect(upstream.mock.calls.length).toBe(readsAfterDefault);
@@ -374,7 +375,7 @@ describe("server-side quote reader per product", () => {
     readLegPoolState.mockRejectedValue(new Error("down"));
     const read = createServerQuoteReader({ env: {}, fetchImpl: mintsUpstream() as unknown as typeof fetch, now: () => now });
     for (let call = 0; call < 6_000; call += 1) {
-      const ticker = PRODUCT_TICKERS[call % PRODUCT_TICKERS.length]!;
+      const ticker = DLMM_TICKERS[call % DLMM_TICKERS.length]!;
       await read("1", ["USDC", "SOL", "SKR"][call % 3], ticker);
       now += 10;
     }

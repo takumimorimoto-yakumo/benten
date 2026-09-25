@@ -100,12 +100,33 @@ export const PURCHASE_CONFIG = {
    */
   serverQuoteUpstreamPerMinute: 300,
   /**
-   * Tokens the bucket holds at most (and starts with): one cold refresh of
-   * every state (10 states x 5 requests), so a fresh instance can serve each
-   * route once before the per-minute rate applies. Any minute is then at most
-   * this plus `serverQuoteUpstreamPerMinute` requests.
+   * Upstream requests one cold refresh of a state makes, at most (a Meteora
+   * DLMM route or a pay-token leg; a Raydium CLMM route makes 3). The bucket
+   * starts with (and holds at most) `SERVER_QUOTE_UPSTREAM_BURST` in
+   * `server-quote.ts`: one cold refresh of every state (the state count times
+   * this), but never more than `serverQuoteUpstreamBurstMax`, so adding
+   * routes does not raise what a fresh instance may send at once. Any minute
+   * is then at most that burst plus `serverQuoteUpstreamPerMinute` requests.
    */
-  serverQuoteUpstreamBurst: 50,
+  serverQuoteRequestsPerColdRefresh: 5,
+  /**
+   * The most tokens the shared upstream bucket holds (ten 5-request cold
+   * refreshes). The reader has one state per product route and per pay-token
+   * leg (`SERVER_QUOTE_STATE_COUNT`: 25 routes and 2 legs, 27 states, whose
+   * cold refreshes make 103 requests), so a fresh instance serves the first
+   * states from the burst and the rest answer `busy` (fail-closed, retryable)
+   * until the refill of 5 a second covers them, about 11 s later.
+   */
+  serverQuoteUpstreamBurstMax: 50,
+  /**
+   * The most a preview's pool fee may be, in basis points of the amount it is
+   * charged on (the consumed input, or the output when the pool charges the
+   * fee there): a quote above it is refused as a route check, for every leg
+   * of every DLMM purchase. The routes generator lists a pool only when its
+   * base fee and its quoted fees at 2 and 10 USDC stay within the same bound
+   * (`MAX_POOL_FEE_PCT` in `scripts/routes/lib.mjs`; a test ties the two).
+   */
+  maxPoolFeeBps: 100,
   /** Wallet Standard chain this route runs on. */
   chain: "solana:mainnet",
   /** Same-origin read-only relay (`@benten/solana-rpc-relay`). */

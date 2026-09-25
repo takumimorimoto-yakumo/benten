@@ -36,7 +36,7 @@ import { PublicKey, type Connection, type Transaction, type TransactionInstructi
 import BN from "bn.js";
 
 import { NVDAX_MINT, NVDAX_USDC_POOL, USDC_MINT } from "./route";
-import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
+import { DEFAULT_PRODUCT, dlmmProductRoute, type ProductTicker } from "./routes-table";
 import { InvalidSwapInputError, RoutePoolMismatchError, readPoolQuote, type RouteQuote } from "./quote";
 
 /** The pinned route identities live in `route.ts` (no SDK import) and are re-exported here. */
@@ -101,7 +101,8 @@ export interface BuildSwapResult {
  */
 export async function buildNvdaxUsdcExactInSwap(params: BuildSwapParams): Promise<BuildSwapResult> {
   const { connection, userPublicKey, usdcInAmountRaw, slippageBps } = params;
-  const route = productRoute(params.product ?? DEFAULT_PRODUCT);
+  const route = dlmmProductRoute(params.product ?? DEFAULT_PRODUCT);
+  if (!route) throw new RoutePoolMismatchError("the product has no pinned Meteora DLMM route");
 
   const { pool, binArrays, sdkQuote: quote, quote: routeQuote } = await readPoolQuote(connection, usdcInAmountRaw, slippageBps, route.ticker);
   const inAmount = new BN(usdcInAmountRaw.toString());

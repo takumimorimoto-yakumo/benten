@@ -407,10 +407,10 @@ describe("purchase placement on the Dossier", () => {
   });
 
   it("gives other tokens the quiet unavailable notice in the same slot and no jump link", () => {
-    const html = page("AMZN", "en");
+    const html = page("IBM", "en");
     expect(html).toContain('data-purchase-slot="unsupported"');
     expect(html).not.toContain("data-purchase-jump");
-    expect(text(html)).toContain("Purchase not available for AMZNx");
+    expect(text(html)).toContain("Purchase not available for IBMx");
     const slot = html.slice(html.indexOf('id="purchase-slot"'));
     expect(slot.slice(0, slot.indexOf("</aside>"))).not.toMatch(/<a |<button/);
   });

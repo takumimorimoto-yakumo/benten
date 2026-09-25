@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { MCP_MAX_BODY_BYTES, MCP_MAX_RESPONSE_BYTES, MCP_PATH, MCP_PURCHASE_RATE_LIMIT_MAX_CALLS, MCP_RATE_LIMIT_MAX_REQUESTS } from "@benten/mcp/config";
-import { PREPARE_PURCHASE_PAY_TOKENS, PREPARE_PURCHASE_TICKERS, type PurchaseQuoteReader } from "@benten/mcp/http";
+import { PREPARE_PURCHASE_DEXES, PREPARE_PURCHASE_PAY_TOKENS, PREPARE_PURCHASE_TICKERS, type PurchaseQuoteReader } from "@benten/mcp/http";
 import { startPublicApi, type PublicApiServer } from "../src/node.js";
 import { createMcpHandler, mcpOriginRejection, siteOriginOf } from "../src/mcp.js";
 import { PAY_TOKEN_IDS } from "../../../packages/purchase/src/token-units.ts";
 import { PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
+import { ROUTE_DEX_LABELS } from "../../../packages/purchase/src/route-dex.ts";
 
 const PROTOCOL = "2025-06-18";
 const CONNECTOR_HEADERS = { "content-type": "application/json", accept: "application/json, text/event-stream", "mcp-protocol-version": PROTOCOL };
@@ -245,6 +246,11 @@ describe("remote MCP endpoint", () => {
     const result = await rpc(api, call("prepare_purchase", { ticker: "tsla", amount_usdc: "2" }));
     expect(calls).toEqual([["2", undefined, "TSLA"]]);
     expect(result.body.result.structuredContent.data).toMatchObject({ prepared: false, reason: "not_purchasable" });
+  });
+
+  it("accepts exactly the purchase package's DEX names in a route", () => {
+    // SSOT check: the MCP package lists the DEX names without depending on the purchase package.
+    expect([...PREPARE_PURCHASE_DEXES]).toEqual(Object.values(ROUTE_DEX_LABELS));
   });
 
   it("advertises exactly the purchase package's pay tokens and passes pay_token through to the host reader", async () => {

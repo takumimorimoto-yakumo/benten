@@ -1,0 +1,78 @@
+[
+  {
+    "ticker": "COIN",
+    "pool": "w7SGmPeXoMCsjvXqgsAmUn56uypyDsjAtsxeVkaiqxa"
+  },
+  {
+    "ticker": "AMZN",
+    "pool": "6m5aXAve4uh6Kt4ytKyCLWNMjd8PYP5vujwNCtycrUiD"
+  },
+  {
+    "ticker": "MSFT",
+    "pool": "D6bRhQUcR9B7bPbbqgxpE17MjyUjBtr8hHQCcJoHrrv1"
+  },
+  {
+    "ticker": "QQQ",
+    "pool": "GMjGLWzvK75LPetrgAmdeXnvxc4fUuQPwJxeQqTDU1aG"
+  },
+  {
+    "ticker": "GLD",
+    "pool": "78ReVNMLGRWmjtf2HmBoHUe2pRcsctXTTbxJnbhchyze"
+  },
+  {
+    "ticker": "BRK.B",
+    "pool": "B4UdLnvzCrnfRndLdgGTYZjcKTDsaFKB54cmKb2GoSne"
+  },
+  {
+    "ticker": "AVGO",
+    "pool": "EkpbWmPzrzFsv2xkJRdvWs61aRuDBVdrJK7WQmctBFnB"
+  },
+  {
+    "ticker": "MCD",
+    "pool": "5MGvNj9RNKNmzwp1LtZuQkZonEYtKJ3JuiyNQEUU2DsF"
+  },
+  {
+    "ticker": "KO",
+    "pool": "7HNwUP5rSUo9GfdDthJn4UCdw2Px6h2aprSedD7r7J3C"
+  },
+  {
+    "ticker": "INTC",
+    "pool": "6KoZB86BFDk6TZbB4CTBoAA8PPbpmEwSWFjCyfkt1Uw4"
+  },
+  {
+    "ticker": "PEP",
+    "pool": "GmcGvaTDhwScEKcmDPsBiLxbgHtvTEGp89kHjpsHZjD2"
+  },
+  {
+    "ticker": "UNH",
+    "pool": "5xm6QUDxRyMg3Gx59CxXB6VZnRKs4bVu44DS6DzZr3Bp"
+  },
+  {
+    "ticker": "XOM",
+    "pool": "H3qMpQnUiod9qfEMZL84nvoYd2pXrscHA6NQAb6icwxD"
+  },
+  {
+    "ticker": "PLTR",
+    "pool": "2EbY6YYKdQY9mmn9voiadgMcEnmZ5oe7qkcFVmywNrrE"
+  },
+  {
+    "ticker": "GME",
+    "pool": "1jAkn9tRpK9R72iW7MHYx6cF9nEkYnD4FYSxMYEDePL"
+  },
+  {
+    "ticker": "STRC",
+    "pool": "DU9dgBU6Yh2JjsYcjtRY21G14dhQxn6Xm5PT949Sa4tA"
+  },
+  {
+    "ticker": "TQQQ",
+    "pool": "7Mt2zB4JUV5VNPXzYaW6kG3xkaq7zKsBuZKZhNq6AVV4"
+  },
+  {
+    "ticker": "WMT",
+    "pool": "36m7kUFCFheNBnvXDSvgCMt5c27VbUbhQnugCReFhet7"
+  },
+  {
+    "ticker": "SPCX",
+    "pool": "AHNN6JmvaGG6XUoSg7sEr38gRYDB2jTbUvqXVuqaRHpq"
+  }
+]

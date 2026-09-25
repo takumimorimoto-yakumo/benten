@@ -18,7 +18,7 @@ import { PAY_TOKENS, USDC_DECIMALS, type PayTokenId } from "./route";
 import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
 import { createRelayConnection, multiplierReading, readPayMint, readRouteMints, relayFailureOf, type RelayConnection } from "./rpc";
 import { classifySimulationError } from "./simulation";
-import { auditShapeOf, auditSwapTransaction, auditTwoLegTransaction, twoLegAmountFailure } from "./tx-allowlist";
+import { auditShapeOf, auditSwapTransaction, auditTwoLegTransaction, quotedFeeFailure, twoLegAmountFailure } from "./tx-allowlist";
 import { transactionErrorCode } from "./tracker";
 
 export type PreviewOutcome =
@@ -41,6 +41,8 @@ function relayOutcome(error: unknown, relay: RelayConnection, createsNvdaxAccoun
  */
 export async function preparePreview(walletAddress: string, inputRaw: bigint, now: () => number = Date.now, payToken: PayTokenId = "USDC", product: ProductTicker = DEFAULT_PRODUCT): Promise<PreviewOutcome> {
   const route = productRoute(product);
+  // A Raydium CLMM product loads its own builder and audit on demand; a DLMM product's page never fetches them.
+  if (route.dex === "raydium-clmm") return import("./clmm-preview").then(({ prepareClmmPreview }) => prepareClmmPreview(walletAddress, inputRaw, now, payToken, route.ticker));
   if (payToken !== "USDC") return prepareTwoLegPreview(walletAddress, payToken, inputRaw, now, route.ticker);
   const relay = createRelayConnection();
   let createsNvdaxAccount = false;
@@ -59,6 +61,8 @@ export async function preparePreview(walletAddress: string, inputRaw: bigint, no
       slippageBps: PURCHASE_CONFIG.slippageBps,
     });
     const minimumOutputRaw = BigInt(built.quote.minimumOutputRaw);
+    const feeFailure = quotedFeeFailure(built.quote, "quote");
+    if (feeFailure) return { ok: false, failure: "routeCheck", details: feeFailure, createsNvdaxAccount };
     const wireTransaction = Uint8Array.from(built.transaction.serialize({ requireAllSignatures: false, verifySignatures: false }));
 
     // Audit the exact bytes the wallet would receive, not the builder's object.
@@ -148,6 +152,8 @@ async function prepareTwoLegPreview(walletAddress: string, payToken: Exclude<Pay
     // The builder's own limit check reads its quote; bound the amounts the user reviews independently of it.
     const amountFailure = twoLegAmountFailure({ usdcOutRaw, usdcMinimumRaw, outputRaw, minimumOutputRaw });
     if (amountFailure) return { ok: false, failure: "routeCheck", details: amountFailure, createsNvdaxAccount };
+    const feeFailure = quotedFeeFailure(built.firstLeg, "first leg") ?? quotedFeeFailure(built.secondLeg, "second leg");
+    if (feeFailure) return { ok: false, failure: "routeCheck", details: feeFailure, createsNvdaxAccount };
     const wireTransaction = Uint8Array.from(built.transaction.serialize({ requireAllSignatures: false, verifySignatures: false }));
 
     const audit = auditTwoLegTransaction(auditShapeOf(wireTransaction), {

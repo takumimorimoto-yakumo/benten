@@ -8,7 +8,9 @@ import { describe, expect, it } from "vitest";
 import { ComputeBudgetProgram, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
 
 import { PAY_TOKENS, USDC_MINT } from "./route";
+import observed from "./routes-observed.json" with { type: "json" };
 import { PRODUCT_ROUTES, PRODUCT_TICKERS, type ProductTicker } from "./routes-table";
+import { DLMM_TICKERS } from "./dlmm-tickers.test-support";
 import {
   associatedTokenAddress,
   auditShapeOf,
@@ -33,19 +35,12 @@ const BLOCKHASH = new PublicKey(new Uint8Array(32).fill(1)).toBase58();
 
 /**
  * Reserve and oracle accounts read back from each pool's `lbPair` on mainnet
- * (read-only, 2026-09-25): independent evidence for the PDA derivations the
- * audit uses for every product.
+ * (read-only, recorded in `routes-observed.json` with the date of each
+ * reading): independent evidence for the PDA derivations the audit uses for
+ * every product.
  */
-const OBSERVED: Record<ProductTicker, { reserveX: string; reserveY: string; oracle: string }> = {
-  NVDA: { reserveX: "86FWMceL1zy5agA4HxyDAZxRHR86Ky7D6AhDL8VXtvsY", reserveY: "GZj4nNXEZ67eEvbvKzkRc8aSrS2EGH2mu2hmUA3UTeBr", oracle: "AMhrVuCt6Yh98bVFSWHfFnn7L25D8QzzocfCRbQfHhB7" },
-  META: { reserveX: "5y4mPK17wFYUK5a8ZgmkKCwp7x6ufxFVVBh78AD3FaeU", reserveY: "8E7er4htv678LMC7U8e5qteWa8BNdz3UipzVzbaemkQ8", oracle: "2fXA73Hco6YcjXaZPDwp4jsUp1HrMfQzVodrq6asgYjE" },
-  MSTR: { reserveX: "68NKnY7TBqo5Wp1jR3WUEEr8b5xQTWMrEf6vjhKQxo7j", reserveY: "DwC162xNqDEF1DdkQHM1C57VyFpuW9s2T466HYqCFEyn", oracle: "5rBLpxG49pX6uFS35LXUVDVTHCeSmxT4gFN8mPsR6e7N" },
-  GOOGL: { reserveX: "6wtMNvNSHqDWG77DKq4QCM1RTdNU8rKpJGrsQtpwkNQB", reserveY: "7CJYjH4UNZvPyuJ9Uwdp7sRhERXcL9hYvDCuE2Rsup4U", oracle: "EkFrj1JScoM9nb3VDtsvYoawf3wYSfQdfXC2pgSWHvqW" },
-  CRCL: { reserveX: "F5gkTb9TqBitWrawpAb82ony4wA9S8oU4JSatbHauTkS", reserveY: "EgR95MhG6FKnkDUvbgEoqLL3WTmxHe1QqXW8Go7HhzMS", oracle: "2esqZnEzvnVAWHCUXKZyParsC4TJxAiRnFFkipGk6EiG" },
-  TSLA: { reserveX: "Fb2igyoX7vgWay6C9mrcK6Eq42UrDs2DCXmmYsBkphxd", reserveY: "6wWq6D7CWdSuetdRdhz1HpNZ9NKkwymEUx4E3wrzKc7K", oracle: "2a529zrA4QGfdE3P26kwGjjzZzkZYAApiVbQPSikHdYt" },
-  SPY: { reserveX: "f7c1WCa22RVfXbKF7KVxkVZpnyHzdojdriBXhvGDwF2", reserveY: "8q9RAYzVEjeNGY4C4K14yE1DgEZiYi61t4waJyTeuHpM", oracle: "ubLscM8FriNDZFUn5PuYhNGCEqKG4ibCU2318KK5hVR" },
-  HOOD: { reserveX: "bQQ91tcWeEXQ2dUDqihhyQ3Hgz64GCCjyDmFkV3rHFx", reserveY: "Hr8KWKywy5Mg2XMy6LfueDDRfoSou8wu5sz7spKw71CV", oracle: "25JXDTmpsUAQbr914ozE4rWjrbvAVWjpNcJmfK6HfnXo" },
-};
+// The DLMM records carry the reserve and oracle accounts; the Raydium CLMM records do not (their pools are checked in clmm-*.test.ts).
+const OBSERVED = observed as unknown as Partial<Record<ProductTicker, { reserveX: string; reserveY: string; oracle: string }>>;
 
 const INPUT = 2_000_000n;
 const MINIMUM = 250_000n;
@@ -118,16 +113,20 @@ function otherProduct(ticker: ProductTicker): ProductTicker {
 }
 
 describe("product pool derivations", () => {
-  it.each([...PRODUCT_TICKERS])("match the accounts read back from the %s pool on mainnet", (ticker) => {
+  it("have one observed record per listed product", () => {
+    expect(Object.keys(OBSERVED)).toEqual([...PRODUCT_TICKERS]);
+  });
+
+  it.each([...DLMM_TICKERS])("match the accounts read back from the %s pool on mainnet", (ticker) => {
     const derived = derivedPoolAccounts(ticker);
-    expect(derived.reserveX).toBe(OBSERVED[ticker].reserveX);
-    expect(derived.reserveY).toBe(OBSERVED[ticker].reserveY);
-    expect(derived.oracle).toBe(OBSERVED[ticker].oracle);
+    expect(derived.reserveX).toBe(OBSERVED[ticker]!.reserveX);
+    expect(derived.reserveY).toBe(OBSERVED[ticker]!.reserveY);
+    expect(derived.oracle).toBe(OBSERVED[ticker]!.oracle);
     expect(binArrayAddress(BIN, ticker)).toBe(poolBinArrayAddress(PRODUCT_ROUTES[ticker].pool, BIN));
   });
 });
 
-describe.each([...PRODUCT_TICKERS])("auditSwapTransaction for %s", (ticker) => {
+describe.each([...DLMM_TICKERS])("auditSwapTransaction for %s", (ticker) => {
   const route = PRODUCT_ROUTES[ticker];
   const other = otherProduct(ticker);
   const otherRoute = PRODUCT_ROUTES[other];
@@ -163,7 +162,7 @@ describe.each([...PRODUCT_TICKERS])("auditSwapTransaction for %s", (ticker) => {
 });
 
 describe("auditSwapTransaction product key", () => {
-  it.each(["AMZN", "meta", "METAx", ""])("fails closed for %j, which is not a routes-table key", (product) => {
+  it.each(["AAPL", "meta", "METAx", ""])("fails closed for %j, which is not a routes-table key", (product) => {
     expect(audit(product as ProductTicker, [LIMIT(), productSwap("META")])).toEqual({ ok: false, reason: "product has no pinned route" });
   });
 
@@ -228,7 +227,7 @@ function twoLegAudit(product: ProductTicker, second: TransactionInstruction, pay
   return auditTwoLegTransaction(auditShapeOf(wire(PAY_LEGS[payToken].instructions(second))), twoLegExpectation(product, payToken));
 }
 
-const TWO_LEG_CASES = PRODUCT_TICKERS.flatMap((ticker) => (["SKR", "SOL"] as const).map((payToken) => [ticker, payToken] as const));
+const TWO_LEG_CASES = DLMM_TICKERS.flatMap((ticker) => (["SKR", "SOL"] as const).map((payToken) => [ticker, payToken] as const));
 
 describe.each(TWO_LEG_CASES)("auditTwoLegTransaction for %s paid with %s", (ticker, payToken) => {
   const other = otherProduct(ticker);
@@ -250,13 +249,21 @@ describe.each(TWO_LEG_CASES)("auditTwoLegTransaction for %s paid with %s", (tick
   });
 });
 
-describe("auditTwoLegTransaction product key", () => {
-  it("fails closed for a product that is not a routes-table key", () => {
-    expect(twoLegAudit("AMZN" as ProductTicker, productSwap("META", {}, USDC_MIN, OUT_MIN))).toEqual({ ok: false, reason: "product has no pinned route" });
+describe("DLMM audits and the Raydium CLMM routes", () => {
+  it("refuse a product bought through a CLMM pool, whatever the instructions", () => {
+    expect(twoLegAudit("COIN", productSwap("META", {}, USDC_MIN, OUT_MIN))).toEqual({ ok: false, reason: "product has no pinned route" });
+    const tx = new Transaction({ blockhash: BLOCKHASH, lastValidBlockHeight: 1, feePayer: USER }).add(ComputeBudgetProgram.setComputeUnitLimit({ units: 1 }));
+    expect(auditSwapTransaction(auditShapeOf(Uint8Array.from(tx.serialize({ requireAllSignatures: false, verifySignatures: false }))), { user: USER.toBase58(), product: "COIN", inputRaw: INPUT, minimumOutputRaw: MINIMUM, binArrayIndexes: [BIN], hasBitmapExtension: false })).toEqual({ ok: false, reason: "product has no pinned route" });
   });
 });
 
-describe.each([...PRODUCT_TICKERS])("wire bytes of a %s purchase that are not exactly one transaction", (ticker) => {
+describe("auditTwoLegTransaction product key", () => {
+  it("fails closed for a product that is not a routes-table key", () => {
+    expect(twoLegAudit("AAPL" as ProductTicker, productSwap("META", {}, USDC_MIN, OUT_MIN))).toEqual({ ok: false, reason: "product has no pinned route" });
+  });
+});
+
+describe.each([...DLMM_TICKERS])("wire bytes of a %s purchase that are not exactly one transaction", (ticker) => {
   const withTrailingByte = (bytes: Uint8Array) => Uint8Array.from([...bytes, 0]);
   const oneLeg: AuditExpectation = { user: USER.toBase58(), product: ticker, inputRaw: INPUT, minimumOutputRaw: MINIMUM, binArrayIndexes: [BIN], hasBitmapExtension: false };
 

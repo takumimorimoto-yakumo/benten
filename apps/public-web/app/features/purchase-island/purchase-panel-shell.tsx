@@ -36,17 +36,17 @@ export type PurchaseFrame = {
 };
 
 /** The sale flow's frame: the same pool, its own heading, route line and "Before you sell" heading. */
-export function saleFrameFrom(copy: PurchaseCopy, pool: string): PurchaseFrame {
-  const frame = purchaseFrameFrom(copy, pool);
+export function saleFrameFrom(copy: PurchaseCopy, pool: string, dex: string): PurchaseFrame {
+  const frame = purchaseFrameFrom(copy, pool, dex);
   return { ...frame, heading: copy.sell.heading, routeLine: copy.sell.routeLine(shortenAddress(pool)), noScript: copy.sell.noScript, notice: { ...copy.notice, heading: copy.sell.noticeHeading } };
 }
 
 export type WalletReserveCopy = { readonly title: string; readonly body: string };
 
-/** The frame for one locale's purchase copy and the pinned pool. */
-export function purchaseFrameFrom(copy: PurchaseCopy, pool: string): PurchaseFrame {
+/** The frame for one locale's purchase copy, the pinned pool and the display name of its DEX. */
+export function purchaseFrameFrom(copy: PurchaseCopy, pool: string, dex: string): PurchaseFrame {
   return {
-    heading: copy.heading, routeLine: copy.routeLine(shortenAddress(pool)), pool, copyValue: copy.copyValue, notice: copy.notice,
+    heading: copy.heading, routeLine: copy.routeLine(shortenAddress(pool), dex), pool, copyValue: copy.copyValue, notice: copy.notice,
     noScript: copy.noScript, walletReserve: { title: copy.wallet.notDetectedTitle, body: copy.wallet.notDetectedBody },
   };
 }

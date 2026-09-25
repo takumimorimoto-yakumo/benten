@@ -437,7 +437,7 @@ test("the remote MCP endpoint answers a connector without Origin and refuses a f
   assert.equal(JSON.parse(over.remote.body.toString("utf8")).result.structuredContent.data.reason, "over_limit");
   assert.deepEqual(material(over.remote), material(over.local));
   // The ticker reaches the hosted reader: a registry product with no route is refused before any upstream read, on both sides.
-  const unrouted = await both("POST", "/api/mcp", { headers: { ...MCP_HEADERS, host: PREVIEW_HOST }, body: JSON.stringify({ jsonrpc: "2.0", id: 5, method: "tools/call", params: { name: "prepare_purchase", arguments: { ticker: "AMZN", amount_usdc: "2" } } }) });
+  const unrouted = await both("POST", "/api/mcp", { headers: { ...MCP_HEADERS, host: PREVIEW_HOST }, body: JSON.stringify({ jsonrpc: "2.0", id: 5, method: "tools/call", params: { name: "prepare_purchase", arguments: { ticker: "IBM", amount_usdc: "2" } } }) });
   assert.equal(JSON.parse(unrouted.remote.body.toString("utf8")).result.structuredContent.data.reason, "not_purchasable");
   assert.deepEqual(material(unrouted.remote), material(unrouted.local));
   const own = await both("POST", "/api/mcp", { headers: { ...MCP_HEADERS, host: PREVIEW_HOST, origin: `https://${PREVIEW_HOST}` }, body: MCP_INITIALIZE });

@@ -3,7 +3,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { describe, expect, it, vi } from "vitest";
 import { createServer, PREPARE_PURCHASE_DESCRIPTION } from "../server.js";
 import { DISCLAIMER } from "../lib/envelope.js";
-import { preparePurchase, type PurchaseQuoteResult } from "./prepare-purchase.js";
+import { PREPARE_PURCHASE_TICKERS, preparePurchase, type PurchaseQuoteResult } from "./prepare-purchase.js";
 
 const NVDAX_MINT = "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh";
 const WALLET = "11111111111111111111111111111111";
@@ -84,6 +84,30 @@ describe("prepare_purchase", () => {
     await Promise.all([client.close(), server.close()]);
   });
 
+  it("returns the output in display units at the multiplier the reader read, and null without one", async () => {
+    const withDisplay = vi.fn(async () => quoted({ product_display: { multiplier: "1.0059033904787456", output: "0.02233813", minimum_output: "0.02211473" } }));
+    const { client, server } = await protocolClient(withDisplay as never);
+    const shown = (await client.callTool({ name: "prepare_purchase", arguments: { amount_usdc: 5 } })).structuredContent as any;
+    expect(shown.data.quote).toMatchObject({ output_raw: "2220704", minimum_output_raw: "2198496", output_basis: "raw_token_units_before_display_multiplier", display_multiplier: "1.0059033904787456", output_display: "0.02233813", minimum_output_display: "0.02211473" });
+    await Promise.all([client.close(), server.close()]);
+
+    for (const display of [null, undefined]) {
+      const reader = vi.fn(async () => quoted(display === undefined ? {} : { product_display: display }));
+      const { client: c, server: srv } = await protocolClient(reader as never);
+      const body = (await c.callTool({ name: "prepare_purchase", arguments: { amount_usdc: 5 } })).structuredContent as any;
+      expect(body.data.quote).toMatchObject({ display_multiplier: null, output_display: null, minimum_output_display: null });
+      await Promise.all([c.close(), srv.close()]);
+    }
+  });
+
+  it.each([{ multiplier: "1e1", output: "0.1", minimum_output: "0.1" }, { multiplier: "10", output: "-1", minimum_output: "0.1" }, { multiplier: "10", output: "0.1" }])("fails closed on a malformed display reading %j", async (display) => {
+    const reader = vi.fn(async () => quoted({ product_display: display as never }));
+    const { client, server } = await protocolClient(reader as never);
+    const body = (await client.callTool({ name: "prepare_purchase", arguments: { amount_usdc: 5 } })).structuredContent as any;
+    expect(body.data).toMatchObject({ prepared: false, reason: "service_unavailable" });
+    await Promise.all([client.close(), server.close()]);
+  });
+
   it("fails closed on the reader's amount checks and on a wallet address that is not a Solana address", async () => {
     const overLimit = vi.fn(async () => ({ ok: false as const, reason: "over_limit" as const, max_amount_usdc: "10.00", retryable: false }));
     const { client, server } = await protocolClient(overLimit);
@@ -140,7 +164,7 @@ describe("prepare_purchase", () => {
         amount_usdc: { anyOf: [{ type: "string", maxLength: 32 }, { type: "number", exclusiveMinimum: 0 }] },
         amount: { anyOf: [{ type: "string", maxLength: 32 }, { type: "number", exclusiveMinimum: 0 }] },
         pay_token: { type: "string", maxLength: 16, enum: ["USDC", "SOL", "SKR"] },
-        ticker: { type: "string", maxLength: 16, enum: ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"] },
+        ticker: { type: "string", maxLength: 16, enum: [...PREPARE_PURCHASE_TICKERS] },
         wallet_address: { type: "string", maxLength: 64 },
       },
     });
@@ -267,6 +291,27 @@ describe("prepare_purchase", () => {
       expect(result.eligibility).toMatch(/xStocks to US persons/);
     });
 
+    it("carries a Raydium CLMM route's facts as the reader gives them", async () => {
+      const coin = "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu";
+      const quote = vi.fn(async () => quoted({
+        amount_usdc: "2.00", amount_raw: "2000000", buy_query: "?amount=2.00",
+        route: { ...(quoted() as Extract<PurchaseQuoteResult, { ok: true }>).route, pool: "w7SGmPeXoMCsjvXqgsAmUn56uypyDsjAtsxeVkaiqxa", dex: "Raydium CLMM", output_mint: coin, output_symbol: "COINx" },
+      }));
+      const result = await preparePurchase({ ticker: "COIN", amount_usdc: "2" }, { quote, siteOrigin: "https://benten.example" });
+      expect(result.data).toMatchObject({
+        prepared: true,
+        product: { ticker: "COIN", symbol: "COINx", mint: coin },
+        route: { dex: "Raydium CLMM", pool: "w7SGmPeXoMCsjvXqgsAmUn56uypyDsjAtsxeVkaiqxa", output_mint: coin },
+        purchase_url: "https://benten.example/stock/COIN/buy?amount=2.00",
+      });
+    });
+
+    it("answers service_unavailable for a route naming any other DEX", async () => {
+      const quote = vi.fn(async () => quoted({ route: { ...(quoted() as Extract<PurchaseQuoteResult, { ok: true }>).route, dex: "Orca Whirlpool" as never } }));
+      const result = await preparePurchase({ amount_usdc: "5" }, { quote, siteOrigin: null });
+      expect(result.data).toMatchObject({ prepared: false, reason: "service_unavailable" });
+    });
+
     it("resolves the ticker through the registry first: an unknown ticker never reaches the reader", async () => {
       const quote = vi.fn(async () => metaQuote());
       for (const ticker of ["NOPE", "META!", "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu", "SPCX"]) {
@@ -280,8 +325,8 @@ describe("prepare_purchase", () => {
 
     it("answers not_purchasable when the reader has no route for a registry product", async () => {
       const quote = vi.fn(async () => ({ ok: false, reason: "not_purchasable", max_amount_usdc: "10.00", retryable: false }) as PurchaseQuoteResult);
-      const result = await preparePurchase({ ticker: "AMZN", amount_usdc: "2" }, { quote, siteOrigin: null });
-      expect(quote).toHaveBeenCalledWith("2", undefined, "AMZN");
+      const result = await preparePurchase({ ticker: "IBM", amount_usdc: "2" }, { quote, siteOrigin: null });
+      expect(quote).toHaveBeenCalledWith("2", undefined, "IBM");
       expect(result.data).toMatchObject({ prepared: false, reason: "not_purchasable", retryable: false });
     });
 
@@ -293,7 +338,7 @@ describe("prepare_purchase", () => {
     });
 
     it("names every advertised ticker in the description, with NVDA as the default", () => {
-      for (const ticker of ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"]) expect(PREPARE_PURCHASE_DESCRIPTION).toContain(ticker);
+      for (const ticker of PREPARE_PURCHASE_TICKERS) expect(PREPARE_PURCHASE_DESCRIPTION).toContain(ticker);
       expect(PREPARE_PURCHASE_DESCRIPTION).toMatch(/default NVDA/);
     });
   });

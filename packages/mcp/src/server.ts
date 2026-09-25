@@ -641,6 +641,8 @@ export const PREPARE_PURCHASE_DESCRIPTION =
   + `Set ticker to the xStock's registry ticker: ${PREPARE_PURCHASE_TICKERS.join(", ")} (default NVDA, the NVIDIA xStock NVDAx); any other ticker is not purchasable. `
   + "Each has one fixed route. Returns facts for that route: a current quote read from the product's pinned product/USDC pool, when the quote stops being current, "
   + "and purchase_url, the product's Benten buy page with the pay token and amount filled in. "
+  + "quote.output_raw and minimum_output_raw are raw token units before the display multiplier; output_display and minimum_output_display "
+  + "are the same amounts in display units at display_multiplier, the token's Scaled UI multiplier in effect at the quote (null when not read). "
   + "Pay with USDC (the default): give amount_usdc, a decimal USDC amount above 0 and at most the per-transaction limit, 10 USDC. "
   + "Or set pay_token to SOL or SKR and give amount in that token's units: the quote then covers the fixed two-leg route "
   + "(the token to USDC in one pinned pool, then that USDC to the product), and the first leg's quoted USDC must be at most 10 USDC, "

@@ -41,7 +41,7 @@ describe("product selection in the purchase reducer", () => {
     expect(purchaseReducer(ready, { type: "productSelected", product: "TSLA" })).toMatchObject({ product: "TSLA", attempt: { phase: "editing" } });
   });
 
-  it.each(["AMZN", "meta", "METAx", "", " META"])("ignores %j, which is not a routes-table key", (product) => {
+  it.each(["AAPL", "meta", "METAx", "", " META"])("ignores %j, which is not a routes-table key", (product) => {
     expect(purchaseReducer(CONNECTED, { type: "productSelected", product })).toBe(CONNECTED);
   });
 

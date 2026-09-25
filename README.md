@@ -7,14 +7,16 @@ a company through a Solana token. The investor starts from the company, not
 the token: Benten shows which tokens on Solana reference that company, which
 exact mint each one is, what the provider says the holder owns, where each
 statement comes from, and a live Pyth reference price where a reviewed feed
-exists. For eight xStocks (NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx
-and HOODx), each through one fixed pool, the investor can buy with USDC, SOL
-or SKR from their own wallet inside the app — SOL and SKR swap through one
-fixed two-leg route to USDC first, and every purchase is capped at 10 USDC's
-worth — and then check that the tokens arrived. NVDAx can also be sold back
-to USDC through its same fixed pool. Benten's server never holds a key and
-never signs; the investor's own wallet signs and sends every transaction.
-Benten gives no advice, ranking or recommendation.
+exists. For 25 xStocks (NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx,
+HOODx, AMDx, COINx, AMZNx, MSFTx, QQQx, GLDx, BRK.Bx, AVGOx, MCDx, KOx, INTCx,
+UNHx, XOMx, PLTRx, GMEx, STRCx and WMTx), each through one fixed pool, the
+investor can buy with USDC, SOL or SKR from their own wallet inside the app —
+SOL and SKR swap through one fixed two-leg route to USDC first, and every
+purchase is capped at 10 USDC's worth — and then check that the tokens
+arrived. NVDAx can also be sold back to USDC through its same fixed pool.
+Benten's server never holds a key and never signs; the investor's own wallet
+signs and sends every transaction. Benten gives no advice, ranking or
+recommendation.
 
 The name comes from Benzaiten (Benten) / Saraswati: the goddess of knowledge
 and wealth.
@@ -108,21 +110,49 @@ Reading needs no wallet; only Buy and Holdings ask for one.
 
 ## Purchase limits
 
-- Eight tokens, one route each, for USDC through one fixed Meteora DLMM pool
-  per token (`packages/purchase/src/routes-table.ts`). Each pool was read on
-  mainnet on 2026-09-25: owned by the DLMM program, token X the xStock mint
+- 25 tokens, one route each, for USDC through one fixed pool per token: nine
+  through a Meteora DLMM pool and sixteen through a Raydium CLMM pool
+  (`packages/purchase/src/routes-table.ts`). Each Meteora DLMM pool was read
+  on mainnet on 2026-09-25: owned by the DLMM program, token X the xStock mint
   (Token-2022, 8 decimals, Scaled UI Amount, no transfer hook), token Y USDC.
+  Its fee is the pool's base fee and, in brackets, the most its variable fee
+  can raise it to, from the pool's own parameters (`baseFactor` x `binStep` x
+  10 x 10^`baseFeePowerFactor`, over 10^9). Each Raydium CLMM pool
+  (`packages/purchase/src/routes-table-clmm.ts`) was read on mainnet on
+  2026-09-25: owned by the CLMM program, token A the xStock mint (the same
+  mint checks), token B USDC, both vaults the program's own vault addresses,
+  the fee taken on the input and no dynamic fee. Its fee is the trade fee of
+  the pool's config, a fixed rate; its liquidity is the USDC vault plus the
+  xStock vault at the pool's price. Every preview whose quoted pool fee is
+  above 1% is refused.
 
-  | Token | Mint | Pool | Liquidity (2026-09-25) |
-  |---|---|---|---:|
-  | NVDAx | `Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh` | `F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a` | about $430 |
-  | METAx | `Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu` | `D8pGWVN3vWeyexBtMZjyyPbcLhM1oeTEMibE9h3nNRYL` | about $10,100 |
-  | MSTRx | `XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ` | `CK751YkvVdjWF6cC3Mcs6ibb16DQ417ohXDZ52CRC4xS` | about $4,900 |
-  | GOOGLx | `XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN` | `HgerAhee6opeBQZSLYALL87kBAe9sa3gXM3qj7S4Jdk5` | about $2,200 |
-  | CRCLx | `XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1` | `DUJM3UvCd9o7CtQ771JR8x5ecn9AsbiH1GnEZAWwCinT` | about $1,400 |
-  | TSLAx | `XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB` | `BCZLEgknvcyCsJ9ERRN38U4gBTNn4ftU11fEtV3XHnK2` | about $1,300 |
-  | SPYx | `XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W` | `6uAw2iue69CTGsENLS3j2ur4NnBtbmGptFZ1ZZUje5PJ` | about $1,100 |
-  | HOODx | `XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg` | `AiKXdE3vAtCQTD9REbMEwNnuUfxHAZtBaHoVHdQirBUU` | about $810 |
+  | Token | DEX | Mint | Pool | Pool fee | Liquidity (2026-09-25) |
+  |---|---|---|---|---:|---:|
+  | NVDAx | Meteora DLMM | `Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh` | `F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a` | 0.25% (max 1.4%) | about $430 |
+  | METAx | Meteora DLMM | `Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu` | `D8pGWVN3vWeyexBtMZjyyPbcLhM1oeTEMibE9h3nNRYL` | 0.1% (max 0.59%) | about $10,100 |
+  | MSTRx | Meteora DLMM | `XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ` | `CK751YkvVdjWF6cC3Mcs6ibb16DQ417ohXDZ52CRC4xS` | 0.2% (max 2.84%) | about $4,900 |
+  | GOOGLx | Meteora DLMM | `XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN` | `HgerAhee6opeBQZSLYALL87kBAe9sa3gXM3qj7S4Jdk5` | 0.15% (max 1.84%) | about $2,200 |
+  | CRCLx | Meteora DLMM | `XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1` | `DUJM3UvCd9o7CtQ771JR8x5ecn9AsbiH1GnEZAWwCinT` | 0.15% (max 1.1%) | about $1,400 |
+  | TSLAx | Meteora DLMM | `XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB` | `BCZLEgknvcyCsJ9ERRN38U4gBTNn4ftU11fEtV3XHnK2` | 0.25% (max 1.81%) | about $1,300 |
+  | SPYx | Meteora DLMM | `XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W` | `6uAw2iue69CTGsENLS3j2ur4NnBtbmGptFZ1ZZUje5PJ` | 0.05% (max 1.61%) | about $1,100 |
+  | HOODx | Meteora DLMM | `XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg` | `AiKXdE3vAtCQTD9REbMEwNnuUfxHAZtBaHoVHdQirBUU` | 0.5% (max 2.06%) | about $810 |
+  | AMDx | Meteora DLMM | `XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF` | `DsxZiQTsdJbGJojzbdAy9yK7absibgAgUnMLTdNaWr4c` | 1% (max 2.69%) | about $2,200 |
+  | COINx | Raydium CLMM | `Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu` | `w7SGmPeXoMCsjvXqgsAmUn56uypyDsjAtsxeVkaiqxa` | 0.8% | about $1,455,900 |
+  | AMZNx | Raydium CLMM | `Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg` | `6m5aXAve4uh6Kt4ytKyCLWNMjd8PYP5vujwNCtycrUiD` | 0.25% | about $399,100 |
+  | MSFTx | Raydium CLMM | `XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX` | `D6bRhQUcR9B7bPbbqgxpE17MjyUjBtr8hHQCcJoHrrv1` | 0.1% | about $352,000 |
+  | QQQx | Raydium CLMM | `Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ` | `GMjGLWzvK75LPetrgAmdeXnvxc4fUuQPwJxeQqTDU1aG` | 0.1% | about $2,272,300 |
+  | GLDx | Raydium CLMM | `Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re` | `78ReVNMLGRWmjtf2HmBoHUe2pRcsctXTTbxJnbhchyze` | 0.1% | about $1,074,400 |
+  | BRK.Bx | Raydium CLMM | `Xs6B6zawENwAbWVi7w92rjazLuAr5Az59qgWKcNb45x` | `B4UdLnvzCrnfRndLdgGTYZjcKTDsaFKB54cmKb2GoSne` | 0.25% | about $110,100 |
+  | AVGOx | Raydium CLMM | `XsgSaSvNSqLTtFuyWPBhK9196Xb9Bbdyjj4fH3cPJGo` | `EkpbWmPzrzFsv2xkJRdvWs61aRuDBVdrJK7WQmctBFnB` | 1% | about $144,900 |
+  | MCDx | Raydium CLMM | `XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2` | `5MGvNj9RNKNmzwp1LtZuQkZonEYtKJ3JuiyNQEUU2DsF` | 1% | about $444,500 |
+  | KOx | Raydium CLMM | `XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ` | `7HNwUP5rSUo9GfdDthJn4UCdw2Px6h2aprSedD7r7J3C` | 1% | about $57,300 |
+  | INTCx | Raydium CLMM | `XshPgPdXFRWB8tP1j82rebb2Q9rPgGX37RuqzohmArM` | `6KoZB86BFDk6TZbB4CTBoAA8PPbpmEwSWFjCyfkt1Uw4` | 1% | about $55,200 |
+  | UNHx | Raydium CLMM | `XszvaiXGPwvk2nwb3o9C1CX4K6zH8sez11E6uyup6fe` | `5xm6QUDxRyMg3Gx59CxXB6VZnRKs4bVu44DS6DzZr3Bp` | 1% | about $12,500 |
+  | XOMx | Raydium CLMM | `XsaHND8sHyfMfsWPj6kSdd5VwvCayZvjYgKmmcNL5qh` | `H3qMpQnUiod9qfEMZL84nvoYd2pXrscHA6NQAb6icwxD` | 1% | about $17,600 |
+  | PLTRx | Raydium CLMM | `XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4` | `2EbY6YYKdQY9mmn9voiadgMcEnmZ5oe7qkcFVmywNrrE` | 1% | about $49,500 |
+  | GMEx | Raydium CLMM | `Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc` | `1jAkn9tRpK9R72iW7MHYx6cF9nEkYnD4FYSxMYEDePL` | 0.25% | about $54,400 |
+  | STRCx | Raydium CLMM | `Xs78JED6PFZxWc2wCEPspZW9kL3Se5J7L5TChKgsidH` | `DU9dgBU6Yh2JjsYcjtRY21G14dhQxn6Xm5PT949Sa4tA` | 0.1% | about $231,600 |
+  | WMTx | Raydium CLMM | `Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci` | `36m7kUFCFheNBnvXDSvgCMt5c27VbUbhQnugCReFhet7` | 1% | about $7,200 |
 
   Pay with USDC through that token's pool, or pay with SOL or SKR through
   that pay token's own pinned first-leg pool into USDC, then the same fixed
@@ -155,8 +185,10 @@ Reading needs no wallet; only Buy and Holdings ask for one.
   simulated NVDAx balance change equal to the quoted output. On 2026-09-25 a
   read-only mainnet check built, audited and simulated (unsigned) a 2 USDC
   purchase of each of the eight tokens, and a 0.01 SOL two-leg purchase of
-  METAx and TSLAx; all passed. A funded purchase has not been recorded in
-  this repository.
+  METAx and TSLAx; all passed. On 2026-09-26 the same read-only check, with
+  tampered variants of each purchase that the audit must refuse, was run on
+  each of the nine tokens listed now; all passed. A funded purchase has not
+  been recorded in this repository.
 
 ## Data sources and dates
 
@@ -359,7 +391,7 @@ The remote endpoint adds one tool the stdio server does not have:
 
 | Tool | Description |
 |---|---|
-| `prepare_purchase` | For a purchase the user explicitly asked for, of one of the eight buyable xStocks (`ticker`: NVDA, META, MSTR, GOOGL, CRCL, TSLA, SPY or HOOD; default NVDA, so a call without `ticker` works as before), on that token's one fixed route. The ticker is resolved through the registry allowlist (`invalid_ticker` otherwise), then matched exactly against the routes table (`not_purchasable` for any other registry product). Pay with USDC (the default; `amount_usdc` above 0 and at most 10), or set `pay_token` to `SOL` or `SKR` and give `amount` in that token's units: the quote then covers the same fixed two-leg route as the buy page (the token to USDC in its pinned pool, then that leg's USDC minimum to the token), and a first leg quoted above 10 USDC answers `over_limit`. It returns the pay token, each leg's quote (output, minimum output after the fixed slippage, fees, price impact; `first_leg` is `null` for USDC), when the quote stops being current, and `purchase_url`, the token's Benten buy page with the pay token and amount filled in (`/stock/META/buy?amount=5.00`, or `?amount=0.02&pay=sol`). Benten builds, signs and sends nothing: the page reads a fresh quote and the user's own wallet shows and approves the transaction. It carries the US-persons statement and the disclaimer |
+| `prepare_purchase` | For a purchase the user explicitly asked for, of one of the 25 buyable xStocks (`ticker`: NVDA, META, MSTR, GOOGL, CRCL, TSLA, SPY, HOOD, AMD, COIN, AMZN, MSFT, QQQ, GLD, BRK.B, AVGO, MCD, KO, INTC, UNH, XOM, PLTR, GME, STRC or WMT; default NVDA, so a call without `ticker` works as before), on that token's one fixed route. The ticker is resolved through the registry allowlist (`invalid_ticker` otherwise), then matched exactly against the routes table (`not_purchasable` for any other registry product). Pay with USDC (the default; `amount_usdc` above 0 and at most 10), or set `pay_token` to `SOL` or `SKR` and give `amount` in that token's units: the quote then covers the same fixed two-leg route as the buy page (the token to USDC in its pinned pool, then that leg's USDC minimum to the token), and a first leg quoted above 10 USDC answers `over_limit`. It returns the pay token, each leg's quote (output, minimum output after the fixed slippage, fees, price impact; `first_leg` is `null` for USDC), the product output and minimum output in display units with the token's Scaled UI multiplier in effect at the quote (`display_multiplier`; the raw amounts are before it), when the quote stops being current, and `purchase_url`, the token's Benten buy page with the pay token and amount filled in (`/stock/META/buy?amount=5.00`, or `?amount=0.02&pay=sol`). Benten builds, signs and sends nothing: the page reads a fresh quote and the user's own wallet shows and approves the transaction. It carries the US-persons statement and the disclaimer |
 
 The buy page accepts the `pay` parameter only as an exact lower-case pay token
 id (`usdc`, `sol`, `skr`; anything else ignores the whole link), selects that
@@ -386,8 +418,15 @@ contract is in [public data v2](./specs/contracts/public-data-v2.md), the
 
 ## Known limits
 
-- Only the eight tokens above are buyable in Benten. Every other product,
+- Only the 25 tokens above are buyable in Benten. Every other product,
   including all PreStocks tokens, is shown for reading and checking only.
+- A buy preview is not compared with the Pyth reference price at run time:
+  each pool's price was compared with it when the route was listed (within
+  3% where a current Pyth price existed), and the preview shows the pool's
+  own quote, fee and minimum output before approval. Several Raydium CLMM
+  pools hold little liquidity (WMTx about $7,200, UNHx about $12,500), so a
+  preview there can move further from the reference price than in the
+  deeper pools.
 - No funded purchase has been recorded in this repository.
 - Activity lists only purchases made from the same browser. A wallet's in-app
   browser keeps its own records.

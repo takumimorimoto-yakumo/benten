@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { ComputeBudgetProgram, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
 
+import { PURCHASE_CONFIG } from "./config";
 import {
+  quotedFeeFailure,
   associatedTokenAddress,
   auditShapeOf,
   auditSwapTransaction,
@@ -123,6 +125,10 @@ describe("auditSwapTransaction accepts the route's own transactions", () => {
     expect(audit([LIMIT(), createNvdaxAccount(), swapInstruction()])).toEqual({ ok: true, createsNvdaxAccount: true, createsUsdcAccount: false });
   });
 
+  it("accepts an input of exactly the per-transaction limit", () => {
+    expect(audit([LIMIT(), swapInstruction(swapKeys(), swapData(PURCHASE_CONFIG.maxUsdcInRaw))], { inputRaw: PURCHASE_CONFIG.maxUsdcInRaw }).ok).toBe(true);
+  });
+
   it("accepts several derived bin arrays", () => {
     const keys = [...swapKeys(), key(binArrayAddress(5n), false, true)];
     expect(audit([LIMIT(), swapInstruction(keys)], { binArrayIndexes: [4n, 5n] }).ok).toBe(true);
@@ -170,6 +176,9 @@ describe("auditSwapTransaction rejects anything else before the wallet", () => {
     ["a non-empty transfer-hook slice", () => audit([swapInstruction(swapKeys(), swapData(INPUT, MINIMUM, "0200000000010100"))]), /unexpected extra accounts/],
     ["an input that differs from the reviewed amount", () => audit([swapInstruction(swapKeys(), swapData(INPUT + 1n))]), /encoded input differs/],
     ["a minimum that differs from the reviewed minimum", () => audit([swapInstruction(swapKeys(), swapData(INPUT, MINIMUM - 1n))]), /encoded minimum differs/],
+    ["an input above the per-transaction limit, even as reviewed", () => audit([swapInstruction(swapKeys(), swapData(PURCHASE_CONFIG.maxUsdcInRaw + 1n))], { inputRaw: PURCHASE_CONFIG.maxUsdcInRaw + 1n }), /above the per-transaction limit/],
+    ["an input far above the limit (u64 max), even as reviewed", () => audit([swapInstruction(swapKeys(), swapData(18_446_744_073_709_551_615n))], { inputRaw: 18_446_744_073_709_551_615n }), /above the per-transaction limit/],
+    ["a zero input, even as reviewed", () => audit([swapInstruction(swapKeys(), swapData(0n))], { inputRaw: 0n }), /not positive/],
     ["another instruction of the DLMM program", () => audit([swapInstruction(swapKeys(), Buffer.from("00".repeat(32), "hex"))]), /not the expected swap/],
     ["two swaps", () => audit([swapInstruction(), swapInstruction()]), /must be the last instruction/],
     ["a swap that is not last", () => audit([swapInstruction(), LIMIT()]), /must be the last instruction/],
@@ -224,4 +233,34 @@ describe("wire bytes that are not exactly one transaction (fail closed)", () => 
       expect(auditSwapTransaction(auditShapeOf(bytes()), EXPECTATION)).toEqual({ ok: false, reason: "transaction bytes do not decode to exactly one transaction" });
     });
   }
+});
+
+describe("quotedFeeFailure", () => {
+  const leg = (feeRaw: string, feeOnInput = true) => ({ feeRaw, consumedInputRaw: "10000000", outputRaw: "2000000", feeOnInput });
+
+  it("bounds the fee at 1% (the routes generator's MAX_POOL_FEE_PCT; its test ties the two)", () => {
+    expect(PURCHASE_CONFIG.maxPoolFeeBps).toBe(100);
+  });
+
+  it("accepts a fee up to 1% of the amount it is charged on", () => {
+    expect(quotedFeeFailure(leg("100000"), "quote")).toBeNull();
+    expect(quotedFeeFailure(leg("20000", false), "quote")).toBeNull();
+    expect(quotedFeeFailure(leg("0"), "quote")).toBeNull();
+  });
+
+  it.each([
+    ["one raw unit above 1% of the input", leg("100001")],
+    ["a 10% fee", leg("1000000")],
+    ["one raw unit above 1% of the output when the fee is on the output", leg("20001", false)],
+  ])("refuses %s", (_name, quote) => {
+    expect(quotedFeeFailure(quote, "quote")).toBe("quote: the quoted pool fee is above the fee limit");
+  });
+
+  it.each([
+    ["an unreadable fee", { ...leg("x") }],
+    ["a negative fee", { ...leg("-1") }],
+    ["a zero base", { ...leg("1"), consumedInputRaw: "0" }],
+  ])("refuses %s", (_name, quote) => {
+    expect(quotedFeeFailure(quote, "quote")).toBe("quote: the quoted pool fee is not readable");
+  });
 });

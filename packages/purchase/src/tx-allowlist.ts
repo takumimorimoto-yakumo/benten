@@ -91,7 +91,7 @@ const SWAP2_DATA_LENGTH = SWAP2_DISCRIMINATOR.length + U64_BYTES * 2 + SWAP2_REM
  * (tag 3), whose priority fee the wallet would pay on top of the reviewed
  * terms, so it is refused like any other unknown instruction.
  */
-const COMPUTE_UNIT_LIMIT = { tag: 2, length: 5 };
+export const COMPUTE_UNIT_LIMIT = { tag: 2, length: 5 };
 /** Associated-token-account `CreateIdempotent`. */
 const ATA_CREATE_IDEMPOTENT = 1;
 
@@ -105,7 +105,7 @@ function i64LittleEndian(value: bigint): Uint8Array {
   return bytes;
 }
 
-function u64At(data: Uint8Array, offset: number): bigint {
+export function u64At(data: Uint8Array, offset: number): bigint {
   return new DataView(data.buffer, data.byteOffset, data.byteLength).getBigUint64(offset, true);
 }
 
@@ -120,7 +120,8 @@ export function associatedTokenAddress(owner: PublicKey, mint: PublicKey, tokenP
 /** The table route of a product key, or `null` for anything that is not a table key. */
 function routeOf(product: ProductTicker | undefined): ProductRoute | null {
   const ticker = resolveProductTicker(product ?? DEFAULT_PRODUCT);
-  return ticker === null ? null : PRODUCT_ROUTES[ticker];
+  // Only Meteora DLMM routes: a product bought through another DEX is audited by that DEX's audit.
+  return ticker === null || PRODUCT_ROUTES[ticker].dex !== "meteora-dlmm" ? null : PRODUCT_ROUTES[ticker];
 }
 
 /** The product's pinned pool as a `PoolSpec`: product token X (its own token program), USDC token Y. */
@@ -148,9 +149,9 @@ export function binArrayAddress(index: bigint, product: ProductTicker = DEFAULT_
  * wallet's own slots cannot be told apart per instruction; the signer set is
  * checked separately (only the wallet may sign).
  */
-type Expected = { pubkey: string; signer: boolean | null; writable: boolean | null };
+export type Expected = { pubkey: string; signer: boolean | null; writable: boolean | null };
 
-function checkAccounts(actual: AuditAccount[], expected: Expected[], label: string): string | null {
+export function checkAccounts(actual: AuditAccount[], expected: Expected[], label: string): string | null {
   if (actual.length !== expected.length) return `${label}: expected ${expected.length} accounts, found ${actual.length}`;
   for (const [index, want] of expected.entries()) {
     const got = actual[index];
@@ -162,7 +163,7 @@ function checkAccounts(actual: AuditAccount[], expected: Expected[], label: stri
 }
 
 /** `maxUnits`: the largest accepted compute-unit limit, or `null` for any (the protocol caps it). */
-function auditComputeBudget(instruction: AuditInstruction, seen: Set<number>, maxUnits: number | null): string | null {
+export function auditComputeBudget(instruction: AuditInstruction, seen: Set<number>, maxUnits: number | null): string | null {
   if (instruction.keys.length !== 0) return "compute budget: unexpected accounts";
   const tag = instruction.data[0];
   if (tag !== COMPUTE_UNIT_LIMIT.tag || instruction.data.length !== COMPUTE_UNIT_LIMIT.length) return "compute budget: unexpected instruction";
@@ -204,6 +205,9 @@ function auditSwap(instruction: AuditInstruction, user: PublicKey, expectation: 
   const amountIn = u64At(data, SWAP2_DISCRIMINATOR.length);
   const minimumOut = u64At(data, SWAP2_DISCRIMINATOR.length + U64_BYTES);
   if (amountIn !== expectation.inputRaw) return "swap: encoded input differs from the reviewed amount";
+  // The same per-transaction limit the two-leg audit holds its USDC leg to, whatever the caller reviewed.
+  if (amountIn <= 0n) return "swap: the USDC input is not positive";
+  if (amountIn > PURCHASE_CONFIG.maxUsdcInRaw) return "swap: the USDC input is above the per-transaction limit";
   if (minimumOut !== expectation.minimumOutputRaw) return "swap: encoded minimum differs from the reviewed minimum";
   if (!bytesEqual(data.subarray(SWAP2_DISCRIMINATOR.length + U64_BYTES * 2), SWAP2_REMAINING_ACCOUNTS_INFO)) {
     return "swap: unexpected extra accounts";
@@ -236,7 +240,7 @@ function auditSwap(instruction: AuditInstruction, user: PublicKey, expectation: 
 }
 
 /** Reason an audit gives for bytes that are not exactly one decodable transaction. */
-const NOT_ONE_TRANSACTION = "transaction bytes do not decode to exactly one transaction";
+export const NOT_ONE_TRANSACTION = "transaction bytes do not decode to exactly one transaction";
 
 function sameBytes(left: Uint8Array, right: Uint8Array): boolean {
   return left.byteLength === right.byteLength && left.every((byte, index) => byte === right[index]);
@@ -325,7 +329,7 @@ export interface PoolSpec {
   programY: PublicKey;
 }
 
-interface LegSpec extends PoolSpec {
+export interface LegSpec extends PoolSpec {
   userTokenIn: string;
   userTokenOut: string;
   amountIn: bigint;
@@ -363,7 +367,7 @@ export interface TwoLegAmounts {
 }
 
 /** Lowest minimum the fixed slippage allows for a quoted output: floor(out * (1 - slippage)). */
-function slippageFloor(outputRaw: bigint): bigint {
+export function slippageFloor(outputRaw: bigint): bigint {
   const denominator = BigInt(BPS_DENOMINATOR);
   return (outputRaw * (denominator - BigInt(PURCHASE_CONFIG.slippageBps))) / denominator;
 }
@@ -384,12 +388,40 @@ export function twoLegAmountFailure(amounts: TwoLegAmounts): string | null {
   return null;
 }
 
+/** The fields of one leg's pool quote the fee bound reads. */
+export interface LegFeeQuote {
+  feeRaw: string | bigint;
+  consumedInputRaw: string | bigint;
+  outputRaw: string | bigint;
+  feeOnInput: boolean;
+}
+
+/**
+ * `null` when a quoted pool fee is within `PURCHASE_CONFIG.maxPoolFeeBps` of
+ * the amount it is charged on (the consumed input, or the output when the pool
+ * takes the fee from it), otherwise the reason. A fee that cannot be read, or
+ * a zero base, fails.
+ */
+export function quotedFeeFailure(quote: LegFeeQuote, label: string): string | null {
+  let fee: bigint;
+  let base: bigint;
+  try {
+    fee = BigInt(quote.feeRaw);
+    base = BigInt(quote.feeOnInput ? quote.consumedInputRaw : quote.outputRaw);
+  } catch {
+    return `${label}: the quoted pool fee is not readable`;
+  }
+  if (fee < 0n || base <= 0n) return `${label}: the quoted pool fee is not readable`;
+  if (fee * BigInt(BPS_DENOMINATOR) > base * BigInt(PURCHASE_CONFIG.maxPoolFeeBps)) return `${label}: the quoted pool fee is above the fee limit`;
+  return null;
+}
+
 /** System program `Transfer` (u32 instruction index 2, then u64 lamports). */
-const SYSTEM_TRANSFER_INDEX = 2;
-const SYSTEM_TRANSFER_LENGTH = 12;
+export const SYSTEM_TRANSFER_INDEX = 2;
+export const SYSTEM_TRANSFER_LENGTH = 12;
 /** SPL Token `SyncNative` and `CloseAccount`. */
-const TOKEN_SYNC_NATIVE = 17;
-const TOKEN_CLOSE_ACCOUNT = 9;
+export const TOKEN_SYNC_NATIVE = 17;
+export const TOKEN_CLOSE_ACCOUNT = 9;
 
 export function poolAccounts(spec: PoolSpec) {
   const pool = spec.pool.toBytes();
@@ -407,7 +439,7 @@ export function poolBinArrayAddress(pool: PublicKey, index: bigint): string {
   return pda([new TextEncoder().encode("bin_array"), pool.toBytes(), i64LittleEndian(index)], DLMM_PROGRAM_ID);
 }
 
-function auditLegSwap(instruction: AuditInstruction, user: PublicKey, leg: LegSpec, label: string): string | null {
+export function auditLegSwap(instruction: AuditInstruction, user: PublicKey, leg: LegSpec, label: string): string | null {
   const data = instruction.data;
   if (data.length !== SWAP2_DATA_LENGTH || !bytesEqual(data.subarray(0, SWAP2_DISCRIMINATOR.length), SWAP2_DISCRIMINATOR)) {
     return `${label}: not the expected swap instruction`;
@@ -442,7 +474,7 @@ function auditLegSwap(instruction: AuditInstruction, user: PublicKey, leg: LegSp
 }
 
 /** Idempotent creation of the wallet's own token account for one of `mints`. Returns the mint created, or a failure. */
-function auditTwoLegAccountCreation(instruction: AuditInstruction, user: PublicKey, mints: ReadonlyMap<string, PublicKey>, created: Set<string>): string | null {
+export function auditTwoLegAccountCreation(instruction: AuditInstruction, user: PublicKey, mints: ReadonlyMap<string, PublicKey>, created: Set<string>): string | null {
   if (!bytesEqual(instruction.data, Uint8Array.from([ATA_CREATE_IDEMPOTENT]))) return "token account: only idempotent creation is allowed";
   const mint = instruction.keys[3]?.pubkey ?? "";
   const program = mints.get(mint);

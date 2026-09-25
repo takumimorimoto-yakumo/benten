@@ -28,11 +28,11 @@ import { TOKEN_PROGRAM_ID } from "@benten/solana";
 import { PAY_CONFIG } from "./pay-config";
 import { composeTwoLegInstructions } from "./two-leg-compose";
 import { PAY_TOKENS, USDC_MINT, type PayLeg, type PayTokenId } from "./route";
-import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
+import { DEFAULT_PRODUCT, dlmmProductRoute, type ProductTicker } from "./routes-table";
 
 const MAX_SLIPPAGE_BPS = 10_000;
 /** The pay token is token X of its first pool: that leg swaps X for Y. */
-const LEG_SWAP_FOR_Y = true;
+export const LEG_SWAP_FOR_Y = true;
 /** USDC is token Y of every product pool and the product token X: the second leg swaps Y for X. */
 const NVDAX_SWAP_FOR_Y = false;
 
@@ -58,8 +58,8 @@ export class QuoteOverLimitError extends Error {
   }
 }
 
-type DlmmPool = Awaited<ReturnType<typeof DLMM.create>>;
-type PoolBinArrays = Awaited<ReturnType<DlmmPool["getBinArrayForSwap"]>>;
+export type DlmmPool = Awaited<ReturnType<typeof DLMM.create>>;
+export type PoolBinArrays = Awaited<ReturnType<DlmmPool["getBinArrayForSwap"]>>;
 
 export interface BuildTwoLegParams {
   /** Caller-supplied RPC connection. This module never constructs its own. */
@@ -102,7 +102,7 @@ export interface BuildTwoLegResult {
   transaction: Transaction;
 }
 
-async function loadPool(connection: Connection, address: PublicKey, mintX: PublicKey, mintY: PublicKey, programX: PublicKey, programY: PublicKey): Promise<DlmmPool> {
+export async function loadPool(connection: Connection, address: PublicKey, mintX: PublicKey, mintY: PublicKey, programX: PublicKey, programY: PublicKey): Promise<DlmmPool> {
   const pool = await DLMM.create(connection, address);
   if (!pool.tokenX.mint.address.equals(mintX) || !pool.tokenY.mint.address.equals(mintY)) {
     throw new TwoLegRouteMismatchError(`pool ${address.toBase58()} mints do not match the pinned identity`);
@@ -122,9 +122,9 @@ function binArrayIndexesOf(pool: DlmmPool, binArrays: PoolBinArrays, used: Publi
   });
 }
 
-type SdkQuote = ReturnType<DlmmPool["swapQuote"]>;
+export type SdkQuote = ReturnType<DlmmPool["swapQuote"]>;
 
-function legQuote(pool: DlmmPool, binArrays: PoolBinArrays, quote: SdkQuote): LegQuote {
+export function legQuote(pool: DlmmPool, binArrays: PoolBinArrays, quote: SdkQuote): LegQuote {
   return {
     pool: pool.pubkey.toBase58(),
     consumedInputRaw: quote.consumedInAmount.toString(),
@@ -146,7 +146,8 @@ function legQuote(pool: DlmmPool, binArrays: PoolBinArrays, quote: SdkQuote): Le
 export async function buildTwoLegExactInSwap(params: BuildTwoLegParams): Promise<BuildTwoLegResult> {
   const { connection, userPublicKey, payToken, inAmountRaw, slippageBps, maxUsdcRaw } = params;
   const route = PAY_TOKENS[payToken];
-  const product = productRoute(params.product ?? DEFAULT_PRODUCT);
+  const product = dlmmProductRoute(params.product ?? DEFAULT_PRODUCT);
+  if (!product) throw new TwoLegRouteMismatchError("the product has no pinned Meteora DLMM route");
   const leg: PayLeg | null = route?.leg ?? null;
   if (!leg) throw new TwoLegInputError("the pay token has no pinned first leg");
   if (inAmountRaw <= 0n) throw new TwoLegInputError("inAmountRaw must be a positive integer");

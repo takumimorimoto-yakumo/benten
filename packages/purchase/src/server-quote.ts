@@ -17,7 +17,7 @@
  * quoted locally from it. Three limits apply on top, all per reader:
  *  - every upstream request draws one token from one shared bucket
  *    (`serverQuoteUpstreamPerMinute` a minute, at most
- *    `serverQuoteUpstreamBurst` saved); a refresh that finds none answers
+ *    `SERVER_QUOTE_UPSTREAM_BURST` saved); a refresh that finds none answers
  *    `busy` without reaching the upstream;
  *  - a state's failed refreshes are answered for a wait that starts at
  *    `serverQuoteMinRefreshMs` and doubles with each consecutive failure up
@@ -37,20 +37,23 @@ import { Connection, type FetchFn } from "@solana/web3.js";
 import { UPSTREAM_TIMEOUT_MS, UPSTREAM_URL_ENV } from "@benten/solana-rpc-relay/config";
 import { resolveUpstreamUrl, type RelayEnvironment } from "@benten/solana-rpc-relay";
 
-import { formatRawUnits, parsePayTokenInput } from "./amount";
+import { formatRawUnits, formatScaledUnits, parsePayTokenInput } from "./amount";
 import { PURCHASE_CONFIG } from "./config";
 import { deepLinkQuery } from "./deep-link";
 import { previewExpiry } from "./purchase-machine";
 import { quoteLegOnPoolState, quoteOnPoolState, readLegPoolState, readPoolState, type PoolState, type RouteQuote } from "./quote";
 import { PAY_TOKEN_UNITS, PAY_TOKENS, resolvePayToken, USDC_DECIMALS, USDC_MINT, USDC_SYMBOL, type PayTokenId } from "./route";
 import { DEFAULT_PRODUCT, PRODUCT_ROUTES, PRODUCT_TICKERS, resolveProductTicker, type ProductTicker } from "./routes-table";
+import { effectiveMultiplier, type ScaledUiAmountConfig } from "./mint-info";
 import { readPayMint, readRouteMints, type RelayConnection } from "./rpc";
+import { quoteClmmOnState, readClmmRouteState, type ClmmState } from "./clmm-quote";
+import { ROUTE_DEX_LABELS, type RouteDexLabel } from "./route-dex";
 
 export type ServerQuoteFailure = "invalid_amount" | "invalid_pay_token" | "not_purchasable" | "over_limit" | "busy" | "route_check" | "upstream_unavailable";
 
 export interface ServerQuoteRoute {
   pool: string;
-  dex: "Meteora DLMM";
+  dex: RouteDexLabel;
   input_mint: string;
   input_symbol: string;
   input_decimals: number;
@@ -64,6 +67,18 @@ export interface ServerQuoteLeg {
   route: ServerQuoteRoute;
   /** `outputRaw` is the estimated USDC; `minimumOutputRaw` is the USDC the second leg swaps. */
   quote: RouteQuote;
+}
+
+/**
+ * The product output in display units: the Token-2022 Scaled UI multiplier in
+ * effect when the answer was made (read from the product's mint account with
+ * the pool) and the quoted output and minimum output at it, truncated to the
+ * mint's decimals. The raw amounts in `quote` stay what the swap uses.
+ */
+export interface ServerQuoteProductDisplay {
+  multiplier: string;
+  output: string;
+  minimum_output: string;
 }
 
 export type ServerQuoteResult =
@@ -83,6 +98,8 @@ export type ServerQuoteResult =
     first_leg: ServerQuoteLeg | null;
     route: ServerQuoteRoute;
     quote: RouteQuote;
+    /** `null` when the product mint carries no readable Scaled UI multiplier. */
+    product_display: ServerQuoteProductDisplay | null;
     quoted_at_ms: number;
     expires_at_ms: number;
     buy_query: string;
@@ -105,6 +122,12 @@ export type ServerQuoteReader = (amountText: string, payToken?: string, ticker?:
  */
 export const SERVER_QUOTE_STATE_COUNT = PRODUCT_TICKERS.length + 2;
 
+/**
+ * Tokens the shared upstream bucket holds at most and starts with: one cold
+ * refresh of every state, capped at `serverQuoteUpstreamBurstMax`.
+ */
+export const SERVER_QUOTE_UPSTREAM_BURST = Math.min(SERVER_QUOTE_STATE_COUNT * PURCHASE_CONFIG.serverQuoteRequestsPerColdRefresh, PURCHASE_CONFIG.serverQuoteUpstreamBurstMax);
+
 export interface ServerQuoteOptions {
   /**
    * Server environment, for example `process.env`, read on every quote like
@@ -122,7 +145,7 @@ function productQuoteRoute(product: ProductTicker): ServerQuoteRoute {
   const route = PRODUCT_ROUTES[product];
   return {
     pool: route.pool.toBase58(),
-    dex: "Meteora DLMM",
+    dex: ROUTE_DEX_LABELS[route.dex],
     input_mint: USDC_MINT.toBase58(),
     input_symbol: USDC_SYMBOL,
     input_decimals: USDC_DECIMALS,
@@ -138,7 +161,7 @@ function legRoute(payToken: LegPayToken): ServerQuoteRoute {
   const token = PAY_TOKENS[payToken];
   return {
     pool: token.leg!.pool.toBase58(),
-    dex: "Meteora DLMM",
+    dex: ROUTE_DEX_LABELS["meteora-dlmm"],
     input_mint: token.mint.toBase58(),
     input_symbol: token.symbol,
     input_decimals: token.decimals,
@@ -188,7 +211,7 @@ export function retryAfterMs(value: string | null, nowMs: number): number | null
  */
 export function createUpstreamGuard(now: () => number) {
   const perMinute = PURCHASE_CONFIG.serverQuoteUpstreamPerMinute;
-  const burst = PURCHASE_CONFIG.serverQuoteUpstreamBurst;
+  const burst = SERVER_QUOTE_UPSTREAM_BURST;
   let tokens: number = burst;
   let refilledAt = now();
   let pausedUntil = 0;
@@ -255,15 +278,21 @@ function guardedFetch(fetchImpl: typeof fetch, guard: UpstreamGuard, attempt: Re
   }) as FetchFn;
 }
 
-interface CachedState extends PoolState {
+/** A route's amount-independent state: a DLMM pool and its bin arrays, or a CLMM pool and its tick arrays. */
+type RouteState = PoolState | ClmmState;
+
+/** A product route's state with the product mint's Scaled UI configuration read in the same refresh. */
+type ProductRouteState = RouteState & { productScaledUi?: ScaledUiAmountConfig | null };
+
+type CachedState = RouteState & {
   /** When the state was read; quotes computed from it are dated here. */
   at: number;
   /** The upstream it was read from; a changed upstream invalidates it. */
   upstream: string;
-}
+};
 
 type RefreshOutcome = CachedState | FailedQuote;
-type StateRead = (connection: Connection) => Promise<PoolState | FailedQuote>;
+type StateRead = (connection: Connection) => Promise<RouteState | FailedQuote>;
 type ConnectionFor = (upstream: URL, attempt: RefreshAttempt) => Connection;
 
 /**
@@ -286,7 +315,7 @@ function createCachedState(read: StateRead, connectionFor: ConnectionFor, guard:
       return { outcome: "pool" in outcome ? { ...outcome, at: now(), upstream: upstream.href } : outcome, limited: false };
     } catch (error) {
       if (attempt.limited) return { outcome: failure("busy", true), limited: true };
-      return { outcome: error instanceof Error && error.name === "RoutePoolMismatchError" ? failure("route_check", false) : failure("upstream_unavailable", true), limited: false };
+      return { outcome: error instanceof Error && (error.name === "RoutePoolMismatchError" || error.name === "ClmmUnsupportedError") ? failure("route_check", false) : failure("upstream_unavailable", true), limited: false };
     }
   }
 
@@ -337,7 +366,8 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
     routeStates[product] = createCachedState(async (connection) => {
       const mints = await readRouteMints(relayOf(connection), product);
       if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== PRODUCT_ROUTES[product].decimals) return failure("route_check", false);
-      return readPoolState(connection, { product });
+      const state = PRODUCT_ROUTES[product].dex === "raydium-clmm" ? await readClmmRouteState(connection, product) : await readPoolState(connection, { product });
+      return { ...state, productScaledUi: mints.nvdax.scaledUiAmount };
     }, connectionFor, guard, now);
   }
 
@@ -351,8 +381,20 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
     }, connectionFor, guard, now);
   }
 
-  function secondLeg(state: PoolState, usdcRaw: bigint): RouteQuote | null {
+  /** The product output at the multiplier in effect now, or `null` without a readable multiplier. */
+  function productDisplay(state: ProductRouteState, product: ProductTicker, quote: RouteQuote): ServerQuoteProductDisplay | null {
+    if (!state.productScaledUi) return null;
+    const multiplier = effectiveMultiplier(state.productScaledUi, now());
+    if (!/^\d+(?:\.\d+)?$/.test(multiplier)) return null;
+    const decimals = PRODUCT_ROUTES[product].decimals;
+    const output = formatScaledUnits(BigInt(quote.outputRaw), decimals, multiplier);
+    const minimum = formatScaledUnits(BigInt(quote.minimumOutputRaw), decimals, multiplier);
+    return output !== null && minimum !== null ? { multiplier, output, minimum_output: minimum } : null;
+  }
+
+  function secondLeg(state: RouteState, usdcRaw: bigint): RouteQuote | null {
     try {
+      if ("poolState" in state) return quoteClmmOnState(state, usdcRaw, PURCHASE_CONFIG.slippageBps).quote;
       return quoteOnPoolState(state, usdcRaw, PURCHASE_CONFIG.slippageBps).quote;
     } catch {
       return null;
@@ -388,6 +430,7 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
         first_leg: null,
         route: productQuoteRoute(product),
         quote,
+        product_display: productDisplay(outcome, product, quote),
         quoted_at_ms: outcome.at,
         expires_at_ms: previewExpiry(outcome.at),
         buy_query: deepLinkQuery(amount.raw),
@@ -397,6 +440,8 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
     const [route, leg] = await Promise.all([routeState(upstream), legStates[payToken](upstream)]);
     if (!("pool" in route)) return route;
     if (!("pool" in leg)) return leg;
+    // A first leg is always a DLMM pool state; a CLMM state here would be a wiring error.
+    if ("poolState" in leg) return failure("route_check", false);
     let first: RouteQuote;
     try {
       first = quoteLegOnPoolState(leg, amount.raw, PURCHASE_CONFIG.slippageBps);
@@ -425,6 +470,7 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
       first_leg: { route: legRoute(payToken), quote: first },
       route: productQuoteRoute(product),
       quote,
+      product_display: productDisplay(route, product, quote),
       quoted_at_ms: quotedAt,
       expires_at_ms: previewExpiry(quotedAt),
       buy_query: deepLinkQuery(amount.raw, payToken),

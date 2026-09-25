@@ -2,31 +2,38 @@ import { describe, expect, it } from "vitest";
 import { resolveMint, resolveTicker } from "@benten/registry";
 
 import { isPurchasableMint, NVDAX_MINT, NVDAX_SYMBOL, NVDAX_USDC_POOL } from "./route";
-import { DEFAULT_PRODUCT, PRODUCT_ROUTES, PRODUCT_TICKERS, productRoute, productRouteForMint, purchasableRoute, resolveProductTicker } from "./routes-table";
+import { PRODUCT_SYMBOLS } from "./product-symbols";
+import observed from "./routes-observed.json" with { type: "json" };
+import { DEFAULT_PRODUCT, dlmmProductRoute, PRODUCT_ROUTES, PRODUCT_TICKERS, productRoute, productRouteForMint, purchasableRoute, resolveProductTicker } from "./routes-table";
 
 const TOKEN_2022 = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
 
 /**
- * The pinned pools, copied from the read-only mainnet observation of
- * 2026-09-25 (pool owner DLMM, token X the product mint, token Y USDC). A
- * change to the table must change this list too.
+ * The pinned pools as the read-only mainnet observation recorded them
+ * (`routes-observed.json`, written by `scripts/routes/add-routes.mjs` after
+ * it checked each pool: owner DLMM, token X the product mint, token Y USDC).
+ * A change to the table must change that record too.
  */
-const OBSERVED_POOLS: Record<string, string> = {
-  NVDA: "F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a",
-  META: "D8pGWVN3vWeyexBtMZjyyPbcLhM1oeTEMibE9h3nNRYL",
-  MSTR: "CK751YkvVdjWF6cC3Mcs6ibb16DQ417ohXDZ52CRC4xS",
-  GOOGL: "HgerAhee6opeBQZSLYALL87kBAe9sa3gXM3qj7S4Jdk5",
-  CRCL: "DUJM3UvCd9o7CtQ771JR8x5ecn9AsbiH1GnEZAWwCinT",
-  TSLA: "BCZLEgknvcyCsJ9ERRN38U4gBTNn4ftU11fEtV3XHnK2",
-  SPY: "6uAw2iue69CTGsENLS3j2ur4NnBtbmGptFZ1ZZUje5PJ",
-  HOOD: "AiKXdE3vAtCQTD9REbMEwNnuUfxHAZtBaHoVHdQirBUU",
-};
+const OBSERVED_POOLS: Record<string, string> = Object.fromEntries(Object.entries(observed).map(([ticker, record]) => [ticker, record.pool]));
 
 describe("routes table", () => {
-  it("lists exactly the eight observed products, NVDA first and by default", () => {
+  it("lists exactly the observed products, NVDA first and by default", () => {
     expect([...PRODUCT_TICKERS]).toEqual(Object.keys(OBSERVED_POOLS));
+    // Written out so that a route added or dropped is reviewed here too.
+    expect([...PRODUCT_TICKERS]).toEqual(["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD", "AMD", "COIN", "AMZN", "MSFT", "QQQ", "GLD", "BRK.B", "AVGO", "MCD", "KO", "INTC", "UNH", "XOM", "PLTR", "GME", "STRC", "WMT"]);
     expect(Object.keys(PRODUCT_ROUTES)).toEqual([...PRODUCT_TICKERS]);
+    expect(PRODUCT_TICKERS[0]).toBe("NVDA");
     expect(DEFAULT_PRODUCT).toBe("NVDA");
+  });
+
+  it("states the table's symbols, in its order, in the dependency-free symbol list", () => {
+    expect([...PRODUCT_SYMBOLS]).toEqual(PRODUCT_TICKERS.map((ticker) => PRODUCT_ROUTES[ticker].symbol));
+  });
+
+  it.each([...PRODUCT_TICKERS])("records a liquidity reading and its date for %s", (ticker) => {
+    const record = (observed as Record<string, { liquidityUsd: number; observedOn: string }>)[ticker]!;
+    expect(record.liquidityUsd).toBeGreaterThan(0);
+    expect(record.observedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
   it.each([...PRODUCT_TICKERS])("pins %s to its registry mint, decimals and symbol, and its observed pool", (ticker) => {
@@ -47,6 +54,12 @@ describe("routes table", () => {
     expect(isPurchasableMint(entry!.mint)).toBe(true);
   });
 
+  it.each([...PRODUCT_TICKERS])("records %s under its route's DEX", (ticker) => {
+    const record = (observed as Record<string, { dex?: string }>)[ticker]!;
+    // The DLMM generator's records carry no DEX field; the Raydium CLMM records name theirs.
+    expect(record.dex ?? "meteora-dlmm").toBe(PRODUCT_ROUTES[ticker].dex);
+  });
+
   it("gives every product its own pool and mint", () => {
     const pools = new Set(PRODUCT_TICKERS.map((ticker) => PRODUCT_ROUTES[ticker].pool.toBase58()));
     const mints = new Set(PRODUCT_TICKERS.map((ticker) => PRODUCT_ROUTES[ticker].productMint.toBase58()));
@@ -62,7 +75,7 @@ describe("routes table", () => {
 });
 
 describe("routes table gate", () => {
-  it.each(["AMZN", "COIN", "MSFT", "QQQ"])("does not make the registry product %s purchasable", (ticker) => {
+  it.each(["ACN", "IBM", "PEP", "JPM"])("does not make the registry product %s purchasable", (ticker) => {
     const entry = resolveTicker(ticker);
     expect(entry).not.toBeNull();
     expect(purchasableRoute(entry)).toBeNull();
@@ -90,6 +103,20 @@ describe("routes table gate", () => {
   });
 
   it("throws for a value that is not a table key", () => {
-    expect(() => productRoute("AMZN" as never)).toThrow(/no pinned route/);
+    expect(() => productRoute("AAPL" as never)).toThrow(/no pinned route/);
+  });
+});
+
+describe("DLMM route gate", () => {
+  it.each([...PRODUCT_TICKERS])("gives %s to the DLMM reader and builders only when its route is a DLMM pool", (ticker) => {
+    const route = PRODUCT_ROUTES[ticker];
+    expect(dlmmProductRoute(ticker)).toBe(route.dex === "meteora-dlmm" ? route : null);
+  });
+
+  it("refuses every Raydium CLMM product and still throws for a value that is not a table key", () => {
+    const clmm = PRODUCT_TICKERS.filter((ticker) => PRODUCT_ROUTES[ticker].dex === "raydium-clmm");
+    expect(clmm.length).toBeGreaterThan(0);
+    for (const ticker of clmm) expect(dlmmProductRoute(ticker)).toBeNull();
+    expect(() => dlmmProductRoute("AAPL" as never)).toThrow(/no pinned route/);
   });
 });

@@ -22,6 +22,7 @@ import {
   type Tracking,
 } from "@benten/purchase/purchase-machine";
 import { PAY_TOKEN_IDS, PAY_TOKEN_UNITS, USDC_SYMBOL, type PayTokenId } from "@benten/purchase/route";
+import { ROUTE_DEX_LABELS } from "@benten/purchase/route-dex";
 import { productRoute, SELL_ROUTE } from "@benten/purchase/routes-table";
 import type { SaleReferenceCheck } from "@benten/purchase/reference-price";
 import { ExternalLink } from "@/components/external-link";
@@ -270,7 +271,7 @@ function PayTokenField({ state, copy, handlers }: { state: PurchaseState; copy: 
           </PanelButton>
         ))}
       </div>
-      {state.payToken !== "USDC" ? <p className="text-xs text-muted-foreground">{copy.pay.route(state.payToken)}</p> : null}
+      {state.payToken !== "USDC" ? <p className="text-xs text-muted-foreground">{copy.pay.route(state.payToken, ROUTE_DEX_LABELS["meteora-dlmm"], ROUTE_DEX_LABELS[productRoute(attemptProduct(state)).dex])}</p> : null}
     </div>
   );
 }
@@ -682,7 +683,7 @@ export function PurchasePanelView({ state, now, locale, handlers, refs, announce
   const preview = PREVIEW_PHASES.has(attempt.phase) ? (attempt as Extract<Attempt, { preview: PreviewTerms }>).preview : null;
 
   return (
-    <PurchasePanelShell frame={selling ? saleFrameFrom(copy, pool) : purchaseFrameFrom(copy, pool)} locale={locale} phase={attempt.phase} flow={flow} side={state.side}>
+    <PurchasePanelShell frame={selling ? saleFrameFrom(copy, pool, ROUTE_DEX_LABELS[product.dex]) : purchaseFrameFrom(copy, pool, ROUTE_DEX_LABELS[product.dex])} locale={locale} phase={attempt.phase} flow={flow} side={state.side}>
       {!postSend ? <WalletStep state={state} copy={copy} handlers={handlers} locked={locked} /> : null}
       {showField && !selling ? <PayTokenField state={state} copy={copy} handlers={handlers} /> : null}
       {showField ? (selling ? <SellAmountField state={state} copy={copy} locale={locale} handlers={handlers} refs={refs} /> : <AmountField state={state} copy={copy} locale={locale} handlers={handlers} refs={refs} />) : null}

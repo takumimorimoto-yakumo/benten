@@ -6,6 +6,10 @@ import { ACTIVITY_CONFIG } from "../app/features/activity/activity-config.ts";
 import { tabOf } from "../app/features/navigation/app-tabs.ts";
 import { PRICE_DISPLAY_CONFIG } from "../app/features/pricing/price-config.ts";
 import { PAGE_FACTS, STATIC_PAGE_CONFIG } from "../app/features/static-pages/static-page-config.ts";
+import { PRODUCT_ROUTES, PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
+
+/** The routes table's symbols, in its order: the list About and the xStocks page state. */
+const PRODUCT_ROUTE_SYMBOLS = PRODUCT_TICKERS.map((ticker) => PRODUCT_ROUTES[ticker].symbol);
 import { pageLabelsFor, staticPagesCopyFor } from "../app/features/static-pages/static-page-copy.ts";
 import { AboutPage, LearnPage, LegalPage } from "../app/features/static-pages/static-pages.tsx";
 import { portfolioMessagesFor } from "../app/i18n/holdings-messages.ts";
@@ -109,6 +113,7 @@ describe("static information pages", () => {
       maxValueConfidencePercent: String(PRICE_DISPLAY_CONFIG.maxValueConfidenceBps / 100),
       activityMaxRecords: ACTIVITY_CONFIG.maxRecords,
       rateLimitWindowSeconds: RATE_LIMIT_WINDOW_MS / 1000,
+      buyableSymbols: PRODUCT_ROUTE_SYMBOLS,
     });
     for (const locale of PUBLIC_WEB_LOCALES) {
       const prices = textOf(pages(locale).find(({ name }) => name === "learn/reference-prices")!.html);

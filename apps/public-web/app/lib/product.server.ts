@@ -6,7 +6,9 @@
 import { companyForXStock } from "@benten/registry";
 import { formatBpsAsPercent } from "@benten/purchase/amount";
 import { PURCHASE_CONFIG } from "@benten/purchase/config";
+import { routeLiquidity } from "@benten/purchase/route-liquidity";
 import { productRouteForMint } from "@benten/purchase/routes-table";
+import { formatCompactCurrency, formatSourceDate } from "../i18n/format";
 import type { StockProductView } from "../features/product/product-view";
 import type { PublicWebLocale } from "../i18n/locales";
 import { isPublishedCompany } from "./company.server.js";
@@ -21,8 +23,15 @@ export function createStockProductView(ticker: string, locale: PublicWebLocale):
   const company = found && isPublishedCompany(found.slug) ? { slug: found.slug, displayName: found.display_name } : null;
   // The product's own pinned pool from the routes table, matched by exact mint.
   const pinned = view.purchase === "fixed_route" ? productRouteForMint(view.identity.mint) : null;
+  const reading = pinned ? routeLiquidity(pinned.ticker) : null;
   const route = pinned
-    ? { routeLine: createPurchaseFrame(locale, pinned.ticker).routeLine, pool: pinned.pool.toBase58(), slippage: `${formatBpsAsPercent(PURCHASE_CONFIG.slippageBps)}%` }
+    ? {
+      routeLine: createPurchaseFrame(locale, pinned.ticker).routeLine,
+      pool: pinned.pool.toBase58(),
+      slippage: `${formatBpsAsPercent(PURCHASE_CONFIG.slippageBps)}%`,
+      // No recorded reading leaves the liquidity line out; the route itself is still shown.
+      liquidity: reading ? { amount: formatCompactCurrency(reading.usd, "USD", locale), date: formatSourceDate(reading.observedOn, locale) } : null,
+    }
     : null;
   return { identity: view.identity, purchase: view.purchase, route, company };
 }

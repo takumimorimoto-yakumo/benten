@@ -10,7 +10,7 @@ import type { PublicWebLocale } from "./locales";
 
 type PurchaseErrorCopy = { title: string; body: string };
 export type PurchaseCopy = {
-  heading: string; jumpLink: string; routeLine: (pool: string) => string; poolLabel: string; noScript: string;
+  heading: string; jumpLink: string; routeLine: (pool: string, dex: string) => string; poolLabel: string; noScript: string;
   copyValue: { copy: string; copied: string; unavailable: string }; opensNewTab: string;
   unsupported: { heading: (symbol: string) => string; body: string };
   notice: { heading: string; usPersons: string; noEligibilityCheck: string; noAvailabilityGuarantee: string; notAdvice: string };
@@ -20,7 +20,7 @@ export type PurchaseCopy = {
   pay: {
     label: string; balance: (amount: string) => string; balanceLoading: (symbol: string) => string; balanceUnavailable: (symbol: string) => string; solReserve: (reserve: string) => string;
     amountLabel: (symbol: string) => string; helperRaw: (raw: string, symbol: string, decimals: string) => string; errorEmpty: (symbol: string) => string; errorPrecision: (symbol: string, decimals: string) => string; errorOverBalance: (balance: string) => string;
-    route: (symbol: string) => string; firstLeg: string; firstLegValue: (pay: string, usdc: string) => string; usdcIn: string; usdcInNote: string; limitBasis: (usdc: string, limit: string) => string; firstLegFee: (amount: string) => string; nvdaxPoolFee: string; nvdaxPoolImpact: string; accountCreation: string;
+    route: (symbol: string, firstDex: string, secondDex: string) => string; firstLeg: string; firstLegValue: (pay: string, usdc: string) => string; usdcIn: string; usdcInNote: string; limitBasis: (usdc: string, limit: string) => string; firstLegFee: (amount: string) => string; nvdaxPoolFee: string; nvdaxPoolImpact: string; accountCreation: string;
     overLimit: { title: string; body: (usdc: string, limit: string) => string }; paid: (symbol: string) => string; solPaidNote: string; usdcLeft: string;
   };
   action: { preview: string; previewing: string; approve: string; approving: string; refresh: string; tryAgain: string; checkAgain: string; startNew: string };
@@ -50,7 +50,7 @@ export type PurchaseCopy = {
 
 const purchaseEn = (s: string): PurchaseCopy => ({
   heading: `Buy ${s}`, jumpLink: `Buy ${s}`,
-  routeLine: (pool) => `One fixed route: Meteora DLMM pool ${pool}. You approve and send in your own wallet. Benten never signs or holds funds.`, poolLabel: "Pool address", noScript: "Buying requires JavaScript and a wallet.",
+  routeLine: (pool, dex) => `One fixed route: ${dex} pool ${pool}. You approve and send in your own wallet. Benten never signs or holds funds.`, poolLabel: "Pool address", noScript: "Buying requires JavaScript and a wallet.",
   copyValue: { copy: "Copy address", copied: "Copied", unavailable: "Copy unavailable" }, opensNewTab: "(opens in a new tab)",
   unsupported: { heading: (symbol) => `Purchase not available for ${symbol}`, body: "Benten supports buying only a fixed list of xStocks, each through one fixed pool. Benten offers no purchase for this token." },
   notice: { heading: "Before you buy", usPersons: "The issuer does not offer or sell xStocks to US persons, and transfers may only be made to non-US persons.", noEligibilityCheck: "Benten does not check whether you are eligible.", noAvailabilityGuarantee: "Availability from any country is not guaranteed.", notAdvice: "This is not investment advice." },
@@ -60,7 +60,7 @@ const purchaseEn = (s: string): PurchaseCopy => ({
   pay: {
     label: "Pay with", balance: (amount) => `Balance ${amount}`, balanceLoading: (symbol) => `Reading your ${symbol} balance...`, balanceUnavailable: (symbol) => `Your ${symbol} balance could not be read.`, solReserve: (reserve) => `${reserve} SOL stays in your wallet for the network fee and account deposits.`,
     amountLabel: (symbol) => `${symbol} to pay`, helperRaw: (raw, symbol, decimals) => `${raw} raw units. ${symbol} uses ${decimals} decimals.`, errorEmpty: (symbol) => `Enter an amount of ${symbol}.`, errorPrecision: (symbol, decimals) => `${symbol} has at most ${decimals} decimal places.`, errorOverBalance: (balance) => `This is more than the ${balance} you can use.`,
-    route: (symbol) => `${symbol} to USDC to ${s}: two fixed Meteora DLMM pools, in one transaction you approve in your wallet.`, firstLeg: "First pool: expected USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `USDC into the ${s} pool`, usdcInNote: "The first pool's minimum after slippage. Any USDC above it stays in your wallet.", limitBasis: (usdc, limit) => `Limit check: the first pool expects to return ${usdc} USDC for this amount. The limit is ${limit} USDC per transaction.`, firstLegFee: (amount) => `Pool fee ${amount}`, nvdaxPoolFee: `${s} pool fee`, nvdaxPoolImpact: `${s} pool price impact`, accountCreation: `This transaction may also create the token accounts it needs: ${s}, USDC, and wrapped SOL when paying with SOL. Your wallet shows any one-time SOL deposit; the wrapped SOL account is closed and its deposit returned in the same transaction.`,
+    route: (symbol, first, second) => `${symbol} to USDC to ${s}: ${first === second ? `two fixed ${first} pools` : `a fixed ${first} pool, then a fixed ${second} pool`}, in one transaction you approve in your wallet.`, firstLeg: "First pool: expected USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `USDC into the ${s} pool`, usdcInNote: "The first pool's minimum after slippage. Any USDC above it stays in your wallet.", limitBasis: (usdc, limit) => `Limit check: the first pool expects to return ${usdc} USDC for this amount. The limit is ${limit} USDC per transaction.`, firstLegFee: (amount) => `Pool fee ${amount}`, nvdaxPoolFee: `${s} pool fee`, nvdaxPoolImpact: `${s} pool price impact`, accountCreation: `This transaction may also create the token accounts it needs: ${s}, USDC, and wrapped SOL when paying with SOL. Your wallet shows any one-time SOL deposit; the wrapped SOL account is closed and its deposit returned in the same transaction.`,
     overLimit: { title: "Above the per-transaction limit", body: (usdc, limit) => `The first pool expects to return ${usdc} USDC for this amount, above the limit of ${limit} USDC per transaction. Enter a smaller amount. Nothing was signed or sent.` }, paid: (symbol) => `${symbol} paid`, solPaidNote: "SOL paid is the change in your wallet's SOL balance, so it includes the network fee and any account deposit.", usdcLeft: "USDC left in your wallet",
   },
   action: { preview: "Preview swap", previewing: "Preparing preview...", approve: "Approve in wallet", approving: "Waiting for approval...", refresh: "Refresh preview", tryAgain: "Try again", checkAgain: "Check again", startNew: "Start a new purchase" },
@@ -101,7 +101,7 @@ const purchaseEn = (s: string): PurchaseCopy => ({
 
 const purchaseJa = (s: string): PurchaseCopy => ({
   heading: `${s}を購入`, jumpLink: `${s}を購入`,
-  routeLine: (pool) => `固定ルートは1つです: Meteora DLMM プール ${pool}。承認と送信はご自身のウォレットで行います。Bentenは署名せず、資金を預かりません。`, poolLabel: "プールアドレス", noScript: "購入にはJavaScriptとウォレットが必要です。",
+  routeLine: (pool, dex) => `固定ルートは1つです: ${dex} プール ${pool}。承認と送信はご自身のウォレットで行います。Bentenは署名せず、資金を預かりません。`, poolLabel: "プールアドレス", noScript: "購入にはJavaScriptとウォレットが必要です。",
   copyValue: { copy: "アドレスをコピー", copied: "コピーしました", unavailable: "コピーできません" }, opensNewTab: "（新しいタブで開きます）",
   unsupported: { heading: (symbol) => `${symbol} は購入できません`, body: "Bentenが対応している購入は、決められた一部のxStocksを、それぞれ1つの固定プールを通じて購入することだけです。このトークンの購入は提供していません。" },
   notice: { heading: "購入の前に", usPersons: "発行体は米国人にxStocksを提供・販売しません。引き渡しは米国人でない人にだけ行います。", noEligibilityCheck: "Bentenはあなたに購入資格があるかを確認しません。", noAvailabilityGuarantee: "どの国からの利用も保証されていません。", notAdvice: "これは投資助言ではありません。" },
@@ -111,7 +111,7 @@ const purchaseJa = (s: string): PurchaseCopy => ({
   pay: {
     label: "支払いに使うトークン", balance: (amount) => `残高 ${amount}`, balanceLoading: (symbol) => `${symbol}残高を読み取っています…`, balanceUnavailable: (symbol) => `${symbol}残高を読み取れませんでした。`, solReserve: (reserve) => `ネットワーク手数料とアカウントのデポジットのため、${reserve} SOLはウォレットに残します。`,
     amountLabel: (symbol) => `支払う${symbol}`, helperRaw: (raw, symbol, decimals) => `${raw} raw単位。${symbol}は小数点以下${decimals}桁です。`, errorEmpty: (symbol) => `${symbol}の数量を入力してください。`, errorPrecision: (symbol, decimals) => `${symbol}は小数点以下${decimals}桁までです。`, errorOverBalance: (balance) => `使える額 ${balance} を超えています。`,
-    route: (symbol) => `${symbol}からUSDC、USDCから${s}へ: 2つの固定されたMeteora DLMMプールを、ウォレットで承認する1つのトランザクションで通ります。`, firstLeg: "1つ目のプール: 受け取る見込みのUSDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `${s}プールに入れるUSDC`, usdcInNote: "1つ目のプールのスリッページ後の最低額です。これを超えたUSDCはウォレットに残ります。", limitBasis: (usdc, limit) => `上限の確認: 1つ目のプールはこの数量で ${usdc} USDCを返す見込みです。上限は1回の取引で ${limit} USDCです。`, firstLegFee: (amount) => `プール手数料 ${amount}`, nvdaxPoolFee: `${s}プールの手数料`, nvdaxPoolImpact: `${s}プールの価格インパクト`, accountCreation: `このトランザクションは、必要なトークンアカウント(${s}、USDC、SOLで支払う場合はラップドSOL)も作成することがあります。1回限りのSOLのデポジットはウォレットに表示されます。ラップドSOLのアカウントは同じトランザクション内で閉じられ、そのデポジットは戻ります。`,
+    route: (symbol, first, second) => `${symbol}からUSDC、USDCから${s}へ: ${first === second ? `2つの固定された${first}プール` : `固定された${first}プールと、固定された${second}プール`}を、ウォレットで承認する1つのトランザクションで通ります。`, firstLeg: "1つ目のプール: 受け取る見込みのUSDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `${s}プールに入れるUSDC`, usdcInNote: "1つ目のプールのスリッページ後の最低額です。これを超えたUSDCはウォレットに残ります。", limitBasis: (usdc, limit) => `上限の確認: 1つ目のプールはこの数量で ${usdc} USDCを返す見込みです。上限は1回の取引で ${limit} USDCです。`, firstLegFee: (amount) => `プール手数料 ${amount}`, nvdaxPoolFee: `${s}プールの手数料`, nvdaxPoolImpact: `${s}プールの価格インパクト`, accountCreation: `このトランザクションは、必要なトークンアカウント(${s}、USDC、SOLで支払う場合はラップドSOL)も作成することがあります。1回限りのSOLのデポジットはウォレットに表示されます。ラップドSOLのアカウントは同じトランザクション内で閉じられ、そのデポジットは戻ります。`,
     overLimit: { title: "1回の取引の上限を超えています", body: (usdc, limit) => `1つ目のプールはこの数量で ${usdc} USDCを返す見込みで、1回の取引の上限 ${limit} USDCを超えています。数量を減らしてください。署名も送信もされていません。` }, paid: (symbol) => `支払った${symbol}`, solPaidNote: "支払ったSOLはウォレットのSOL残高の変化なので、ネットワーク手数料とアカウントのデポジットを含みます。", usdcLeft: "ウォレットに残ったUSDC",
   },
   action: { preview: "スワップをプレビュー", previewing: "プレビューを準備しています…", approve: "ウォレットで承認", approving: "承認を待っています…", refresh: "プレビューを更新", tryAgain: "もう一度試す", checkAgain: "もう一度確認", startNew: "新しい購入を始める" },
@@ -152,7 +152,7 @@ const purchaseJa = (s: string): PurchaseCopy => ({
 
 const purchaseKo = (s: string): PurchaseCopy => ({
   heading: `${s} 구매`, jumpLink: `${s} 구매`,
-  routeLine: (pool) => `고정된 경로 하나: Meteora DLMM 풀 ${pool}. 승인과 전송은 본인의 지갑에서 합니다. Benten은 서명하지 않으며 자금을 보관하지 않습니다.`, poolLabel: "풀 주소", noScript: "구매하려면 JavaScript와 지갑이 필요합니다.",
+  routeLine: (pool, dex) => `고정된 경로 하나: ${dex} 풀 ${pool}. 승인과 전송은 본인의 지갑에서 합니다. Benten은 서명하지 않으며 자금을 보관하지 않습니다.`, poolLabel: "풀 주소", noScript: "구매하려면 JavaScript와 지갑이 필요합니다.",
   copyValue: { copy: "주소 복사", copied: "복사했습니다", unavailable: "복사할 수 없습니다" }, opensNewTab: "(새 탭에서 열림)",
   unsupported: { heading: (symbol) => `${symbol}은(는) 구매할 수 없습니다`, body: "Benten은 정해진 일부 xStocks를 각각 하나의 고정된 풀을 통해 구매하는 것만 지원합니다. 이 토큰의 구매는 제공하지 않습니다." },
   notice: { heading: "구매 전에", usPersons: "발행사는 미국인에게 xStocks를 제공하거나 판매하지 않으며, 인도는 미국인이 아닌 사람에게만 이루어집니다.", noEligibilityCheck: "Benten은 귀하의 구매 자격을 확인하지 않습니다.", noAvailabilityGuarantee: "어느 국가에서든 이용 가능성은 보장되지 않습니다.", notAdvice: "이것은 투자 자문이 아닙니다." },
@@ -162,7 +162,7 @@ const purchaseKo = (s: string): PurchaseCopy => ({
   pay: {
     label: "결제 토큰", balance: (amount) => `잔액 ${amount}`, balanceLoading: (symbol) => `${symbol} 잔액을 읽는 중...`, balanceUnavailable: (symbol) => `${symbol} 잔액을 읽을 수 없습니다.`, solReserve: (reserve) => `네트워크 수수료와 계정 보증금을 위해 ${reserve} SOL은 지갑에 남겨 둡니다.`,
     amountLabel: (symbol) => `지불할 ${symbol}`, helperRaw: (raw, symbol, decimals) => `${raw} raw 단위. ${symbol}은(는) 소수점 이하 ${decimals}자리입니다.`, errorEmpty: (symbol) => `${symbol} 수량을 입력하세요.`, errorPrecision: (symbol, decimals) => `${symbol}은(는) 소수점 이하 ${decimals}자리까지입니다.`, errorOverBalance: (balance) => `사용할 수 있는 ${balance}을(를) 초과합니다.`,
-    route: (symbol) => `${symbol}에서 USDC, USDC에서 ${s}로: 두 개의 고정된 Meteora DLMM 풀을 지갑에서 승인하는 하나의 트랜잭션으로 거칩니다.`, firstLeg: "첫 번째 풀: 예상 USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `${s} 풀에 들어가는 USDC`, usdcInNote: "첫 번째 풀의 슬리피지 적용 후 최소 금액입니다. 이를 넘는 USDC는 지갑에 남습니다.", limitBasis: (usdc, limit) => `한도 확인: 첫 번째 풀은 이 수량에 대해 ${usdc} USDC를 돌려줄 것으로 예상합니다. 한도는 거래당 ${limit} USDC입니다.`, firstLegFee: (amount) => `풀 수수료 ${amount}`, nvdaxPoolFee: `${s} 풀 수수료`, nvdaxPoolImpact: `${s} 풀 가격 영향`, accountCreation: `이 트랜잭션은 필요한 토큰 계정(${s}, USDC, SOL로 지불할 때는 래핑된 SOL)도 생성할 수 있습니다. 1회성 SOL 예치금은 지갑에 표시됩니다. 래핑된 SOL 계정은 같은 트랜잭션 안에서 닫히고 예치금은 돌아옵니다.`,
+    route: (symbol, first, second) => `${symbol}에서 USDC, USDC에서 ${s}로: ${first === second ? `두 개의 고정된 ${first} 풀` : `고정된 ${first} 풀과 고정된 ${second} 풀`}을 지갑에서 승인하는 하나의 트랜잭션으로 거칩니다.`, firstLeg: "첫 번째 풀: 예상 USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `${s} 풀에 들어가는 USDC`, usdcInNote: "첫 번째 풀의 슬리피지 적용 후 최소 금액입니다. 이를 넘는 USDC는 지갑에 남습니다.", limitBasis: (usdc, limit) => `한도 확인: 첫 번째 풀은 이 수량에 대해 ${usdc} USDC를 돌려줄 것으로 예상합니다. 한도는 거래당 ${limit} USDC입니다.`, firstLegFee: (amount) => `풀 수수료 ${amount}`, nvdaxPoolFee: `${s} 풀 수수료`, nvdaxPoolImpact: `${s} 풀 가격 영향`, accountCreation: `이 트랜잭션은 필요한 토큰 계정(${s}, USDC, SOL로 지불할 때는 래핑된 SOL)도 생성할 수 있습니다. 1회성 SOL 예치금은 지갑에 표시됩니다. 래핑된 SOL 계정은 같은 트랜잭션 안에서 닫히고 예치금은 돌아옵니다.`,
     overLimit: { title: "거래당 한도를 초과했습니다", body: (usdc, limit) => `첫 번째 풀은 이 수량에 대해 ${usdc} USDC를 돌려줄 것으로 예상하며, 이는 거래당 한도 ${limit} USDC를 초과합니다. 더 적은 수량을 입력하세요. 서명되거나 전송된 것은 없습니다.` }, paid: (symbol) => `지불한 ${symbol}`, solPaidNote: "지불한 SOL은 지갑의 SOL 잔액 변화이므로 네트워크 수수료와 계정 보증금이 포함됩니다.", usdcLeft: "지갑에 남은 USDC",
   },
   action: { preview: "스왑 미리보기", previewing: "미리보기를 준비하는 중…", approve: "지갑에서 승인", approving: "승인을 기다리는 중…", refresh: "미리보기 새로고침", tryAgain: "다시 시도", checkAgain: "다시 확인", startNew: "새 구매 시작" },
@@ -203,7 +203,7 @@ const purchaseKo = (s: string): PurchaseCopy => ({
 
 const purchaseZhHans = (s: string): PurchaseCopy => ({
   heading: `购买 ${s}`, jumpLink: `购买 ${s}`,
-  routeLine: (pool) => `唯一的固定路径：Meteora DLMM 池 ${pool}。你在自己的钱包中批准并发送。Benten 从不签名，也不持有资金。`, poolLabel: "池地址", noScript: "购买需要 JavaScript 和钱包。",
+  routeLine: (pool, dex) => `唯一的固定路径：${dex} 池 ${pool}。你在自己的钱包中批准并发送。Benten 从不签名，也不持有资金。`, poolLabel: "池地址", noScript: "购买需要 JavaScript 和钱包。",
   copyValue: { copy: "复制地址", copied: "已复制", unavailable: "无法复制" }, opensNewTab: "（在新标签页中打开）",
   unsupported: { heading: (symbol) => `${symbol} 不提供购买`, body: "Benten 仅支持通过各自的一个固定池购买指定的几种 xStocks，不提供此代币的购买。" },
   notice: { heading: "购买之前", usPersons: "发行人不向美国人士发售或出售 xStocks，只能交付给非美国人士。", noEligibilityCheck: "Benten 不会核实你是否具备购买资格。", noAvailabilityGuarantee: "不保证在任何国家或地区均可使用。", notAdvice: "这不是投资建议。" },
@@ -213,7 +213,7 @@ const purchaseZhHans = (s: string): PurchaseCopy => ({
   pay: {
     label: "支付代币", balance: (amount) => `余额 ${amount}`, balanceLoading: (symbol) => `正在读取你的 ${symbol} 余额…`, balanceUnavailable: (symbol) => `无法读取你的 ${symbol} 余额。`, solReserve: (reserve) => `为支付网络费用和账户押金，${reserve} SOL 会留在你的钱包中。`,
     amountLabel: (symbol) => `支付的 ${symbol}`, helperRaw: (raw, symbol, decimals) => `${raw} 个原始单位。${symbol} 使用 ${decimals} 位小数。`, errorEmpty: (symbol) => `请输入 ${symbol} 数量。`, errorPrecision: (symbol, decimals) => `${symbol} 最多 ${decimals} 位小数。`, errorOverBalance: (balance) => `超过了你可用的 ${balance}。`,
-    route: (symbol) => `${symbol} 兑换为 USDC，再兑换为 ${s}：经过两个固定的 Meteora DLMM 池，在你钱包中批准的同一笔交易内完成。`, firstLeg: "第一个池：预计收到的 USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `进入 ${s} 池的 USDC`, usdcInNote: "第一个池扣除滑点后的最低数额。超出部分的 USDC 留在你的钱包中。", limitBasis: (usdc, limit) => `上限核对：第一个池预计为此数量返回 ${usdc} USDC。每笔交易上限为 ${limit} USDC。`, firstLegFee: (amount) => `池手续费 ${amount}`, nvdaxPoolFee: `${s} 池手续费`, nvdaxPoolImpact: `${s} 池价格影响`, accountCreation: `此交易可能还会创建所需的代币账户：${s}、USDC，以及用 SOL 支付时的包装 SOL。钱包会显示一次性的 SOL 押金；包装 SOL 账户会在同一笔交易内关闭，其押金会退回。`,
+    route: (symbol, first, second) => `${symbol} 兑换为 USDC，再兑换为 ${s}：${first === second ? `经过两个固定的 ${first} 池` : `先经过固定的 ${first} 池，再经过固定的 ${second} 池`}，在你钱包中批准的同一笔交易内完成。`, firstLeg: "第一个池：预计收到的 USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `进入 ${s} 池的 USDC`, usdcInNote: "第一个池扣除滑点后的最低数额。超出部分的 USDC 留在你的钱包中。", limitBasis: (usdc, limit) => `上限核对：第一个池预计为此数量返回 ${usdc} USDC。每笔交易上限为 ${limit} USDC。`, firstLegFee: (amount) => `池手续费 ${amount}`, nvdaxPoolFee: `${s} 池手续费`, nvdaxPoolImpact: `${s} 池价格影响`, accountCreation: `此交易可能还会创建所需的代币账户：${s}、USDC，以及用 SOL 支付时的包装 SOL。钱包会显示一次性的 SOL 押金；包装 SOL 账户会在同一笔交易内关闭，其押金会退回。`,
     overLimit: { title: "超过每笔交易上限", body: (usdc, limit) => `第一个池预计为此数量返回 ${usdc} USDC，超过每笔交易 ${limit} USDC 的上限。请输入更小的数量。没有签名或发送任何内容。` }, paid: (symbol) => `支付的 ${symbol}`, solPaidNote: "支付的 SOL 是你钱包 SOL 余额的变化，因此包含网络费用和账户押金。", usdcLeft: "留在钱包中的 USDC",
   },
   action: { preview: "预览兑换", previewing: "正在准备预览…", approve: "在钱包中批准", approving: "正在等待批准…", refresh: "刷新预览", tryAgain: "重试", checkAgain: "再次检查", startNew: "开始新的购买" },
@@ -254,7 +254,7 @@ const purchaseZhHans = (s: string): PurchaseCopy => ({
 
 const purchaseZhHant = (s: string): PurchaseCopy => ({
   heading: `購買 ${s}`, jumpLink: `購買 ${s}`,
-  routeLine: (pool) => `唯一的固定路徑：Meteora DLMM 池 ${pool}。你在自己的錢包中核准並傳送。Benten 從不簽署，也不持有資金。`, poolLabel: "池地址", noScript: "購買需要 JavaScript 與錢包。",
+  routeLine: (pool, dex) => `唯一的固定路徑：${dex} 池 ${pool}。你在自己的錢包中核准並傳送。Benten 從不簽署，也不持有資金。`, poolLabel: "池地址", noScript: "購買需要 JavaScript 與錢包。",
   copyValue: { copy: "複製位址", copied: "已複製", unavailable: "無法複製" }, opensNewTab: "（在新分頁中開啟）",
   unsupported: { heading: (symbol) => `${symbol} 不提供購買`, body: "Benten 僅支援透過各自的一個固定池購買指定的幾種 xStocks，不提供此代幣的購買。" },
   notice: { heading: "購買之前", usPersons: "發行人不向美國人士發售或出售 xStocks，只能交付給非美國人士。", noEligibilityCheck: "Benten 不會核實你是否具備購買資格。", noAvailabilityGuarantee: "不保證在任何國家或地區皆可使用。", notAdvice: "這不是投資建議。" },
@@ -264,7 +264,7 @@ const purchaseZhHant = (s: string): PurchaseCopy => ({
   pay: {
     label: "支付代幣", balance: (amount) => `餘額 ${amount}`, balanceLoading: (symbol) => `正在讀取你的 ${symbol} 餘額…`, balanceUnavailable: (symbol) => `無法讀取你的 ${symbol} 餘額。`, solReserve: (reserve) => `為支付網路費用和帳戶押金，${reserve} SOL 會留在你的錢包中。`,
     amountLabel: (symbol) => `支付的 ${symbol}`, helperRaw: (raw, symbol, decimals) => `${raw} 個原始單位。${symbol} 使用 ${decimals} 位小數。`, errorEmpty: (symbol) => `請輸入 ${symbol} 數量。`, errorPrecision: (symbol, decimals) => `${symbol} 最多 ${decimals} 位小數。`, errorOverBalance: (balance) => `超過了你可用的 ${balance}。`,
-    route: (symbol) => `${symbol} 兌換為 USDC，再兌換為 ${s}：經過兩個固定的 Meteora DLMM 池，在你錢包中核准的同一筆交易內完成。`, firstLeg: "第一個池：預計收到的 USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `進入 ${s} 池的 USDC`, usdcInNote: "第一個池扣除滑價後的最低數額。超出部分的 USDC 留在你的錢包中。", limitBasis: (usdc, limit) => `上限核對：第一個池預計為此數量返回 ${usdc} USDC。每筆交易上限為 ${limit} USDC。`, firstLegFee: (amount) => `池手續費 ${amount}`, nvdaxPoolFee: `${s} 池手續費`, nvdaxPoolImpact: `${s} 池價格影響`, accountCreation: `此交易可能還會建立所需的代幣帳戶：${s}、USDC，以及用 SOL 支付時的包裝 SOL。錢包會顯示一次性的 SOL 押金；包裝 SOL 帳戶會在同一筆交易內關閉，其押金會退回。`,
+    route: (symbol, first, second) => `${symbol} 兌換為 USDC，再兌換為 ${s}：${first === second ? `經過兩個固定的 ${first} 池` : `先經過固定的 ${first} 池，再經過固定的 ${second} 池`}，在你錢包中核准的同一筆交易內完成。`, firstLeg: "第一個池：預計收到的 USDC", firstLegValue: (pay, usdc) => `${pay} = ${usdc}`, usdcIn: `進入 ${s} 池的 USDC`, usdcInNote: "第一個池扣除滑價後的最低數額。超出部分的 USDC 留在你的錢包中。", limitBasis: (usdc, limit) => `上限核對：第一個池預計為此數量返回 ${usdc} USDC。每筆交易上限為 ${limit} USDC。`, firstLegFee: (amount) => `池手續費 ${amount}`, nvdaxPoolFee: `${s} 池手續費`, nvdaxPoolImpact: `${s} 池價格影響`, accountCreation: `此交易可能還會建立所需的代幣帳戶：${s}、USDC，以及用 SOL 支付時的包裝 SOL。錢包會顯示一次性的 SOL 押金；包裝 SOL 帳戶會在同一筆交易內關閉，其押金會退回。`,
     overLimit: { title: "超過每筆交易上限", body: (usdc, limit) => `第一個池預計為此數量返回 ${usdc} USDC，超過每筆交易 ${limit} USDC 的上限。請輸入更小的數量。沒有簽署或傳送任何內容。` }, paid: (symbol) => `支付的 ${symbol}`, solPaidNote: "支付的 SOL 是你錢包 SOL 餘額的變化，因此包含網路費用和帳戶押金。", usdcLeft: "留在錢包中的 USDC",
   },
   action: { preview: "預覽兌換", previewing: "正在準備預覽…", approve: "在錢包中核准", approving: "正在等待核准…", refresh: "重新整理預覽", tryAgain: "重試", checkAgain: "再次檢查", startNew: "開始新的購買" },
