@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { MCP_MAX_BODY_BYTES, MCP_MAX_RESPONSE_BYTES, MCP_PATH, MCP_PURCHASE_RATE_LIMIT_MAX_CALLS, MCP_RATE_LIMIT_MAX_REQUESTS } from "@benten/mcp/config";
-import type { PurchaseQuoteReader } from "@benten/mcp/http";
+import { PREPARE_PURCHASE_PAY_TOKENS, type PurchaseQuoteReader } from "@benten/mcp/http";
 import { startPublicApi, type PublicApiServer } from "../src/node.js";
 import { createMcpHandler, mcpOriginRejection, siteOriginOf } from "../src/mcp.js";
+import { PAY_TOKEN_IDS } from "../../../packages/purchase/src/token-units.ts";
 
 const PROTOCOL = "2025-06-18";
 const CONNECTOR_HEADERS = { "content-type": "application/json", accept: "application/json, text/event-stream", "mcp-protocol-version": PROTOCOL };
@@ -229,5 +230,22 @@ describe("remote MCP endpoint", () => {
     const over = await rpc(api, call("prepare_purchase", { amount_usdc: "11" }));
     expect(over.body.result.isError).toBe(true);
     expect(over.body.result.structuredContent.data).toMatchObject({ prepared: false, reason: "over_limit" });
+  });
+
+  it("advertises exactly the purchase package's pay tokens and passes pay_token through to the host reader", async () => {
+    // SSOT check: the MCP package lists the pay tokens without depending on the purchase package.
+    expect([...PREPARE_PURCHASE_PAY_TOKENS]).toEqual([...PAY_TOKEN_IDS]);
+    const calls: unknown[][] = [];
+    const quote: PurchaseQuoteReader = async (...args) => {
+      calls.push(args);
+      return { ok: false as const, reason: "over_limit" as const, max_amount_usdc: "10.00", retryable: false };
+    };
+    const api = await start(quote);
+    const list = await rpc(api, { jsonrpc: "2.0", id: 2, method: "tools/list" });
+    const tool = list.body.result.tools.find((entry: { name: string }) => entry.name === "prepare_purchase");
+    expect(tool.inputSchema.properties.pay_token.enum).toEqual([...PAY_TOKEN_IDS]);
+    const over = await rpc(api, call("prepare_purchase", { pay_token: "SKR", amount: "1000000" }));
+    expect(over.body.result.structuredContent.data).toMatchObject({ prepared: false, reason: "over_limit" });
+    expect(calls).toEqual([["1000000", "SKR"]]);
   });
 });

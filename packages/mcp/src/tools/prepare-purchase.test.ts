@@ -107,7 +107,11 @@ describe("prepare_purchase", () => {
       [{ amount_usdc: { value: 5 } }, "invalid_amount"],
       [{ amount_usdc: "5".repeat(33) }, "invalid_amount"],
       [{ amount_usdc: "5", extra: 1 }, "invalid_amount"],
-      [{ amount: "5" }, "invalid_amount"],
+      [{ amount_usdc: "5", amount: "5" }, "invalid_amount"],
+      [{ amount_usdc: "0.02", pay_token: "SOL" }, "invalid_amount"],
+      [{ amount: "0.02", pay_token: 5 }, "invalid_pay_token"],
+      [{ amount: "0.02", pay_token: "x".repeat(17) }, "invalid_pay_token"],
+      [{ amount_usdc: "5", pay_token: "BTC" }, "invalid_pay_token"],
       [{ amount_usdc: "5", wallet_address: 42 }, "invalid_wallet_address"],
       [{ amount_usdc: "5", wallet_address: "x".repeat(65) }, "invalid_wallet_address"],
       [{ amount_usdc: null, wallet_address: 42 }, "invalid_wallet_address"],
@@ -132,12 +136,15 @@ describe("prepare_purchase", () => {
     expect(tool?.inputSchema).toMatchObject({
       type: "object",
       additionalProperties: false,
-      required: ["amount_usdc"],
       properties: {
         amount_usdc: { anyOf: [{ type: "string", maxLength: 32 }, { type: "number", exclusiveMinimum: 0 }] },
+        amount: { anyOf: [{ type: "string", maxLength: 32 }, { type: "number", exclusiveMinimum: 0 }] },
+        pay_token: { type: "string", maxLength: 16, enum: ["USDC", "SOL", "SKR"] },
         wallet_address: { type: "string", maxLength: 64 },
       },
     });
+    // Both amounts are optional in the schema; the tool requires exactly one of them.
+    expect(tool?.inputSchema.required ?? []).toEqual([]);
     await Promise.all([client.close(), server.close()]);
   });
 
@@ -164,5 +171,78 @@ describe("prepare_purchase", () => {
   it("gives a site-relative link when the site origin is unknown and echoes a valid wallet address", async () => {
     const result = await preparePurchase({ amount_usdc: "5", wallet_address: WALLET }, { quote: async () => quoted(), siteOrigin: null });
     expect(result.data).toMatchObject({ prepared: true, purchase_url: "/stock/NVDA/buy?amount=5.00", wallet_address: WALLET });
+  });
+
+  it("keeps the USDC call exactly as before: amount_usdc without a pay token reaches the reader alone", async () => {
+    const quote = vi.fn(async (..._args: unknown[]) => quoted());
+    const result = await preparePurchase({ amount_usdc: "5" }, { quote: quote as never, siteOrigin: null });
+    expect(quote).toHaveBeenCalledWith("5");
+    expect(quote.mock.calls[0]).toHaveLength(1);
+    expect(result.data).toMatchObject({
+      prepared: true, pay_token: "USDC", amount_in: "5.00", amount_in_raw: "5000000", amount_usdc: "5.00", first_leg: null,
+      purchase_url: "/stock/NVDA/buy?amount=5.00",
+    });
+    // An explicit USDC pay token is passed through for the reader to match.
+    await preparePurchase({ amount_usdc: "5", pay_token: "USDC" }, { quote: quote as never, siteOrigin: null });
+    expect(quote).toHaveBeenLastCalledWith("5", "USDC");
+  });
+
+  it("passes an unknown pay token to the reader and answers its invalid_pay_token", async () => {
+    const quote = vi.fn(async () => ({ ok: false as const, reason: "invalid_pay_token" as const, max_amount_usdc: "10.00", retryable: false }));
+    for (const payToken of ["sol", "Sol", " SOL", "BTC", ""]) {
+      const result = await preparePurchase({ amount: "1", pay_token: payToken }, { quote: quote as never, siteOrigin: null });
+      expect(result.data, payToken).toEqual({ prepared: false, reason: "invalid_pay_token", max_amount_usdc: "10.00", retryable: false });
+      expect(quote).toHaveBeenLastCalledWith("1", payToken);
+    }
+  });
+
+  it.each([
+    ["SOL", "0.02", "?amount=0.02&pay=sol", "5rCf1DM8LjKTw4YqhnoLcngyZYeNnQqztScTogYHAS6", "So11111111111111111111111111111111111111112", 9, "20000000"],
+    ["SKR", "100", "?amount=100.00&pay=skr", "3EFvYXRRchBUbc2c8cwFWzJLttvYRPYq1dUi9yjug6wB", "SKRbvo6Gf7GondiT3BbTfuRDPqLWei4j2Qy2NPGZhW3", 6, "100000000"],
+  ] as const)("returns both legs and a %s buy link", async (payToken, amount, query, legPool, legMint, decimals, rawIn) => {
+    const quote = vi.fn(async () => quoted({
+      pay_token: payToken, amount_in: amount.includes(".") ? amount : `${amount}.00`, amount_in_raw: rawIn,
+      amount_usdc: "3.96", amount_raw: "3960000",
+      first_leg: {
+        route: { pool: legPool, dex: "Meteora DLMM", input_mint: legMint, input_symbol: payToken, input_decimals: decimals, output_mint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", output_symbol: "USDC", output_decimals: 6 },
+        quote: { consumedInputRaw: rawIn, outputRaw: "4000000", minimumOutputRaw: "3960000", feeRaw: "40", protocolFeeRaw: "5", feeOnInput: true, priceImpactPct: "0.002" },
+      },
+      buy_query: query,
+    }));
+    const result = await preparePurchase({ amount, pay_token: payToken }, { quote: quote as never, siteOrigin: "https://benten.example" });
+    expect(quote).toHaveBeenCalledWith(amount, payToken);
+    expect(result.data).toMatchObject({
+      prepared: true,
+      pay_token: payToken,
+      amount_in_raw: rawIn,
+      amount_usdc: "3.96",
+      first_leg: {
+        route: { pool: legPool, input_mint: legMint, input_symbol: payToken, output_symbol: "USDC" },
+        quote: { consumed_input_raw: rawIn, usdc_output_raw: "4000000", usdc_minimum_output_raw: "3960000", fee_raw: "40", price_impact_pct: "0.002" },
+      },
+      quote: { output_raw: "2220704", minimum_output_raw: "2198496", expires_at: "2026-09-25T01:00:30.000Z" },
+      purchase_url: `https://benten.example/stock/NVDA/buy${query}`,
+    });
+    expect(result.disclaimer).toBe(DISCLAIMER);
+    expect((result as any).eligibility).toMatch(/US persons/);
+  });
+
+  it.each(["SOL", "SKR"])("answers over_limit for a %s amount the reader refuses above 10 USDC", async (payToken) => {
+    const quote = vi.fn(async () => ({ ok: false as const, reason: "over_limit" as const, max_amount_usdc: "10.00", retryable: false }));
+    const result = await preparePurchase({ amount: "1000000", pay_token: payToken }, { quote: quote as never, siteOrigin: null });
+    expect(result.data).toEqual({ prepared: false, reason: "over_limit", max_amount_usdc: "10.00", retryable: false });
+  });
+
+  it("refuses an answer for another pay token, or a leg that does not match the pay token", async () => {
+    const leg = { route: (quoted() as any).route, quote: (quoted() as any).quote };
+    for (const [args, answer] of [
+      [{ amount: "0.02", pay_token: "SOL" }, quoted()],
+      [{ amount: "0.02", pay_token: "SOL" }, quoted({ pay_token: "SKR", first_leg: leg })],
+      [{ amount: "0.02", pay_token: "SOL" }, quoted({ pay_token: "SOL", first_leg: null })],
+      [{ amount_usdc: "5" }, quoted({ pay_token: "USDC", first_leg: leg })],
+    ] as const) {
+      const result = await preparePurchase(args, { quote: async () => answer, siteOrigin: null });
+      expect(result.data, JSON.stringify(args)).toMatchObject({ prepared: false, reason: "service_unavailable" });
+    }
   });
 });

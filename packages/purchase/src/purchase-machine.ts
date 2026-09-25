@@ -13,7 +13,7 @@
  * per approval, and nothing is ever re-requested automatically.
  */
 
-import { parseTokenInput, type AmountError } from "./amount";
+import { parsePayTokenInput, type AmountError } from "./amount";
 import { PURCHASE_CONFIG } from "./config";
 import { PAY_CONFIG } from "./pay-config";
 import { PAY_TOKEN_UNITS, resolvePayToken, type PayTokenId } from "./token-units";
@@ -236,8 +236,7 @@ function balanceRawOf(state: PurchaseState): bigint | null {
 
 /** Parse the pay field for the selected token. USDC keeps its raw limit; SOL and SKR are limited in USD terms at preview. */
 export function parsePayAmount(state: Pick<PurchaseState, "payToken" | "amountText">, balanceRaw: bigint | null) {
-  const maxRaw = state.payToken === "USDC" ? PURCHASE_CONFIG.maxUsdcInRaw : null;
-  return parseTokenInput(state.amountText, PAY_TOKEN_UNITS[state.payToken].decimals, balanceRaw, maxRaw);
+  return parsePayTokenInput(state.amountText, state.payToken, balanceRaw);
 }
 
 function matchesTracking(attempt: Attempt, signature: string): attempt is Extract<Attempt, { tracking: Tracking }> {

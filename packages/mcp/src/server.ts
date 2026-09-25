@@ -636,10 +636,14 @@ export interface ServerOptions {
 }
 
 export const PREPARE_PURCHASE_DESCRIPTION =
-  "Use only when the user explicitly asks to buy NVDAx (the NVIDIA xStock) with USDC; never suggest a purchase yourself. "
-  + "Returns facts for that one fixed route: a current quote read from the pinned NVDAx/USDC pool for amount_usdc "
-  + "(a decimal USDC amount above 0 and at most the per-transaction limit, 10 USDC), when the quote stops being current, "
-  + "and purchase_url, a Benten buy page with the amount filled in. Benten does not sign or send anything: the user opens "
+  "Use only when the user explicitly asks to buy NVDAx (the NVIDIA xStock); never suggest a purchase yourself. "
+  + "Returns facts for that one fixed route: a current quote read from the pinned NVDAx/USDC pool, when the quote stops being current, "
+  + "and purchase_url, a Benten buy page with the pay token and amount filled in. "
+  + "Pay with USDC (the default): give amount_usdc, a decimal USDC amount above 0 and at most the per-transaction limit, 10 USDC. "
+  + "Or set pay_token to SOL or SKR and give amount in that token's units: the quote then covers the fixed two-leg route "
+  + "(the token to USDC in one pinned pool, then that USDC to NVDAx), and the first leg's quoted USDC must be at most 10 USDC, "
+  + "so the limit is the equivalent of 10 USD. first_leg gives that leg's USDC estimate and minimum; amount_usdc is the USDC the second leg swaps. "
+  + "Benten does not sign or send anything: the user opens "
   + "the link, connects their own wallet, checks a fresh quote and approves in the wallet. This tool does not recommend, "
   + "evaluate or predict anything; relay its facts without advice. The issuer does not offer or sell NVDAx to US persons, "
   + "and transfers may only be made to non-US persons; Benten does not check eligibility.";

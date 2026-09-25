@@ -10,14 +10,15 @@
  * `inert` by its route (`routes/dossier.tsx`).
  *
  * The purchase itself is the app shell's installed purchase island: this
- * component only shows it. A link may carry a suggested amount
- * (`?amount=5.00`, written by the MCP `prepare_purchase` tool); once the
- * island is installed it fills an empty amount field with it after the
- * field's own checks. It never requests a preview or asks the wallet. Closing the flow, switching tabs or coming back
+ * component only shows it. A link may carry a suggested amount and pay token
+ * (`?amount=5.00`, or `?amount=0.02&pay=sol`, written by the MCP
+ * `prepare_purchase` tool); once the island is installed it selects that pay
+ * token and fills an empty amount field in its units after the field's own
+ * checks. It never requests a preview or asks the wallet. Closing the flow, switching tabs or coming back
  * never cancels a wallet request or stops tracking.
  */
 import { useEffect, useRef } from "react";
-import { deepLinkAmountText } from "@benten/purchase/deep-link";
+import { readDeepLink } from "@benten/purchase/deep-link";
 import { XIcon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { buttonVariants } from "@/components/ui/button";
@@ -58,13 +59,13 @@ export function BuyFlow({ locale, frame, productHref }: { locale: PublicWebLocal
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // A link amount fills the field once per visit of this URL; an invalid one is ignored.
+  // A link pay token and amount fill the panel once per visit of this URL; an invalid link is ignored.
   const prefilledKeyRef = useRef<string | null>(null);
   useEffect(() => {
     if (!purchase || prefilledKeyRef.current === location.key) return;
     prefilledKeyRef.current = location.key;
-    const amount = deepLinkAmountText(location.search);
-    if (amount !== null) purchase.prefillAmount(amount);
+    const link = readDeepLink(location.search);
+    if (link) purchase.prefillPurchase(link);
   }, [purchase, location.key, location.search]);
 
   function close() {

@@ -8,7 +8,7 @@
  */
 
 import { PURCHASE_CONFIG } from "./config";
-import { USDC_DECIMALS } from "./token-units";
+import { PAY_TOKEN_UNITS, USDC_DECIMALS, type PayTokenId } from "./token-units";
 
 export type AmountError = "empty" | "format" | "precision" | "zero" | "overLimit" | "overBalance";
 
@@ -52,6 +52,16 @@ export function parseTokenInput(text: string, decimals: number, balanceRaw?: big
   if (maxRaw !== null && raw > maxRaw) return { ok: false, error: "overLimit" };
   if (balanceRaw !== undefined && balanceRaw !== null && raw > balanceRaw) return { ok: false, error: "overBalance" };
   return { ok: true, raw };
+}
+
+/**
+ * Parse an amount in `payToken` units: USDC with the per-transaction limit,
+ * SOL or SKR without it (their limit applies in USD terms to the quote).
+ * The one rule shared by the panel, the buy-flow link and the server quote.
+ */
+export function parsePayTokenInput(text: string, payToken: PayTokenId, balanceRaw?: bigint | null): AmountParse {
+  const maxRaw = payToken === "USDC" ? PURCHASE_CONFIG.maxUsdcInRaw : null;
+  return parseTokenInput(text, PAY_TOKEN_UNITS[payToken].decimals, balanceRaw, maxRaw);
 }
 
 /**

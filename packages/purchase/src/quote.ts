@@ -3,7 +3,9 @@
  * the pool, check its pinned identity, and ask the SDK for the swap quote.
  * Shared by the browser swap builder (`build-swap.ts`), which then builds the
  * unsigned transaction from the same pool read, and by the server-side quote
- * reader (`server-quote.ts`), which builds nothing.
+ * reader (`server-quote.ts`), which builds nothing. The server-side reader
+ * also quotes the first leg of a two-leg purchase (pay token -> USDC in one
+ * pinned pool) with `readLegPoolState` / `quoteLegOnPoolState`.
  *
  * Nothing here builds, signs or sends a transaction; it only reads public
  * RPC state through the `Connection` the caller supplies.
@@ -16,7 +18,7 @@ import DLMM from "@meteora-ag/dlmm";
 
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
 
-import { NVDAX_MINT, NVDAX_USDC_POOL, USDC_MINT } from "./route";
+import { NVDAX_MINT, NVDAX_USDC_POOL, USDC_MINT, type PayLeg } from "./route";
 
 const MAX_SLIPPAGE_BPS = 10_000;
 
@@ -154,4 +156,49 @@ export function quoteOnPoolState(state: PoolState, usdcInAmountRaw: bigint, slip
 export async function readPoolQuote(connection: Connection, usdcInAmountRaw: bigint, slippageBps: number): Promise<PoolQuoteReading> {
   checkQuoteInput(usdcInAmountRaw, slippageBps);
   return quoteOnPoolState(await readPoolState(connection), usdcInAmountRaw, slippageBps);
+}
+
+/**
+ * The pay token is token X of its first-leg pool and USDC token Y, so the
+ * first leg swaps X for Y (same fixed direction as `build-two-leg.ts`).
+ */
+export const LEG_SWAP_FOR_Y = true;
+
+/**
+ * Read a pinned first-leg pool (pay token -> USDC), check its identity (the
+ * pinned mints, both legacy SPL Token), and read the bin arrays its swap
+ * walks. Amount-independent, like `readPoolState`. Throws
+ * `RoutePoolMismatchError` on an identity mismatch; any other failure
+ * propagates as-is.
+ */
+export async function readLegPoolState(connection: Connection, leg: PayLeg): Promise<PoolState> {
+  const pool = await DLMM.create(connection, leg.pool);
+  if (!pool.tokenX.mint.address.equals(leg.tokenXMint) || !pool.tokenY.mint.address.equals(leg.tokenYMint) || !leg.tokenYMint.equals(USDC_MINT)) {
+    throw new RoutePoolMismatchError(`pool ${leg.pool.toBase58()} mints do not match the pinned identity`);
+  }
+  if (!pool.tokenX.owner.equals(TOKEN_PROGRAM_ID) || !pool.tokenY.owner.equals(TOKEN_PROGRAM_ID)) {
+    throw new RoutePoolMismatchError(`pool ${leg.pool.toBase58()} token programs do not match the pinned identity`);
+  }
+  const binArrays = await pool.getBinArrayForSwap(LEG_SWAP_FOR_Y);
+  return { pool, binArrays };
+}
+
+/**
+ * Quote an exact-in pay-token amount on an already-read first-leg pool
+ * state. A local computation. It quotes a partial fill instead of throwing
+ * when the read bin arrays cannot take the whole amount, so the caller sees
+ * `consumedInputRaw` below the input and refuses the amount.
+ */
+export function quoteLegOnPoolState(state: PoolState, inAmountRaw: bigint, slippageBps: number): RouteQuote {
+  checkQuoteInput(inAmountRaw, slippageBps);
+  const sdkQuote = state.pool.swapQuote(new BN(inAmountRaw.toString()), LEG_SWAP_FOR_Y, new BN(slippageBps), state.binArrays, true);
+  return {
+    consumedInputRaw: sdkQuote.consumedInAmount.toString(),
+    outputRaw: sdkQuote.outAmount.toString(),
+    minimumOutputRaw: sdkQuote.minOutAmount.toString(),
+    feeRaw: sdkQuote.fee.toString(),
+    protocolFeeRaw: sdkQuote.protocolFee.toString(),
+    feeOnInput: sdkQuote.feeOnInput,
+    priceImpactPct: sdkQuote.priceImpact.toString(),
+  };
 }

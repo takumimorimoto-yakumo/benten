@@ -11,6 +11,7 @@
  * its Solana SDK and DEX code stay out of every other page's graph.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType, type ReactNode } from "react";
+import type { PayTokenId } from "@benten/purchase/token-units";
 import { connectWallet, disconnectWallet, reconnectWallet, watchConnectedAccount, watchWallets } from "@benten/purchase/wallet-standard";
 import type { PublicWebLocale } from "@/i18n/locales";
 import { createWalletSession, INITIAL_WALLET_SESSION, type WalletSession, type WalletSessionAdapter, type WalletSessionState } from "./wallet-session";
@@ -24,8 +25,8 @@ export type InstalledPurchase = {
   readonly Panel: ComponentType<{ locale: PublicWebLocale; flow?: { readonly leading: ReactNode } }>;
   /** The shell's status line while a sent purchase is tracked (app IA 5.1); renders nothing otherwise. */
   readonly Status: ComponentType<{ locale: PublicWebLocale }>;
-  /** Fill an empty amount field with an already-checked link amount; never starts a preview or a wallet request. */
-  readonly prefillAmount: (text: string) => boolean;
+  /** Select a link's already-checked pay token and fill the amount in its units; never starts a preview or a wallet request. */
+  readonly prefillPurchase: (link: { readonly payToken: PayTokenId | null; readonly amountText: string | null }) => boolean;
 };
 
 type AppSession = {

@@ -11,6 +11,7 @@ import {
   type PurchaseAction,
   type PurchaseState,
 } from "@benten/purchase/purchase-machine";
+import type { PayTokenId } from "@benten/purchase/token-units";
 import type { ApprovalOutcome } from "@benten/purchase/wallet-standard";
 
 export type Transition = { readonly previous: PurchaseState; readonly next: PurchaseState };
@@ -67,17 +68,25 @@ export function approveOnce(store: PurchaseStore, requestApproval: RequestWallet
 }
 
 /**
- * Fill the amount field from a buy-flow link (`?amount=`), after the link
- * amount passed the field's checks (`deepLinkAmountText`). Only an empty
- * field in the editing phase is filled, so a typed amount or an attempt in
- * progress is never replaced. It only edits and commits the field: no
- * preview is requested and the wallet is never asked. Returns whether the
- * field was filled.
+ * Apply a buy-flow link (`?amount=` and optionally `?pay=`), after the link
+ * passed its checks (`readDeepLink`). Only an empty field in the editing
+ * phase is touched, so a typed amount or an attempt in progress is never
+ * replaced. It selects the link's pay token (Step 1), then fills and commits
+ * the amount field in that token's units. No preview is requested and the
+ * wallet is never asked. Returns whether anything was applied.
  */
-export function prefillAmount(store: PurchaseStore, text: string): boolean {
+export function prefillPurchase(store: PurchaseStore, link: { readonly payToken: PayTokenId | null; readonly amountText: string | null }): boolean {
   const state = store.getState();
   if (state.attempt.phase !== "editing" || state.amountText !== "") return false;
-  store.send({ type: "amountEdited", text });
-  store.send({ type: "amountCommitted" });
-  return true;
+  let applied = false;
+  if (link.payToken !== null && link.payToken !== state.payToken) {
+    applied = store.send({ type: "payTokenSelected", payToken: link.payToken }).next.payToken === link.payToken;
+    if (!applied) return false;
+  }
+  if (link.amountText !== null) {
+    store.send({ type: "amountEdited", text: link.amountText });
+    store.send({ type: "amountCommitted" });
+    applied = true;
+  }
+  return applied;
 }

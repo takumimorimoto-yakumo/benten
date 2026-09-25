@@ -62,11 +62,12 @@ Reading needs no wallet; only Buy and Holdings ask for one.
     reviewed feed map only, read with one `getMultipleAccounts` of the map's
     price accounts.
   - `POST /api/mcp`: the remote MCP endpoint. Its `prepare_purchase` tool
-    reads the route mints and the pinned pool from the same upstream and
+    reads the route mints and the pinned pool (and, paying with SOL or SKR,
+    that token's mint and pinned first-leg pool) from the same upstream and
     quotes each amount locally from that reading, which one function instance
-    reuses for 5 seconds (one refresh at a time, and at most one attempt a
-    second after a failure); it builds no transaction. Its other tools read
-    the snapshots.
+    reuses for 5 seconds (one refresh at a time per reading, and at most one
+    attempt a second after a failure); it builds no transaction. Its other
+    tools read the snapshots.
 - The relay and prices routes accept same-origin callers only (or the exact origins in
   `SOLANA_RPC_RELAY_ALLOWED_ORIGINS`); the MCP endpoint also accepts callers
   without `Origin` (connectors). All three apply a per-client rate limit, bound
@@ -300,11 +301,14 @@ The remote endpoint adds one tool the stdio server does not have:
 
 | Tool | Description |
 |---|---|
-| `prepare_purchase` | For a purchase the user explicitly asked for, on the one fixed route (NVDAx for USDC, `amount_usdc` above 0 and at most 10): a current quote read from the pinned pool (output, minimum output after the fixed slippage, fees, price impact), when it stops being current, and `purchase_url`, the Benten buy page with the amount filled in (`/stock/NVDA/buy?amount=5.00`). Benten builds, signs and sends nothing: the page reads a fresh quote and the user's own wallet shows and approves the transaction. It carries the US-persons statement and the disclaimer |
+| `prepare_purchase` | For a purchase the user explicitly asked for, on the one fixed route to NVDAx. Pay with USDC (the default; `amount_usdc` above 0 and at most 10), or set `pay_token` to `SOL` or `SKR` and give `amount` in that token's units: the quote then covers the same fixed two-leg route as the buy page (the token to USDC in its pinned pool, then that leg's USDC minimum to NVDAx), and a first leg quoted above 10 USDC answers `over_limit`. It returns the pay token, each leg's quote (output, minimum output after the fixed slippage, fees, price impact; `first_leg` is `null` for USDC), when the quote stops being current, and `purchase_url`, the Benten buy page with the pay token and amount filled in (`/stock/NVDA/buy?amount=5.00`, or `?amount=0.02&pay=sol`). Benten builds, signs and sends nothing: the page reads a fresh quote and the user's own wallet shows and approves the transaction. It carries the US-persons statement and the disclaimer |
 
-The buy page accepts the `amount` parameter only after the amount field's own
-checks (format, precision, above 0, at most the limit) and only into an empty
-field; it never starts a preview or a wallet request by itself.
+The buy page accepts the `pay` parameter only as an exact lower-case pay token
+id (`usdc`, `sol`, `skr`; anything else ignores the whole link), selects that
+token in Step 1, and accepts the `amount` parameter in that token's units only
+after the amount field's own checks (format, precision, above 0, and for USDC
+at most the limit) and only into an empty field; it never starts a preview or
+a wallet request by itself.
 
 Add it in Claude under Settings, Connectors, Add custom connector, with the
 URL above. In ChatGPT, turn on developer mode (Settings, Apps and connectors,

@@ -12,8 +12,8 @@ import { createActivityStore, type ActivityStorage } from "../app/features/activ
 import { activityAttemptId, activityWriteFor, recordPurchaseActivity } from "../app/features/purchase-island/purchase-activity.ts";
 import { PurchasePanelView, type PanelHandlers, type PanelRefs } from "../app/features/purchase-island/purchase-panel-view.tsx";
 import { PurchaseStatusLineView, STATUS_LINE_PHASES } from "../app/features/purchase-island/purchase-status-line.tsx";
-import { approveOnce, createPurchaseStore, prefillAmount } from "../app/features/purchase-island/purchase-store.ts";
-import { deepLinkAmountText } from "../../../packages/purchase/src/deep-link.ts";
+import { approveOnce, createPurchaseStore, prefillPurchase } from "../app/features/purchase-island/purchase-store.ts";
+import { readDeepLink } from "../../../packages/purchase/src/deep-link.ts";
 import { PUBLIC_WEB_LOCALES, type PublicWebLocale } from "../app/i18n/locales.ts";
 import { PRODUCT_MESSAGES } from "../app/i18n/product-messages.ts";
 import { PURCHASE_MESSAGES } from "../app/i18n/purchase-messages.ts";
@@ -278,10 +278,11 @@ describe("After sending (app IA 5.1 and change C5)", () => {
 describe("buy-flow link amount (MCP prepare_purchase)", () => {
   it("fills an empty amount field with a checked link amount and requests nothing", () => {
     const store = createPurchaseStore();
-    const amount = deepLinkAmountText("?amount=5");
-    expect(amount).toBe("5.00");
-    expect(prefillAmount(store, amount!)).toBe(true);
+    const link = readDeepLink("?amount=5");
+    expect(link).toEqual({ payToken: "USDC", amountText: "5.00" });
+    expect(prefillPurchase(store, link!)).toBe(true);
     const state = store.getState();
+    expect(state.payToken).toBe("USDC");
     expect(state.amountText).toBe("5.00");
     expect(state.amountError).toBeNull();
     expect(state.attempt.phase).toBe("editing");
@@ -291,19 +292,47 @@ describe("buy-flow link amount (MCP prepare_purchase)", () => {
     expect(requestApproval).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ["?amount=0.02&pay=sol", "SOL", "0.02"],
+    ["?amount=100&pay=skr", "SKR", "100.00"],
+  ] as const)("selects the link's pay token and fills the amount in its units for %s, requesting nothing", (search, payToken, amountText) => {
+    const store = createPurchaseStore();
+    const link = readDeepLink(search);
+    expect(link).toEqual({ payToken, amountText });
+    expect(prefillPurchase(store, link!)).toBe(true);
+    const state = store.getState();
+    expect(state.payToken).toBe(payToken);
+    expect(state.amountText).toBe(amountText);
+    expect(state.amountError).toBeNull();
+    expect(state.attempt.phase).toBe("editing");
+    const requestApproval = vi.fn(async (): Promise<ApprovalOutcome> => ({ kind: "rejected" }));
+    expect(approveOnce(store, requestApproval)).toBe(false);
+    expect(requestApproval).not.toHaveBeenCalled();
+  });
+
+  it("a plain amount link selects USDC again after another token was chosen with an empty field", () => {
+    const store = createPurchaseStore();
+    store.send({ type: "payTokenSelected", payToken: "SOL" });
+    expect(prefillPurchase(store, readDeepLink("?amount=5")!)).toBe(true);
+    expect(store.getState()).toMatchObject({ payToken: "USDC", amountText: "5.00" });
+  });
+
   it("never replaces a typed amount or an attempt in progress", () => {
     const store = createPurchaseStore();
     store.send({ type: "amountEdited", text: "2" });
-    expect(prefillAmount(store, "5.00")).toBe(false);
-    expect(store.getState().amountText).toBe("2");
+    expect(prefillPurchase(store, { payToken: "SOL", amountText: "0.02" })).toBe(false);
+    expect(store.getState()).toMatchObject({ payToken: "USDC", amountText: "2" });
     const busy = createPurchaseStore(PURCHASE_FIXTURES.reviewReady.state);
-    expect(prefillAmount(busy, "5.00")).toBe(false);
+    expect(prefillPurchase(busy, { payToken: "USDC", amountText: "5.00" })).toBe(false);
     expect(busy.getState()).toBe(PURCHASE_FIXTURES.reviewReady.state);
   });
 
-  it("ignores link amounts outside the field's checks", () => {
+  it("ignores link amounts outside the field's checks and invalid pay tokens", () => {
     for (const search of ["?amount=11", "?amount=0", "?amount=1e1", "?amount=-5", "?amount=5&amount=6", "?amount=abc"]) {
-      expect(deepLinkAmountText(search), search).toBeNull();
+      expect(readDeepLink(search), search).toBeNull();
+    }
+    for (const search of ["?amount=1&pay=SOL", "?amount=1&pay=btc", "?amount=1&pay=sol&pay=skr", "?amount=1&pay="]) {
+      expect(readDeepLink(search), search).toBeNull();
     }
   });
 });

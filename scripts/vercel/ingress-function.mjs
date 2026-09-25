@@ -33,7 +33,7 @@ function platformClientAddress(request) {
  * One reader per instance; a failed load is retried on the next quote.
  */
 let quoteReader;
-export async function purchaseQuote(amountText) {
+export async function purchaseQuote(amountText, payToken) {
   quoteReader ??= import("../../packages/purchase/src/server-quote.ts").then(
     ({ createServerQuoteReader }) => createServerQuoteReader({ env: process.env }),
     (error) => {
@@ -41,7 +41,7 @@ export async function purchaseQuote(amountText) {
       throw error;
     },
   );
-  return (await quoteReader)(amountText);
+  return (await quoteReader)(amountText, payToken);
 }
 
 export default createHostedIngress({

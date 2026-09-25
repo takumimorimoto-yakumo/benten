@@ -31,7 +31,7 @@ import type { PublicWebLocale } from "@/i18n/locales";
 import { purchaseMessagesFor } from "@/i18n/purchase-messages";
 import { PurchasePanelView, type PanelHandlers, type PanelRefs } from "./purchase-panel-view";
 import { activityWriteFor, recordPurchaseActivity } from "./purchase-activity";
-import { approveOnce, createPurchaseStore, prefillAmount, type PurchaseStore } from "./purchase-store";
+import { approveOnce, createPurchaseStore, prefillPurchase, type PurchaseStore } from "./purchase-store";
 import { locksDisconnect, sessionTransitionActions } from "./session-bridge";
 import { PurchaseStatusLineView, STATUS_LINE_PHASES } from "./purchase-status-line";
 
@@ -321,6 +321,6 @@ export function createInstalledPurchase(): InstalledPurchase {
     Runtime: InstalledPurchaseRuntime,
     Panel: InstalledPurchasePanel,
     Status: InstalledPurchaseStatus,
-    prefillAmount: (text) => prefillAmount(store, text),
+    prefillPurchase: (link) => prefillPurchase(store, link),
   };
 }

@@ -34,6 +34,13 @@ export const PURCHASE_CONFIG = {
    */
   deepLinkAmountParam: "amount",
   /**
+   * Query parameter of a buy-flow link that selects the pay token (for
+   * example `?amount=0.02&pay=sol`). Its value is the lower-case pay token id,
+   * matched exactly; `amount` is then read in that token's units. Absent, the
+   * link pays with USDC as before.
+   */
+  deepLinkPayParam: "pay",
+  /**
    * Server-side quote reader (the remote MCP `prepare_purchase` tool), per
    * server instance: how long the amount-independent route state (mints,
    * pool, bin arrays) is reused before one refresh reads it again, and how
