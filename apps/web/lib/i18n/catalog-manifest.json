@@ -1,0 +1,1 @@
+{"schema_version":"benten.localization-catalog-manifest.v1","default_locale":"en","locales":["en","ja","ko","zh-Hans","zh-Hant"],"catalogs":[{"path":"apps/web/lib/i18n/messages.ts","sha256":"7c3b702174367ec1fc8b488aafe0122dd42904e7e68f5e511069a084f8850843"}]}

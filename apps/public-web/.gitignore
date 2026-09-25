@@ -1,0 +1,5 @@
+.generated/
+# React Router typegen output (`react-router typegen`, run by dev and build).
+# Regenerated on every run and not a build artifact, so it has no ownership
+# sidecar under the guarded-output contract (LR-OUTPUT-1).
+.react-router/

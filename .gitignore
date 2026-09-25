@@ -1,0 +1,14 @@
+node_modules/
+CLAUDE.md
+.env
+.env.*
+!.env.example
+dist/
+build/
+apps/public-web/build-capsule/
+apps/public-web/build-host/
+.next/
+.DS_Store
+*.log
+.turbo/
+.vercel/

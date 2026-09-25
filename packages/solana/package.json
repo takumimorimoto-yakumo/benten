@@ -1,0 +1,30 @@
+{
+  "name": "@benten/solana",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./supported-products": {
+      "types": "./dist/supported-products.d.ts",
+      "default": "./dist/supported-products.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test scripts/run-tests.test.mjs && pnpm build && node scripts/run-tests.mjs"
+  },
+  "dependencies": {
+    "@benten/registry": "workspace:*",
+    "@solana/web3.js": "^1.99.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0"
+  }
+}

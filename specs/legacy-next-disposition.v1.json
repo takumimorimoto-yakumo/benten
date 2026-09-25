@@ -1,0 +1,760 @@
+{
+  "schema_version": "benten.legacy-next-disposition.v1",
+  "legacy_tree_sha256": "383b02150c7082e28ea1d1ed485eadaf85e9c5089346c2cec565b2555818ba11",
+  "authority": "none_for_deletion",
+  "file_count": 94,
+  "files": [
+    {
+      "path": "apps/web/app/[locale]/company/[slug]/page.tsx",
+      "sha256": "c32d693a055082921a1755be30b2bd3f3262299f7447eccf90f2a05d20361aa9",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/[locale]/error.tsx",
+      "sha256": "cc94eb8081d5e1953374886d084bda3fcd57e35f537144dc1236edba7a7e55f1",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/[locale]/not-found.tsx",
+      "sha256": "cff313114d4d191b559af34951a490a36ceb0ab910c042de61cf43703b91ff27",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/[locale]/page.tsx",
+      "sha256": "e80411227294601a20686e2785d1574b6b2d0a2f7c9070cf2760335240efcca5",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/[locale]/provider/[provider]/[id]/page.tsx",
+      "sha256": "264c8b58d232accaec8faa8d6023faf5ebbff7e4a92ac800ea171d1f08d70c70",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/[locale]/stock/[ticker]/page.tsx",
+      "sha256": "d15005f73c9e5ebad91daf9c09b424d7dd2ec95755b8312884a1e9d46493184a",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/financials/[ticker]/route.ts",
+      "sha256": "8a5679b13f06e36d1b493c9b246073af056bc062c9dd0f7f304fd1f538a2d5a6",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/fundamentals/[ticker]/route.ts",
+      "sha256": "7a36e13c981a8077d33c19dae6191420e8a49d2770ba4c5d31f9c3e2935695e3",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/solana-rpc/route.test.ts",
+      "sha256": "ff8569d17428afb7a863b241f33db7d76527579a45b02b80c9efa313d11f7842",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/solana-rpc/route.ts",
+      "sha256": "751c120ad24cd02fef3191ffaa95119e4241331dac7aac2077c3b8d2a0ac49b5",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/v2/financials/route.ts",
+      "sha256": "24d05b04cd810c068a393f760fae7df8b3cc78a905c9cb005728ae4843244afe",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/v2/fundamentals/route.ts",
+      "sha256": "f7a80788cc6bc608813c9cd4673bc635a2c093c2dbb520bc21e46d074d620d44",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/api/v2/provider-assets/route.ts",
+      "sha256": "e74ec5a1385f25652e54838a607b5bb06b4a107fd969357c039719d14eb8d9cd",
+      "category": "replaced_http_route",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/benten-not-found/page.tsx",
+      "sha256": "cedf81f90e066943629366f81fb982545125f104ee73e8cf42a4f0fe043e52d9",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/company/[slug]/page.tsx",
+      "sha256": "5ad075fc6afd1caba77566397bb6fc7b7a558e86caeaafaa1b6782fa458807ed",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/dev/purchase-spike/page.tsx",
+      "sha256": "38ae2888d17181f0a19e4e449ae9de99cb56afdb1842c63f5ff741cacc31c0f1",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/dev/purchase-states/page.tsx",
+      "sha256": "826a20be475fe8171aca151fa7b09729aac7ddb91b36cf8d601c6cfc976ff837",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/dev/ui-catalog/page.tsx",
+      "sha256": "e0280b32c4b9a904429ac00d5517ed1085e99bc711549b3ccb7eb4ba2a8b145a",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/error.tsx",
+      "sha256": "211de5f7f71c66ccac8e40ba6c092c559312623be19add8ea3d7bb1b107f7f8d",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/globals.css",
+      "sha256": "31b0bf96569e036e8cf28088eadf9322abbab5c9db870fcf00ae127cae05c1b0",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/layout.tsx",
+      "sha256": "e45a7778b24bd12442c4bbf0bd329faf49091921149b4b3f9dacb5fa18cc131d",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/not-found.tsx",
+      "sha256": "4089227ffffa27c2ac20101827f1788aef41785c902388aaaec545aa6127c019",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/page.tsx",
+      "sha256": "cd3abbde84478254e3cfd1f92039e1acc750ef0b53a9fc3b86bd1934794d2c95",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/provider/[provider]/[id]/page.tsx",
+      "sha256": "17630df7ff3d18427837739e418cd2b8dc8d82ce7bad678a564e588d1607d6f7",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/providers.tsx",
+      "sha256": "77312ae4d3e6d1f1afec1bb5c89ce6d3d20d46ba62bf751f6b60c626e9452d25",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/app/stock/[ticker]/page.tsx",
+      "sha256": "c66ab5d952492deba2b8c1fe5acaa56ed93ebf7368a6684c3a4c42b8ebf904b8",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/CoverageBadge.tsx",
+      "sha256": "8a458fa32df68d1a672a0cd671656c4908010c94fb74f7e924f8d6f6e593d0c0",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/FactTable.test.tsx",
+      "sha256": "e1a4f6a8b3011ba0d85760db806137fa384b7401f06d0aeb66c47fc9f0519f70",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/FactTable.tsx",
+      "sha256": "703f745c2890899a9cb9d9f0ead0a4dcabfa1942b779064767300df2eca0f471",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/WalletSection.tsx",
+      "sha256": "4da031b0763be61eed4a4a8c2e8a93a226cb2d5b1b5d5fd6bd550d615163e764",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/alert-notice.tsx",
+      "sha256": "21a287c46a3b8e88bce446577f1f5247566081f9b4c00139031779efb0043483",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/catalog-lookup-states.tsx",
+      "sha256": "502c845b0e83e86f3aa9383e05741eb6fd12a6b1f773bb416e8e7d399231b061",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/catalog-mint-journey.tsx",
+      "sha256": "76b8743a84c84bbdc64b086c84d8d45e2f965e04413f16252b9da281c5fd8d2b",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/company-page.test.ts",
+      "sha256": "e21bded6100b3944fd88b9ff770a65c46590633dd73e9c9b4a6c24f0b750db7b",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/company-page.tsx",
+      "sha256": "a6982da8c0022f95e530e0ddb9daf467877c1071c1871fe2d1649f110d32ca0a",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/copy-value.tsx",
+      "sha256": "5e4dd093cb8eca4b023e57415edf82b8b11eb5ed5ad85a7b016ac20bd9028f92",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/coverage-strip.tsx",
+      "sha256": "ba01583253da024d1165803ff1782a539a748bf2a564be880258d87a74376b81",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/data-state-notice.tsx",
+      "sha256": "1e5c5b27f7f402e0a9c59c649d3ced811af791defef0c5fd93d76ab51704c932",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/home-page.tsx",
+      "sha256": "56db9e01c384858d209eff25cfeb9d08d40edf22a057988ec63c923dd129cbdb",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/identity-proof-rail.tsx",
+      "sha256": "ea2fa68287c81afcce2b8f2461692ee7df2084b3f6d1442cb88eb2370e546aae",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/legacy-statement-periods.test.ts",
+      "sha256": "1de155cafd5b08d63eb94d56b63a58d839ad1685baae4114ea1b26ca31be488e",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/legacy-statement-periods.ts",
+      "sha256": "557c325e7fd8641651a2f4a446e54fe4e938e1c3cc26562b3276bc0e49bdfec1",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/locale-switcher.tsx",
+      "sha256": "a23f425408a506012c22807d6a9ff84cd1458d3b891df9c59534f34f8a8a5a98",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/mcp-setup-panel.tsx",
+      "sha256": "24ccffc1bb1a33308342dac66d2e10cb169b6416d4fe60127ccb2d65bf72eb56",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/mint-journey.tsx",
+      "sha256": "c684e8e317e15f2889b0edcdde6e33ea5c017185d0ee7b6aae9b0313e98a8aa2",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/mint-lookup-form.tsx",
+      "sha256": "16aceabba76f41ec832eb987089cd920767d9945d365b1cede84687125c819e7",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/provider-page.test.ts",
+      "sha256": "bfacc1969612473c1d2b1cc8383aae93934e0c2ac079aa77465a3ababbfc967a",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/provider-page.tsx",
+      "sha256": "cb39213ba43a246e5fe0d294eb33f3cf9373006a4c3623aa57a7dd17d2feae7d",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/provider-references-section.test.ts",
+      "sha256": "deb3f5394bfdb2946138f5d6e64e7f67d49163a977253c7c9be01a5215e39775",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/provider-references-section.tsx",
+      "sha256": "dc8b950ec6a17ed282ada956338f0269ec12e47dcf5efe00ea0744ea995ebaea",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-jump-link.tsx",
+      "sha256": "672924653450b8924ad2d943bf025d478ee0c600e2a2d41b97dc2f8ff0d52f0d",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-notice.tsx",
+      "sha256": "dedf48c24062877fb49fb686c0ff2269cbc9ef42051823063792e23e038b0858",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-panel-fixture.tsx",
+      "sha256": "7c331faf4fd88f5db283531252e8f254ddfb44d305b740b5c4bc109e3c671781",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-panel.test.tsx",
+      "sha256": "6f57bce54a27e8de1814fbdfe0cd0ca88cca521a252667730bc5bc55f85e8b4a",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-panel.tsx",
+      "sha256": "2fba156120cb1f3999766a39fe862374134750ddceef38fb87c34800700aed1e",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-terms-list.tsx",
+      "sha256": "a49a6036622247f2dcd91e77aa102820b5e033f09c61b7345553d13276b2d6cb",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-trail.tsx",
+      "sha256": "081734ffbfc60017d80855485f2968c8f9175488b0c91c7eb41a8beb082cf037",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/purchase-unavailable.tsx",
+      "sha256": "90eb27cad0696da196cad79966e7a100484e3c2fadcfa68706e727da639745b4",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/record-table.tsx",
+      "sha256": "b0d9b8c01626e587edc1774b7b0e7fd40dbbd1aae77bb34deeb964b2f8adba79",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/status-mark.tsx",
+      "sha256": "a3e23b439e91faf56931f67588cbc9b6998b187d7859b10def67c783e3359e87",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/sticky-aside.tsx",
+      "sha256": "aa7c967e359a60bed81ae34d507d6db5c92c498ff456191bf2fa6e3a91c2618c",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/stock-page.tsx",
+      "sha256": "f9a082c54bfc3fdf7eede5daed69e009bcf6b31fc2081d6ae9aceb638f43c707",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/components/verified-fact-list.tsx",
+      "sha256": "29a0766a00eee819b709d1b7dd9bf39a11e3ad77f8ca18d651dfd70167c3fb93",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/disclaimer.ts",
+      "sha256": "e3d930174ff96016ef4c2b1d5761e0c6f8318e8b6d9f1b496d9ad93030b4d649",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/exclusion-reason.ts",
+      "sha256": "832a9c905fdd958bb45f49be19cf9efe4f44fb23fed37b4163906ffd92980723",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/format.ts",
+      "sha256": "f64119299c8359a8f5fd0f7e454fa310267642c41a6d7862c7026a00867f768f",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/fundamentals-fields.ts",
+      "sha256": "c411968944e08ef8d0ae3fd175db77a9156c39b383f837ef0cb3156724546727",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/catalog-manifest.json",
+      "sha256": "41ba64e8236a5db0bb9c887c6b427c3d20181045c7465c30d7fb88bd24a42dd0",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/config.test.ts",
+      "sha256": "6044e50a35b44dbda07377ba12872beca26207b89ad8fba2e48e073d74c6f009",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/config.ts",
+      "sha256": "7427c001876dd173e916ab3987acb811502fcd193eadd6c7e4bf312d50badfb0",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/format.test.ts",
+      "sha256": "727fbf689df2d8566e8d7d9930b21c10057d95888de1748f4083997c5078f987",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/format.ts",
+      "sha256": "f242a8f736ab7db8b8f5287123eb20f18207a5fffd3ebf64b2fbf3f3353a9432",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/messages.test.ts",
+      "sha256": "318e9ed13a1d8458bad5fbb4a7768e5f2ad36cc5ea5eac6a9f356aec66fbc5e4",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/messages.ts",
+      "sha256": "7c3b702174367ec1fc8b488aafe0122dd42904e7e68f5e511069a084f8850843",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/i18n/metadata.ts",
+      "sha256": "cb3e712e54ceff50cfdae49a42818f2c8002c2ab81d15df6b2bfe642e5bed718",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/period-presentation.test.ts",
+      "sha256": "faaa396cd3a9254fec1d3b9645c624ec661d5675e818562073d97a66748b13ab",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/period-presentation.ts",
+      "sha256": "fef06c3539f92e0294c838bbbae59eca1da77b5aec56ebe72128a92b3d532c57",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/provider-assets-route.test.ts",
+      "sha256": "01a65b0b6637cef034868bb400ba407c4bac8c2e3a2bb20644f26b2fdcd90635",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/provider-presentation.ts",
+      "sha256": "0bb76a8630708d40fee9a0421266ee057a5a4402b8a1ead92576620344333485",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/public-result.ts",
+      "sha256": "fac1f6f21585044c74bf89bbcedfe043234f1fb40d19c88b946fc44807f11e3d",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/public-v2-differential.test.ts",
+      "sha256": "c09039f01440994b674cacdadc784542f6702661694073e687f6baa8d2e52f51",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/public-v2.test.ts",
+      "sha256": "b8aa6cb11e1acc6b6a890db1fcf2965a5b499e3aa69914520c782a66a2dc631d",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/public-v2.ts",
+      "sha256": "b367769d931477333a750a1c8717b6ad810143040c17963443e88778b7d52e08",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/site-copy.ts",
+      "sha256": "091bf7e9fba8d973a8b2ae9ad9b972c670635204dfbc8de65d6037a71d92f229",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/verified-facts.test.ts",
+      "sha256": "17a2dbe4f85eef04d9f5db0c306f13880dadb58f97d71f062a58113da29120e0",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/lib/verified-facts.ts",
+      "sha256": "ea5915cd9a387df3dc622d99bdbb3637232fe0e7c62925c17af125d2adf58ffb",
+      "category": "legacy_product_ui",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/middleware.test.ts",
+      "sha256": "8e46e5ea8744816bef3cba9c3dc86b57f27e5f24f6d91fc90c8932f3a5b58b08",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/middleware.ts",
+      "sha256": "8107f184915f452312d658f836f77951edf4815812f1ace7a4fe16d89531ade0",
+      "category": "legacy_localization",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "sha256": "9dd9d642cdb87d4d5b3173217e0c45429b3e47a6f5cf5fb0ead6c644ec5fed01",
+      "category": "next_runtime_config",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/next.config.mjs",
+      "sha256": "a9ca27792f9facbee70fca437f69dcad82e8300a153339093fb0c1b6c18bf541",
+      "category": "next_runtime_config",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/next.config.test.ts",
+      "sha256": "c9dc98513e125bf856ec0ed1620a5d5db212b8a944ea40476bd6c7d4102c6740",
+      "category": "historical_test",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "350ddf32d66e466e536e8a54c8e35c570f1b182e8205d7ea8263950e9fb4ba6b",
+      "category": "next_runtime_config",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "41deb7c3b13893ab256d3002cccb0d5baaac76fe24dc1eb0d2ca7396bb507b6e",
+      "category": "next_runtime_config",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    },
+    {
+      "path": "apps/web/vitest.config.mjs",
+      "sha256": "305232a0a1772e1c1d5cd2e75b7a12ddbb707e1a15273f326a5f67fc3ffc3526",
+      "category": "next_runtime_config",
+      "disposition": "remove_only_after_explicit_lr_n0_authority",
+      "retained_value": "git_history_and_literal_http_oracle",
+      "moved_to_new_runtime": false
+    }
+  ]
+}

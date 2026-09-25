@@ -1,0 +1,646 @@
+{
+  "schema_version": "benten.onchain-pools.v1",
+  "checked_at": "2026-09-24",
+  "selection": {
+    "directory": "https://api.geckoterminal.com/api/v2/networks/solana/tokens/{mint}/pools (first page, public, read only)",
+    "rule": "Candidates are the USDC pools of the xStock on the directory's first page with at least min_tx_24h transactions in the last 24 hours (used only to find candidate addresses). At each probe instant the successful pool transactions in the 24 hours before it are counted from the ledger (getSignaturesForAddress, at most 1000). The pool with the longest unbroken run of active probes ending at the latest probe is chosen; a tie goes to the larger sum of probe counts. One pool per ticker, fixed for the whole series."
+  },
+  "pools": [
+    {
+      "ticker": "NVDA",
+      "symbol": "NVDAx",
+      "xstock_mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "6R4r93V5fcMzc13CL2enEepDSYcr4Qx3ptZBDwudTXCo",
+      "dex": "orca",
+      "program": "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc",
+      "xstock_vault": "FaHQ9Ny2U2RkcdapsKVr9pvnt4Mg7n92NdKnvyRzuibH",
+      "usdc_vault": "5TSHEwRAgHLTYkchrUNiKUL2RvuZgdh3vExbMptWrHoX",
+      "created_at": "2025-07-02T15:56:06Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 526
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 769
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 921
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 831
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 864
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 679
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 874
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 825
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "TSLA",
+      "symbol": "TSLAx",
+      "xstock_mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "9p7abUFv31ycgu9kckvnoqMMvBy67dqTDM2m6HP9xokN",
+      "dex": "orca",
+      "program": "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc",
+      "xstock_vault": "7AmJBD4kP72fY7xTncNgy1kPVp5TzsYs34zzUeotqbbe",
+      "usdc_vault": "2NfTohqtneNa5bphKGw1MZNKdyAbV4B7mZDwtkxnYPhN",
+      "created_at": "2025-07-02T15:34:23Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 674
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 746
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 892
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 819
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 917
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 294
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 798
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 891
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "MSFT",
+      "symbol": "MSFTx",
+      "xstock_mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "CLu4kFM4nb67xrdN7vJnMxXXir8Z5hA4HJUzPFccXjsL",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "AtP8LYj8MBdHWXAdFVWmc3QC91wgBs1F4d2mxFGptepC",
+      "usdc_vault": "A2Skn6UnSuFusfc3aPhBfiMCyYZugdd4ntrMcevo5xvB",
+      "created_at": "2025-09-29T12:26:32Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": null
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": null
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 27
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 28
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 50
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 454
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 235
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 780
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "GOOGL",
+      "symbol": "GOOGLx",
+      "xstock_mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "4k43WcUS8kPXkmL7PhgpwCteYYaSgzXvfKU63FEE1WS5",
+      "dex": "byreal",
+      "program": "REALQqNEomY6cQGZJUGwywTBD2UmDT32rZcNnfxQ5N2",
+      "xstock_vault": "4CKe7EYKUnqGUenBWDi42K8U28Ekn4bFYpNbiPVHXfro",
+      "usdc_vault": "G3z1p6vFkV15QSpvLKSey7LJCGeSX96pLxu8dV9w99id",
+      "created_at": "2025-08-06T08:45:37Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": null
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 135
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 488
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 492
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 496
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 760
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 798
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 700
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "AMZN",
+      "symbol": "AMZNx",
+      "xstock_mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "6m5aXAve4uh6Kt4ytKyCLWNMjd8PYP5vujwNCtycrUiD",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "DWQnWAPHQWhUoM4NXwyyf4N2xQ1PECxHAQ88t3LL9pTF",
+      "usdc_vault": "5BSujhdVKPx3QE361BJGzHqbDF3B4sNHy8cMRJGD5x6g",
+      "created_at": "2025-07-01T23:25:50Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 116
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 237
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 259
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 179
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 264
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 277
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 298
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 753
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "META",
+      "symbol": "METAx",
+      "xstock_mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "3L7KbPVaAQA4UTecaGQYsm6UCq5F3sZM9zAYkxqYt63j",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "BMS7RrFtXNByMZoAAyViq4LhhUDDZBLfyY3Ni1W9iptc",
+      "usdc_vault": "EbqkNhtHX6oNRzWuArFut7C5WXfiU2fEVEmg8rmHKsmc",
+      "created_at": "2025-08-12T15:31:58Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": null
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 92
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 462
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 56
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 75
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 238
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 169
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 584
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "SPY",
+      "symbol": "SPYx",
+      "xstock_mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "Fae5dWVntUt6zbWu2voXxioDpMii7SqQwtsxBmoVCsHR",
+      "dex": "orca",
+      "program": "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc",
+      "xstock_vault": "EfmaMxuPJaU914gV9N8Z2sDTp249AtEASTLDZdhRsN37",
+      "usdc_vault": "5NbsTM8qKWA65oRjZpMARnnxpeR4rGiGdG9vPdCD3sem",
+      "created_at": "2025-07-02T16:30:11Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 544
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 885
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 932
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 553
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 866
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 297
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 213
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 633
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "QQQ",
+      "symbol": "QQQx",
+      "xstock_mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "FknDV1F5n6QaA7rLmjquDjuU6wcPMNm5RYq7zWbqhpZw",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "EwvUC5UCDsAsdkSXNeVJp77ooQvJRRK21oNcpvgqPyte",
+      "usdc_vault": "4DqRE6N2yvXrT4cUpzenMVSYGswvkE36hjUJdtyCZqSP",
+      "created_at": "2025-07-02T03:02:00Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 128
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 259
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 216
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 406
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 140
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 810
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 80
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 267
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "COIN",
+      "symbol": "COINx",
+      "xstock_mint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "7ouGUDRMy4C9RJpTgPizRyfcxyJusAEe9ZbjqYv7BSqe",
+      "dex": "orca",
+      "program": "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc",
+      "xstock_vault": "3MoVFiZzQKLaVKENC52Gm2DM8iNY7rBFMmtX8WucKJYB",
+      "usdc_vault": "EyqGzfvJMk7iKb3cY5jQfkzUrHRNPn79EQu9Edx3Fmai",
+      "created_at": "2025-07-12T06:11:33Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 66
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 31
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 92
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 166
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 308
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 329
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 196
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 815
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "HOOD",
+      "symbol": "HOODx",
+      "xstock_mint": "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "DXWbip5LducMAbDSSpLYz9Xik3253EPeAYQufQtx7LXs",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "9DydSm4vvfDRKTg81sFqadFvPb21aayxwNLkW7MNwVMD",
+      "usdc_vault": "93QSfpPGq7KS79fgFLu5nQ9ACPjCpf4JLmuu3i8VXymM",
+      "created_at": "2025-07-03T16:19:24Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 151
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 43
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 272
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 173
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 364
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 746
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 244
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 631
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "MSTR",
+      "symbol": "MSTRx",
+      "xstock_mint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "RyhF4cksVZY7vcqJpoytHcxcGNKRp27PEGhSnEPpbGv",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "5f4k3xxs72HdW42oLgAuvK9apEarYKVKH1Eb76Z8eh5J",
+      "usdc_vault": "Bny8ExpPhzbJaV9rjkdk7NSNrMHofZVWUCMQG9TECYus",
+      "created_at": "2025-06-27T12:59:33Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 524
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 673
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 842
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 566
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 868
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 477
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 714
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 599
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    },
+    {
+      "ticker": "CRCL",
+      "symbol": "CRCLx",
+      "xstock_mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+      "xstock_decimals": 8,
+      "usdc_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "usdc_decimals": 6,
+      "address": "G39wywquKbHK8F2wZZZFX3fcsyG91VCCbbr6WEVp5axy",
+      "dex": "raydium-clmm",
+      "program": "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK",
+      "xstock_vault": "2E4iJMqtDz6hhvpBb5HJ1GfQk1RuhnuAp6uCywTB1qYM",
+      "usdc_vault": "TMuoeZMJ4HVJcELyJ44EXGPo6SPRANda5ZHPcRymMSb",
+      "created_at": "2025-06-27T14:59:23Z",
+      "selection": {
+        "rule": "longest_recent_activity",
+        "observed_at": "2026-09-24",
+        "probes": [
+          {
+            "at": "2025-07-15T12:00:00Z",
+            "successful_24h": 622
+          },
+          {
+            "at": "2025-09-15T12:00:00Z",
+            "successful_24h": 795
+          },
+          {
+            "at": "2025-11-14T12:00:00Z",
+            "successful_24h": 761
+          },
+          {
+            "at": "2026-01-15T12:00:00Z",
+            "successful_24h": 667
+          },
+          {
+            "at": "2026-03-16T12:00:00Z",
+            "successful_24h": 675
+          },
+          {
+            "at": "2026-05-15T12:00:00Z",
+            "successful_24h": 381
+          },
+          {
+            "at": "2026-07-15T12:00:00Z",
+            "successful_24h": 770
+          },
+          {
+            "at": "2026-09-15T12:00:00Z",
+            "successful_24h": 677
+          }
+        ]
+      },
+      "checked_at": "2026-09-24"
+    }
+  ]
+}

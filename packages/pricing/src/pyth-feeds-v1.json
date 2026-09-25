@@ -1,0 +1,4467 @@
+{
+  "schema_version": "benten.pyth-feed-map.v1",
+  "revision": "2026-09-24.1",
+  "checked_at": "2026-09-24",
+  "source": {
+    "feed_metadata_url": "https://hermes.pyth.network/v2/price_feeds",
+    "network": "solana-mainnet",
+    "receiver_program": "rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ",
+    "push_oracle_program": "pythWSnswVUd12oZpeFP8e9CVaEqJg25g1Vtc2biRsT",
+    "price_account_derivation": "program-derived address of [shard as u16 little-endian, feed id bytes] under push_oracle_program; shards 0 and 1 are listed",
+    "binding_rule": "each entry is bound to one registry mint by exact mint equality and, for xStocks, to its registry ticker; the Pyth symbol of an underlying-share feed is exactly Equity.US.<ticker>/USD. No binding is made by name."
+  },
+  "conversion_bases": {
+    "xstock_scaled_ui_amount": {
+      "statement": "One xStock display unit, the raw amount times the Token-2022 Scaled UI multiplier in effect, represents one underlying share. The value of a holding is raw / 10^decimals x multiplier x underlying share price.",
+      "evidence": [
+        {
+          "kind": "issuer_documentation",
+          "url": "https://docs.xstocks.fi/developers/multipliers",
+          "checked_at": "2026-09-24",
+          "finding": "Scaled amount = raw amount x multiplier and reflects the equity value in underlying shares; tokens launch at multiplier 1.0 = 1 share."
+        },
+        {
+          "kind": "pyth_redemption_rate_matches_mint_multiplier",
+          "checked_at": "2026-09-24",
+          "finding": "For NVDAx, GOOGLx, QQQx, SPYx, COINx, HOODx, MSTRx and TSLAx the latest on-chain Pyth <xStock>/<ticker>.RR redemption rate (published 2026-07-20/21, exponent -8) agrees within 1.03 units of its last published decimal with the mint Scaled UI multiplier in effect at that publish time. No larger difference was found."
+        }
+      ]
+    }
+  },
+  "entries": [
+    {
+      "feed_id": "5da511a7c68b17a3bc94380cab4756bc83ab87f86307af10ea58467a64b6689d",
+      "pyth_symbol": "Equity.Index.ANTHROPIC/USD",
+      "pyth_description": "PYTH PRICE IN USD FOR ANTHROPIC 24/7",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "private_company_index",
+      "binding": {
+        "kind": "prestocks",
+        "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+        "provider_asset_id": "ANTHROPIC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5P9RpEST43g1jCNoAPQjCPuq2b8GaperzCGDQihJVjuc"
+        },
+        {
+          "shard": 1,
+          "address": "ERC3BNqLdTmrZuNEKvyrACf34MVr9KbQkGptVqFLgt4G"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "96d4bb23a3db78fdb72b3a03ce80ead686096f324319166534d9a27c0519c483",
+      "pyth_symbol": "Equity.Index.OPENAI/USD",
+      "pyth_description": "PYTH PRICE IN USD FOR OPENAI 24/7",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "private_company_index",
+      "binding": {
+        "kind": "prestocks",
+        "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+        "provider_asset_id": "OPENAI"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5vdJiSaETP5e2S99y2sQzM8jTDXsLhJ9f6nxix7cjSwr"
+        },
+        {
+          "shard": 1,
+          "address": "4EcBywgqkM8oyp7T9mCR6BUQN3fyaM444gJdXAnbnMG6"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "327ae981719058e6fb44e132fb4adbf1bd5978b43db0661bfdaefd9bea0c82dc",
+      "pyth_symbol": "Equity.US.WMT/USD",
+      "pyth_description": "WALMART INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci",
+        "ticker": "WMT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "68gHDJZokg2awMMRy47XjN2e3u1tvpVFzmqNPxhBvF1E"
+        },
+        {
+          "shard": 1,
+          "address": "9UuHGnCgqbPzR5Ftpo3xRz3q9AzbVWFk8btwz3EqKRFw"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "46417522a59b245c5af35c33c13426d991b36514c4c85aaefe1cf787e7daad90",
+      "pyth_symbol": "Equity.US.RIOT/USD",
+      "pyth_description": "RIOT PLATFORMS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs31mE5EiqjSHEaiX9QDKCN6NvSGCqpJ6f1FNq2wri5",
+        "ticker": "RIOT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BhpnFXWJw98mqBRR55NNC6M8wDfGifesU9Fu6L8DKXwB"
+        },
+        {
+          "shard": 1,
+          "address": "F5fErUrpwYLvLQtCmH3x5Zs6odFREYFqNTn4Z5d65V7i"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "15d10cdf550966316121a3e07b86eec98be08afa1f3abc634818156d32094b31",
+      "pyth_symbol": "Equity.US.SBAC/USD",
+      "pyth_description": "SBA COMMUNICATIONS CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs3BuKwwLLSgKCKPBeSN5Wje5gP8McsHrt6pnqWzjhs",
+        "ticker": "SBAC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6GCJYchZdgceJiuCN5TdjwnDSQKxRC9tMLGuaJKtiqWT"
+        },
+        {
+          "shard": 1,
+          "address": "CRA4p4FrjAvk6vGnNiKFTvse8pgmX4E2bGnMizsRx6HF"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "a388977cbd7b063e456a31267919d86395af058a7558e892dde3c6b38c6240bb",
+      "pyth_symbol": "Equity.US.ADI/USD",
+      "pyth_description": "ANALOG DEVICES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs3CytsvJshAYy1TQjq2o2yVWCyEGinNpvkB6f3Qs31",
+        "ticker": "ADI"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "92WQ6asHDLSWuBDUzyvKvDjjNBnE32v2DtUSqfxWxc7h"
+        },
+        {
+          "shard": 1,
+          "address": "CcZxtZhz78CGEwwkGZ6wrHcchm2yWKGFntNiZjfamTAh"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "14291d2651ecf1f9105729bdc59553c1ce73fb3d6c931dd98a9d2adddc37e00f",
+      "pyth_symbol": "Equity.US.SNOW/USD",
+      "pyth_description": "SNOWFLAKE INC",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs3QCTNpPWTFYRQ9yPv9gsvWKNJGk45UQ1bb1w7xznc",
+        "ticker": "SNOW"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "4VB7ghiccpsmSqRWCryZkBrZ9ysE62ChPZD3UkL9UAEb"
+        },
+        {
+          "shard": 1,
+          "address": "FUckDQZA68DgkronfteMgDiEmsy3HcoLD4o3kPwz2vZq"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "7fb3b27d9039f8ca0a435fe0fdf724a3a5a2309ab62ad07ca775e5ab2100c1be",
+      "pyth_symbol": "Equity.US.AZN/USD",
+      "pyth_description": "ASTRAZENECA PLC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs3ZFkPYT2BN7qBMqf1j1bfTeTm1rFzEFSsQ1z3wAKU",
+        "ticker": "AZN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9eg61vdeQHV7HwJrG6ukmebzvVmGnxcQzis6kWo1stVy"
+        },
+        {
+          "shard": 1,
+          "address": "E94Xuf8Wnc7PSFWAUrnjcaGActAwAnSoJye4hxP6FSU2"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "7148fbe6e493ff2580305c92a8d7f8628c9943b11b9b253aebc24863fec290e8",
+      "pyth_symbol": "Crypto.AMZNX/USD",
+      "pyth_description": "AMAZON XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+        "ticker": "AMZN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HVWLZ3JEY6nV1zKtAmdsNsUm99SrYs4b5MGVCJkeAZ66"
+        },
+        {
+          "shard": 1,
+          "address": "Btc8xrXKbESTaJdJGZLzDSx5otzgr7VPvqEUfBEtniwg"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b5d0e0fa58a1f8b81498ae670ce93c872d14434b72c364885d4fa1b257cbb07a",
+      "pyth_symbol": "Equity.US.AMZN/USD",
+      "pyth_description": "AMAZON.COM, INC. / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+        "ticker": "AMZN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GBkjjFxbaFY9TBHpAPypk5JBchpPPve2jskAcd9zuFNd"
+        },
+        {
+          "shard": 1,
+          "address": "4eT5d4SJ7GjD8HMpMysSNoPV7RBVTBGzoSEkynmPLMPS"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "6672325a220c0ee1166add709d5ba2e51c185888360c01edc76293257ef68b58",
+      "pyth_symbol": "Equity.US.VZ/USD",
+      "pyth_description": "VERIZON COMMUNICATIONS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs4VKGG8TTan8UN3mC1ufsDMamBtBLE4Ahfkyv2tfuy",
+        "ticker": "VZ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7mCKHgVHdLXX4ucU3AeJGL3UZBXHobAieNaxgrQkGn8N"
+        },
+        {
+          "shard": 1,
+          "address": "756xSbrG2wbftMjsxrmkfGLzPpJ4JcqD6rmVVBNC8FBH"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "d54d8d4e3774ea53660e660ecd03aa9daa31eed9b7e67d1a2aed3095b3e6720d",
+      "pyth_symbol": "Equity.US.COP/USD",
+      "pyth_description": "CONOCOPHILLIPS / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs58CxmUcgT17reeVV64se747XuRfjsJQnpb8DX9TDq",
+        "ticker": "COP"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "DYw1Vg6qhkNk7VPrjXLfLnJdd4QKaKQYXnZgWwmuDabo"
+        },
+        {
+          "shard": 1,
+          "address": "93GRSmbCdCZjzNSdBwLhZk1c5jMQYf3b8vGcbDNQ6mZF"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "68848984b74a7766ad23cdccd8e78e9ef339dcfb86b7e96990f27447c20967ed",
+      "pyth_symbol": "Equity.US.ACN/USD",
+      "pyth_description": "ACCENTURE PLC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs5UJzmCRQ8DWZjskExdSQDnbE6iLkRu2jjrRAB1JSU",
+        "ticker": "ACN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9qJaPV9rJ3BBwRLaj2RmfraFhxPBqc2EJQeBwiBtwN8Y"
+        },
+        {
+          "shard": 1,
+          "address": "ESv5WDAdMg66Frn58mQHDj1cya6ZufbJEKaCrHB8U8Lg"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "bcbe7f4f918381ad7891595dabea1c1a0b662e48cc533d48f308aa4883a0802d",
+      "pyth_symbol": "Equity.US.STZ/USD",
+      "pyth_description": "CONSTELLATION BRANDS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs6eATub8cqKdztx4asCRFMSzMwtNqAUWiDaUPXxUtD",
+        "ticker": "STZ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "B9bWByErU1RQHEhN3WpMCrLPinRXLw2Vh5wALaxnXaLs"
+        },
+        {
+          "shard": 1,
+          "address": "CDM68AwtkfRSxkSWLxPkqWfZB2xFK1xrMCdEJvwEvy7b"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "29f6892fec85377d66086b3c323e298c2a0bf133551e9a0a91c150b95517aec5",
+      "pyth_symbol": "Equity.US.CHD/USD",
+      "pyth_description": "CHURCH & DWIGHT CO INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs712gQLCYkFSYJwdu3pE5itNfyKwsXQ1HEGZF8Esc5",
+        "ticker": "CHD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "D1gJtsjo271Hcm5sSou5pCoD4YTRSWnBA37brAjExzZG"
+        },
+        {
+          "shard": 1,
+          "address": "AQHXBECcMnR3mEWWaoaXw7a4UNdXZZrZS5H9j9vbSfZp"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "5f5193ed44dd1f4b0732dbffa2e27caf953e16a2d911854c8c3766d8bc609a47",
+      "pyth_symbol": "Crypto.STRCX/USD",
+      "pyth_description": "STRATEGY VARIABLE RATE PERPETUAL STRETCH XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs78JED6PFZxWc2wCEPspZW9kL3Se5J7L5TChKgsidH",
+        "ticker": "STRC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EqemnPBBiwYx9FuCuhUXurbK8cDNu5QwiJYfVT1dEMWy"
+        },
+        {
+          "shard": 1,
+          "address": "8KpD7z5MCujCtpEGzFRci2ctbHjkvs98rzQmYWnLbGxN"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "27c7bbc9755d847f7fc63620c2edcc6a91d2c0c67a28c7999907b59c505b3c17",
+      "pyth_symbol": "Equity.US.STRC/USD",
+      "pyth_description": "STRATEGY INC VARIABLE RATE SERIES A PERPETUAL STRETCH PREFERRED STOCK / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs78JED6PFZxWc2wCEPspZW9kL3Se5J7L5TChKgsidH",
+        "ticker": "STRC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GcEfvXPFyoWLfZeKCoA2gRwLCQds49anRfVzVRcU9cai"
+        },
+        {
+          "shard": 1,
+          "address": "BvuaVvpVToE8deeN9DrwXqy49g6QQgLpLrzepFVCUZ6g"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "641435d5dffb5311140b480517c79986d8488d5cf08a11eec53b83ad02cab33f",
+      "pyth_symbol": "Crypto.COINX/USD",
+      "pyth_description": "COINBASE XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+        "ticker": "COIN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6aCwE8Gu4vCY14BUYUsvPQgKNP3ELaBgaMcc3QdtG4c4"
+        },
+        {
+          "shard": 1,
+          "address": "4rWwbU2CJaKK854TYTRhjB37t9wLi4acisAMze5hhEKQ"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "fee33f2a978bf32dd6b662b65ba8083c6773b494f8401194ec1870c640860245",
+      "pyth_symbol": "Equity.US.COIN/USD",
+      "pyth_description": "COINBASE GLOBAL INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+        "ticker": "COIN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "91JXaWGHr57awfqhXQP2TxrkLX6CpvtBaaRjz1PEQqXn"
+        },
+        {
+          "shard": 1,
+          "address": "8gj9iFZMKftcXZmB9AJ2LhdNSbcuCtZUot3EVW364t2d"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "91d942b363c77592a40d4590a96283e9ad95c55ec40a06f57d9a840229786715",
+      "pyth_symbol": "Equity.US.AUR/USD",
+      "pyth_description": "AURORA INNOVATION, INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs7x2HYEazWDXpYQYPBiRYh6o2AbkYrdrFwaBfBxyaU",
+        "ticker": "AUR"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "4EZQDCephoMinoca5TxVNABReZxyjJmP9K2qL3eUbCvS"
+        },
+        {
+          "shard": 1,
+          "address": "HoHXXzQ7QpVgBxXLvaDsPkyRnVaR2c7oe9aFWHpXLnHJ"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "baed936d3c6c2e34104e92c6b015b97ce96adc5ab4f04230c1270e1162e7a270",
+      "pyth_symbol": "Equity.US.CRWD/USD",
+      "pyth_description": "CROWDSTRIKE HOLDINGS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs7xXqkcK7K8urEqGg52SECi79dRp2cEKKuYjUePYDw",
+        "ticker": "CRWD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8zWQVp313FFdanpZoQeDohp5HE7ugoJE2VaX4sYPHj4e"
+        },
+        {
+          "shard": 1,
+          "address": "6yA7hV5UoW2tit9eEQ5PLDK8fqFwgEJYsi92y2BW7KbD"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "5a68b463343e82512e5ea36024037971bb44328de682711a671801dc31c22967",
+      "pyth_symbol": "Equity.US.FIVE/USD",
+      "pyth_description": "FIVE BELOW INC COM / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs7zvvE6QUtYmpMBrz4oWJexS7WSJPwJs7vQsvMCpaG",
+        "ticker": "FIVE"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2eb5B7CY4JutMTZ5vMe5vRawWLgoUVjAbnzpnMvbvkms"
+        },
+        {
+          "shard": 1,
+          "address": "25FZN6ancSLzpBdLs6a2deCoJnrovQDmEwnQG5hFMBBW"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "178a6f73a5aede9d0d682e86b0047c9f333ed0efe5c6537ca937565219c4054d",
+      "pyth_symbol": "Crypto.QQQX/USD",
+      "pyth_description": "NASDAQ XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+        "ticker": "QQQ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BRZ4SSorCG3DQ1KLgTPu7TYmQWsxa8ghqz2BAfDzs6a3"
+        },
+        {
+          "shard": 1,
+          "address": "2xdqcqEb633LJiMtWzCPE9bghncp3TgNqmUHR1RYFKWV"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "9695e2b96ea7b3859da9ed25b7a46a920a776e2fdae19a7bcfdf2b219230452d",
+      "pyth_symbol": "Equity.US.QQQ/USD",
+      "pyth_description": "INVESCO QQQ TRUST SERIES 1 / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+        "ticker": "QQQ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EwssJrQ7UVz6itHEaQQsKWikhZ3iHddyxRhmR7pTvwt5"
+        },
+        {
+          "shard": 1,
+          "address": "TWtoAxPvaXy46uy3Vr4UwFxmWdgyMjpZAJSFxV4RGbF"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "244fdf268ed7ecfad2cf84529c46d0fcef7a643428ff4ef8b16e8dbb63e0f2d9",
+      "pyth_symbol": "Equity.US.TMO/USD",
+      "pyth_description": "THERMO FISHER SCIENTIFIC INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs8drBWy3Sd5QY3aifG9kt9KFs2K3PGZmx7jWrsrk57",
+        "ticker": "TMO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5f9eekiFMRESBFgdCS7CPaJGtt6kZAPsMtaFraeGjDRD"
+        },
+        {
+          "shard": 1,
+          "address": "DEqCTSBshf6cR4VMcPxfiZQQrKp1AEULHiVNgwP1tURJ"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "86cd9abb315081b136afc72829058cf3aaf1100d4650acb2edb6a8e39f03ef75",
+      "pyth_symbol": "Equity.US.SBUX/USD",
+      "pyth_description": "STARBUCKS CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xs9gd8SGbYQn9kkUYQayn46BdqQbvvUshEF6ZpRAzM7",
+        "ticker": "SBUX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EtYMxZyhx2NwkacFs249jPYqdsdTSamEoQm9aesfHT4X"
+        },
+        {
+          "shard": 1,
+          "address": "AB5JhjHgHtkzNGgUFDPQBQhygWzigKzV39pQ48pTTzgs"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "639db3fe6951d2465bd722768242e68eb0285f279cb4fa97f677ee8f80f1f1c0",
+      "pyth_symbol": "Equity.US.MA/USD",
+      "pyth_description": "MASTERCARD INCORPORATED / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC",
+        "ticker": "MA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EcDQMonpX4Resc4PG2PEDX5sQr7B83125i5CvR8PkXhv"
+        },
+        {
+          "shard": 1,
+          "address": "13v6qr1rp9y7DPqb5X8kw5M2cYFCnyngLjC5o1YETsvv"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c04665f62a0eabf427a834bb5da5f27773ef7422e462d40c7468ef3e4d39d8f1",
+      "pyth_symbol": "Equity.US.UBER/USD",
+      "pyth_description": "UBER TECHNOLOGIES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsAsZLF4MmsvS1sDxRMrUz7REjHfwbC9UAMXSRBqgEB",
+        "ticker": "UBER"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FnAEMDQgAoCieWdLLKqH7uX4VbdHDqXZcodKhpTWYNwU"
+        },
+        {
+          "shard": 1,
+          "address": "5vMDbPwUiP9tZRwCC7BrMrUx6XWxwotb2KW9QyjU54bv"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "0704ad7547b3dfee329266ee53276349d48e4587cb08264a2818288f356efd1d",
+      "pyth_symbol": "Equity.US.PFE/USD",
+      "pyth_description": "PFIZER INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsAtbqkAP1HJxy7hFDeq7ok6yM43DQ9mQ1Rh861X8rw",
+        "ticker": "PFE"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "Cxdyfj8XK7f9rPCsbaJkv3Dd48diMxMwEvd7jFcmsT8j"
+        },
+        {
+          "shard": 1,
+          "address": "HyYPojcdxNRbNT7PFXwnwhZ6TcVQz6uw6SLVmfhMKgRt"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "6c267962d46cec4a5baf6105de67ef08e1306f75973ce6eb8db8527f06e28f33",
+      "pyth_symbol": "Equity.US.F/USD",
+      "pyth_description": "FORD MOTOR COMPANY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsBNJXGu68cBH5hgFxdqZkeh8cMQv32jeEtZtYTYvfS",
+        "ticker": "F"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BSXB3MLN3oNDLBUaEckE6dtt3W2vLnV5ftbaqrkvDBNs"
+        },
+        {
+          "shard": 1,
+          "address": "427FCSALBQwBTFHfG4JHdJ4q2RRr6kWttUAkNFDw9GzY"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "8419416ba640c8bbbcf2d464561ed7dd860db1e38e51cec9baf1e34c4be839ae",
+      "pyth_symbol": "Equity.US.BA/USD",
+      "pyth_description": "BOEING CO / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsBcnKnZMsPaerLiUQ4eMFy4Fjysot4RugYXYDjiqCP",
+        "ticker": "BA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BiDrtXqVojAocxBafVBD9B2ppZtS2saStuALEhF3wsMW"
+        },
+        {
+          "shard": 1,
+          "address": "knHPWm7x59ZWmxAZom5gzVR1KkP4vVsQHvwdrXdftzv"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "69d2eebcc3c62889f1c0105ff347f296eb435cba8d2e4705a486fd47a8fe1a1b",
+      "pyth_symbol": "Equity.US.NOW/USD",
+      "pyth_description": "SERVICENOW INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsBnEFd2EtpwBRNVfN8qLZcVUnuqXRaGCSEEFChLfxL",
+        "ticker": "NOW"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6NGnoyGgnhX9sXrc3gBey1bviWVnKQaDFVJJDeB7r8pH"
+        },
+        {
+          "shard": 1,
+          "address": "47G6PkCL6oKkxaAWY5tD4qhYV5hVCren6TzUhBGD14ZU"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b911b0329028cd0283e4259c33809d62942bd2716a58084e5f31d64c00b5424e",
+      "pyth_symbol": "Crypto.GOOGLX/USD",
+      "pyth_description": "ALPHABET XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+        "ticker": "GOOGL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HeLrriTGigH3g9qgzZTpkWWkYe1yXKgE6nA7YdBjsvva"
+        },
+        {
+          "shard": 1,
+          "address": "unqK4qNGMkefbrWaRZJd1BvghjajwEVQf6nh2k49wed"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "5a48c03e9b9cb337801073ed9d166817473697efff0d138874e0f6a33d6d5aa6",
+      "pyth_symbol": "Equity.US.GOOGL/USD",
+      "pyth_description": "ALPHABET INC CLASS A / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+        "ticker": "GOOGL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HShKFQqhYkUiXpVyyLmrAALXwWqHB7ikLmPbrwJzpRNh"
+        },
+        {
+          "shard": 1,
+          "address": "7aUtbtC3o3GVwRWvaDp5fxKjBq53QL3UrVmDzDgeNo8M"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "b8f2bb034ab00c83a9a4e4bc4f8254c139631f56f11deb6f99f00c34ce032478",
+      "pyth_symbol": "Equity.US.HWM/USD",
+      "pyth_description": "HOWMET AEROSPACE INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsCX8NnXq3qx6zUxXxWwjV2yQnGc9C5y6UyXvE6RG7r",
+        "ticker": "HWM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8WjAXtRpNyPfJjsV1Z9SVcn8M9hzwGtmLV7n7nL3UbAc"
+        },
+        {
+          "shard": 1,
+          "address": "GHep1zmwLfozp6FU8F6bLQnhRysBjkfSYnzNiAMZ6qfK"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "f2be31eeb67f9e2bb7228aaab13fd3a7b836cfc3e6832b876d488363c21dd24a",
+      "pyth_symbol": "Equity.US.PFG/USD",
+      "pyth_description": "PRINCIPAL FINANCIAL GROUP INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsChiU9gDeWj7HYrqioNUn8C81jaHZwegfGQdQXHnhd",
+        "ticker": "PFG"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6KNtfgvYAZhhLjaeevVE8XbmLfRNdTY6yCU9Z1Avg7j2"
+        },
+        {
+          "shard": 1,
+          "address": "G4mK1LMW3YybLqiH3Y2Lvr7K7Fbm4VRhoZpDk4GfbEnm"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "df82dc88ea742bb42bdb845e5fc3ca4eef2354c67357d338221e8a696891b4ca",
+      "pyth_symbol": "Equity.US.ADBE/USD",
+      "pyth_description": "ADOBE INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsDZMGEU8zadWFCkTtPBoPWYcUX3JHVmghnwf2Mve2q",
+        "ticker": "ADBE"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "D56gkpWR3VfxwWS38XuRWZvkEi41qjyvcG4oQvAjG6Qd"
+        },
+        {
+          "shard": 1,
+          "address": "HmRZ5UEF4eajBHMhitKhGUPkkYtfg6m7SVPrK3BFpXGo"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "1d762c633d4166a8d061518e187047afda1868cc524990262d8144e39dbb815f",
+      "pyth_symbol": "Equity.US.MDT/USD",
+      "pyth_description": "MEDTRONIC PLC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsDgw22qRLTv5Uwuzn6T63cW69exG41T6gwQhEK22u2",
+        "ticker": "MDT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8omTDnnZtkn67inbN4pECDwHCkXkfprPpwux5SxR6vAd"
+        },
+        {
+          "shard": 1,
+          "address": "D61jR2cjvd976VdV7YmDq4p7mAokUhrSoQVaPKF9VHh2"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "47a156470288850a440df3a6ce85a55917b813a19bb5b31128a33a986566a362",
+      "pyth_symbol": "Crypto.TSLAX/USD",
+      "pyth_description": "TESLA XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+        "ticker": "TSLA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GpoWLTd6GoisYxYgHz7mTcZvgnfJu4SN7T6PxWjgUTFY"
+        },
+        {
+          "shard": 1,
+          "address": "Exzs9zruUELRmPAn6SzzLiqx5wpkVJ8cghTQnF8wSCXP"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "16dad506d7db8da01c87581c87ca897a012a153557d4d578c3b9c9e1bc0632f1",
+      "pyth_symbol": "Equity.US.TSLA/USD",
+      "pyth_description": "TESLA INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+        "ticker": "TSLA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "E8WFH8brgP58arcuW2wwsPHiomYrSvrgWTsRLZLAEZUQ"
+        },
+        {
+          "shard": 1,
+          "address": "FQB8c4zB8Emrp9W8bmyk6GanCLq4aRytHYPDAnaEpq9z"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "85cd26ce8d989a2e1648eb0463f2482303fe0dcc737d620d19247ae75e6d1189",
+      "pyth_symbol": "Equity.US.FWONK/USD",
+      "pyth_description": "LIBERTY MEDIA CORP DEL COM LBTY ONE S C / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsDum7DWP825ChLAhSN5NYBpoCUsHJJdRKTPseA9VxR",
+        "ticker": "FWONK"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7Q2zqKPPrKcwxieF2tPwjgQczMrqEC4QR1Z27K7KxU61"
+        },
+        {
+          "shard": 1,
+          "address": "HR2EXon54UnqAgXMv1JAiMfZv9jV6MDx2Sp4QaVycQGZ"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "02a67e6184e6c9dd65e14745a2a80df8b2b3d2ca91b4b191404936003d9929ae",
+      "pyth_symbol": "Crypto.NFLXX/USD",
+      "pyth_description": "NETFLIX INC XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsEH7wWfJJu2ZT3UCFeVfALnVA6CP5ur7Ee11KmzVpL",
+        "ticker": "NFLX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FUqSvECa7qTFsn8QncA5MHpohUfz227295LFvVj5AWFh"
+        },
+        {
+          "shard": 1,
+          "address": "5SH7cVkeTW9gAaNz8LmkSa6Kq78o5xHCpsLGfdiMtkQ7"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "8376cfd7ca8bcdf372ced05307b24dced1f15b1afafdeff715664598f15a3dd2",
+      "pyth_symbol": "Equity.US.NFLX/USD",
+      "pyth_description": "NETFLIX INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsEH7wWfJJu2ZT3UCFeVfALnVA6CP5ur7Ee11KmzVpL",
+        "ticker": "NFLX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BcKrDiVyQ2fsTJ4dDHLNV2Tbyqz8uS1JfhmSwBrX69Ci"
+        },
+        {
+          "shard": 1,
+          "address": "EyPopcccrL6sQqWMtjJDXZnCDuHA8HkqsCVoxmVoiog2"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "72c3b869b1188eaaacd19da9fac87253d8d4adfa651e5b1b4fd371168445a108",
+      "pyth_symbol": "Equity.US.BAX/USD",
+      "pyth_description": "BAXTER INTERNATIONAL INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsFo6dYyRQwVtxbfdGs3zwyyQ1QBkh8D4ANjWXN3zTo",
+        "ticker": "BAX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HxTQUeiT7eBFq9mZf3fLgwcnikzbzFmkrcXiahSH2q7V"
+        },
+        {
+          "shard": 1,
+          "address": "619DqDjmS3Sgrf956wzAwHyaivwRpPMN2ErpoWxu7rAM"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "1ab9bd7ed68a12736e9feb89044e6ab23b1abfa7b66e06f85653752ec0a890e1",
+      "pyth_symbol": "Equity.US.PGR/USD",
+      "pyth_description": "THE PROGRESSIVE CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsGDHfnSNxofQ2qXzcty9r4HB5HFszUCrQhjN7mbEcw",
+        "ticker": "PGR"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "3PnvhrD2XruA4LEHvBeWrNoAsgSvZyedksm3A85e8k7P"
+        },
+        {
+          "shard": 1,
+          "address": "6Gjnrsj3WTKnFVUkzT9XxVPzYu2Yv2BrtFXMb4HvUYZc"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "12848738d5db3aef52f51d78d98fc8b8b8450ffb19fb3aeeb67d38f8c147ff63",
+      "pyth_symbol": "Equity.US.JNJ/USD",
+      "pyth_description": "JOHNSON & JOHNSON / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsGVi5eo1Dh2zUpic4qACcjuWGjNv8GCt3dm5XcX6Dn",
+        "ticker": "JNJ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CQdAm1hHV4bymL6AovtQmPQVDxhRjdRXQodSaidwQA9f"
+        },
+        {
+          "shard": 1,
+          "address": "F8We9FemEGwBLPwt6WniHsbYf8BbAbGiMRdT7P2sDxLu"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "67649450b4ca4bfff97cbaf96d2fd9e40f6db148cb65999140154415e4378e14",
+      "pyth_symbol": "Equity.US.NKE/USD",
+      "pyth_description": "NIKE INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsGYpMvKbVt6ViHqRd7cF3s746dAMFBQWcC49hB9VVP",
+        "ticker": "NKE"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FysHfG3sfuuz8g94KayzzYVJMiGpr1bYwwSe84gAXDKZ"
+        },
+        {
+          "shard": 1,
+          "address": "ZPwsqu5KAmp1XSiNq8t3hiq8Eev2HtjzVXQ5PyE7jFx"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "4aac40f432e039ab06236eb9bd3c58347f953d8f05b29aaac295b99cc47ee429",
+      "pyth_symbol": "Equity.US.ABT/USD",
+      "pyth_description": "ABBOTT LABORATORIES / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsHtf5RpxsQ7jeJ9ivNewouZKJHbPxhPoEy6yYvULr7",
+        "ticker": "ABT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6VW7PRdfFRXiMcJ5MpfbEfTnSS2wPdAtNG5fEFzCc4xM"
+        },
+        {
+          "shard": 1,
+          "address": "2xzsQ7P9bAWDWdRwb84wReZFKossRsmVBF3Ce8Zkai53"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "137b11f6e570f46d5cbcf1ebe05ba1bbc677d419ba6eefb5e7f0786c11adae06",
+      "pyth_symbol": "Equity.US.AFRM/USD",
+      "pyth_description": "AFFIRM HOLDINGS INC",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsKfV36es7HHpJFKrDqaaXSFC1dwsrwLit4N67JH5LV",
+        "ticker": "AFRM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "82Es39oiMELkQv48DAvgMYrkpfqLZuHgaXmc3c8AhS98"
+        },
+        {
+          "shard": 1,
+          "address": "3fJbZJSqoPYsngL9GpeVegmezyqT4r5Ew2WAUwnQtr29"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "48a13d42218646bba8cc114cd394a283b11c0e07dd14a885efd5caec640c5289",
+      "pyth_symbol": "Equity.US.VXUS/USD",
+      "pyth_description": "VANGUARD TOTAL INTL STOCK ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsLT5v4DAd1kwViPQh3SZiT5kzJfNLxzJxJN1dySZTe",
+        "ticker": "VXUS"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5fXKkTAUKirGymuVm93vjHeNKC7V7W5PYFSedMiJ1dbB"
+        },
+        {
+          "shard": 1,
+          "address": "CKSDb7iyURuorsWnf1y7U5QkDiw5WigVhAVAjoCeZPz5"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "45b4d37b660364a2bf23a9bdc0ed53b12b84fb85a334b711ba77d6a6533a3bff",
+      "pyth_symbol": "Equity.US.IVZ/USD",
+      "pyth_description": "INVESCO LTD / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsM5qDSyGiTVyHoi2VixmaEacByd3UCUoWtNhEqsyoH",
+        "ticker": "IVZ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EifwGdYqcDo3hPpBGY57VMyFfcDSgQNGPPPkQBCsvfGM"
+        },
+        {
+          "shard": 1,
+          "address": "E9A5hrjQEQqS5xwTaAnB7zec9JYUn3SA2cCvsyRK37G"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "7f4f157e57bfcccd934c566df536f34933e74338fe241a5425ce561acdab164e",
+      "pyth_symbol": "Equity.US.JPM/USD",
+      "pyth_description": "JPMORGAN CHASE & CO / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C",
+        "ticker": "JPM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9gx1FfCkrtdBkr3q7RtZj4WceQmgf2VDmvU7BAoWeABE"
+        },
+        {
+          "shard": 1,
+          "address": "2365ekpPZr6eG4AZHfyUwvMHcKxqcCVxmyhtH4tsb3fS"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "8f34132a42f8bb7a47568d77a910f97174a30719e16904e9f2915d5b2c6c2d52",
+      "pyth_symbol": "Equity.US.SMCI/USD",
+      "pyth_description": "SUPER MICRO COMPUTER INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsMxAoJP47FQGLsVUvSS2QfBaHdNsd7DRU6nWRL8RSa",
+        "ticker": "SMCI"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CgvTuHjgJqZfnuefTCQWp8gqTNpQPNQBcL5hwK8FT4QE"
+        },
+        {
+          "shard": 1,
+          "address": "CY6yzPBfnd2Wrxfot5bAG4wGxd61CjramrFnoQYuVyqd"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "97c483cc4172de7ac1a3cc0814f442e4747e64008723f2705d6e9fdff3ba4d3d",
+      "pyth_symbol": "Equity.US.RTX/USD",
+      "pyth_description": "RTX CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsN53tgjZA4QU8iuedPNHxxCbDqKcJqbrT1f8jBXzdC",
+        "ticker": "RTX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "ASUY3VT4D59iLKnFSmhj51Vfj871hn8RfDuwtxmNzxKK"
+        },
+        {
+          "shard": 1,
+          "address": "FcRp6avqagg4WxhnqEXsRUWvb1cy7vKfKgK5befpsSA4"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "f464e36fd4ef2f1c3dc30801a9ab470dcdaaa0af14dd3cf6ae17a7fca9e051c5",
+      "pyth_symbol": "Equity.US.CVX/USD",
+      "pyth_description": "CHEVRON CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsNNMt7WTNA2sV3jrb1NNfNgapxRF5i4i6GcnTRRHts",
+        "ticker": "CVX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "Amo1jErie3G7oMF2GTMprbeFRw3PWnecLsAULSZq9t7p"
+        },
+        {
+          "shard": 1,
+          "address": "B5jQzVS5TpQhaNAoAexqoBNjCcUP9yFL1etoSBiERGaR"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "894f78037ec2465fbbd50c75abb95a5059d5d9ca5f092e2e6736685885569322",
+      "pyth_symbol": "Equity.US.KMB/USD",
+      "pyth_description": "KIMBERLY-CLARK CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsNnfg6KXzaRsH8PE9T9YEahq3MQpSZ3dQAa4hcL1SN",
+        "ticker": "KMB"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BbJawVBZVAA5Js3arkyhzASmmBBH3TLxWYZXpz9w7avN"
+        },
+        {
+          "shard": 1,
+          "address": "Hiu3u3ZNCBE1X5AYEr75NBRcZeyrN5Qpx8KmofPj7iQX"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "53f95ba4e23ed15ea56083e2ee9a5eec48055d6f59033d4bb95f1ca2a2349c28",
+      "pyth_symbol": "Crypto.MSTRX/USD",
+      "pyth_description": "MICROSTRATEGY XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+        "ticker": "MSTR"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "C1AgDTF3hG9a23cGrCZcDhTFNzZuJ5BxYmVwwESP1Da1"
+        },
+        {
+          "shard": 1,
+          "address": "9U2W5Z88HwjiEfRW67u8Fqfbnqup2hRCjMR1ny9zBtYt"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e1e80251e5f5184f2195008382538e847fafc36f751896889dd3d1b1f6111f09",
+      "pyth_symbol": "Equity.US.MSTR/USD",
+      "pyth_description": "MICROSTRATEGY INC. - CLASS A / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+        "ticker": "MSTR"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HJGvGyWrAXdZPG4Q7LNkkKja72FDkJW7ixuyg3u6vZyP"
+        },
+        {
+          "shard": 1,
+          "address": "KDQSrjsiur6YxyuY4veB7Gd13MKhwNoMZTQWvx1c93S"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "1e0192ac474db72a6937c45460929dcef6efebf4d4b493685d020d1bc3b265a2",
+      "pyth_symbol": "Equity.US.TJX/USD",
+      "pyth_description": "THE TJX COMPANIES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsPWZN3FYcrvpEnxrQqogbVZtxpRX9tFomymKw2dWJS",
+        "ticker": "TJX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2P9ZmKnfDKUZDcGonr6dG5rTuwk6VWPayvdoxTTLVMzU"
+        },
+        {
+          "shard": 1,
+          "address": "38cEXCX1sgPzv11HxAxjqaLhEFKirAFZ4Jp2Qz8GLK7Q"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "026e4a35b33c438e4c75b2bf8f5f8298b26165eff133b1da2b4559985ecab11e",
+      "pyth_symbol": "Equity.US.PCG/USD",
+      "pyth_description": "PG&E CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsPq3VY73br4wpgi2a4b3jAdvuhstpknXVJ2fA4vNmk",
+        "ticker": "PCG"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2Jw91uVUhigFTBLD7cnEL3K72j9jUMg4BHEDT3nyh4UL"
+        },
+        {
+          "shard": 1,
+          "address": "CBZ85CTvGn4FzkzKhwktqXC39pJktmDVyVL4kMQeF9Ch"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "0ce20662c616102659948a2e6ccf7ce05c930366af42b71240086eafb7cfa860",
+      "pyth_symbol": "Crypto.MUX/USD",
+      "pyth_description": "MICRON TECHNOLOGY XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsQLZycSZ7QnBBdBXQaTbQdiUcbRqjNJgyBGAMzhHav",
+        "ticker": "MU"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "3Ca5PGDtdFwdJzP4cU2SPQBCavqwMmHBfdCcGXLDVJof"
+        },
+        {
+          "shard": 1,
+          "address": "GGDN6v6Cf59dsbzpBGS9bvsrxsYUzoffsxkqaUyCcAu5"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "152244dc24665ca7dd3f257b8f442dc449b6346f48235b7b229268cb770dda2d",
+      "pyth_symbol": "Equity.US.MU/USD",
+      "pyth_description": "MICRON TECHNOLOGY INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsQLZycSZ7QnBBdBXQaTbQdiUcbRqjNJgyBGAMzhHav",
+        "ticker": "MU"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "DNgPodPW65bwT4HyeVs6C49UNUdJcdNKuGq8sMCDvzGy"
+        },
+        {
+          "shard": 1,
+          "address": "4eMZuk9khRP5uMnk5f1i1uA8joNMcHtBwDGCstW65bai"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b9bc74cc1243b706efacf664ed206d08ab1dda79e8b87752c7c44b3bdf1b9e08",
+      "pyth_symbol": "Equity.US.AMAT/USD",
+      "pyth_description": "APPLIED MATERIALS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsQZdaWUAGC4R3fgD2N1fupKvJfJq6YM51ccnsLUWFA",
+        "ticker": "AMAT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FaPu2RMkS7DDReY2Fn9Avk5UtHNrP4ToFopPbwYnKPV2"
+        },
+        {
+          "shard": 1,
+          "address": "G3UYEgQQDcBwJCmqzoVAxDmegXKey4SYim4GK2MuA8tj"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "107918baaaafb79cd9df1c8369e44ac21136d95f3ca33f2373b78f24ba1e3e6a",
+      "pyth_symbol": "Equity.US.HON/USD",
+      "pyth_description": "HONEYWELL INTERNATIONAL INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsRbLZthfABAPAfumWNEJhPyiKDW6TvDVeAeW7oKqA2",
+        "ticker": "HON"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "94624SXQM3bCz8DRQNWfXfcWHkW5GEhRG8244ikg52Hp"
+        },
+        {
+          "shard": 1,
+          "address": "D4Z2rPyTQbcBpejg3855NfRm64udtcPce3vfDDu4s7MP"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "0d6c41f292267e021b5bebd48a9b4dd1697e10bb9b9a5b06411c74c570d1135c",
+      "pyth_symbol": "Equity.US.ALLY/USD",
+      "pyth_description": "ALLY FINL INC COM / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsRifLZvp2XvCpPFQNK6XGTjHSL7sTZmmGyEs4NLAV2",
+        "ticker": "ALLY"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7YsSBBUymTZ9kW9PgzgEa3GXiA8jVUU4D1tQAQJZXHNa"
+        },
+        {
+          "shard": 1,
+          "address": "9J8HFG1vFR1xYPxBmGTeVofro3Ycvq5tanLEJQuDA5v4"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "ad04597ba688c350a97265fcb60585d6a80ebd37e147b817c94f101a32e58b4c",
+      "pyth_symbol": "Equity.US.CAT/USD",
+      "pyth_description": "CATERPILLAR INC. / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsRvd1meWQ9kW1SrZPa1jokQqmBoPWWjd6wGTgdp5E6",
+        "ticker": "CAT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "77dgA24BpzpUThrZWxBJcQqLnT91ix9NvRjykERUkPsx"
+        },
+        {
+          "shard": 1,
+          "address": "DNorfvzsBwUZ9mrb5guEStAEPigk6Bmq5acqWmLLANWq"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "df8109bbec79e2b24ce326c3be5ca0036a88ed20800ec0aa54ccc2bc7811bd3b",
+      "pyth_symbol": "Equity.US.GM/USD",
+      "pyth_description": "GENERAL MOTORS COMPANY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsSFgHPgZgYNSuz1ttNHNp8zUBBMZGngFcMMfKPK6JQ",
+        "ticker": "GM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "ETtEn7wJgXnL796Bd9Pzr35wxRysecW6aSqTbuu6bVMb"
+        },
+        {
+          "shard": 1,
+          "address": "CZcF6t4rZ98nieeRYXaF1kxGfMXArucaEooNVCbGv2pr"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "9146c5c900d9aea9579819cf50d1ae18b54dea58eea3c9a198102e4e458e652b",
+      "pyth_symbol": "Equity.US.LIN/USD",
+      "pyth_description": "LINDE PLC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsSr8anD1hkvNMu8XQiVcmiaTP7XGvYu7Q58LdmtE8Z",
+        "ticker": "LIN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "Emx6u78iiJebBvQ8RC8hSSvWvbVyiiY1LjGnTyh8PNDS"
+        },
+        {
+          "shard": 1,
+          "address": "79nqB4K8QuM1MEuSZPec7DfowH1cUk3ePgFz1LuPRu9Q"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "fd05a384ba19863cbdfc6575bed584f041ef50554bab3ab482eabe4ea58d9f81",
+      "pyth_symbol": "Equity.US.MMM/USD",
+      "pyth_description": "3M CO / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsTEo8W2L8JprN57bmJgatDT84z57ReJYizr5f32BfP",
+        "ticker": "MMM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "F6vafPxpGJPo2aQPwVckFiXnF5za73XQ54sXNougqRba"
+        },
+        {
+          "shard": 1,
+          "address": "8dM1FyDBvLVEfKgsLNh3243J8gB5dgygAq5dfzngitSg"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c5b94c7ece9c3ac984e1439a8fac86270d0f988bbbcc838b456e2d7311754bdc",
+      "pyth_symbol": "Equity.US.TXN/USD",
+      "pyth_description": "TEXAS INSTRUMENTS INCORPORATED / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsU4fHhJEFcrwNh4RYuHmWdaoCfsrWKEm4UEs3zTJwH",
+        "ticker": "TXN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "J8WL4E1HmYLRZCrXmuLefq5gwoxNLArs798jaqKWSXU9"
+        },
+        {
+          "shard": 1,
+          "address": "3xrM5JSr6Q17h1qrRzCHADubc5W1uxBr7LyE4UjFjwux"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "54350ebf587c3f14857efcfec50e5c4f6e10220770c2266e9fe85bd5e42e4022",
+      "pyth_symbol": "Equity.US.QCOM/USD",
+      "pyth_description": "QUALCOMM INCORPORATED / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsUUG8bjFN2KvzLTpzavvEKdAjMAeLTZiTeAQJ9uhvB",
+        "ticker": "QCOM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "3bewRSsY2JYJ6acojBstows9ahEj8b4trNyy1DPxKKwk"
+        },
+        {
+          "shard": 1,
+          "address": "3oSPTjqtN4JurvoR25KJ9ZvgMda8eXzryPnnaaVaVi4j"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "97b55381ff94c6c0a22f3e0c8cdc2186a3561bf3dfe3cfaebf4786c9318b770f",
+      "pyth_symbol": "Equity.US.MS/USD",
+      "pyth_description": "MORGAN STANLEY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsUucbjDLYbER4WNNffn1eQ9cDnAcFVfLgSZeLHPDZS",
+        "ticker": "MS"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FACHDfRCrANrayis6KMq3bDWJmiJUNRpEH3m4QTVagva"
+        },
+        {
+          "shard": 1,
+          "address": "CmVDdjTN7MmuF1yDpUKcHwSWqFtPrrEXEYxUEWUWe2Df"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b0d68bb7055327a5ec773094129a00f6794ae064b9286a1b55eb2b975bc17dc0",
+      "pyth_symbol": "Equity.US.PEG/USD",
+      "pyth_description": "PUBLIC SERVICE ENTERPRISE GROUP INCORPORATED / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsUytoK53kCKfXC61Dn3ZM8sjyVBUpScF111pfMG69U",
+        "ticker": "PEG"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CyCN7Kma73FuDCeXwstPozGoYZvLsJ8J6mpmjjHCN2J6"
+        },
+        {
+          "shard": 1,
+          "address": "5fuVQyfhPZUxz3R1aTgDn4CzHX8mct3RzpjJB7MDxeQT"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "bd022edbd573a52f57b7e930b8b4c51db94407f3b6a99d08abed9c9a79a0a27d",
+      "pyth_symbol": "Equity.US.TXRH/USD",
+      "pyth_description": "TEXAS ROADHOUSE INC COM / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsWFY8Ems96uFPnZJ1NwXsqeH6bczLQDDvvvab14crQ",
+        "ticker": "TXRH"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6iZsviCCwP1CxPTZt5NhbxG2hACQm8FdhAYicUDyJ4Aw"
+        },
+        {
+          "shard": 1,
+          "address": "HzwHbzSryszYM5Ws1DT7Q5DX4EGXxvXdw2PuEnSjViy7"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "3622e381dbca2efd1859253763b1adc63f7f9abb8e76da1aa8e638a57ccde93e",
+      "pyth_symbol": "Equity.US.AMD/USD",
+      "pyth_description": "ADVANCED MICRO DEVICES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF",
+        "ticker": "AMD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8XEoc9ZbC2DvVqQVkQJEXx2mszRVMhHgT3W1nZALVkKU"
+        },
+        {
+          "shard": 1,
+          "address": "4est8NR419iGFnMvEVczBW1cCMstB6N2xK54TaCanCN1"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "ad2fda41998f4e7be99a2a7b27273bd16f183d9adfc014a4f5e5d3d6cd519bf4",
+      "pyth_symbol": "Equity.US.PG/USD",
+      "pyth_description": "PROCTER & GAMBLE CO / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsYdjDjNUygZ7yGKfQaB6TxLh2gC6RRjzLtLAGJrhzV",
+        "ticker": "PG"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7tx25xetumfviLcWULGt4ab3SqViLwoTvAJSaxd3d2aQ"
+        },
+        {
+          "shard": 1,
+          "address": "5bHjXsXUu7zm6wffKJUb2XrcF3dpZEHdDhoepbheZA3E"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "cc7851b525bd7f0d8ce00e409d59d6cd5ecdfbc5a2df1aaee3c4948426976100",
+      "pyth_symbol": "Equity.US.MSI/USD",
+      "pyth_description": "MOTOROLA SOLUTIONS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsa1gZ38panjmJwh6cr9QQ1YpRBEzVfxrykWSsiWvJe",
+        "ticker": "MSI"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "ECLMtDD1EQzoc2ysE7jE9cwjAKiz2LmxueRzkjkTxSSD"
+        },
+        {
+          "shard": 1,
+          "address": "5nhZYYdjE4US6nyXFYhp8Hw98FVUPcnmbCV82pjJNt1h"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "bf3e5871be3f80ab7a4d1f1fd039145179fb58569e159aee1ccd472868ea5900",
+      "pyth_symbol": "Crypto.METAX/USD",
+      "pyth_description": "META XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+        "ticker": "META"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HmqkFx31Jk1STgqVfxYAz6pKtwgn9mXZdNZfWnu6sqWS"
+        },
+        {
+          "shard": 1,
+          "address": "FSCvCRqwg5QkvWKnYv8r4N8jEEXq6RPhvF9Au6jzgA99"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "78a3e3b8e676a8f73c439f5d749737034b139bbbe899ba5775216fba596607fe",
+      "pyth_symbol": "Equity.US.META/USD",
+      "pyth_description": "META PLATFORMS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+        "ticker": "META"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GsKrMNoa1Mqjpif4SYk2WjdduWZP699hXRdP51yBM6K2"
+        },
+        {
+          "shard": 1,
+          "address": "6NJCSCAWy1yB1jEGhPbsMTrT4WH13o8BGD5wgPbBtdY9"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "9aa471dccea36b90703325225ac76189baf7e0cc286b8843de1de4f31f9caa7d",
+      "pyth_symbol": "Equity.US.KO/USD",
+      "pyth_description": "COCA-COLA CO / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+        "ticker": "KO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "58TvF41sXqh2bYD5hzgVH25Ns3tLzx6Qxy39tkvhUHCa"
+        },
+        {
+          "shard": 1,
+          "address": "7YTWjuFDNAFmZAuAAmJbotmWtvdHUAZ3nvyUszt7Tzau"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "4a1a12070192e8db9a89ac235bb032342a390dde39389b4ee1ba8e41e7eae5d8",
+      "pyth_symbol": "Equity.US.XOM/USD",
+      "pyth_description": "EXXON MOBIL CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsaHND8sHyfMfsWPj6kSdd5VwvCayZvjYgKmmcNL5qh",
+        "ticker": "XOM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8EV2DC3WqFBYffRekh48haP9dRm6HpXwXBYKgjUqM42M"
+        },
+        {
+          "shard": 1,
+          "address": "B3XMcXAVDCSHjJxPzaiJnagcmWfPRg23fbHRUUmXx52r"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e722560a66e4ab00522ef20a38fa2ba5d1b41f1c5404723ed895d202a7af7cc4",
+      "pyth_symbol": "Equity.US.TSM/USD",
+      "pyth_description": "TAIWAN SEMICONDUCTOR MANUFACTURING CO LIMITED / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsafvsGtzFqqHgTnA3aPC83EAMkacU5mcGtcSayhpVV",
+        "ticker": "TSM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6TZfpihtCtH1FdDt3yoexKYkv5iTZwmjBAfUVoKrT883"
+        },
+        {
+          "shard": 1,
+          "address": "EyfMZeidPiEpi7MNknBTQdS9U9QUpQztCztBGzbdBcmG"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "eff690a187797aa225723345d4612abec0bf0cec1ae62347c0e7b1905d730879",
+      "pyth_symbol": "Equity.US.IWM/USD",
+      "pyth_description": "ISHARES RUSSELL 2000 ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsbELVbLGBkn7xfMfyYuUipKGt1iRUc2B7pYRvFTFu3",
+        "ticker": "IWM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "JB5qxBAeY2e3V8oAVPaPPyLt3D4QDJxSDPxReJoxwsub"
+        },
+        {
+          "shard": 1,
+          "address": "722zCiaGSFWGasdYB3qSWw4cPZShtGHSgENpqZNxtnvw"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "a32f875eb39e23f087ea0db141b00857630c2c5011bfbe53a2a4d186f37cb583",
+      "pyth_symbol": "Equity.US.PM/USD",
+      "pyth_description": "PHILIP MORRIS INTERNATIONAL INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsba6tUnSjDae2VcopDB6FGGDaxRrewFCDa5hKn5vT3",
+        "ticker": "PM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9aqrvHn77TCX18DnEigaYtr4V2c9gSjMt3Gcz4C7MWXY"
+        },
+        {
+          "shard": 1,
+          "address": "8AJ9GZqWRAfgRq5usejGd4Y5PKuiybdz7wnDFq2zx5vx"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "4244d07890e4610f46bbde67de8f43a4bf8b569eebe904f136b469f148503b7f",
+      "pyth_symbol": "Crypto.NVDAX/USD",
+      "pyth_description": "NVIDIA XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+        "ticker": "NVDA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6TPsjFigUaMFanRCsxQ4WbmG215xhRBXsb5y5Cn5L6eE"
+        },
+        {
+          "shard": 1,
+          "address": "9a6FLptoMN4AMc11qVS8YmhiCgssrmRC2qjehKscr27"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+      "pyth_symbol": "Equity.US.NVDA/USD",
+      "pyth_description": "NVIDIA CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+        "ticker": "NVDA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2w1Tg1XTZbUib7srfRoStJ4v5JXVsK7roQEGMsMaGZFC"
+        },
+        {
+          "shard": 1,
+          "address": "5VETJ8h3p4JrESYrzhjTDAWPEjDjfcnduqe9CjxgqBNd"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "cabf6dfb723b12ac8a67e919379d177903580f8d3ae2fad3897198dc07a5a861",
+      "pyth_symbol": "Equity.US.DJT/USD",
+      "pyth_description": "TRUMP MEDIA & TECHNOLOGY GROUP CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XscR1RVZydyrL6Wn7WqbW2k6EmkLuS8SqDzuyptwxoj",
+        "ticker": "DJT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "B7W9MXNCxkxVMNmFogrgkoV3T7NVtEZuBFRLYnmBksLD"
+        },
+        {
+          "shard": 1,
+          "address": "9hEZokNqCaD6JMzW78yeXZZ5pmNYCK72rj9cXHu1rcJL"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "ccab508da0999d36e1ac429391d67b3ac5abf1900978ea1a56dab6b1b932168e",
+      "pyth_symbol": "Equity.US.ABNB/USD",
+      "pyth_description": "AIRBNB INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XscSc1zjbVizEnhCzzehJ9fzztm3WRKdn9pjmriKDuN",
+        "ticker": "ABNB"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8JQLofEg3SjAUJpXdScaF7W8KbRSXCx6KENJbZgkZnGb"
+        },
+        {
+          "shard": 1,
+          "address": "6QCMeZmxssuhpMkEg6wUc5osre59di31dg18shS9V47p"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "feff234600320f4d6bb5a01d02570a9725c1e424977f2b823f7231e6857bdae8",
+      "pyth_symbol": "Equity.US.CRM/USD",
+      "pyth_description": "SALESFORCE INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsczbcQ3zfcgAEt9qHQES8pxKAVG5rujPSHQEXi4kaN",
+        "ticker": "CRM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "57Njqzi6yFM4kChHGDLGjrpM2QLpU4khpMZCwpaf7PQ5"
+        },
+        {
+          "shard": 1,
+          "address": "CXoSirxmnty8485ZXnefN6MUtTHzxKZk37YqGnwY4wxo"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "236b30dd09a9c00dfeec156c7b1efd646c0f01825a1758e3e4a0679e3bdff179",
+      "pyth_symbol": "Equity.US.VOO/USD",
+      "pyth_description": "VANGUARD S&P 500 ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsd7TduTbjuYCFL7Uoujb8SbkZLmUsuYNLn7KdvX21x",
+        "ticker": "VOO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "LVreNUP8XfYuhsVQgXEm9csBUKiLTESKrxCFYdZ4HjN"
+        },
+        {
+          "shard": 1,
+          "address": "Gqwix4VCsWm7guter5ooEucidc1iMuJEBLxnTYe7E7FW"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b095647f688415d4102a858e1b25c1af15750f0e516a0d561cb35ebe30deb183",
+      "pyth_symbol": "Equity.US.UNP/USD",
+      "pyth_description": "UNION PACIFIC CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsehrw5hHiQ16Vfxxctj8ewUhtRCzbCrBYS278ctAAy",
+        "ticker": "UNP"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CYKf1vRDpnoFKdL63avvJDGmgFV8o2URysvZiBzjHAAu"
+        },
+        {
+          "shard": 1,
+          "address": "ESUriY54mMjDibm9Am1tX2Rt2W77KdYtv4ZSFG8W4SV7"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "6f9cd89ef1b7fd39f667101a91ad578b6c6ace4579d5f7f285a4b06aa4504be6",
+      "pyth_symbol": "Equity.US.GME/USD",
+      "pyth_description": "GAMESTOP CORP. / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc",
+        "ticker": "GME"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6AvVgYACju3WKAMSMZibU8UtDeQhF6si9f1vyrdthiJp"
+        },
+        {
+          "shard": 1,
+          "address": "J1hU9GbAqFwgNow5gQHz8cqdikXiU3uqJ3Z2p3d7Ee8v"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "8dde322496e031d942b9eee8ca769d618cd2e69b18196644369379f5a1e7c23d",
+      "pyth_symbol": "Equity.US.NVO/USD",
+      "pyth_description": "NOVO NORDISK AS / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsfAzPzYrYjd4Dpa9BU3cusBsvWfVB9gBcyGC87S57n",
+        "ticker": "NVO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "96q5heUgagmBhXZLBYCk3dvbhoPewy7tLbdVsJvp1Jq"
+        },
+        {
+          "shard": 1,
+          "address": "6JcLR2mKzhkRGmWaWq889opKHuoQC3XtthqujBWcHAoR"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "43ef64ff6af44e0648f0328ee56e88fee57943b0aa077c24ef175bb9ecd37133",
+      "pyth_symbol": "Equity.US.INTU/USD",
+      "pyth_description": "INTUIT INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsfodJMz7SyMNsSgATVDcbuMiQDqQoAiRTL1xuyHNUn",
+        "ticker": "INTU"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7XXq7CaHeoRRQgqqYkPBGnNSVgnvYL8ufjyywxuosGVf"
+        },
+        {
+          "shard": 1,
+          "address": "9B1RbV5Dus65EgZUNXSfVnoTJd3zdLsr3Uvw4KRERCLK"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e1d3115c6e7ac649faca875b3102f1000ab5e06b03f6903e0d699f0f5315ba86",
+      "pyth_symbol": "Equity.US.GE/USD",
+      "pyth_description": "GENERAL ELECTRIC COMPANY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsfsBjSZoXXKJsxoSt8TyLYsjhBAKFaDPZTCQbFRirP",
+        "ticker": "GE"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "wLEfzCQTGWb7eY8x5GeZ7fdAqKYtuKSchXwESKsESJv"
+        },
+        {
+          "shard": 1,
+          "address": "AAyCCZZLvEbG2G96ba32hJgDRPvywbf9cKTE5zfEnADL"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "703e36203020ae6761e6298975764e266fb869210db9b35dd4e4225fa68217d0",
+      "pyth_symbol": "Equity.US.DIS/USD",
+      "pyth_description": "WALT DISNEY CO / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsg93jDV656ULQ5u9yT2x5DS9b4xGD8aDCtfESSW6Bb",
+        "ticker": "DIS"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EyE4m9Ez9WkLNjBxsY9gyPmcDmZJ5od9NouFtyNRStXG"
+        },
+        {
+          "shard": 1,
+          "address": "CgsdtrRhAXvNT8DFfSHDtNwdMivBoMfveC3y6RHQSYtr"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "ad4dc1db82c47e0822afef9d9eca7bf693cdad20dd61fcd5aa1b6895b1b90190",
+      "pyth_symbol": "Equity.US.ISRG/USD",
+      "pyth_description": "INTUITIVE SURGICAL INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsgBcHP3frsQGHr5EoDdoPZMANk52Y4JPg5BYx98NwL",
+        "ticker": "ISRG"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EkSRHbWKFCUMksLPf67yak7W3diUoaaNAX3p21nfma5j"
+        },
+        {
+          "shard": 1,
+          "address": "7WabdqNjdSi931YaZXe9erhtpwucg9P65pKJ2fABQvHm"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "ac9de86ae3dcff03514bde733f5793f1446b2cd31f1539a1c449acc3e76cacc1",
+      "pyth_symbol": "Equity.US.VRTX/USD",
+      "pyth_description": "VERTEX PHARMACEUTICALS INCORPORATED / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsgCWpLUC3pv6JmNAFtkYmuwSaikShy8QZRuripgBzn",
+        "ticker": "VRTX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CmuiU9H1WmLZrPnfJLZ4DuktUJwDU3mpKFosnihAWbTn"
+        },
+        {
+          "shard": 1,
+          "address": "4CDfvdKtrCjYYRLsyhJAm95YnfncEn2gFWQ6MebxZYyS"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "10946973bfcc936b423d52ee2c5a538d96427626fe6d1a7dae14b1c401d1e794",
+      "pyth_symbol": "Equity.US.AMGN/USD",
+      "pyth_description": "AMGEN, INC. / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsgKwBMbv8LDzEYRgbKtyqsub6QB56PQVzgTGbiGaNe",
+        "ticker": "AMGN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GKHRTMyLzvkbvAZMfU8Ta1QfmNgbdbjfSrZd67nskCpD"
+        },
+        {
+          "shard": 1,
+          "address": "9JJMaRtwkND5urVUZaSHnvtqGiz6Tmuz8xSWg1Dm9st"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "d0c9aef79b28308b256db7742a0a9b08aaa5009db67a52ea7fa30ed6853f243b",
+      "pyth_symbol": "Equity.US.AVGO/USD",
+      "pyth_description": "BROADCOM INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsgSaSvNSqLTtFuyWPBhK9196Xb9Bbdyjj4fH3cPJGo",
+        "ticker": "AVGO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2jgfs5FsDQkdCrgcCKHEd7p9KNtKAyWznMSyu21WbFgS"
+        },
+        {
+          "shard": 1,
+          "address": "PWwkPGejbPvYavP8zUdnFW2iw2SdM1q9fUpaa5Jp13X"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "9c68c0c6999765cf6e27adf75ed551b34403126d3b0d5b686a2addb147ed4554",
+      "pyth_symbol": "Equity.US.GS/USD",
+      "pyth_description": "GOLDMAN SACHS GROUP INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsgaUyp4jd1fNBCxgtTKkW64xnnhQcvgaxzsbAq5ZD1",
+        "ticker": "GS"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BWraZvJJf5kDc87FKgMLSVRHZYffyjGypeLKz68yYHEy"
+        },
+        {
+          "shard": 1,
+          "address": "7gAZNxCEYLt7xE5Ti8Kvu6WonRdmH8yTvfkhzcif7BCj"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "0fc2ad77a9ab75bcbc3ebd7a9ff60facd08c517309e2d684baa979c910a0e43e",
+      "pyth_symbol": "Equity.US.MARA/USD",
+      "pyth_description": "MARATHON DIGITAL HOLDINGS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsguBZPkM9BDmxspmWe29EmrYZBv21ENcC27Pqh7grB",
+        "ticker": "MARA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "54ZTFKKfvxAFiMqwzHhNFFmMFM1rbrKyhx69LhF8uvyw"
+        },
+        {
+          "shard": 1,
+          "address": "9MrfkvuB4ZrhpxHqFzxfbziNYVLE6N2VDxAyp14gYfts"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c2d23f236142a519929b147c4dbe8720475724918c8b8473db0283f8cf044184",
+      "pyth_symbol": "Equity.US.DE/USD",
+      "pyth_description": "DEERE & COMPANY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsh3Lt6pLpH65udstiFuZThJ6gyQTL6ryVXtNwEy5zd",
+        "ticker": "DE"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2KL9BY8nMwrs2QxKetTNngUWC5GycmB17sirPAGphnUc"
+        },
+        {
+          "shard": 1,
+          "address": "HvgAdrssDtkahSB8xmaQXr9NkYQdphbng6idFS5iHefX"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c1751e085ee292b8b3b9dd122a135614485a201c35dfc653553f0e28c1baf3ff",
+      "pyth_symbol": "Equity.US.INTC/USD",
+      "pyth_description": "INTEL CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XshPgPdXFRWB8tP1j82rebb2Q9rPgGX37RuqzohmArM",
+        "ticker": "INTC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GSLaP27qiAxWr5HrskKCurbTZ7su4TRGDGWXJv6ZJbij"
+        },
+        {
+          "shard": 1,
+          "address": "FK3GQy2PjQ18G2yPEV8eTpK8GFPoTFkVYhFcWmDc3rRG"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "773c3b11f6be58e8151966a9f5832696d8cd08884ccc43ac8965a7ebea911533",
+      "pyth_symbol": "Equity.US.PYPL/USD",
+      "pyth_description": "PAYPAL HOLDINGS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XshWQWYVp5ff8CrAEsGmLVKD47nBWi3Ygn5v8wXK27G",
+        "ticker": "PYPL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9uQ8fQy35gRXDrWTZVoLJpa3kVNhwiiR5qmns5aQwXrg"
+        },
+        {
+          "shard": 1,
+          "address": "A4kFhiC4DpjykrtMbSVfNPgbEHUA1Y2UQ1RnWvZjUSrR"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "1a6e324589a0e355919fb1c0389edc3fdf4c46034626bd82aad4e47714cfa94f",
+      "pyth_symbol": "Equity.US.ASML/USD",
+      "pyth_description": "ASML HOLDING NV / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XshuHQ6o6SVpUNawvnnTMxsZ4tacZsNgVCLorv7TkFq",
+        "ticker": "ASML"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FDBKgU5To4QGwYQp6FLn56AQKaiWXLzTxKZZfs8htnrp"
+        },
+        {
+          "shard": 1,
+          "address": "2zTXJrXyBikZqy9q1EUHy75grA6VyorrBZdBkPejPCeY"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e1548338663e981fde5c43aa16f21bbde73164994b790aed663fc4190fc6e9db",
+      "pyth_symbol": "Equity.US.MLI/USD",
+      "pyth_description": "MUELLER INDS INC COM / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsikuTgNGjzibezDk9u22QGW8zQaGWyK61vN4gQE4Dc",
+        "ticker": "MLI"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "E2fFAe9yKxcxzuHuqD3FJJS9LjYn5H3swD41E2Th5iY1"
+        },
+        {
+          "shard": 1,
+          "address": "D6ZsNthfLkR1dr2BfMXehpgp2TPS9CFWXYhie1X1KMwf"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "ab31ec9dbcacacfb26e5ea6c249d69f5ae8b9c691aac6ccc5919b6107efa1c3a",
+      "pyth_symbol": "Equity.US.LOW/USD",
+      "pyth_description": "LOWE'S COMPANIES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsixDLxXcKZBcRBddYiPZjB9FJcKMTLd4B7VBeKo3pB",
+        "ticker": "LOW"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9eRnJFrDn5U7WB62bDxE4wRaVoQwcBxg8qPKzo4cAtzk"
+        },
+        {
+          "shard": 1,
+          "address": "EyyhnkXowgpMaNDCuVVSKWUFEtbJ4H4KHm16enPe1o2z"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e47ff732eaeb6b4163902bdee61572659ddf326511917b1423bae93fcdf3153c",
+      "pyth_symbol": "Equity.US.ORCL/USD",
+      "pyth_description": "ORACLE CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsjFwUPiLofddX5cWFHW35GCbXcSu1BCUGfxoQAQjeL",
+        "ticker": "ORCL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "63Vt5pXYVJKdaaU1m3JaPdfpojaSFdrK2cSVcReh39FN"
+        },
+        {
+          "shard": 1,
+          "address": "5tJRMGN9fWrikQGn5hXUUU6huHUR3Y7PJeyGwJ8p1gx7"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "5aa9f82dc2e0f5f8271fd163e980010101517da59f4b72b71c7056a5950b2f9d",
+      "pyth_symbol": "Equity.US.TQQQ/USD",
+      "pyth_description": "PROSHARES ULTRAPRO QQQ / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsjQP3iMAaQ3kQScQKthQpx9ALRbjKAjQtHg6TFomoc",
+        "ticker": "TQQQ"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "G26hTVgVSWRyNpsNcgxgwB7KGLGsWStZTqSMmAY3KPza"
+        },
+        {
+          "shard": 1,
+          "address": "GZvkvHNgfXNBNi1bhcCsPdpKck7Yohi6EQuS3BpGa1zH"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "2fc0a41f1d62126539e3b1ca29029e66d991724b2189f63059a5f5682129ab28",
+      "pyth_symbol": "Equity.US.TXT/USD",
+      "pyth_description": "TEXTRON INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsjWGbe4McmJXNRd6hQYsS8dEsPKTfT38fxSebugRbn",
+        "ticker": "TXT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "h15MuQxRdMmpai5ZzX1BCXtsXwjmEXktDiDNVJ8VrrP"
+        },
+        {
+          "shard": 1,
+          "address": "7QLCUH1bzkXeWJAVnd4UvPLEJn8RFxKigZUm6KwzJPLM"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "29148f7de5819fe7467e99f5f0b22e8fb124d958d8f668c3c17e607d7ed1eb09",
+      "pyth_symbol": "Equity.US.GILD/USD",
+      "pyth_description": "GILEAD SCIENCES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsmAFboVqfDwGPgXfd7oCunvYAYSzzkuKE2BDRzwjGy",
+        "ticker": "GILD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "82yvPknk4GUEhXRfvy4ndwVK2T3nNWmi5Xo7FZjAsGCV"
+        },
+        {
+          "shard": 1,
+          "address": "8TjnMaL2oDtScBsTrYbpDHFHC82znbToPvPPcgZGZY6G"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c81114e16ec3cbcdf20197ac974aed5a254b941773971260ce09e7caebd6af46",
+      "pyth_symbol": "Equity.US.MRK/USD",
+      "pyth_description": "MERCK & CO INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsnQnU7AdbRZYe2akqqpibDdXjkieGFfSkbkjX1Sd1X",
+        "ticker": "MRK"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "DhRmDbSn8nU2ehYR8WJF6H3bgqpQ7q4LSxgUSCMmxrad"
+        },
+        {
+          "shard": 1,
+          "address": "CCyrhofdABzs6jQMj6tEhrQeE9T6qm4NXxhM8pEDJ6rW"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "70dcf5fd56553d0023693e4b590336a8c9bcfd0d98dd9f093b1f697820d98325",
+      "pyth_symbol": "Equity.US.LLY/USD",
+      "pyth_description": "ELI LILLY AND COMPANY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH",
+        "ticker": "LLY"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "AmhgzXb37V3YegqdXoDTGL5QVhSV83dESyadboJwc7sQ"
+        },
+        {
+          "shard": 1,
+          "address": "CfLa82BupGZGcm5HvWkjpjj4J7UybQWrBPZyPPQuiyrh"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "11a70634863ddffb71f2b11f2cff29f73f3db8f6d0b78c49f2b5f4ad36e885f0",
+      "pyth_symbol": "Equity.US.PLTR/USD",
+      "pyth_description": "PALANTIR TECHNOLOGIES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+        "ticker": "PLTR"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7RP45Z6dsTrHQakMg7xha1RLZGk1x2pVViBjpUMpzdBK"
+        },
+        {
+          "shard": 1,
+          "address": "5tMC8VYPmVvsQqvFY2bp8iL9XVkejyc5T3X1RGjPM4LM"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "2817b78438c769357182c04346fddaad1178c82f4048828fe0997c3c64624e14",
+      "pyth_symbol": "Crypto.SPYX/USD",
+      "pyth_description": "SP500 XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+        "ticker": "SPY"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "jf8MarLKgBte4f3NWufbNpGRCuBfJLhuZPuFigvSQR2"
+        },
+        {
+          "shard": 1,
+          "address": "7LqVac8fyvhJfQapRPZHi6Ss1E4WbD5GLfS24vCFTnT9"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "19e09bb805456ada3979a7d1cbb4b6d63babc3a0f8e8a9509f68afa5c4c11cd5",
+      "pyth_symbol": "Equity.US.SPY/USD",
+      "pyth_description": "SPY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+        "ticker": "SPY"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9owhtgrdLiUMAH9JKxYFt5pUY4Luy4EzzLhdcWPVuDyy"
+        },
+        {
+          "shard": 1,
+          "address": "CRDaGwcVnKdRNRtx6fjHtvrBgKM5U55AhbqBWhtPMDA"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "1e59e3164331ce560683eae0c69efe9650ff1bc834225772ddb330aa808f72f0",
+      "pyth_symbol": "Equity.US.RIVN/USD",
+      "pyth_description": "RIVIAN AUTOMOTIVE INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsoxDMY8s3ZV7zD4Yd87wAvURyxA8VXkd7w6HNuQkzj",
+        "ticker": "RIVN"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "3wjeAuVmk6gpAMP9vsruRHPF2gXfepE7rgvuYNbA8SGi"
+        },
+        {
+          "shard": 1,
+          "address": "9Fsv9MmDEGfEYXP6zU9Gxq3xfcxtXq42tGGjxKpaAP1U"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "67ac585d05128c7b6a88660be04acd18b2bddd6308e98b71b9f3ba0f0e781296",
+      "pyth_symbol": "Equity.US.WFC/USD",
+      "pyth_description": "WELLS FARGO & COMPANY / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XspHXejQ3A4VeimAqR1mAkvgTWgpmmoNR5CUhwCqzqr",
+        "ticker": "WFC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5ZTJShizo4G4HmLw9rD7rmrMauQwX6nfmDRtq4hNU6uH"
+        },
+        {
+          "shard": 1,
+          "address": "4MyjscVeV57iD1dWmzh5Kw8QirNSVj4rg7V9LeRDeXtK"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "cfd44471407f4da89d469242546bb56f5c626d5bef9bd8b9327783065b43c3ef",
+      "pyth_symbol": "Equity.US.IBM/USD",
+      "pyth_description": "INTERNATIONAL BUSINESS MACHINES CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XspwhyYPdWVM8XBHZnpS9hgyag9MKjLRyE3tVfmCbSr",
+        "ticker": "IBM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BWAvrRns3hMisVc5Xde5sAM3EiE1hkNbk7LctwRTy6o1"
+        },
+        {
+          "shard": 1,
+          "address": "RMwL7A6JB75mikUf2sxJ9BvxfyRPov6jFkwtLC5PVpA"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "bb723a70af731ab56b9a650eb7e8ac22b7bc07ea77f8670bd1fa9a37bf6df3f5",
+      "pyth_symbol": "Crypto.MSFTX/USD",
+      "pyth_description": "MICROSOFT XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+        "ticker": "MSFT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9KiECPa4BdbLHM61iur7u7svmRKA2MUJ76RLGfsVihvC"
+        },
+        {
+          "shard": 1,
+          "address": "5AJ7RyChvVtCCgkRA1qUTpnipEfid61WBghBiq4ztj3L"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "d0ca23c1cc005e004ccf1db5bf76aeb6a49218f43dac3d4b275e92de12ded4d1",
+      "pyth_symbol": "Equity.US.MSFT/USD",
+      "pyth_description": "MICROSOFT CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+        "ticker": "MSFT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7VYuuJxz8w2rLA9tJG2KZ9T1fSMcjC7uECoYA6nDaqtK"
+        },
+        {
+          "shard": 1,
+          "address": "EKhrgXYwqsjgxF71Gxznui1zdoeqgxJzzPzfefEmm5un"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "27cac3c00ed32285b8686611bbc4a654279c1ea11ab4dc90822c2edd20734bca",
+      "pyth_symbol": "Crypto.MCDX/USD",
+      "pyth_description": "MCDONALDS XSTOCK  / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+        "ticker": "MCD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9Cvyi5y1aR2nhNbkeFoe8VNQXgoL9dBMrpUsx9iqVnrP"
+        },
+        {
+          "shard": 1,
+          "address": "4KWHibArcYSBVeu7djFTUa7fwMVia2H2dEreDdnuohz8"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "d3178156b7c0f6ce10d6da7d347952a672467b51708baaf1a57ffe1fb005824a",
+      "pyth_symbol": "Equity.US.MCD/USD",
+      "pyth_description": "MCDONALD'S CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+        "ticker": "MCD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "4gRz4DRNxWauuA6nWVw286qWdn7yzeMFupqXakAG2Bza"
+        },
+        {
+          "shard": 1,
+          "address": "B56dDZVYm1rV1EWq67iZ8mJRZcooxSZmT2f9j44oSfBJ"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c719eb7bab9b2bc060167f1d1680eb34a29c490919072513b545b9785b73ee90",
+      "pyth_symbol": "Equity.US.V/USD",
+      "pyth_description": "VISA INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsqgsbXwWogGJsNcVZ3TyVouy2MbTkfCFhCGGGcQZ2p",
+        "ticker": "V"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FEfstxF9Nw8S5qrr7E2dEgWyxpJ4R199N8miXg1gyJiW"
+        },
+        {
+          "shard": 1,
+          "address": "HgGshEXzxcerxACnskSofkn1nJC6YcUvXyXJmxTHUXwT"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "3f4b77dd904e849f70e1e812b7811de57202b49bc47c56391275c0f45f2ec481",
+      "pyth_symbol": "Equity.US.CSCO/USD",
+      "pyth_description": "CISCO SYSTEMS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsr3pdLQyXvDJBFgpR5nexCEZwXvigb8wbPYp4YoNFf",
+        "ticker": "CSCO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "42SMgNidC8uyjFkvQMPuPKyeSpzxPKo5YMbpG7FgLf4K"
+        },
+        {
+          "shard": 1,
+          "address": "FdCf8EDd612mEmHw4GZ8DWBexsThU64E19SPdK6df95U"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "6acec4867e7c4b0610d0422ff34cdd368552e846ea9df4fc2bbb4681126f724f",
+      "pyth_symbol": "Equity.US.BITX/USD",
+      "pyth_description": "2X BITCOIN STRATEGY ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsraCsjDB8cYn672MZSxCzZBhrodEPXD7pWd5EiRUhm",
+        "ticker": "BITX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2ARNy3Gho9cJnvYfRdxeNrFBFnK7MGqaNUAcDjtF4EMg"
+        },
+        {
+          "shard": 1,
+          "address": "5wsTkBqt1PQdSRrqJRhKWwTgaCDtei8r7kNF6RyMfVE7"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "d62134a195739141d0649991f11fe0f9cd9eb83fd890bc3ba41dfdd18c1a49f4",
+      "pyth_symbol": "Equity.US.RBLX/USD",
+      "pyth_description": "ROBLOX CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xss5RAku5EH6UViFdvW7ss9xQjwQLsrs2opPMhb3k43",
+        "ticker": "RBLX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "AXQnhaLdgvrCn2y1WMC8Bu2e1nqThxGWy7rctKKLvPC6"
+        },
+        {
+          "shard": 1,
+          "address": "Lqa718cinV997Mgy3jfBWGMJeHPQ9v37CjyTMBYhw1z"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "880d96a272d5ccbb3cd6f6aacb881a996cb4976b3f252b58c595cd2a418b6ea9",
+      "pyth_symbol": "Equity.US.LMT/USD",
+      "pyth_description": "LOCKHEED MARTIN CORP / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XssULacY8D3z3a8HoQuLid8wdJHcZLGpSST9MkNFzox",
+        "ticker": "LMT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "D1FiDNxk78GdVCy4A9yjWPDQn3fbKhECG1fsZfjCeNgw"
+        },
+        {
+          "shard": 1,
+          "address": "3sjuVKoARAJeGjvPAyPwESajTkP4ygKdtqKPtsWuQtqG"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "7afba60a06a553edc3339b53c2e46c2700b076b3f9c9067b88b93f0a12213fbf",
+      "pyth_symbol": "Equity.US.DXCM/USD",
+      "pyth_description": "DEXCOM INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsspestq9YiZofYG2pvuHgYM1aKdRNocveBodzrGjbg",
+        "ticker": "DXCM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "JC7UkysgMDgRdimjEwo8RorjWJkQVXiKn7WsDVpV2dBs"
+        },
+        {
+          "shard": 1,
+          "address": "4uceQGhFwTcsKa6BZ2wTkmnxrPbCbBno7uimUntrYxeR"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "26c67e91769aeba33a09469c705a1863794014dac416e4270661f489309ae862",
+      "pyth_symbol": "Equity.US.VTI/USD",
+      "pyth_description": "VANGUARD TOTAL STOCK MKT ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsssYEQjzxBCFgvYFFNuhJFBeHNdLWYeUSP8F45cDr9",
+        "ticker": "VTI"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EewkdT43FNdobmBKYDbbrtRZa3zMshboFQ5cTZinMSmw"
+        },
+        {
+          "shard": 1,
+          "address": "GEtUUfS6WaJnQanx8xRLcmMAqUrzeyP3xdiEWVzab9J1"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "782410278b6c8aa2d437812281526012808404aa14c243f73fb9939eeb88d430",
+      "pyth_symbol": "Equity.US.PPLT/USD",
+      "pyth_description": "ABERDEEN PHYSICAL PLATINUM SHARES ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xst6eFD4YT6sz9RLMysN9SyvaZWtraSdVJQGu5ZkAme",
+        "ticker": "PPLT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "49GevGdn2PP8z1NE8VVyqYWTYZSapYUoL5azSZrRyXvB"
+        },
+        {
+          "shard": 1,
+          "address": "3vMzWDoVgSrLm8f1ViVCuX18SC6z4ZDim2pzHcywmAmL"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "84ce9993f3e19e52be7d567c8bf7714407cab2afa0d3a752ac09bc49b0153663",
+      "pyth_symbol": "Equity.US.PKG/USD",
+      "pyth_description": "PACKAGING CORPORATION OF AMERICA / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xstq2wirnUgqHdMvvWafGVbdtg9y845zxAy7iVixkRU",
+        "ticker": "PKG"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9E3fkEUuz3w4ru171rwW4JGU6guQZs9wrW7DDxdmGh5n"
+        },
+        {
+          "shard": 1,
+          "address": "5fsVKUz3cVQUSLzCWHEtZ6TW85D1u1MCfkMyQxwUxUyC"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c4db80e9a68aca4575714c9f5387368239d63965850a359b68b676355a799d7d",
+      "pyth_symbol": "Equity.US.ONTO/USD",
+      "pyth_description": "ONTO INNOVATION INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsu33VJj7s2tMUZfAQ8bbGgpDEnfXdCsKHSC4p6C5tS",
+        "ticker": "ONTO"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "2v2myfXkzh2CLmY2LnhTQeZxbJCtoXTkAwG2DVo8Hujy"
+        },
+        {
+          "shard": 1,
+          "address": "5rVXxLoqW61EHjuwMwN6wHLgQKBpQjyormxBAZUMcm3q"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "a2950270a22ce39a22cb3488ba91e60474cd93c6d01da2ecc5a97c1dd40f4995",
+      "pyth_symbol": "Equity.US.DELL/USD",
+      "pyth_description": "DELL TECHNOLOGIES INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsu7Tc5J2fVUE4H5vYAiSr34cvLJeCsYPMjAYnayQn6",
+        "ticker": "DELL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5i5yznJfsFrExdaFNZHQJKpWZnAfUCo9QywdCUBACDgM"
+        },
+        {
+          "shard": 1,
+          "address": "Ct6Q8vMuHrfpXQKUytxJYeSi6UxEWKZuprtH8sJEBweV"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "af9f76555c0147ec660100ff1639eb128e48c4f16b0aec229b736c04e082de23",
+      "pyth_symbol": "Equity.US.DASH/USD",
+      "pyth_description": "DOORDASH INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsuW1yxtbifjEYojFLmoavTWBT7hsuUXXeReAWK9X91",
+        "ticker": "DASH"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "3KKGMpEgGmrrhnzoL53XdEecYKygFTVVt39bfxAmj94A"
+        },
+        {
+          "shard": 1,
+          "address": "9FQTRjh2UPTJ1M6Qi1mxaxzBgbAd5rKytXHX9H9ncqUJ"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "c13184461c0c80d98ffcd89be627c2220b94a96c7c67f0c4b16bc12fd3b17758",
+      "pyth_symbol": "Crypto.CRCLX/USD",
+      "pyth_description": "CIRCLE XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+        "ticker": "CRCL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "8gfVVaN5jZVGGAYs11TNptaAbL851mTSt6eCoKaUL5CR"
+        },
+        {
+          "shard": 1,
+          "address": "2NM8k7B66VbHTX3cmR15F4ywYYsiyc4jFv3AD9B2NfAo"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "92b8527aabe59ea2b12230f7b532769b133ffb118dfbd48ff676f14b273f1365",
+      "pyth_symbol": "Equity.US.CRCL/USD",
+      "pyth_description": "CIRCLE INTERNET GROUP INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+        "ticker": "CRCL"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "7zWGncBP5aGTDmEK7Ej4GYwGc2kXFHZJZFxmq28ocCaG"
+        },
+        {
+          "shard": 1,
+          "address": "HK88ukUTCcjf3ZooGkzA8iBF4fvDCci1C8GEWYibpbwK"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "be230eddb16aad5ad273a85e581e74eb615ebf67d378f885768d9b047df0c843",
+      "pyth_symbol": "Equity.US.PEP/USD",
+      "pyth_description": "PEPSICO INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsv99frTRUeornyvCfvhnDesQDWuvns1M852Pez91vF",
+        "ticker": "PEP"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "48poNkAU9LTF7ovyfXfmxRfzAEyjJpCVvAbvPuSWUvNY"
+        },
+        {
+          "shard": 1,
+          "address": "CyfYg6CbnqxpMEqwRUeo9bHJDtCpZcFXvTWM1g5ARu9o"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e7d1138d0083368634087268c64b7bea0b4101a6365f83915cba9e76a8364b96",
+      "pyth_symbol": "Crypto.GLDX/USD",
+      "pyth_description": "GOLD XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+        "ticker": "GLD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "FMGx9GMRAsAnFciE4HPHSMoWVZ6UgzmFJZ1nXdKVGH6e"
+        },
+        {
+          "shard": 1,
+          "address": "Hs5pCS9oosH3vAVj2VuwFvGYt4BvuNmvStdoH5GDwXxD"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "e190f467043db04548200354889dfe0d9d314c08b8d4e62fabf4d5a3140fecca",
+      "pyth_symbol": "Equity.US.GLD/USD",
+      "pyth_description": "SPDR GOLD SHARES ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+        "ticker": "GLD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "4ZVfYJzpww4uQ6qaVnonfKVgPeZ6kHZ3mE8W3hK7eiFf"
+        },
+        {
+          "shard": 1,
+          "address": "AnnLDCwoKGfUy1AzXP3yCmWM45eeu7U1sVnJWWwmaLsh"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "1bd6720eea4df323c076c9bbc1e98e8f5fe4bd16584e56468c5fb6b1a6072725",
+      "pyth_symbol": "Equity.US.CMCSA/USD",
+      "pyth_description": "COMCAST CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsvKCaNsxg2GN8jjUmq71qukMJr7Q1c5R2Mk9P8kcS8",
+        "ticker": "CMCSA"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CC7UBGJjBG3Gar6HkNywnfA5vK8XYuK2XxKYYQ9GYVUC"
+        },
+        {
+          "shard": 1,
+          "address": "3VDKpq6GtBLsgqNxq4HMYQWmYj5CgzqyE59V6xphZ8zn"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "dd49a9ac6df5cbfa9d8fc6371f7ae927a74d5c6763c1c01b4220d70314c647f9",
+      "pyth_symbol": "Crypto.HOODX/USD",
+      "pyth_description": "ROBINHOOD XSTOCK / US DOLLAR",
+      "asset_type": "Crypto",
+      "quote_currency": "USD",
+      "role": "xstock_token",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg",
+        "ticker": "HOOD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "EC93PJ3KRj7PSwLXHR1Kh6znNNLyNSUQ26NTtUarUkFe"
+        },
+        {
+          "shard": 1,
+          "address": "55dPfKs4nV71zyjhEsYLftQVdPTvgzwmSC8UPwVneg6a"
+        }
+      ],
+      "valuation": {
+        "use": false,
+        "reason": "unit_basis_unverified"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "306736a4035846ba15a3496eed57225b64cc19230a50d14f3ed20fd7219b7849",
+      "pyth_symbol": "Equity.US.HOOD/USD",
+      "pyth_description": "ROBINHOOD MARKETS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg",
+        "ticker": "HOOD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "5tZizzQN776ZWTibPJKecjk1DkTSDHu47dXM3SxR5D5i"
+        },
+        {
+          "shard": 1,
+          "address": "diB3BMZa4JwVjoih7u1wgEuqgwMjLWcFw91enxBDSjv"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": [
+        "pyth_redemption_rate_matches_mint_multiplier"
+      ]
+    },
+    {
+      "feed_id": "8a80397a6e962b6e260d620e3c68d08ab94bdc82fd27d2c506d41b8a52280364",
+      "pyth_symbol": "Equity.US.AMT/USD",
+      "pyth_description": "AMERICAN TOWER CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsvYPZkrDDg7259oDv5E76HSmeLWgHPgNEQ44KVbJJU",
+        "ticker": "AMT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "BXqYJQmwyLGVXU7HfDGPaWV5Pjh1XRCiaBTMyPzAiffr"
+        },
+        {
+          "shard": 1,
+          "address": "5sGYEQA7nKqDp1K9F3De7NtUEW9tVWDdpTtYwwoT1jPg"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "58dfd9c50639f1a6c7ea8a1a94d07d69989b51a4265801420895c292fd68e7d4",
+      "pyth_symbol": "Equity.US.MLM/USD",
+      "pyth_description": "MARTIN MARIETTA MATERIALS INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "Xsvi61uutcLdAsa5NxJ2c9geLgzUFM3tMtpJ44eoegt",
+        "ticker": "MLM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "GUZCfvFkMX4ReU9D8m61UFHufBLnNWkYZzm5XR2mBiB8"
+        },
+        {
+          "shard": 1,
+          "address": "DTNHV5ZGHkN3te9t7FsevUSTywcJbzFhYS1NKRyWamUi"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "d71412c0ef13b400c49514108d5236f47c5c30906ac8ae7c65b40bca8a6a984b",
+      "pyth_symbol": "Equity.US.CPT/USD",
+      "pyth_description": "CAMDEN PROPERTY TRUST / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsvoRXtZZfwvkLhp4qKPR9B9mcbuWakDUWnPszYw2BT",
+        "ticker": "CPT"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "D54AeNrmhhwm4U29AZL3ZbXxKJHCcU48LpZRjFoHzjKt"
+        },
+        {
+          "shard": 1,
+          "address": "FYLLwSNGhAEp1kmmhq7moEqMkxokFnii7cJU6Rrzx5gk"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "957bf692b35cc62f222dbf4dc6929130df42fe17c9f03373f44c01f78b05391e",
+      "pyth_symbol": "Equity.US.ARM/USD",
+      "pyth_description": "ARM HOLDINGS PLC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XswUFSYE5CWsZM3X3yo6e2pZvxcAzx912DonGvgUFka",
+        "ticker": "ARM"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "CuAVuHfdHZvrmceVJCooAPh3VpSzzPjYMi5KZPmE8AEe"
+        },
+        {
+          "shard": 1,
+          "address": "9d3Wm6sFSVpfvFwpsw6MWhMZvffGn3x4D1HTW3nZnJxx"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "21debc1718a4b76ff74dadf801c261d76c46afaafb74d9645b65e00b80f5ee3e",
+      "pyth_symbol": "Equity.US.BAC/USD",
+      "pyth_description": "BANK OF AMERICA CORPORATION / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XswsQk4duEQmCbGzfqUUWYmi7pV7xpJ9eEmLHXCaEQP",
+        "ticker": "BAC"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "9KcsjFiNv9KezHD1e1FtjFRRUB8gw76XC1qnRbPsFH7F"
+        },
+        {
+          "shard": 1,
+          "address": "92XsDsvy8xquugmDecWnk6zQXTC9fiLoDKM4hFrQ8UAE"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "6fc08c9963d266069cbd9780d98383dabf2668322a5bef0b9491e11d67e5d7e7",
+      "pyth_symbol": "Equity.US.SLV/USD",
+      "pyth_description": "ISHARES SILVER TRUST",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsxAd6okt8y1RRK6gNg7iJaqiWNiq5Md5EDf3ZrF2dm",
+        "ticker": "SLV"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "6CU2PU2QVgsp4C32QXzBoniR8takTSsbcBKx4vKQiJbS"
+        },
+        {
+          "shard": 1,
+          "address": "GCUYzNYB9Ctnfv9neXNADbTDBPisD1RruySgsGZeQTi8"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "8bbaca50510ba7108093fd89100523a01d4eee8087de21c9ca807292933e5479",
+      "pyth_symbol": "Equity.US.COPX/USD",
+      "pyth_description": "GLOBAL X COPPER MINERS ETF / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XsybfiKkD4UmjkAGT2uR8X2sq9AWFtvGJM2KTffoALZ",
+        "ticker": "COPX"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "JE8M9GNrN4jtXbG7dmVtXnjNWb5w2MrQvvrtBCwFKq5p"
+        },
+        {
+          "shard": 1,
+          "address": "DqnGCSEJzUKwiBrxMWTY2TzFvNNoCrEMrZbgNtLKSbpg"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "b3a83dbe70b62241b0f916212e097465a1b31085fa30da3342dd35468ca17ca5",
+      "pyth_symbol": "Equity.US.HD/USD",
+      "pyth_description": "HOME DEPOT INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XszjVtyhowGjSC5odCqBpW1CtXXwXjYokymrk7fGKD3",
+        "ticker": "HD"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "4UMygEBxQLrxM91iibNAft6qgPznGyLTAzjXyuv5znct"
+        },
+        {
+          "shard": 1,
+          "address": "36jFgWGgV1qAD3fudP9BpRuX5QLrg2Yyw9LWmmXXBy8f"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    },
+    {
+      "feed_id": "05380f8817eb1316c0b35ac19c3caa92c9aa9ea6be1555986c46dce97fed6afd",
+      "pyth_symbol": "Equity.US.UNH/USD",
+      "pyth_description": "UNITEDHEALTH GROUP INC / US DOLLAR",
+      "asset_type": "Equity",
+      "quote_currency": "USD",
+      "role": "xstock_underlying_share",
+      "binding": {
+        "kind": "xstock",
+        "mint": "XszvaiXGPwvk2nwb3o9C1CX4K6zH8sez11E6uyup6fe",
+        "ticker": "UNH"
+      },
+      "price_accounts": [
+        {
+          "shard": 0,
+          "address": "HBCUey2zP688M1XcH5CXj5sr7P9YqNDb6ERTnjDziKLW"
+        },
+        {
+          "shard": 1,
+          "address": "Dhrp68QbgzNyamvyiFDVBZTTLWGp8HiCUN5H4smZCYFm"
+        }
+      ],
+      "valuation": {
+        "use": true,
+        "unit_basis": "one_underlying_share",
+        "conversion": "xstock_scaled_ui_amount"
+      },
+      "instrument_checks": []
+    }
+  ]
+}

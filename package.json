@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "benten",
+  "packageManager": "pnpm@10.16.1",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "predev": "pnpm --filter @benten/registry build && pnpm --filter @benten/solana build && pnpm --filter @benten/solana-rpc-relay build && pnpm --filter @benten/pricing build && pnpm --filter @benten/mcp build && pnpm --filter @benten/purchase build && pnpm --filter @benten/public-api build && pnpm --filter @benten/public-web build && pnpm --filter @benten/public-web build:host",
+    "dev": "node scripts/run-local-stack.mjs",
+    "dev:local-stack": "node scripts/run-local-stack.mjs",
+    "build": "pnpm --filter @benten/registry build && pnpm --filter @benten/solana build && pnpm --filter @benten/solana-rpc-relay build && pnpm --filter @benten/pricing build && pnpm --filter @benten/mcp build && pnpm --filter @benten/purchase build && pnpm --filter @benten/public-api build && pnpm --filter @benten/public-web build && pnpm --filter @benten/public-web build:host",
+    "typecheck": "pnpm --filter @benten/registry typecheck && pnpm --filter @benten/solana typecheck && pnpm --filter @benten/solana-rpc-relay typecheck && pnpm --filter @benten/pricing typecheck && pnpm --filter @benten/purchase typecheck && pnpm --filter @benten/holdings typecheck && pnpm --filter @benten/mcp typecheck && pnpm --filter @benten/public-api typecheck && pnpm --filter @benten/public-web typecheck",
+    "test": "pnpm --filter @benten/registry test && pnpm --filter @benten/registry build && pnpm --filter @benten/solana test && pnpm --filter @benten/solana-rpc-relay test && pnpm --filter @benten/solana-rpc-relay build && pnpm --filter @benten/pricing test && pnpm --filter @benten/pricing build && pnpm --filter @benten/purchase test && pnpm --filter @benten/holdings test && pnpm --filter @benten/mcp test && pnpm --filter @benten/public-api test && pnpm --filter @benten/public-web test:local && pnpm --filter @benten/public-api build && node --test scripts/run-local-stack.test.mjs && node --test scripts/onchain-prices/lib.test.mjs && pnpm test:vercel && node scripts/check-legacy-disposition.mjs && python3 scripts/check_publishable_test.py",
+    "build:vercel": "node scripts/vercel/build-output.mjs",
+    "test:vercel": "node scripts/check-vercel-config.mjs && node scripts/vercel/build-output.mjs && node --test scripts/vercel/output.test.mjs",
+    "dev:legacy-web": "pnpm --filter web dev",
+    "build:legacy-web": "pnpm --filter web build",
+    "test:legacy-web": "pnpm --filter @benten/registry --filter @benten/solana --filter @benten/solana-rpc-relay build && pnpm --filter web typecheck && pnpm --filter web test",
+    "smoke:mcp": "pnpm --filter @benten/mcp smoke",
+    "capture:legacy-http": "node apps/public-api/scripts/capture-legacy-http.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

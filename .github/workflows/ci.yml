@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check repository is safe to publish
+        env:
+          DENYLIST_REGEX: ${{ secrets.DENYLIST_REGEX }}
+          DENYLIST_REQUIRED: "1"
+        run: bash scripts/check-publishable.sh
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.16.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build default lifecycle (packages, MCP, facts API, public Web)
+        run: pnpm build
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test default local stack and safety boundaries
+        run: pnpm test
+      - name: Smoke compiled MCP journey
+        run: pnpm --filter @benten/mcp smoke
+
+  legacy-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.16.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck and test the retained legacy Next web
+        run: pnpm test:legacy-web
+      - name: Build the retained legacy Next web
+        run: pnpm build:legacy-web

@@ -1,0 +1,23 @@
+{
+  "name": "@benten/holdings",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Framework-independent, SDK-free read of the supported product tokens a public key holds, through the read-only relay. Consumed from source by bundlers; nothing here signs or sends.",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@benten/purchase": "workspace:*",
+    "@benten/solana": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.0"
+  }
+}

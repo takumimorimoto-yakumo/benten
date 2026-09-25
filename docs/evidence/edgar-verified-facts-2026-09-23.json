@@ -1,0 +1,1269 @@
+{
+  "schema_version": "1.0",
+  "generated_on": "2026-09-23",
+  "producer": "scripts/edgar/build-verified-facts.mjs",
+  "source_api": [
+    "https://data.sec.gov/api/xbrl/companyfacts/",
+    "https://data.sec.gov/submissions/"
+  ],
+  "artifact_revision": "2026-09-23-edgar-annual-57140b46",
+  "verified_overlay_sha256": "57140b461d10a7d54c91a036aaf225a2b2b178041af98c5431ab79cc74cbe50a",
+  "counts": {
+    "covered_tickers": 129,
+    "promoted": 107,
+    "stayed_legacy": 22,
+    "unresolved_ciks": 0,
+    "legacy_comparisons_flagged": 9
+  },
+  "known_limitations": {
+    "companyfacts_single_attribution": "companyfacts collapses a repeated concept/period/value to one record and attributes it to a single accession, which is not always the 10-K. A required fact attributed to another filing is reported as required_fact_not_in_selected_accession and the ticker stays legacy rather than being published under a 10-K source reference it cannot be proven to carry.",
+    "no_bank_revenue_proxy": "Interest-and-dividend revenue proxies for bank holding companies are not substituted for a reported revenue concept.",
+    "implausible_revenue_gate": "A ticker whose selected revenue concept is smaller than the same filing's operating cash flow or net income is not promoted and stays legacy with reason implausible_revenue_concept. The reported concept covers only a fragment of the issuer's top line (a REIT reporting lease income, or an asset manager whose consolidated Revenues are tagged separately), so it is not comparable to the other issuers. No additional revenue concept is substituted.",
+    "round_numbered_values_not_reconciled": "Published values are the literal companyfacts numbers and are not reconciled against the filing HTML. Visa (V) revenue 40000000000 for accession 0001403161-25-000089 is one such literal value; the filing document itself was not viewed while this artifact was produced.",
+    "fiscal_year_label": "fiscal_year is the SEC companyfacts `fy` value carried by the selected 10-K facts, not the calendar year of the period end, so a January or February year end keeps the issuer's own fiscal-year name. Period and source references are keyed by the period end date instead of a year."
+  },
+  "selection_rules": {
+    "filing": "Greatest `filed` among us-gaap USD facts with form 10-K and fp FY; facts from other accessions are never mixed in.",
+    "period": "Fiscal period end is the latest us-gaap:Assets instant date inside that accession; durations must span 350-380 days and end on it.",
+    "promotion": "A ticker is promoted only when revenue, net_income_parent and total_assets are all present under those rules and the reported revenue is at least as large as the same filing's operating cash flow and net income.",
+    "units": "USD only. ifrs-full filers and non-USD reporters stay legacy."
+  },
+  "promoted": [
+    "ABNB",
+    "ABT",
+    "ACN",
+    "ADBE",
+    "ADI",
+    "AFRM",
+    "ALLY",
+    "AMAT",
+    "AMD",
+    "AMGN",
+    "AMZN",
+    "ARMK",
+    "AUR",
+    "BA",
+    "BAC",
+    "BAX",
+    "BRK.B",
+    "CHD",
+    "CMCSA",
+    "COIN",
+    "COP",
+    "CRCL",
+    "CRM",
+    "CRWD",
+    "CSCO",
+    "CVX",
+    "DASH",
+    "DE",
+    "DELL",
+    "DIS",
+    "DOCN",
+    "DXCM",
+    "FIVE",
+    "FWONK",
+    "GE",
+    "GILD",
+    "GM",
+    "GME",
+    "GOOGL",
+    "HD",
+    "HON",
+    "HOOD",
+    "HWM",
+    "IBM",
+    "INTC",
+    "INTU",
+    "ISRG",
+    "JNJ",
+    "JPM",
+    "KMB",
+    "KO",
+    "LIN",
+    "LLY",
+    "LMT",
+    "LOW",
+    "MARA",
+    "MCD",
+    "MDT",
+    "META",
+    "MLI",
+    "MLM",
+    "MMM",
+    "MRK",
+    "MSFT",
+    "MSI",
+    "MSTR",
+    "MU",
+    "NFLX",
+    "NKE",
+    "NOW",
+    "NVDA",
+    "ONTO",
+    "ORCL",
+    "PAG",
+    "PEG",
+    "PEP",
+    "PFE",
+    "PFG",
+    "PG",
+    "PGR",
+    "PKG",
+    "PLTR",
+    "PM",
+    "PYPL",
+    "QCOM",
+    "RBLX",
+    "RGA",
+    "RIOT",
+    "RIVN",
+    "RTX",
+    "SBAC",
+    "SBUX",
+    "SMCI",
+    "SNOW",
+    "STZ",
+    "TJX",
+    "TMO",
+    "TSLA",
+    "TXN",
+    "TXT",
+    "UBER",
+    "UNH",
+    "UNP",
+    "V",
+    "VRTX",
+    "VZ",
+    "WMT"
+  ],
+  "stayed_legacy": [
+    {
+      "ticker": "AEIS",
+      "cik": "0000927003",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "AMT",
+      "cik": "0001053507",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "ARM",
+      "cik": "0001973239",
+      "reason": "files_form_20f_not_10k"
+    },
+    {
+      "ticker": "ASML",
+      "cik": "0000937966",
+      "reason": "files_form_20f_not_10k"
+    },
+    {
+      "ticker": "AVGO",
+      "cik": "0001730168",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "AZN",
+      "cik": "0000901832",
+      "reason": "reports_under_ifrs"
+    },
+    {
+      "ticker": "CAT",
+      "cik": "0000018230",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "CPT",
+      "cik": "0000906345",
+      "reason": "implausible_revenue_concept"
+    },
+    {
+      "ticker": "DJT",
+      "cik": "0001849635",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "F",
+      "cik": "0000037996",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "GS",
+      "cik": "0000886982",
+      "reason": "required_fact_not_in_selected_accession:revenue"
+    },
+    {
+      "ticker": "IVZ",
+      "cik": "0000914208",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "MA",
+      "cik": "0001141391",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "MS",
+      "cik": "0000895421",
+      "reason": "required_fact_not_in_selected_accession:revenue"
+    },
+    {
+      "ticker": "NVO",
+      "cik": "0000353278",
+      "reason": "reports_under_ifrs"
+    },
+    {
+      "ticker": "OWL",
+      "cik": "0001823945",
+      "reason": "implausible_revenue_concept"
+    },
+    {
+      "ticker": "PCG",
+      "cik": "0001004980",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "SLMT",
+      "cik": "0001939965",
+      "reason": "reports_under_ifrs"
+    },
+    {
+      "ticker": "TSM",
+      "cik": "0001046179",
+      "reason": "reports_under_ifrs"
+    },
+    {
+      "ticker": "TXRH",
+      "cik": "0001289460",
+      "reason": "required_fact_not_in_selected_accession:net_income_parent"
+    },
+    {
+      "ticker": "WFC",
+      "cik": "0000072971",
+      "reason": "required_fact_not_in_selected_accession:revenue"
+    },
+    {
+      "ticker": "XOM",
+      "cik": "0002115436",
+      "reason": "no_annual_10k_in_companyfacts"
+    }
+  ],
+  "stayed_legacy_reason_counts": {
+    "required_fact_not_in_selected_accession:net_income_parent": 10,
+    "files_form_20f_not_10k": 2,
+    "reports_under_ifrs": 4,
+    "implausible_revenue_concept": 2,
+    "required_fact_not_in_selected_accession:revenue": 3,
+    "no_annual_10k_in_companyfacts": 1
+  },
+  "unresolved_ciks": [],
+  "cik_resolution_sources": {
+    "ABNB": "company_tickers",
+    "AMZN": "company_tickers",
+    "ASML": "company_tickers",
+    "BRK.B": "company_tickers",
+    "MSFT": "company_tickers",
+    "NVDA": "company_tickers",
+    "ABT": "company_tickers",
+    "ACN": "company_tickers",
+    "ADBE": "company_tickers",
+    "ADI": "company_tickers",
+    "AEIS": "company_tickers",
+    "AFRM": "company_tickers",
+    "ALLY": "company_tickers",
+    "AMAT": "company_tickers",
+    "AMD": "company_tickers",
+    "AMGN": "company_tickers",
+    "AMT": "company_tickers",
+    "ARM": "company_tickers",
+    "ARMK": "company_tickers",
+    "AUR": "company_tickers",
+    "AVGO": "company_tickers",
+    "AZN": "company_tickers",
+    "BA": "company_tickers",
+    "BAC": "company_tickers",
+    "BAX": "company_tickers",
+    "CAT": "company_tickers",
+    "CHD": "company_tickers",
+    "CMCSA": "company_tickers",
+    "COIN": "company_tickers",
+    "COP": "company_tickers",
+    "CPT": "company_tickers",
+    "CRCL": "company_tickers",
+    "CRM": "company_tickers",
+    "CRWD": "company_tickers",
+    "CSCO": "company_tickers",
+    "CVX": "company_tickers",
+    "DASH": "company_tickers",
+    "DE": "company_tickers",
+    "DELL": "company_tickers",
+    "DIS": "company_tickers",
+    "DJT": "company_tickers",
+    "DOCN": "company_tickers",
+    "DXCM": "company_tickers",
+    "F": "company_tickers",
+    "FIVE": "company_tickers",
+    "FWONK": "company_tickers",
+    "GE": "company_tickers",
+    "GILD": "company_tickers",
+    "GM": "company_tickers",
+    "GME": "company_tickers",
+    "GOOGL": "company_tickers",
+    "GS": "company_tickers",
+    "HD": "company_tickers",
+    "HON": "company_tickers",
+    "HOOD": "company_tickers",
+    "HWM": "company_tickers",
+    "IBM": "company_tickers",
+    "INTC": "company_tickers",
+    "INTU": "company_tickers",
+    "ISRG": "company_tickers",
+    "IVZ": "company_tickers",
+    "JNJ": "company_tickers",
+    "JPM": "company_tickers",
+    "KMB": "company_tickers",
+    "KO": "company_tickers",
+    "LIN": "company_tickers",
+    "LLY": "company_tickers",
+    "LMT": "company_tickers",
+    "LOW": "company_tickers",
+    "MA": "company_tickers",
+    "MARA": "company_tickers",
+    "MCD": "company_tickers",
+    "MDT": "company_tickers",
+    "META": "company_tickers",
+    "MLI": "company_tickers",
+    "MLM": "company_tickers",
+    "MMM": "company_tickers",
+    "MRK": "company_tickers",
+    "MS": "company_tickers",
+    "MSI": "company_tickers",
+    "MSTR": "company_tickers",
+    "MU": "company_tickers",
+    "NFLX": "company_tickers",
+    "NKE": "company_tickers",
+    "NOW": "company_tickers",
+    "NVO": "company_tickers",
+    "ONTO": "company_tickers",
+    "ORCL": "company_tickers",
+    "OWL": "company_tickers",
+    "PAG": "company_tickers",
+    "PCG": "company_tickers",
+    "PEG": "company_tickers",
+    "PEP": "company_tickers",
+    "PFE": "company_tickers",
+    "PFG": "company_tickers",
+    "PG": "company_tickers",
+    "PGR": "company_tickers",
+    "PKG": "company_tickers",
+    "PLTR": "company_tickers",
+    "PM": "company_tickers",
+    "PYPL": "company_tickers",
+    "QCOM": "company_tickers",
+    "RBLX": "company_tickers",
+    "RGA": "company_tickers",
+    "RIOT": "company_tickers",
+    "RIVN": "company_tickers",
+    "RTX": "company_tickers",
+    "SBAC": "company_tickers",
+    "SBUX": "company_tickers",
+    "SLMT": "company_tickers",
+    "SMCI": "company_tickers",
+    "SNOW": "company_tickers",
+    "STZ": "company_tickers",
+    "TJX": "company_tickers",
+    "TMO": "company_tickers",
+    "TSLA": "company_tickers",
+    "TSM": "company_tickers",
+    "TXN": "company_tickers",
+    "TXRH": "company_tickers",
+    "TXT": "company_tickers",
+    "UBER": "company_tickers",
+    "UNH": "company_tickers",
+    "UNP": "company_tickers",
+    "V": "company_tickers",
+    "VRTX": "company_tickers",
+    "VZ": "company_tickers",
+    "WFC": "company_tickers",
+    "WMT": "company_tickers",
+    "XOM": "company_tickers"
+  },
+  "concept_choices": {
+    "ABNB": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ABT": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ACN": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ADBE": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ADI": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "AFRM": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ALLY": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "AMAT": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "AMD": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "AMGN": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "AMZN": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ARMK": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets"
+    },
+    "AUR": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "BA": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "BAC": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "BAX": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "BRK.B": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CHD": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CMCSA": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "COIN": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "COP": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CRCL": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CRM": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CRWD": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CSCO": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "CVX": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "DASH": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "DE": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "DELL": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "DIS": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "DOCN": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "DXCM": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "FIVE": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "FWONK": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities"
+    },
+    "GE": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "GILD": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "GM": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "GME": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "GOOGL": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "HD": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "HON": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "HOOD": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "HWM": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "IBM": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "INTC": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "INTU": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ISRG": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "JNJ": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "JPM": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "KMB": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "KO": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "LIN": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "LLY": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "LMT": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "LOW": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MARA": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MCD": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MDT": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "META": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MLI": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MLM": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MMM": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MRK": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MSFT": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MSI": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MSTR": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "MU": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "NFLX": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "NKE": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "NOW": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "NVDA": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ONTO": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "ORCL": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PAG": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PEG": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PEP": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PFE": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PFG": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PG": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PGR": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PKG": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PLTR": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PM": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "PYPL": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "QCOM": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "RBLX": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "RGA": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "RIOT": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "RIVN": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "RTX": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "SBAC": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "SBUX": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "SMCI": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "SNOW": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "STZ": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "TJX": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "TMO": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "TSLA": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "TXN": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "TXT": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "UBER": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "UNH": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "UNP": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "V": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "VRTX": {
+      "revenue": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "total_liabilities": "us-gaap:Liabilities",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "VZ": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    },
+    "WMT": {
+      "revenue": "us-gaap:Revenues",
+      "net_income_parent": "us-gaap:NetIncomeLoss",
+      "total_assets": "us-gaap:Assets",
+      "operating_cf": "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    }
+  },
+  "legacy_comparisons": {
+    "AFRM": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2025
+    },
+    "CRM": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2026
+    },
+    "CSCO": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2025
+    },
+    "FIVE": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2026
+    },
+    "GME": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2026
+    },
+    "HD": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2026
+    },
+    "LOW": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2026
+    },
+    "ONTO": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2025
+    },
+    "SMCI": {
+      "status": "fiscal_year_differs",
+      "legacy_fiscal_year": 2025
+    }
+  },
+  "previous_overlay_reproduction": {
+    "ABNB": "reproduced_exactly",
+    "ABT": "reproduced_exactly",
+    "ACN": "reproduced_exactly",
+    "ADBE": "reproduced_exactly",
+    "ADI": "reproduced_exactly",
+    "AFRM": "reproduced_exactly",
+    "ALLY": "reproduced_exactly",
+    "AMAT": "reproduced_exactly",
+    "AMD": "reproduced_exactly",
+    "AMGN": "reproduced_exactly",
+    "AMZN": "reproduced_exactly",
+    "ARMK": "reproduced_exactly",
+    "AUR": "reproduced_exactly",
+    "BA": "reproduced_exactly",
+    "BAC": "differs",
+    "BAX": "reproduced_exactly",
+    "BRK.B": "reproduced_exactly",
+    "CHD": "reproduced_exactly",
+    "CMCSA": "reproduced_exactly",
+    "COIN": "reproduced_exactly",
+    "COP": "reproduced_exactly",
+    "CRCL": "reproduced_exactly",
+    "CRM": "reproduced_exactly",
+    "CRWD": "reproduced_exactly",
+    "CSCO": "reproduced_exactly",
+    "CVX": "reproduced_exactly",
+    "DASH": "reproduced_exactly",
+    "DE": "reproduced_exactly",
+    "DELL": "reproduced_exactly",
+    "DIS": "reproduced_exactly",
+    "DOCN": "reproduced_exactly",
+    "DXCM": "reproduced_exactly",
+    "FIVE": "reproduced_exactly",
+    "FWONK": "reproduced_exactly",
+    "GE": "reproduced_exactly",
+    "GILD": "reproduced_exactly",
+    "GM": "reproduced_exactly",
+    "GME": "reproduced_exactly",
+    "GOOGL": "reproduced_exactly",
+    "HD": "reproduced_exactly",
+    "HON": "reproduced_exactly",
+    "HOOD": "reproduced_exactly",
+    "HWM": "reproduced_exactly",
+    "IBM": "reproduced_exactly",
+    "INTC": "reproduced_exactly",
+    "INTU": "reproduced_exactly",
+    "ISRG": "reproduced_exactly",
+    "JNJ": "reproduced_exactly",
+    "JPM": "reproduced_exactly",
+    "KMB": "reproduced_exactly",
+    "KO": "reproduced_exactly",
+    "LIN": "reproduced_exactly",
+    "LLY": "reproduced_exactly",
+    "LMT": "reproduced_exactly",
+    "LOW": "reproduced_exactly",
+    "MARA": "reproduced_exactly",
+    "MCD": "reproduced_exactly",
+    "MDT": "reproduced_exactly",
+    "META": "reproduced_exactly",
+    "MLI": "reproduced_exactly",
+    "MLM": "reproduced_exactly",
+    "MMM": "reproduced_exactly",
+    "MRK": "reproduced_exactly",
+    "MSFT": "reproduced_exactly",
+    "MSI": "reproduced_exactly",
+    "MSTR": "reproduced_exactly",
+    "MU": "reproduced_exactly",
+    "NFLX": "reproduced_exactly",
+    "NKE": "reproduced_exactly",
+    "NOW": "reproduced_exactly",
+    "NVDA": "reproduced_exactly",
+    "ONTO": "reproduced_exactly",
+    "ORCL": "reproduced_exactly",
+    "PAG": "reproduced_exactly",
+    "PEG": "reproduced_exactly",
+    "PEP": "reproduced_exactly",
+    "PFE": "reproduced_exactly",
+    "PFG": "reproduced_exactly",
+    "PG": "reproduced_exactly",
+    "PGR": "reproduced_exactly",
+    "PKG": "reproduced_exactly",
+    "PLTR": "reproduced_exactly",
+    "PM": "reproduced_exactly",
+    "PYPL": "reproduced_exactly",
+    "QCOM": "reproduced_exactly",
+    "RBLX": "reproduced_exactly",
+    "RGA": "reproduced_exactly",
+    "RIOT": "reproduced_exactly",
+    "RIVN": "reproduced_exactly",
+    "RTX": "reproduced_exactly",
+    "SBAC": "reproduced_exactly",
+    "SBUX": "reproduced_exactly",
+    "SMCI": "reproduced_exactly",
+    "SNOW": "reproduced_exactly",
+    "STZ": "reproduced_exactly",
+    "TJX": "reproduced_exactly",
+    "TMO": "reproduced_exactly",
+    "TSLA": "reproduced_exactly",
+    "TXN": "reproduced_exactly",
+    "TXT": "reproduced_exactly",
+    "UBER": "reproduced_exactly",
+    "UNH": "reproduced_exactly",
+    "UNP": "reproduced_exactly",
+    "V": "reproduced_exactly",
+    "VRTX": "reproduced_exactly",
+    "VZ": "reproduced_exactly",
+    "WMT": "reproduced_exactly"
+  },
+  "previous_overlay_differences": {
+    "BAC": [
+      {
+        "path": "/identity/underlying_company",
+        "before": "BofA Finance LLC",
+        "after": "BANK OF AMERICA CORP /DE/"
+      }
+    ]
+  }
+}

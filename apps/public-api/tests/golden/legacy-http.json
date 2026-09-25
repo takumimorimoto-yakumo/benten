@@ -1,0 +1,339 @@
+{
+  "schema_version": "benten.legacy-http-oracle.v2",
+  "source_revision": "e3efffd",
+  "capture_transport": "real-local-http",
+  "cases": [
+    {
+      "id": "v1-fundamentals-known",
+      "method": "GET",
+      "path": "/api/fundamentals/NVDA",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"found\":true,\"ticker\":\"NVDA\",\"as_of\":\"FY2026\",\"source\":\"Benten legacy financial snapshot; filing source, unit, and fact kind unverified\",\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\",\"data\":{\"company_name\":\"NVIDIA CORP\",\"metrics_fiscal_year\":2026,\"revenue\":215938000000,\"op_income\":130387000000,\"gross_profit\":153463000000,\"net_income_parent\":120067000000,\"total_assets\":206803000000,\"total_equity\":157293000000,\"total_liabilities\":49510000000,\"long_term_debt\":7469000000,\"operating_cf\":102718000000,\"investing_cf\":-52228000000,\"fcf\":50490000000}}",
+      "body_sha256": "30eb304caf584d23433704c4e2ada2511eb1d3173bb611fc4b75afbd2d1e195a",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-fundamentals-unknown",
+      "method": "GET",
+      "path": "/api/fundamentals/ZZUNKNOWN",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"found\":false,\"reason\":\"unknown_ticker\",\"ticker\":\"ZZUNKNOWN\",\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\"}",
+      "body_sha256": "a60fa5641426d371f4783f0cfbffa1d220c2fa7d94181e70660555e7562b3067",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-fundamentals-ineligible",
+      "method": "GET",
+      "path": "/api/fundamentals/SPY",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"found\":false,\"reason\":\"not_covered\",\"ticker\":\"SPY\",\"exclusion_reason\":\"etf\",\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\"}",
+      "body_sha256": "95a2f88046ca1dab79d5f6505536517075d6bd3da05f95de95ea429272643a4a",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-financials-statement",
+      "method": "GET",
+      "path": "/api/financials/NVDA?statement=cf",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"found\":true,\"ticker\":\"NVDA\",\"as_of\":\"FY2026 M1 FY\",\"source\":\"Benten legacy financial snapshot; filing source, unit, and fact kind unverified\",\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\",\"statements\":{\"cf\":{\"ticker\":\"NVDA\",\"region\":\"US\",\"fiscal_year\":2026,\"fiscal_month\":1,\"period_kind\":\"FY\",\"operating_cf\":102718000000,\"investing_cf\":-52228000000,\"financing_cf\":-48474000000,\"cash_eop\":10605000000,\"capex\":null,\"depreciation_and_amortization\":2843000000,\"cash_dividends_paid\":974000000,\"interest_paid\":null}}}",
+      "body_sha256": "19a1e77c088d3246c8bec3ac9526918b578be2014ab0b43198e05c501f3156cd",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-financials-invalid-statement",
+      "method": "GET",
+      "path": "/api/financials/NVDA?statement=quarterly",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"found\":false,\"reason\":\"invalid_statement\",\"ticker\":\"NVDA\",\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\"}",
+      "body_sha256": "224f35be0fbe64c1fb07ffe145910febad55a746c55b653017bafe3ae24e6c7e",
+      "parity": "literal"
+    },
+    {
+      "id": "v2-fundamentals-known",
+      "method": "GET",
+      "path": "/api/v2/fundamentals?ticker=NVDA",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"schema_version\":\"2.0\",\"artifact_revision\":\"2026-09-25-statement-history-97cbb53d\",\"release_profile\":\"mint_core\",\"data\":{\"found\":true,\"identity\":{\"symbol\":\"NVDAx\",\"ticker\":\"NVDA\",\"token_name\":\"NVIDIA xStock\",\"underlying_company\":\"NVIDIA CORP\",\"underlying_company_source_ref\":\"nvda-20260125-10k\",\"mint\":\"Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh\",\"issuer\":\"S7vYFFWH6BjJyEsdrPQpqpYTqLTrPRK6KW3VwsJuRaS\",\"issuer_verified\":true,\"token_program\":\"unknown\",\"registry_as_of\":\"2026-09-12\",\"registry_source_url\":\"https://docs.xstocks.fi/developers\"},\"coverage\":{\"filing_eligibility\":\"eligible\",\"snapshot_status\":\"available\",\"source_status\":\"source_verified\",\"capabilities\":{\"fundamentals\":\"available\",\"pl\":\"available\",\"bs\":\"available\",\"cf\":\"available\"},\"exclusion_reason\":null},\"verified_facts\":{\"kind\":\"source_verified\",\"periods\":{\"nvda-20260125-duration\":{\"period_ref\":\"nvda-20260125-duration\",\"fiscal_year\":2026,\"fiscal_month\":1,\"period_kind\":\"FY\",\"fact_period_type\":\"duration\",\"period_start\":\"2025-01-27\",\"period_end\":\"2026-01-25\"},\"nvda-20260125-instant\":{\"period_ref\":\"nvda-20260125-instant\",\"fiscal_year\":2026,\"fiscal_month\":1,\"period_kind\":\"FY\",\"fact_period_type\":\"instant\",\"period_start\":null,\"period_end\":\"2026-01-25\"}},\"source_refs\":{\"nvda-20260125-10k\":{\"source_ref\":\"nvda-20260125-10k\",\"form\":\"10-K\",\"accession_number\":\"0001045810-26-000021\",\"filed_at\":\"2026-02-25\",\"filing_url\":\"https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm\",\"source_authority\":\"SEC EDGAR\"}},\"facts\":{\"revenue\":{\"kind\":\"verified_reported\",\"value\":215938000000,\"currency\":\"USD\",\"unit\":\"currency\",\"scale\":1,\"period_ref\":\"nvda-20260125-duration\",\"source_ref\":\"nvda-20260125-10k\",\"source_concept\":\"us-gaap:Revenues\"},\"net_income_parent\":{\"kind\":\"verified_reported\",\"value\":120067000000,\"currency\":\"USD\",\"unit\":\"currency\",\"scale\":1,\"period_ref\":\"nvda-20260125-duration\",\"source_ref\":\"nvda-20260125-10k\",\"source_concept\":\"us-gaap:NetIncomeLoss\"},\"total_assets\":{\"kind\":\"verified_reported\",\"value\":206803000000,\"currency\":\"USD\",\"unit\":\"currency\",\"scale\":1,\"period_ref\":\"nvda-20260125-instant\",\"source_ref\":\"nvda-20260125-10k\",\"source_concept\":\"us-gaap:Assets\"},\"total_liabilities\":{\"kind\":\"verified_reported\",\"value\":49510000000,\"currency\":\"USD\",\"unit\":\"currency\",\"scale\":1,\"period_ref\":\"nvda-20260125-instant\",\"source_ref\":\"nvda-20260125-10k\",\"source_concept\":\"us-gaap:Liabilities\"},\"operating_cf\":{\"kind\":\"verified_reported\",\"value\":102718000000,\"currency\":\"USD\",\"unit\":\"currency\",\"scale\":1,\"period_ref\":\"nvda-20260125-duration\",\"source_ref\":\"nvda-20260125-10k\",\"source_concept\":\"us-gaap:NetCashProvidedByUsedInOperatingActivities\"}}},\"legacy_snapshot\":{\"kind\":\"legacy_snapshot\",\"legacy_as_of\":\"FY2026\",\"observed_period\":{\"fiscal_year\":2026,\"fiscal_month\":null,\"period_kind\":null,\"period_start\":null,\"period_end\":null},\"currency\":null,\"unit\":null,\"fact_kind\":\"unknown\",\"source_refs\":[],\"values\":{\"company_name\":\"NVIDIA CORP\",\"metrics_fiscal_year\":2026,\"revenue\":215938000000,\"op_income\":130387000000,\"gross_profit\":153463000000,\"net_income_parent\":120067000000,\"total_assets\":206803000000,\"total_equity\":157293000000,\"total_liabilities\":49510000000,\"long_term_debt\":7469000000,\"operating_cf\":102718000000,\"investing_cf\":-52228000000,\"fcf\":50490000000}}},\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\"}",
+      "body_sha256": "5873450d577f24508d4c7d628b752ce75c2333af851ee0ca6978c459760b5494",
+      "parity": "literal"
+    },
+    {
+      "id": "v2-fundamentals-repeated",
+      "method": "GET",
+      "path": "/api/v2/fundamentals?ticker=NVDA&ticker=MSFT",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"schema_version\":\"2.0\",\"artifact_revision\":\"2026-09-25-statement-history-97cbb53d\",\"release_profile\":\"mint_core\",\"data\":{\"found\":false,\"reason\":\"invalid_input\",\"requested_identifier\":null,\"identity\":null,\"coverage\":null,\"retryable\":false},\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\"}",
+      "body_sha256": "3900b52e9992d6fb7350632f30e9288d40f9ff9d96315b2774c0502bf82b2abe",
+      "parity": "literal"
+    },
+    {
+      "id": "v2-financials-unknown-mint",
+      "method": "GET",
+      "path": "/api/v2/financials?mint=11111111111111111111111111111111",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"schema_version\":\"2.0\",\"artifact_revision\":\"2026-09-25-statement-history-97cbb53d\",\"release_profile\":\"mint_core\",\"data\":{\"found\":false,\"reason\":\"unknown_mint\",\"requested_identifier\":\"11111111111111111111111111111111\",\"identity\":null,\"coverage\":null,\"retryable\":false},\"disclaimer\":\"Factual data only. Not investment advice, a recommendation, or a valuation.\"}",
+      "body_sha256": "1f69f9e820ecb7446fcdd772b7c93a5b8eeb4a7573f0838b45d37534ccf122df",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-fundamentals-known-head",
+      "method": "HEAD",
+      "path": "/api/fundamentals/NVDA",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-fundamentals-unknown-head",
+      "method": "HEAD",
+      "path": "/api/fundamentals/ZZUNKNOWN",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-fundamentals-ineligible-head",
+      "method": "HEAD",
+      "path": "/api/fundamentals/SPY",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-financials-statement-head",
+      "method": "HEAD",
+      "path": "/api/financials/NVDA?statement=cf",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v1-financials-invalid-statement-head",
+      "method": "HEAD",
+      "path": "/api/financials/NVDA?statement=quarterly",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v2-fundamentals-known-head",
+      "method": "HEAD",
+      "path": "/api/v2/fundamentals?ticker=NVDA",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v2-fundamentals-repeated-head",
+      "method": "HEAD",
+      "path": "/api/v2/fundamentals?ticker=NVDA&ticker=MSFT",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "v2-financials-unknown-mint-head",
+      "method": "HEAD",
+      "path": "/api/v2/financials?mint=11111111111111111111111111111111",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "literal"
+    },
+    {
+      "id": "known-1-options",
+      "method": "OPTIONS",
+      "path": "/api/fundamentals/NVDA",
+      "status": 204,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-1-post",
+      "method": "POST",
+      "path": "/api/fundamentals/NVDA",
+      "status": 405,
+      "headers": {},
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-2-options",
+      "method": "OPTIONS",
+      "path": "/api/financials/NVDA?statement=cf",
+      "status": 204,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-2-post",
+      "method": "POST",
+      "path": "/api/financials/NVDA?statement=cf",
+      "status": 405,
+      "headers": {},
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-3-options",
+      "method": "OPTIONS",
+      "path": "/api/v2/fundamentals?ticker=NVDA",
+      "status": 204,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-3-post",
+      "method": "POST",
+      "path": "/api/v2/fundamentals?ticker=NVDA",
+      "status": 405,
+      "headers": {},
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-4-options",
+      "method": "OPTIONS",
+      "path": "/api/v2/financials?ticker=NVDA&statement=cf",
+      "status": 204,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "known-4-post",
+      "method": "POST",
+      "path": "/api/v2/financials?ticker=NVDA&statement=cf",
+      "status": 405,
+      "headers": {},
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-method-normalization"
+    },
+    {
+      "id": "unknown-api-get",
+      "method": "GET",
+      "path": "/api/unknown",
+      "status": 404,
+      "headers": {
+        "cache-control": "no-store, must-revalidate",
+        "content-type": "text/html; charset=utf-8"
+      },
+      "body": "",
+      "body_sha256": "a448fdd7161d9915581e0891baad5299c1e8b090455c924c2027550dee69d8d3",
+      "parity": "provenance-only-intentional-json-normalization"
+    },
+    {
+      "id": "unknown-api-head",
+      "method": "HEAD",
+      "path": "/api/unknown",
+      "status": 404,
+      "headers": {
+        "cache-control": "no-store, must-revalidate",
+        "content-type": "text/html; charset=utf-8"
+      },
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parity": "provenance-only-intentional-json-normalization"
+    },
+    {
+      "id": "unknown-api-options",
+      "method": "OPTIONS",
+      "path": "/api/unknown",
+      "status": 404,
+      "headers": {
+        "cache-control": "no-store, must-revalidate",
+        "content-type": "text/html; charset=utf-8"
+      },
+      "body": "",
+      "body_sha256": "86bebe7b51f1e55b610b2c612d182b448b4ec9571b53e10e250a43abd81c1e3d",
+      "parity": "provenance-only-intentional-json-normalization"
+    },
+    {
+      "id": "unknown-api-post",
+      "method": "POST",
+      "path": "/api/unknown",
+      "status": 404,
+      "headers": {
+        "cache-control": "no-store, must-revalidate",
+        "content-type": "text/html; charset=utf-8"
+      },
+      "body": "",
+      "body_sha256": "9d07222fc83a30d0f76ba64e49f0d5e27a721148a3c58c17102280d19595d6ee",
+      "parity": "provenance-only-intentional-json-normalization"
+    }
+  ]
+}

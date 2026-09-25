@@ -1,0 +1,148 @@
+{
+  "schema_version": "benten.company-map.v1",
+  "revision": 3,
+  "reviewed_at": "2026-09-24T11:26:00+09:00",
+  "review": {
+    "reviewer": "takumimorimoto-yakumo",
+    "method": "manual_source_review",
+    "issuer_product_checks": []
+  },
+  "bound_sources": {
+    "provider_assets_revision": "3069f69884b35cbbbb5a81ffa1601fd409de6f4bd95993254f2e963b24ecbb42",
+    "xstocks_registry_sha256": "27441e02a030c11ba408c0e8b475b939f5ee2c0acf1f51d2fa43509c5a26a296"
+  },
+  "companies": [
+    {
+      "slug": "anduril",
+      "display_name": "Anduril",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "ANDURIL",
+          "mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "anduril"
+        }
+      ]
+    },
+    {
+      "slug": "anthropic",
+      "display_name": "Anthropic",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "ANTHROPIC",
+          "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "anthropic"
+        }
+      ]
+    },
+    {
+      "slug": "figure-ai",
+      "display_name": "Figure AI",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "FIGUREAI",
+          "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "figureai"
+        }
+      ]
+    },
+    {
+      "slug": "kalshi",
+      "display_name": "Kalshi",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "KALSHI",
+          "mint": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "kalshi"
+        }
+      ]
+    },
+    {
+      "slug": "neuralink",
+      "display_name": "Neuralink",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "NEURALINK",
+          "mint": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "neuralink"
+        }
+      ]
+    },
+    {
+      "slug": "openai",
+      "display_name": "OpenAI",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "OPENAI",
+          "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "openai"
+        }
+      ]
+    },
+    {
+      "slug": "polymarket",
+      "display_name": "Polymarket",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "POLYMARKET",
+          "mint": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "polymarket"
+        }
+      ]
+    },
+    {
+      "slug": "spacex",
+      "display_name": "SpaceX",
+      "listing_status": "private",
+      "instruments": [
+        {
+          "source": "provider_assets",
+          "provider": "prestocks",
+          "provider_asset_id": "SPACEX",
+          "mint": "PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh",
+          "binding_basis": "provider_company_claim",
+          "provider_company_id": "spacex"
+        }
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "source": "xstocks_registry",
+      "ticker": "SPCX",
+      "reason": "not_offered"
+    },
+    {
+      "source": "xstocks_registry",
+      "ticker": "VCX",
+      "reason": "not_offered"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "benten.listed-company-display-names.v1",
+  "purpose": "Reviewed display names for US-listed companies whose name cannot be taken from the xStocks token name by the generator's rule (the token name without its ' xStock' suffix, when it carries no legal form and its words begin the SEC registrant name). Each row names the company as investors read it; the SEC registrant name stays in the map's evidence and is shown only as 'SEC registrant'.",
+  "decided_on": "2026-09-24",
+  "overrides": [
+    { "ticker": "AMAT", "display_name": "Applied Materials", "reason": "The token name carries the legal form ', Inc.'." },
+    { "ticker": "AMD", "display_name": "AMD", "reason": "The company's own short name, kept as the token names it; the SEC registrant is Advanced Micro Devices." },
+    { "ticker": "ARM", "display_name": "Arm", "reason": "The company writes its name Arm; the token writes ARM." },
+    { "ticker": "ASML", "display_name": "ASML", "reason": "The company's own short name, kept as the token names it." },
+    { "ticker": "DELL", "display_name": "Dell Technologies", "reason": "The token name carries the legal form ' Inc.'." },
+    { "ticker": "DIS", "display_name": "Walt Disney", "reason": "The token name begins with 'The'." },
+    { "ticker": "FWONK", "display_name": "Liberty Media", "reason": "Confirmed as the reading name of the tracking-stock issuer." },
+    { "ticker": "GE", "display_name": "GE Aerospace", "reason": "The company's current name; the SEC registrant is still General Electric." },
+    { "ticker": "GME", "display_name": "GameStop", "reason": "The company writes its name GameStop; the token writes Gamestop." },
+    { "ticker": "MARA", "display_name": "MARA", "reason": "The company's own short name, kept as the token names it." },
+    { "ticker": "MSTR", "display_name": "Strategy", "reason": "The company renamed itself from MicroStrategy (SEC former name, 2025-08-11); the token keeps the old name." },
+    { "ticker": "PEG", "display_name": "Public Service Enterprise Group", "reason": "The token name drops 'Group' from the registrant's name." },
+    { "ticker": "RTX", "display_name": "RTX", "reason": "The company's own name, kept as the token names it." },
+    { "ticker": "SLMT", "display_name": "Brera Holdings", "reason": "Not confirmed against the issuer; the SEC name Brera Holdings PLC without its legal form, because the token name Brera does not match it." },
+    { "ticker": "SMCI", "display_name": "Super Micro Computer", "reason": "The token name carries the legal form ', Inc.'." },
+    { "ticker": "TSM", "display_name": "TSMC", "reason": "The company's own short name, kept as the token names it; the SEC registrant is Taiwan Semiconductor Manufacturing." },
+    { "ticker": "XOM", "display_name": "ExxonMobil", "reason": "The listed issuer is ExxonMobil Holdings Corporation since the 2026-07-01 redomiciliation; the token keeps Exxon Mobil." }
+  ]
+}

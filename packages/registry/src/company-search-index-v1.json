@@ -1,0 +1,1731 @@
+{
+  "schema_version": "benten.company-search-index.v1",
+  "entries": [
+    {
+      "slug": "3m",
+      "ticker": "MMM",
+      "names": [
+        "3M",
+        "3M CO"
+      ],
+      "symbols": [
+        "MMMx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "BDWAP",
+      "names": [
+        "Budweiser Brewing Co APAC xStock"
+      ],
+      "symbols": [
+        "BDWAPx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "BITX",
+      "names": [
+        "Volatility Shares 2x Bitcoin Strategy xStock"
+      ],
+      "symbols": [
+        "BITXx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "CHONG",
+      "names": [
+        "China Hongqiao xStock"
+      ],
+      "symbols": [
+        "CHONGx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "CLONP",
+      "names": [
+        "China Longyuan Power xStock"
+      ],
+      "symbols": [
+        "CLONPx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "CLPHD",
+      "names": [
+        "CLP xStock"
+      ],
+      "symbols": [
+        "CLPHDx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "COPX",
+      "names": [
+        "Global X Copper Miners xStock"
+      ],
+      "symbols": [
+        "COPXx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "CPETC",
+      "names": [
+        "China Petroleum & Chemical xStock"
+      ],
+      "symbols": [
+        "CPETCx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "FEZ",
+      "names": [
+        "SPDR EURO STOXX 50 xStock"
+      ],
+      "symbols": [
+        "FEZx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "FSML",
+      "names": [
+        "Franklin Small Cap Enhanced xStock"
+      ],
+      "symbols": [
+        "FSMLx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "GLD",
+      "names": [
+        "Gold xStock"
+      ],
+      "symbols": [
+        "GLDx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "IWM",
+      "names": [
+        "Russell 2000 xStock"
+      ],
+      "symbols": [
+        "IWMx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "PPLT",
+      "names": [
+        "abrdn Physical Platinum Shares xStock"
+      ],
+      "symbols": [
+        "PPLTx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "QQQ",
+      "names": [
+        "Nasdaq xStock"
+      ],
+      "symbols": [
+        "QQQx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "SLV",
+      "names": [
+        "iShares Silver Trust xStock"
+      ],
+      "symbols": [
+        "SLVx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "SNBIO",
+      "names": [
+        "Sino Biopharmaceutical xStock"
+      ],
+      "symbols": [
+        "SNBIOx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "SPY",
+      "names": [
+        "SP500 xStock"
+      ],
+      "symbols": [
+        "SPYx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "STRC",
+      "names": [
+        "Strategy PP Variable xStock"
+      ],
+      "symbols": [
+        "STRCx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "SUOPT",
+      "names": [
+        "Sunny Optical Technology Group xStock"
+      ],
+      "symbols": [
+        "SUOPTx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "TQQQ",
+      "names": [
+        "TQQQ xStock"
+      ],
+      "symbols": [
+        "TQQQx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "VOO",
+      "names": [
+        "Vanguard S&P 500 xStock"
+      ],
+      "symbols": [
+        "VOOx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "VTI",
+      "names": [
+        "Vanguard xStock"
+      ],
+      "symbols": [
+        "VTIx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "VXUS",
+      "names": [
+        "Vanguard Total International Stock ETF xStock"
+      ],
+      "symbols": [
+        "VXUSx"
+      ]
+    },
+    {
+      "slug": null,
+      "ticker": "WRFHD",
+      "names": [
+        "The Wharf Holdings xStock"
+      ],
+      "symbols": [
+        "WRFHDx"
+      ]
+    },
+    {
+      "slug": "abbott-laboratories",
+      "ticker": "ABT",
+      "names": [
+        "Abbott",
+        "ABBOTT LABORATORIES"
+      ],
+      "symbols": [
+        "ABTx"
+      ]
+    },
+    {
+      "slug": "accenture",
+      "ticker": "ACN",
+      "names": [
+        "Accenture",
+        "Accenture plc"
+      ],
+      "symbols": [
+        "ACNx"
+      ]
+    },
+    {
+      "slug": "adobe",
+      "ticker": "ADBE",
+      "names": [
+        "Adobe",
+        "ADOBE INC."
+      ],
+      "symbols": [
+        "ADBEx"
+      ]
+    },
+    {
+      "slug": "advanced-energy-industries",
+      "ticker": "AEIS",
+      "names": [
+        "Advanced Energy Industries",
+        "ADVANCED ENERGY INDUSTRIES, INC."
+      ],
+      "symbols": [
+        "AEISx"
+      ]
+    },
+    {
+      "slug": "advanced-micro-devices",
+      "ticker": "AMD",
+      "names": [
+        "AMD",
+        "ADVANCED MICRO DEVICES INC"
+      ],
+      "symbols": [
+        "AMDx"
+      ]
+    },
+    {
+      "slug": "affirm-holdings",
+      "ticker": "AFRM",
+      "names": [
+        "Affirm",
+        "Affirm Holdings, Inc."
+      ],
+      "symbols": [
+        "AFRMx"
+      ]
+    },
+    {
+      "slug": "airbnb",
+      "ticker": "ABNB",
+      "names": [
+        "Airbnb",
+        "Airbnb, Inc."
+      ],
+      "symbols": [
+        "ABNBx"
+      ]
+    },
+    {
+      "slug": "ally-financial",
+      "ticker": "ALLY",
+      "names": [
+        "Ally Financial",
+        "Ally Financial Inc."
+      ],
+      "symbols": [
+        "ALLYx"
+      ]
+    },
+    {
+      "slug": "alphabet",
+      "ticker": "GOOGL",
+      "names": [
+        "Alphabet",
+        "Alphabet Inc."
+      ],
+      "symbols": [
+        "GOOGLx"
+      ]
+    },
+    {
+      "slug": "amazon-com",
+      "ticker": "AMZN",
+      "names": [
+        "Amazon",
+        "AMAZON COM INC"
+      ],
+      "symbols": [
+        "AMZNx"
+      ]
+    },
+    {
+      "slug": "american-tower",
+      "ticker": "AMT",
+      "names": [
+        "American Tower",
+        "AMERICAN TOWER CORP /MA/"
+      ],
+      "symbols": [
+        "AMTx"
+      ]
+    },
+    {
+      "slug": "amgen",
+      "ticker": "AMGN",
+      "names": [
+        "Amgen",
+        "Amgen Inc."
+      ],
+      "symbols": [
+        "AMGNx"
+      ]
+    },
+    {
+      "slug": "analog-devices",
+      "ticker": "ADI",
+      "names": [
+        "Analog Devices",
+        "ANALOG DEVICES INC"
+      ],
+      "symbols": [
+        "ADIx"
+      ]
+    },
+    {
+      "slug": "anduril",
+      "ticker": null,
+      "names": [
+        "Anduril"
+      ],
+      "symbols": [
+        "ANDURIL"
+      ]
+    },
+    {
+      "slug": "anthropic",
+      "ticker": null,
+      "names": [
+        "Anthropic"
+      ],
+      "symbols": [
+        "ANTHROPIC"
+      ]
+    },
+    {
+      "slug": "applied-materials",
+      "ticker": "AMAT",
+      "names": [
+        "Applied Materials",
+        "APPLIED MATERIALS INC /DE"
+      ],
+      "symbols": [
+        "AMATx"
+      ]
+    },
+    {
+      "slug": "aramark",
+      "ticker": "ARMK",
+      "names": [
+        "Aramark"
+      ],
+      "symbols": [
+        "ARMKx"
+      ]
+    },
+    {
+      "slug": "arm-holdings",
+      "ticker": "ARM",
+      "names": [
+        "Arm",
+        "ARM HOLDINGS PLC /UK"
+      ],
+      "symbols": [
+        "ARMx"
+      ]
+    },
+    {
+      "slug": "asml-holding",
+      "ticker": "ASML",
+      "names": [
+        "ASML",
+        "ASML HOLDING NV"
+      ],
+      "symbols": [
+        "ASMLx"
+      ]
+    },
+    {
+      "slug": "astrazeneca",
+      "ticker": "AZN",
+      "names": [
+        "AstraZeneca",
+        "ASTRAZENECA PLC"
+      ],
+      "symbols": [
+        "AZNx"
+      ]
+    },
+    {
+      "slug": "aurora-innovation",
+      "ticker": "AUR",
+      "names": [
+        "Aurora Innovation",
+        "Aurora Innovation, Inc."
+      ],
+      "symbols": [
+        "AURx"
+      ]
+    },
+    {
+      "slug": "bank-of-america",
+      "ticker": "BAC",
+      "names": [
+        "Bank of America",
+        "BANK OF AMERICA CORP /DE/"
+      ],
+      "symbols": [
+        "BACx"
+      ]
+    },
+    {
+      "slug": "baxter-international",
+      "ticker": "BAX",
+      "names": [
+        "Baxter International",
+        "BAXTER INTERNATIONAL INC."
+      ],
+      "symbols": [
+        "BAXx"
+      ]
+    },
+    {
+      "slug": "berkshire-hathaway",
+      "ticker": "BRK.B",
+      "names": [
+        "Berkshire Hathaway",
+        "BERKSHIRE HATHAWAY INC"
+      ],
+      "symbols": [
+        "BRK.Bx"
+      ]
+    },
+    {
+      "slug": "blue-owl-capital",
+      "ticker": "OWL",
+      "names": [
+        "Blue Owl Capital",
+        "BLUE OWL CAPITAL INC."
+      ],
+      "symbols": [
+        "OWLx"
+      ]
+    },
+    {
+      "slug": "boeing",
+      "ticker": "BA",
+      "names": [
+        "Boeing",
+        "THE BOEING COMPANY"
+      ],
+      "symbols": [
+        "BAx"
+      ]
+    },
+    {
+      "slug": "brera-holdings",
+      "ticker": "SLMT",
+      "names": [
+        "Brera Holdings",
+        "Brera Holdings PLC"
+      ],
+      "symbols": [
+        "SLMTx"
+      ]
+    },
+    {
+      "slug": "broadcom",
+      "ticker": "AVGO",
+      "names": [
+        "Broadcom",
+        "Broadcom Inc."
+      ],
+      "symbols": [
+        "AVGOx"
+      ]
+    },
+    {
+      "slug": "camden-property-trust",
+      "ticker": "CPT",
+      "names": [
+        "Camden Property Trust",
+        "CAMDEN PROPERTY TRUST"
+      ],
+      "symbols": [
+        "CPTx"
+      ]
+    },
+    {
+      "slug": "caterpillar",
+      "ticker": "CAT",
+      "names": [
+        "Caterpillar",
+        "CATERPILLAR INC"
+      ],
+      "symbols": [
+        "CATx"
+      ]
+    },
+    {
+      "slug": "chevron",
+      "ticker": "CVX",
+      "names": [
+        "Chevron",
+        "Chevron Corp"
+      ],
+      "symbols": [
+        "CVXx"
+      ]
+    },
+    {
+      "slug": "church-and-dwight",
+      "ticker": "CHD",
+      "names": [
+        "Church & Dwight",
+        "CHURCH & DWIGHT CO., INC."
+      ],
+      "symbols": [
+        "CHDx"
+      ]
+    },
+    {
+      "slug": "circle-internet-group",
+      "ticker": "CRCL",
+      "names": [
+        "Circle",
+        "CIRCLE INTERNET GROUP, INC."
+      ],
+      "symbols": [
+        "CRCLx"
+      ]
+    },
+    {
+      "slug": "cisco-systems",
+      "ticker": "CSCO",
+      "names": [
+        "Cisco",
+        "CISCO SYSTEMS, INC."
+      ],
+      "symbols": [
+        "CSCOx"
+      ]
+    },
+    {
+      "slug": "coca-cola",
+      "ticker": "KO",
+      "names": [
+        "Coca-Cola",
+        "COCA COLA CO"
+      ],
+      "symbols": [
+        "KOx"
+      ]
+    },
+    {
+      "slug": "coinbase-global",
+      "ticker": "COIN",
+      "names": [
+        "Coinbase",
+        "Coinbase Global, Inc."
+      ],
+      "symbols": [
+        "COINx"
+      ]
+    },
+    {
+      "slug": "comcast",
+      "ticker": "CMCSA",
+      "names": [
+        "Comcast",
+        "COMCAST CORPORATION"
+      ],
+      "symbols": [
+        "CMCSAx"
+      ]
+    },
+    {
+      "slug": "conocophillips",
+      "ticker": "COP",
+      "names": [
+        "ConocoPhillips"
+      ],
+      "symbols": [
+        "COPx"
+      ]
+    },
+    {
+      "slug": "constellation-brands",
+      "ticker": "STZ",
+      "names": [
+        "Constellation Brands",
+        "CONSTELLATION BRANDS, INC."
+      ],
+      "symbols": [
+        "STZx"
+      ]
+    },
+    {
+      "slug": "crowdstrike-holdings",
+      "ticker": "CRWD",
+      "names": [
+        "CrowdStrike",
+        "CrowdStrike Holdings, Inc."
+      ],
+      "symbols": [
+        "CRWDx"
+      ]
+    },
+    {
+      "slug": "deere",
+      "ticker": "DE",
+      "names": [
+        "Deere",
+        "DEERE & CO"
+      ],
+      "symbols": [
+        "DEx"
+      ]
+    },
+    {
+      "slug": "dell-technologies",
+      "ticker": "DELL",
+      "names": [
+        "Dell Technologies",
+        "Dell Technologies Inc."
+      ],
+      "symbols": [
+        "DELLx"
+      ]
+    },
+    {
+      "slug": "dexcom",
+      "ticker": "DXCM",
+      "names": [
+        "DexCom",
+        "DEXCOM, INC."
+      ],
+      "symbols": [
+        "DXCMx"
+      ]
+    },
+    {
+      "slug": "digitalocean-holdings",
+      "ticker": "DOCN",
+      "names": [
+        "DigitalOcean",
+        "DigitalOcean Holdings, Inc."
+      ],
+      "symbols": [
+        "DOCNx"
+      ]
+    },
+    {
+      "slug": "doordash",
+      "ticker": "DASH",
+      "names": [
+        "DoorDash",
+        "DOORDASH, INC."
+      ],
+      "symbols": [
+        "DASHx"
+      ]
+    },
+    {
+      "slug": "eli-lilly",
+      "ticker": "LLY",
+      "names": [
+        "Eli Lilly",
+        "ELI LILLY AND COMPANY"
+      ],
+      "symbols": [
+        "LLYx"
+      ]
+    },
+    {
+      "slug": "exxonmobil-holdings",
+      "ticker": "XOM",
+      "names": [
+        "ExxonMobil",
+        "ExxonMobil Holdings Corp"
+      ],
+      "symbols": [
+        "XOMx"
+      ]
+    },
+    {
+      "slug": "figure-ai",
+      "ticker": null,
+      "names": [
+        "Figure AI"
+      ],
+      "symbols": [
+        "FIGUREAI"
+      ]
+    },
+    {
+      "slug": "five-below",
+      "ticker": "FIVE",
+      "names": [
+        "Five Below",
+        "Five Below, Inc."
+      ],
+      "symbols": [
+        "FIVEx"
+      ]
+    },
+    {
+      "slug": "ford-motor",
+      "ticker": "F",
+      "names": [
+        "Ford Motor",
+        "Ford Motor Co"
+      ],
+      "symbols": [
+        "Fx"
+      ]
+    },
+    {
+      "slug": "gamestop",
+      "ticker": "GME",
+      "names": [
+        "GameStop",
+        "GameStop Corp."
+      ],
+      "symbols": [
+        "GMEx"
+      ]
+    },
+    {
+      "slug": "general-electric",
+      "ticker": "GE",
+      "names": [
+        "GE Aerospace",
+        "GENERAL ELECTRIC CO"
+      ],
+      "symbols": [
+        "GEx"
+      ]
+    },
+    {
+      "slug": "general-motors",
+      "ticker": "GM",
+      "names": [
+        "General Motors",
+        "GENERAL MOTORS COMPANY"
+      ],
+      "symbols": [
+        "GMx"
+      ]
+    },
+    {
+      "slug": "gilead-sciences",
+      "ticker": "GILD",
+      "names": [
+        "Gilead Sciences",
+        "GILEAD SCIENCES, INC."
+      ],
+      "symbols": [
+        "GILDx"
+      ]
+    },
+    {
+      "slug": "goldman-sachs-group",
+      "ticker": "GS",
+      "names": [
+        "Goldman Sachs",
+        "The Goldman Sachs Group, Inc."
+      ],
+      "symbols": [
+        "GSx"
+      ]
+    },
+    {
+      "slug": "home-depot",
+      "ticker": "HD",
+      "names": [
+        "Home Depot",
+        "The Home Depot, Inc."
+      ],
+      "symbols": [
+        "HDx"
+      ]
+    },
+    {
+      "slug": "honeywell-international",
+      "ticker": "HON",
+      "names": [
+        "Honeywell",
+        "Honeywell International Inc"
+      ],
+      "symbols": [
+        "HONx"
+      ]
+    },
+    {
+      "slug": "howmet-aerospace",
+      "ticker": "HWM",
+      "names": [
+        "Howmet Aerospace",
+        "HOWMET AEROSPACE INC."
+      ],
+      "symbols": [
+        "HWMx"
+      ]
+    },
+    {
+      "slug": "intel",
+      "ticker": "INTC",
+      "names": [
+        "Intel",
+        "INTEL CORP"
+      ],
+      "symbols": [
+        "INTCx"
+      ]
+    },
+    {
+      "slug": "international-business-machines",
+      "ticker": "IBM",
+      "names": [
+        "International Business Machines",
+        "INTERNATIONAL BUSINESS MACHINES CORP"
+      ],
+      "symbols": [
+        "IBMx"
+      ]
+    },
+    {
+      "slug": "intuit",
+      "ticker": "INTU",
+      "names": [
+        "Intuit",
+        "INTUIT INC."
+      ],
+      "symbols": [
+        "INTUx"
+      ]
+    },
+    {
+      "slug": "intuitive-surgical",
+      "ticker": "ISRG",
+      "names": [
+        "Intuitive Surgical",
+        "Intuitive Surgical, Inc."
+      ],
+      "symbols": [
+        "ISRGx"
+      ]
+    },
+    {
+      "slug": "invesco",
+      "ticker": "IVZ",
+      "names": [
+        "Invesco",
+        "Invesco Ltd."
+      ],
+      "symbols": [
+        "IVZx"
+      ]
+    },
+    {
+      "slug": "johnson-and-johnson",
+      "ticker": "JNJ",
+      "names": [
+        "Johnson & Johnson"
+      ],
+      "symbols": [
+        "JNJx"
+      ]
+    },
+    {
+      "slug": "jpmorgan-chase",
+      "ticker": "JPM",
+      "names": [
+        "JPMorgan Chase",
+        "JPMORGAN CHASE & CO"
+      ],
+      "symbols": [
+        "JPMx"
+      ]
+    },
+    {
+      "slug": "kalshi",
+      "ticker": null,
+      "names": [
+        "Kalshi"
+      ],
+      "symbols": [
+        "KALSHI"
+      ]
+    },
+    {
+      "slug": "kimberly-clark",
+      "ticker": "KMB",
+      "names": [
+        "Kimberly-Clark",
+        "KIMBERLY-CLARK CORPORATION"
+      ],
+      "symbols": [
+        "KMBx"
+      ]
+    },
+    {
+      "slug": "liberty-media",
+      "ticker": "FWONK",
+      "names": [
+        "Liberty Media",
+        "LIBERTY MEDIA CORPORATION"
+      ],
+      "symbols": [
+        "FWONKx"
+      ]
+    },
+    {
+      "slug": "linde",
+      "ticker": "LIN",
+      "names": [
+        "Linde",
+        "Linde plc"
+      ],
+      "symbols": [
+        "LINx"
+      ]
+    },
+    {
+      "slug": "lockheed-martin",
+      "ticker": "LMT",
+      "names": [
+        "Lockheed Martin",
+        "LOCKHEED MARTIN CORPORATION"
+      ],
+      "symbols": [
+        "LMTx"
+      ]
+    },
+    {
+      "slug": "lowes-companies",
+      "ticker": "LOW",
+      "names": [
+        "Lowe's Companies",
+        "LOWES COMPANIES INC"
+      ],
+      "symbols": [
+        "LOWx"
+      ]
+    },
+    {
+      "slug": "mara-holdings",
+      "ticker": "MARA",
+      "names": [
+        "MARA",
+        "MARA HOLDINGS, INC."
+      ],
+      "symbols": [
+        "MARAx"
+      ]
+    },
+    {
+      "slug": "martin-marietta-materials",
+      "ticker": "MLM",
+      "names": [
+        "Martin Marietta Materials",
+        "MARTIN MARIETTA MATERIALS INC"
+      ],
+      "symbols": [
+        "MLMx"
+      ]
+    },
+    {
+      "slug": "mastercard",
+      "ticker": "MA",
+      "names": [
+        "Mastercard",
+        "Mastercard Incorporated"
+      ],
+      "symbols": [
+        "MAx"
+      ]
+    },
+    {
+      "slug": "mcdonalds",
+      "ticker": "MCD",
+      "names": [
+        "McDonald's",
+        "McDONALD'S CORPORATION"
+      ],
+      "symbols": [
+        "MCDx"
+      ]
+    },
+    {
+      "slug": "medtronic",
+      "ticker": "MDT",
+      "names": [
+        "Medtronic",
+        "Medtronic plc"
+      ],
+      "symbols": [
+        "MDTx"
+      ]
+    },
+    {
+      "slug": "merck",
+      "ticker": "MRK",
+      "names": [
+        "Merck",
+        "Merck & Co., Inc."
+      ],
+      "symbols": [
+        "MRKx"
+      ]
+    },
+    {
+      "slug": "meta-platforms",
+      "ticker": "META",
+      "names": [
+        "Meta",
+        "Meta Platforms, Inc."
+      ],
+      "symbols": [
+        "METAx"
+      ]
+    },
+    {
+      "slug": "micron-technology",
+      "ticker": "MU",
+      "names": [
+        "Micron Technology",
+        "Micron Technology, Inc."
+      ],
+      "symbols": [
+        "MUx"
+      ]
+    },
+    {
+      "slug": "microsoft",
+      "ticker": "MSFT",
+      "names": [
+        "Microsoft",
+        "MICROSOFT CORPORATION"
+      ],
+      "symbols": [
+        "MSFTx"
+      ]
+    },
+    {
+      "slug": "morgan-stanley",
+      "ticker": "MS",
+      "names": [
+        "Morgan Stanley",
+        "MORGAN STANLEY"
+      ],
+      "symbols": [
+        "MSx"
+      ]
+    },
+    {
+      "slug": "motorola-solutions",
+      "ticker": "MSI",
+      "names": [
+        "Motorola Solutions",
+        "Motorola Solutions, Inc."
+      ],
+      "symbols": [
+        "MSIx"
+      ]
+    },
+    {
+      "slug": "mueller-industries",
+      "ticker": "MLI",
+      "names": [
+        "Mueller Industries",
+        "MUELLER INDUSTRIES INC"
+      ],
+      "symbols": [
+        "MLIx"
+      ]
+    },
+    {
+      "slug": "netflix",
+      "ticker": "NFLX",
+      "names": [
+        "Netflix",
+        "NETFLIX INC"
+      ],
+      "symbols": [
+        "NFLXx"
+      ]
+    },
+    {
+      "slug": "neuralink",
+      "ticker": null,
+      "names": [
+        "Neuralink"
+      ],
+      "symbols": [
+        "NEURALINK"
+      ]
+    },
+    {
+      "slug": "nike",
+      "ticker": "NKE",
+      "names": [
+        "Nike",
+        "NIKE, Inc."
+      ],
+      "symbols": [
+        "NKEx"
+      ]
+    },
+    {
+      "slug": "novo-nordisk",
+      "ticker": "NVO",
+      "names": [
+        "Novo Nordisk",
+        "NOVO NORDISK A/S"
+      ],
+      "symbols": [
+        "NVOx"
+      ]
+    },
+    {
+      "slug": "nvidia",
+      "ticker": "NVDA",
+      "names": [
+        "NVIDIA",
+        "NVIDIA CORP"
+      ],
+      "symbols": [
+        "NVDAx"
+      ]
+    },
+    {
+      "slug": "onto-innovation",
+      "ticker": "ONTO",
+      "names": [
+        "Onto Innovation",
+        "ONTO INNOVATION INC."
+      ],
+      "symbols": [
+        "ONTOx"
+      ]
+    },
+    {
+      "slug": "openai",
+      "ticker": null,
+      "names": [
+        "OpenAI"
+      ],
+      "symbols": [
+        "OPENAI"
+      ]
+    },
+    {
+      "slug": "oracle",
+      "ticker": "ORCL",
+      "names": [
+        "Oracle",
+        "Oracle Corporation"
+      ],
+      "symbols": [
+        "ORCLx"
+      ]
+    },
+    {
+      "slug": "packaging-corp-of-america",
+      "ticker": "PKG",
+      "names": [
+        "Packaging Corp of America",
+        "PACKAGING CORP OF AMERICA"
+      ],
+      "symbols": [
+        "PKGx"
+      ]
+    },
+    {
+      "slug": "palantir-technologies",
+      "ticker": "PLTR",
+      "names": [
+        "Palantir",
+        "Palantir Technologies Inc."
+      ],
+      "symbols": [
+        "PLTRx"
+      ]
+    },
+    {
+      "slug": "paypal-holdings",
+      "ticker": "PYPL",
+      "names": [
+        "PayPal",
+        "PayPal Holdings, Inc."
+      ],
+      "symbols": [
+        "PYPLx"
+      ]
+    },
+    {
+      "slug": "penske-automotive-group",
+      "ticker": "PAG",
+      "names": [
+        "Penske Automotive",
+        "Penske Automotive Group, Inc."
+      ],
+      "symbols": [
+        "PAGx"
+      ]
+    },
+    {
+      "slug": "pepsico",
+      "ticker": "PEP",
+      "names": [
+        "PepsiCo",
+        "PepsiCo, Inc."
+      ],
+      "symbols": [
+        "PEPx"
+      ]
+    },
+    {
+      "slug": "pfizer",
+      "ticker": "PFE",
+      "names": [
+        "Pfizer",
+        "PFIZER INC"
+      ],
+      "symbols": [
+        "PFEx"
+      ]
+    },
+    {
+      "slug": "pg-and-e",
+      "ticker": "PCG",
+      "names": [
+        "PG&E",
+        "PG&E CORP"
+      ],
+      "symbols": [
+        "PCGx"
+      ]
+    },
+    {
+      "slug": "philip-morris-international",
+      "ticker": "PM",
+      "names": [
+        "Philip Morris",
+        "Philip Morris International Inc."
+      ],
+      "symbols": [
+        "PMx"
+      ]
+    },
+    {
+      "slug": "polymarket",
+      "ticker": null,
+      "names": [
+        "Polymarket"
+      ],
+      "symbols": [
+        "POLYMARKET"
+      ]
+    },
+    {
+      "slug": "principal-financial-group",
+      "ticker": "PFG",
+      "names": [
+        "Principal Financial",
+        "PRINCIPAL FINANCIAL GROUP, INC"
+      ],
+      "symbols": [
+        "PFGx"
+      ]
+    },
+    {
+      "slug": "procter-and-gamble",
+      "ticker": "PG",
+      "names": [
+        "Procter & Gamble",
+        "The Procter & Gamble Company"
+      ],
+      "symbols": [
+        "PGx"
+      ]
+    },
+    {
+      "slug": "progressive",
+      "ticker": "PGR",
+      "names": [
+        "Progressive",
+        "PROGRESSIVE CORP/OH/"
+      ],
+      "symbols": [
+        "PGRx"
+      ]
+    },
+    {
+      "slug": "public-service-enterprise-group",
+      "ticker": "PEG",
+      "names": [
+        "Public Service Enterprise Group",
+        "Public Service Enterprise Group Incorporated"
+      ],
+      "symbols": [
+        "PEGx"
+      ]
+    },
+    {
+      "slug": "qualcomm",
+      "ticker": "QCOM",
+      "names": [
+        "Qualcomm",
+        "QUALCOMM INC/DE"
+      ],
+      "symbols": [
+        "QCOMx"
+      ]
+    },
+    {
+      "slug": "reinsurance-group-of-america",
+      "ticker": "RGA",
+      "names": [
+        "Reinsurance Group of America",
+        "REINSURANCE GROUP OF AMERICA, INCORPORATED"
+      ],
+      "symbols": [
+        "RGAx"
+      ]
+    },
+    {
+      "slug": "riot-platforms",
+      "ticker": "RIOT",
+      "names": [
+        "Riot Platforms",
+        "RIOT PLATFORMS, INC."
+      ],
+      "symbols": [
+        "RIOTx"
+      ]
+    },
+    {
+      "slug": "rivian-automotive",
+      "ticker": "RIVN",
+      "names": [
+        "Rivian Automotive",
+        "Rivian Automotive, Inc. / DE"
+      ],
+      "symbols": [
+        "RIVNx"
+      ]
+    },
+    {
+      "slug": "robinhood-markets",
+      "ticker": "HOOD",
+      "names": [
+        "Robinhood",
+        "Robinhood Markets, Inc."
+      ],
+      "symbols": [
+        "HOODx"
+      ]
+    },
+    {
+      "slug": "roblox",
+      "ticker": "RBLX",
+      "names": [
+        "Roblox",
+        "Roblox Corporation"
+      ],
+      "symbols": [
+        "RBLXx"
+      ]
+    },
+    {
+      "slug": "rtx",
+      "ticker": "RTX",
+      "names": [
+        "RTX",
+        "RTX CORPORATION"
+      ],
+      "symbols": [
+        "RTXx"
+      ]
+    },
+    {
+      "slug": "salesforce",
+      "ticker": "CRM",
+      "names": [
+        "Salesforce",
+        "Salesforce, Inc."
+      ],
+      "symbols": [
+        "CRMx"
+      ]
+    },
+    {
+      "slug": "sba-communications",
+      "ticker": "SBAC",
+      "names": [
+        "SBA Communications",
+        "SBA COMMUNICATIONS CORPORATION"
+      ],
+      "symbols": [
+        "SBACx"
+      ]
+    },
+    {
+      "slug": "servicenow",
+      "ticker": "NOW",
+      "names": [
+        "ServiceNow",
+        "ServiceNow, Inc."
+      ],
+      "symbols": [
+        "NOWx"
+      ]
+    },
+    {
+      "slug": "snowflake",
+      "ticker": "SNOW",
+      "names": [
+        "Snowflake",
+        "SNOWFLAKE INC."
+      ],
+      "symbols": [
+        "SNOWx"
+      ]
+    },
+    {
+      "slug": "spacex",
+      "ticker": null,
+      "names": [
+        "SpaceX"
+      ],
+      "symbols": [
+        "SPACEX"
+      ]
+    },
+    {
+      "slug": "starbucks",
+      "ticker": "SBUX",
+      "names": [
+        "Starbucks",
+        "Starbucks Corporation"
+      ],
+      "symbols": [
+        "SBUXx"
+      ]
+    },
+    {
+      "slug": "strategy",
+      "ticker": "MSTR",
+      "names": [
+        "Strategy",
+        "STRATEGY INC"
+      ],
+      "symbols": [
+        "MSTRx"
+      ]
+    },
+    {
+      "slug": "super-micro-computer",
+      "ticker": "SMCI",
+      "names": [
+        "Super Micro Computer",
+        "Super Micro Computer, Inc."
+      ],
+      "symbols": [
+        "SMCIx"
+      ]
+    },
+    {
+      "slug": "taiwan-semiconductor-manufacturing",
+      "ticker": "TSM",
+      "names": [
+        "TSMC",
+        "Taiwan Semiconductor Manufacturing Company Limited"
+      ],
+      "symbols": [
+        "TSMx"
+      ]
+    },
+    {
+      "slug": "tesla",
+      "ticker": "TSLA",
+      "names": [
+        "Tesla",
+        "Tesla, Inc."
+      ],
+      "symbols": [
+        "TSLAx"
+      ]
+    },
+    {
+      "slug": "texas-instruments",
+      "ticker": "TXN",
+      "names": [
+        "Texas Instruments",
+        "TEXAS INSTRUMENTS INCORPORATED"
+      ],
+      "symbols": [
+        "TXNx"
+      ]
+    },
+    {
+      "slug": "texas-roadhouse",
+      "ticker": "TXRH",
+      "names": [
+        "Texas Roadhouse",
+        "Texas Roadhouse, Inc."
+      ],
+      "symbols": [
+        "TXRHx"
+      ]
+    },
+    {
+      "slug": "textron",
+      "ticker": "TXT",
+      "names": [
+        "Textron",
+        "Textron Inc."
+      ],
+      "symbols": [
+        "TXTx"
+      ]
+    },
+    {
+      "slug": "thermo-fisher-scientific",
+      "ticker": "TMO",
+      "names": [
+        "Thermo Fisher",
+        "THERMO FISHER SCIENTIFIC INC."
+      ],
+      "symbols": [
+        "TMOx"
+      ]
+    },
+    {
+      "slug": "tjx-companies",
+      "ticker": "TJX",
+      "names": [
+        "TJX Companies",
+        "The TJX Companies, Inc."
+      ],
+      "symbols": [
+        "TJXx"
+      ]
+    },
+    {
+      "slug": "trump-media-and-technology-group",
+      "ticker": "DJT",
+      "names": [
+        "Trump Media & Technology Group",
+        "Trump Media & Technology Group Corp."
+      ],
+      "symbols": [
+        "DJTx"
+      ]
+    },
+    {
+      "slug": "uber-technologies",
+      "ticker": "UBER",
+      "names": [
+        "Uber",
+        "Uber Technologies, Inc"
+      ],
+      "symbols": [
+        "UBERx"
+      ]
+    },
+    {
+      "slug": "union-pacific",
+      "ticker": "UNP",
+      "names": [
+        "Union Pacific",
+        "UNION PACIFIC CORP"
+      ],
+      "symbols": [
+        "UNPx"
+      ]
+    },
+    {
+      "slug": "unitedhealth-group",
+      "ticker": "UNH",
+      "names": [
+        "UnitedHealth",
+        "UnitedHealth Group Incorporated"
+      ],
+      "symbols": [
+        "UNHx"
+      ]
+    },
+    {
+      "slug": "verizon-communications",
+      "ticker": "VZ",
+      "names": [
+        "Verizon Communications",
+        "VERIZON COMMUNICATIONS INC"
+      ],
+      "symbols": [
+        "VZx"
+      ]
+    },
+    {
+      "slug": "vertex-pharmaceuticals",
+      "ticker": "VRTX",
+      "names": [
+        "Vertex Pharmaceuticals",
+        "VERTEX PHARMACEUTICALS INC / MA"
+      ],
+      "symbols": [
+        "VRTXx"
+      ]
+    },
+    {
+      "slug": "visa",
+      "ticker": "V",
+      "names": [
+        "Visa",
+        "VISA INC."
+      ],
+      "symbols": [
+        "Vx"
+      ]
+    },
+    {
+      "slug": "walmart",
+      "ticker": "WMT",
+      "names": [
+        "Walmart",
+        "WALMART INC."
+      ],
+      "symbols": [
+        "WMTx"
+      ]
+    },
+    {
+      "slug": "walt-disney",
+      "ticker": "DIS",
+      "names": [
+        "Walt Disney",
+        "WALT DISNEY CO/"
+      ],
+      "symbols": [
+        "DISx"
+      ]
+    },
+    {
+      "slug": "wells-fargo",
+      "ticker": "WFC",
+      "names": [
+        "Wells Fargo",
+        "WELLS FARGO & COMPANY/MN"
+      ],
+      "symbols": [
+        "WFCx"
+      ]
+    }
+  ]
+}

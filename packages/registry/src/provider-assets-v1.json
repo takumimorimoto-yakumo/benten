@@ -1,0 +1,777 @@
+{
+  "schema_version": "provider-assets.v1",
+  "revision": "3069f69884b35cbbbb5a81ffa1601fd409de6f4bd95993254f2e963b24ecbb42",
+  "fetched_at": "2026-09-23T12:34:23Z",
+  "sources": [
+    {
+      "provider": "prestocks",
+      "source_url": "https://prestocks.com/api/prestocks",
+      "observed_at": "2026-09-23T12:34:23Z",
+      "response_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "schema_revision": "provider-assets-producer.v1",
+      "redistribution_status": "pending_terms_review"
+    }
+  ],
+  "entries": [
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "ANDURIL",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "ANDURIL",
+      "display_name": "Anduril PreStocks",
+      "mint_or_contract": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "anduril",
+        "company_name": "Anduril",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "ANDURIL is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "151.87236312",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "149.73620056116607",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "132471475478",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "11805.820587074",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/anduril",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "ANTHROPIC",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "ANTHROPIC",
+      "display_name": "Anthropic PreStocks",
+      "mint_or_contract": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "anthropic",
+        "company_name": "Anthropic",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "ANTHROPIC is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "1050.43155431",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "1027.570798327492",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "1683512708419",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "7381.826001601",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/anthropic",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "FIGUREAI",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "FIGUREAI",
+      "display_name": "Figure AI PreStocks",
+      "mint_or_contract": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "figureai",
+        "company_name": "Figure AI",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "FIGUREAI is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "181.48498874",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "175.20636296987558",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "38199714904",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "3012.857155916",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/figureai",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "KALSHI",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "KALSHI",
+      "display_name": "Kalshi PreStocks",
+      "mint_or_contract": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "kalshi",
+        "company_name": "Kalshi",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "KALSHI is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "885.45281388",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "865.2096950624799",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "31469452917",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "904.868345532",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/kalshi",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "NEURALINK",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "NEURALINK",
+      "display_name": "Neuralink PreStocks",
+      "mint_or_contract": "PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "neuralink",
+        "company_name": "Neuralink",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "NEURALINK is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "338.32944132",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "436.89361236581925",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "83226070316",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "2595.30414425",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/neuralink",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "OPENAI",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "OPENAI",
+      "display_name": "OpenAI PreStocks",
+      "mint_or_contract": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "openai",
+        "company_name": "OpenAI",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "OPENAI is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "1021.5693368239098",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "1265.792424633573",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "1568228585664",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "2826.3865844512234",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/openai",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "POLYMARKET",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "POLYMARKET",
+      "display_name": "Polymarket PreStocks",
+      "mint_or_contract": "Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "polymarket",
+        "company_name": "Polymarket",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "POLYMARKET is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "144.21628728",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "147.37649896368197",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "14535119727",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "4816.970106875",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/polymarket",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    },
+    {
+      "provider": "prestocks",
+      "provider_asset_id": "SPACEX",
+      "asset_kind": "prestock_provider_instrument",
+      "symbol": "SPACEX",
+      "display_name": "SpaceX PreStocks",
+      "mint_or_contract": "PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh",
+      "evidence_state": "candidate_unverified",
+      "company_binding": {
+        "company_id": "spacex",
+        "company_name": "SpaceX",
+        "binding_status": "provider_claim_only",
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ]
+      },
+      "rights": {
+        "status": "provider_claim_only",
+        "instrument_kind": "economic_exposure_instrument",
+        "equity_ownership": "unknown",
+        "voting_rights": "unknown",
+        "redemption_kind": "unknown",
+        "restrictions": [
+          "provider_terms_not_reviewed",
+          "no_public_source_verification"
+        ],
+        "evidence_refs": [
+          "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56"
+        ],
+        "provider_statement": "SPACEX is a PreStocks issued token backed 1:1 by SPV exposure that tracks the price of the underlying private company."
+      },
+      "references": [
+        {
+          "kind": "prestock_mark_reference",
+          "value": "153.73602072945394",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_token_reference",
+          "value": "112.496991575484",
+          "currency": null,
+          "provider_reported_as_of": null
+        },
+        {
+          "kind": "prestock_implied_valuation_reference",
+          "value": "1474960556212",
+          "currency": null,
+          "provider_reported_as_of": null
+        }
+      ],
+      "supply_reference": {
+        "value": "43712.532115040005",
+        "basis": "provider_reported_supply",
+        "provider_reported_as_of": null
+      },
+      "external_url": "https://www.prestocks.com/spacex",
+      "source_digest": "ad83042bcefcb74f5eb886dbe47b9baae7684cad83b9867269a332777b387d56",
+      "unknowns": [
+        {
+          "code": "source_as_of_unknown",
+          "blocks": [
+            "display",
+            "comparison"
+          ]
+        },
+        {
+          "code": "chain_identity_unknown",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "redistribution_pending",
+          "blocks": [
+            "release"
+          ]
+        },
+        {
+          "code": "currency_unknown",
+          "blocks": [
+            "comparison"
+          ]
+        },
+        {
+          "code": "rights_unknown",
+          "blocks": [
+            "comparison",
+            "release"
+          ]
+        }
+      ],
+      "not_quote": true,
+      "not_authorization": true
+    }
+  ]
+}

@@ -1,0 +1,2745 @@
+{
+  "schema_version": "benten.listed-company-map.v1",
+  "revision": 2,
+  "generated_at": "2026-09-24T11:25:50Z",
+  "generation": {
+    "method": "registry_ticker_sec_cik_entity_name",
+    "generator": "scripts/companies/build-listed-company-map.mjs",
+    "generated_by": "claude-opus-5.5",
+    "human_review": {
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    "verification": {
+      "method": "Independent re-check of every map row against SEC EDGAR: each row's CIK against the live company_tickers.json and the CIK's submissions record (which lists the ticker), and each source-verified facts record's CIK and 10-K accession against the same CIK's submissions filings. Names were compared, not used to bind.",
+      "checked_on": "2026-09-24",
+      "checked_by": "independent re-check, separate from the generator run",
+      "counts": {
+        "map_companies": 129,
+        "map_cik_matches_sec": 129,
+        "verified_facts_records": 107,
+        "verified_facts_cik_and_accession_match": 107
+      }
+    }
+  },
+  "bound_sources": {
+    "xstocks_registry_sha256": "27441e02a030c11ba408c0e8b475b939f5ee2c0acf1f51d2fa43509c5a26a296",
+    "sec_company_tickers_cache_sha256": "0cadb1f058f136b0d443e16d1beddaf792033890bd465993e593b09172b43f27",
+    "sec_companyfacts_cache_sha256": "9f58f96718ff2f7eee912ad6086660ec3753eb929bccc834eb98297d3e3c54dc",
+    "sec_submissions_cache_sha256": "b5de21c5b4ecfdfa82b3cb17adaf71fd23a44edaa54be19b07b6304d1079eb5e",
+    "display_names_sha256": "244d72e9a18ea841b9933d2f61678c0498ba1385677cb60d43938e1cc6be92f6"
+  },
+  "companies": [
+    {
+      "slug": "3m",
+      "display_name": "3M",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MMM",
+          "mint": "XsTEo8W2L8JprN57bmJgatDT84z57ReJYizr5f32BfP",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000066740",
+        "sec_registrant_name": "3M CO",
+        "sec_entity_name": "3M CO",
+        "sec_ticker_title": "3M CO",
+        "registry_token_name": "3M xStock"
+      }
+    },
+    {
+      "slug": "abbott-laboratories",
+      "display_name": "Abbott",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ABT",
+          "mint": "XsHtf5RpxsQ7jeJ9ivNewouZKJHbPxhPoEy6yYvULr7",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000001800",
+        "sec_registrant_name": "ABBOTT LABORATORIES",
+        "sec_entity_name": "ABBOTT LABORATORIES",
+        "sec_ticker_title": "ABBOTT LABORATORIES",
+        "registry_token_name": "Abbott xStock"
+      }
+    },
+    {
+      "slug": "accenture",
+      "display_name": "Accenture",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ACN",
+          "mint": "Xs5UJzmCRQ8DWZjskExdSQDnbE6iLkRu2jjrRAB1JSU",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001467373",
+        "sec_registrant_name": "Accenture plc",
+        "sec_entity_name": "Accenture plc",
+        "sec_ticker_title": "Accenture plc",
+        "registry_token_name": "Accenture xStock"
+      }
+    },
+    {
+      "slug": "adobe",
+      "display_name": "Adobe",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ADBE",
+          "mint": "XsDZMGEU8zadWFCkTtPBoPWYcUX3JHVmghnwf2Mve2q",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000796343",
+        "sec_registrant_name": "ADOBE INC.",
+        "sec_entity_name": "ADOBE INC.",
+        "sec_ticker_title": "ADOBE INC.",
+        "registry_token_name": "Adobe xStock"
+      }
+    },
+    {
+      "slug": "advanced-energy-industries",
+      "display_name": "Advanced Energy Industries",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AEIS",
+          "mint": "XsiXtK4niZXG2MFkDmgRcZskNYoetURTV9XhgRf1ESL",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000927003",
+        "sec_registrant_name": "ADVANCED ENERGY INDUSTRIES, INC.",
+        "sec_entity_name": "ADVANCED ENERGY INDUSTRIES, INC.",
+        "sec_ticker_title": "ADVANCED ENERGY INDUSTRIES INC",
+        "registry_token_name": "Advanced Energy Industries xStock"
+      }
+    },
+    {
+      "slug": "advanced-micro-devices",
+      "display_name": "AMD",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AMD",
+          "mint": "XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000002488",
+        "sec_registrant_name": "ADVANCED MICRO DEVICES INC",
+        "sec_entity_name": "ADVANCED MICRO DEVICES INC",
+        "sec_ticker_title": "ADVANCED MICRO DEVICES INC",
+        "registry_token_name": "AMD xStock"
+      }
+    },
+    {
+      "slug": "affirm-holdings",
+      "display_name": "Affirm",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AFRM",
+          "mint": "XsKfV36es7HHpJFKrDqaaXSFC1dwsrwLit4N67JH5LV",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001820953",
+        "sec_registrant_name": "Affirm Holdings, Inc.",
+        "sec_entity_name": "Affirm Holdings, Inc.",
+        "sec_ticker_title": "Affirm Holdings, Inc.",
+        "registry_token_name": "Affirm xStock"
+      }
+    },
+    {
+      "slug": "airbnb",
+      "display_name": "Airbnb",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ABNB",
+          "mint": "XscSc1zjbVizEnhCzzehJ9fzztm3WRKdn9pjmriKDuN",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001559720",
+        "sec_registrant_name": "Airbnb, Inc.",
+        "sec_entity_name": "Airbnb, Inc.",
+        "sec_ticker_title": "Airbnb, Inc.",
+        "registry_token_name": "Airbnb xStock"
+      }
+    },
+    {
+      "slug": "ally-financial",
+      "display_name": "Ally Financial",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ALLY",
+          "mint": "XsRifLZvp2XvCpPFQNK6XGTjHSL7sTZmmGyEs4NLAV2",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000040729",
+        "sec_registrant_name": "Ally Financial Inc.",
+        "sec_entity_name": "Ally Financial Inc.",
+        "sec_ticker_title": "Ally Financial Inc.",
+        "registry_token_name": "Ally Financial xStock"
+      }
+    },
+    {
+      "slug": "alphabet",
+      "display_name": "Alphabet",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "GOOGL",
+          "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001652044",
+        "sec_registrant_name": "Alphabet Inc.",
+        "sec_entity_name": "Alphabet Inc.",
+        "sec_ticker_title": "Alphabet Inc.",
+        "registry_token_name": "Alphabet xStock"
+      }
+    },
+    {
+      "slug": "amazon-com",
+      "display_name": "Amazon",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AMZN",
+          "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001018724",
+        "sec_registrant_name": "AMAZON COM INC",
+        "sec_entity_name": "AMAZON COM INC",
+        "sec_ticker_title": "AMAZON COM INC",
+        "registry_token_name": "Amazon xStock"
+      }
+    },
+    {
+      "slug": "american-tower",
+      "display_name": "American Tower",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AMT",
+          "mint": "XsvYPZkrDDg7259oDv5E76HSmeLWgHPgNEQ44KVbJJU",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001053507",
+        "sec_registrant_name": "AMERICAN TOWER CORP /MA/",
+        "sec_entity_name": "AMERICAN TOWER CORP /MA/",
+        "sec_ticker_title": "AMERICAN TOWER CORP /MA/",
+        "registry_token_name": "American Tower xStock"
+      }
+    },
+    {
+      "slug": "amgen",
+      "display_name": "Amgen",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AMGN",
+          "mint": "XsgKwBMbv8LDzEYRgbKtyqsub6QB56PQVzgTGbiGaNe",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000318154",
+        "sec_registrant_name": "Amgen Inc.",
+        "sec_entity_name": "Amgen Inc.",
+        "sec_ticker_title": "AMGEN INC",
+        "registry_token_name": "Amgen xStock"
+      }
+    },
+    {
+      "slug": "analog-devices",
+      "display_name": "Analog Devices",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ADI",
+          "mint": "Xs3CytsvJshAYy1TQjq2o2yVWCyEGinNpvkB6f3Qs31",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000006281",
+        "sec_registrant_name": "ANALOG DEVICES INC",
+        "sec_entity_name": "ANALOG DEVICES INC",
+        "sec_ticker_title": "ANALOG DEVICES INC",
+        "registry_token_name": "Analog Devices xStock"
+      }
+    },
+    {
+      "slug": "applied-materials",
+      "display_name": "Applied Materials",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AMAT",
+          "mint": "XsQZdaWUAGC4R3fgD2N1fupKvJfJq6YM51ccnsLUWFA",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000006951",
+        "sec_registrant_name": "APPLIED MATERIALS INC /DE",
+        "sec_entity_name": "APPLIED MATERIALS INC /DE",
+        "sec_ticker_title": "APPLIED MATERIALS INC /DE",
+        "registry_token_name": "Applied Materials, Inc. xStock"
+      }
+    },
+    {
+      "slug": "aramark",
+      "display_name": "Aramark",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ARMK",
+          "mint": "XsVhUJLbtEhVSPHFcyjZYYXJqmK8j8kfD553wZ8of6W",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001584509",
+        "sec_registrant_name": "Aramark",
+        "sec_entity_name": "Aramark",
+        "sec_ticker_title": "Aramark",
+        "registry_token_name": "Aramark xStock"
+      }
+    },
+    {
+      "slug": "arm-holdings",
+      "display_name": "Arm",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ARM",
+          "mint": "XswUFSYE5CWsZM3X3yo6e2pZvxcAzx912DonGvgUFka",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001973239",
+        "sec_registrant_name": "ARM HOLDINGS PLC /UK",
+        "sec_entity_name": "ARM HOLDINGS PLC /UK",
+        "sec_ticker_title": "ARM HOLDINGS PLC /UK",
+        "registry_token_name": "ARM xStock"
+      }
+    },
+    {
+      "slug": "asml-holding",
+      "display_name": "ASML",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ASML",
+          "mint": "XshuHQ6o6SVpUNawvnnTMxsZ4tacZsNgVCLorv7TkFq",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000937966",
+        "sec_registrant_name": "ASML HOLDING NV",
+        "sec_entity_name": "ASML HOLDING NV",
+        "sec_ticker_title": "ASML HOLDING NV",
+        "registry_token_name": "ASML xStock"
+      }
+    },
+    {
+      "slug": "astrazeneca",
+      "display_name": "AstraZeneca",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AZN",
+          "mint": "Xs3ZFkPYT2BN7qBMqf1j1bfTeTm1rFzEFSsQ1z3wAKU",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000901832",
+        "sec_registrant_name": "ASTRAZENECA PLC",
+        "sec_entity_name": "ASTRAZENECA PLC",
+        "sec_ticker_title": "ASTRAZENECA PLC",
+        "registry_token_name": "AstraZeneca xStock"
+      }
+    },
+    {
+      "slug": "aurora-innovation",
+      "display_name": "Aurora Innovation",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AUR",
+          "mint": "Xs7x2HYEazWDXpYQYPBiRYh6o2AbkYrdrFwaBfBxyaU",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001828108",
+        "sec_registrant_name": "Aurora Innovation, Inc.",
+        "sec_entity_name": "Aurora Innovation, Inc.",
+        "sec_ticker_title": "Aurora Innovation, Inc.",
+        "registry_token_name": "Aurora Innovation xStock"
+      }
+    },
+    {
+      "slug": "bank-of-america",
+      "display_name": "Bank of America",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "BAC",
+          "mint": "XswsQk4duEQmCbGzfqUUWYmi7pV7xpJ9eEmLHXCaEQP",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000070858",
+        "sec_registrant_name": "BANK OF AMERICA CORP /DE/",
+        "sec_entity_name": "BofA Finance LLC",
+        "sec_ticker_title": "BANK OF AMERICA CORP /DE/",
+        "registry_token_name": "Bank of America xStock"
+      }
+    },
+    {
+      "slug": "baxter-international",
+      "display_name": "Baxter International",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "BAX",
+          "mint": "XsFo6dYyRQwVtxbfdGs3zwyyQ1QBkh8D4ANjWXN3zTo",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000010456",
+        "sec_registrant_name": "BAXTER INTERNATIONAL INC.",
+        "sec_entity_name": "BAXTER INTERNATIONAL INC.",
+        "sec_ticker_title": "BAXTER INTERNATIONAL INC",
+        "registry_token_name": "Baxter International xStock"
+      }
+    },
+    {
+      "slug": "berkshire-hathaway",
+      "display_name": "Berkshire Hathaway",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "BRK.B",
+          "mint": "Xs6B6zawENwAbWVi7w92rjazLuAr5Az59qgWKcNb45x",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001067983",
+        "sec_registrant_name": "BERKSHIRE HATHAWAY INC",
+        "sec_entity_name": "BERKSHIRE HATHAWAY INC",
+        "sec_ticker_title": "BERKSHIRE HATHAWAY INC",
+        "registry_token_name": "Berkshire Hathaway xStock"
+      }
+    },
+    {
+      "slug": "blue-owl-capital",
+      "display_name": "Blue Owl Capital",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "OWL",
+          "mint": "Xsnb4PjGtFsvTyp7HJNWfJLEbK6MoSZV8o7xMo3PuBn",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001823945",
+        "sec_registrant_name": "BLUE OWL CAPITAL INC.",
+        "sec_entity_name": "BLUE OWL CAPITAL INC.",
+        "sec_ticker_title": "BLUE OWL CAPITAL INC.",
+        "registry_token_name": "Blue Owl Capital xStock"
+      }
+    },
+    {
+      "slug": "boeing",
+      "display_name": "Boeing",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "BA",
+          "mint": "XsBcnKnZMsPaerLiUQ4eMFy4Fjysot4RugYXYDjiqCP",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000012927",
+        "sec_registrant_name": "THE BOEING COMPANY",
+        "sec_entity_name": "THE BOEING COMPANY",
+        "sec_ticker_title": "BOEING CO",
+        "registry_token_name": "Boeing xStock"
+      }
+    },
+    {
+      "slug": "brera-holdings",
+      "display_name": "Brera Holdings",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "SLMT",
+          "mint": "XsPHkGBbztHCCe1RMhiAs7CxVqoghmyd6zDUfrbfVWG",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001939965",
+        "sec_registrant_name": "Brera Holdings PLC",
+        "sec_entity_name": "Brera Holdings PLC",
+        "sec_ticker_title": "Brera Holdings PLC",
+        "registry_token_name": "Brera xStock"
+      }
+    },
+    {
+      "slug": "broadcom",
+      "display_name": "Broadcom",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "AVGO",
+          "mint": "XsgSaSvNSqLTtFuyWPBhK9196Xb9Bbdyjj4fH3cPJGo",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001730168",
+        "sec_registrant_name": "Broadcom Inc.",
+        "sec_entity_name": "Broadcom Inc.",
+        "sec_ticker_title": "Broadcom Inc.",
+        "registry_token_name": "Broadcom xStock"
+      }
+    },
+    {
+      "slug": "camden-property-trust",
+      "display_name": "Camden Property Trust",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CPT",
+          "mint": "XsvoRXtZZfwvkLhp4qKPR9B9mcbuWakDUWnPszYw2BT",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000906345",
+        "sec_registrant_name": "CAMDEN PROPERTY TRUST",
+        "sec_entity_name": "CAMDEN PROPERTY TRUST",
+        "sec_ticker_title": "CAMDEN PROPERTY TRUST",
+        "registry_token_name": "Camden Property Trust xStock"
+      }
+    },
+    {
+      "slug": "caterpillar",
+      "display_name": "Caterpillar",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CAT",
+          "mint": "XsRvd1meWQ9kW1SrZPa1jokQqmBoPWWjd6wGTgdp5E6",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000018230",
+        "sec_registrant_name": "CATERPILLAR INC",
+        "sec_entity_name": "CATERPILLAR INC",
+        "sec_ticker_title": "CATERPILLAR INC",
+        "registry_token_name": "Caterpillar xStock"
+      }
+    },
+    {
+      "slug": "chevron",
+      "display_name": "Chevron",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CVX",
+          "mint": "XsNNMt7WTNA2sV3jrb1NNfNgapxRF5i4i6GcnTRRHts",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000093410",
+        "sec_registrant_name": "Chevron Corp",
+        "sec_entity_name": "Chevron Corp",
+        "sec_ticker_title": "CHEVRON CORP",
+        "registry_token_name": "Chevron xStock"
+      }
+    },
+    {
+      "slug": "church-and-dwight",
+      "display_name": "Church & Dwight",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CHD",
+          "mint": "Xs712gQLCYkFSYJwdu3pE5itNfyKwsXQ1HEGZF8Esc5",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000313927",
+        "sec_registrant_name": "CHURCH & DWIGHT CO., INC.",
+        "sec_entity_name": "CHURCH & DWIGHT CO., INC.",
+        "sec_ticker_title": "CHURCH & DWIGHT CO INC /DE/",
+        "registry_token_name": "Church & Dwight xStock"
+      }
+    },
+    {
+      "slug": "circle-internet-group",
+      "display_name": "Circle",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CRCL",
+          "mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001876042",
+        "sec_registrant_name": "CIRCLE INTERNET GROUP, INC.",
+        "sec_entity_name": "CIRCLE INTERNET GROUP, INC.",
+        "sec_ticker_title": "Circle Internet Group, Inc.",
+        "registry_token_name": "Circle xStock"
+      }
+    },
+    {
+      "slug": "cisco-systems",
+      "display_name": "Cisco",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CSCO",
+          "mint": "Xsr3pdLQyXvDJBFgpR5nexCEZwXvigb8wbPYp4YoNFf",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000858877",
+        "sec_registrant_name": "CISCO SYSTEMS, INC.",
+        "sec_entity_name": "CISCO SYSTEMS, INC.",
+        "sec_ticker_title": "CISCO SYSTEMS, INC.",
+        "registry_token_name": "Cisco xStock"
+      }
+    },
+    {
+      "slug": "coca-cola",
+      "display_name": "Coca-Cola",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "KO",
+          "mint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000021344",
+        "sec_registrant_name": "COCA COLA CO",
+        "sec_entity_name": "COCA COLA CO",
+        "sec_ticker_title": "COCA COLA CO",
+        "registry_token_name": "Coca-Cola xStock"
+      }
+    },
+    {
+      "slug": "coinbase-global",
+      "display_name": "Coinbase",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "COIN",
+          "mint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001679788",
+        "sec_registrant_name": "Coinbase Global, Inc.",
+        "sec_entity_name": "Coinbase Global, Inc.",
+        "sec_ticker_title": "Coinbase Global, Inc.",
+        "registry_token_name": "Coinbase xStock"
+      }
+    },
+    {
+      "slug": "comcast",
+      "display_name": "Comcast",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CMCSA",
+          "mint": "XsvKCaNsxg2GN8jjUmq71qukMJr7Q1c5R2Mk9P8kcS8",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001166691",
+        "sec_registrant_name": "COMCAST CORPORATION",
+        "sec_entity_name": "COMCAST CORPORATION",
+        "sec_ticker_title": "COMCAST CORP",
+        "registry_token_name": "Comcast xStock"
+      }
+    },
+    {
+      "slug": "conocophillips",
+      "display_name": "ConocoPhillips",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "COP",
+          "mint": "Xs58CxmUcgT17reeVV64se747XuRfjsJQnpb8DX9TDq",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001163165",
+        "sec_registrant_name": "ConocoPhillips",
+        "sec_entity_name": "ConocoPhillips",
+        "sec_ticker_title": "CONOCOPHILLIPS",
+        "registry_token_name": "ConocoPhillips xStock"
+      }
+    },
+    {
+      "slug": "constellation-brands",
+      "display_name": "Constellation Brands",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "STZ",
+          "mint": "Xs6eATub8cqKdztx4asCRFMSzMwtNqAUWiDaUPXxUtD",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000016918",
+        "sec_registrant_name": "CONSTELLATION BRANDS, INC.",
+        "sec_entity_name": "CONSTELLATION BRANDS, INC.",
+        "sec_ticker_title": "CONSTELLATION BRANDS, INC.",
+        "registry_token_name": "Constellation Brands xStock"
+      }
+    },
+    {
+      "slug": "crowdstrike-holdings",
+      "display_name": "CrowdStrike",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CRWD",
+          "mint": "Xs7xXqkcK7K8urEqGg52SECi79dRp2cEKKuYjUePYDw",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001535527",
+        "sec_registrant_name": "CrowdStrike Holdings, Inc.",
+        "sec_entity_name": "CrowdStrike Holdings, Inc.",
+        "sec_ticker_title": "CrowdStrike Holdings, Inc.",
+        "registry_token_name": "CrowdStrike xStock"
+      }
+    },
+    {
+      "slug": "deere",
+      "display_name": "Deere",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DE",
+          "mint": "Xsh3Lt6pLpH65udstiFuZThJ6gyQTL6ryVXtNwEy5zd",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000315189",
+        "sec_registrant_name": "DEERE & CO",
+        "sec_entity_name": "DEERE & CO",
+        "sec_ticker_title": "DEERE & CO",
+        "registry_token_name": "Deere xStock"
+      }
+    },
+    {
+      "slug": "dell-technologies",
+      "display_name": "Dell Technologies",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DELL",
+          "mint": "Xsu7Tc5J2fVUE4H5vYAiSr34cvLJeCsYPMjAYnayQn6",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001571996",
+        "sec_registrant_name": "Dell Technologies Inc.",
+        "sec_entity_name": "Dell Technologies Inc.",
+        "sec_ticker_title": "Dell Technologies Inc.",
+        "registry_token_name": "Dell Technologies Inc. xStock"
+      }
+    },
+    {
+      "slug": "dexcom",
+      "display_name": "DexCom",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DXCM",
+          "mint": "Xsspestq9YiZofYG2pvuHgYM1aKdRNocveBodzrGjbg",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001093557",
+        "sec_registrant_name": "DEXCOM, INC.",
+        "sec_entity_name": "DEXCOM, INC.",
+        "sec_ticker_title": "DEXCOM INC",
+        "registry_token_name": "DexCom xStock"
+      }
+    },
+    {
+      "slug": "digitalocean-holdings",
+      "display_name": "DigitalOcean",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DOCN",
+          "mint": "XsKJGRCayh5LQ6bsET8ZVip8BaRZbWmj9fjSnCcy9P6",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001582961",
+        "sec_registrant_name": "DigitalOcean Holdings, Inc.",
+        "sec_entity_name": "DigitalOcean Holdings, Inc.",
+        "sec_ticker_title": "DigitalOcean Holdings, Inc.",
+        "registry_token_name": "DigitalOcean xStock"
+      }
+    },
+    {
+      "slug": "doordash",
+      "display_name": "DoorDash",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DASH",
+          "mint": "XsuW1yxtbifjEYojFLmoavTWBT7hsuUXXeReAWK9X91",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001792789",
+        "sec_registrant_name": "DOORDASH, INC.",
+        "sec_entity_name": "DOORDASH, INC.",
+        "sec_ticker_title": "DoorDash, Inc.",
+        "registry_token_name": "DoorDash xStock"
+      }
+    },
+    {
+      "slug": "eli-lilly",
+      "display_name": "Eli Lilly",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "LLY",
+          "mint": "Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000059478",
+        "sec_registrant_name": "ELI LILLY AND COMPANY",
+        "sec_entity_name": "ELI LILLY AND COMPANY",
+        "sec_ticker_title": "ELI LILLY & Co",
+        "registry_token_name": "Eli Lilly xStock"
+      }
+    },
+    {
+      "slug": "exxonmobil-holdings",
+      "display_name": "ExxonMobil",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "XOM",
+          "mint": "XsaHND8sHyfMfsWPj6kSdd5VwvCayZvjYgKmmcNL5qh",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0002115436",
+        "sec_registrant_name": "ExxonMobil Holdings Corp",
+        "sec_entity_name": "Exxon Mobil Corporation",
+        "sec_ticker_title": "ExxonMobil Holdings Corp",
+        "registry_token_name": "Exxon Mobil xStock"
+      }
+    },
+    {
+      "slug": "five-below",
+      "display_name": "Five Below",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "FIVE",
+          "mint": "Xs7zvvE6QUtYmpMBrz4oWJexS7WSJPwJs7vQsvMCpaG",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001177609",
+        "sec_registrant_name": "Five Below, Inc.",
+        "sec_entity_name": "Five Below, Inc.",
+        "sec_ticker_title": "FIVE BELOW, INC",
+        "registry_token_name": "Five Below xStock"
+      }
+    },
+    {
+      "slug": "ford-motor",
+      "display_name": "Ford Motor",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "F",
+          "mint": "XsBNJXGu68cBH5hgFxdqZkeh8cMQv32jeEtZtYTYvfS",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000037996",
+        "sec_registrant_name": "Ford Motor Co",
+        "sec_entity_name": "Ford Motor Co",
+        "sec_ticker_title": "FORD MOTOR CO",
+        "registry_token_name": "Ford Motor xStock"
+      }
+    },
+    {
+      "slug": "gamestop",
+      "display_name": "GameStop",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "GME",
+          "mint": "Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001326380",
+        "sec_registrant_name": "GameStop Corp.",
+        "sec_entity_name": "GameStop Corp.",
+        "sec_ticker_title": "GameStop Corp.",
+        "registry_token_name": "Gamestop xStock"
+      }
+    },
+    {
+      "slug": "general-electric",
+      "display_name": "GE Aerospace",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "GE",
+          "mint": "XsfsBjSZoXXKJsxoSt8TyLYsjhBAKFaDPZTCQbFRirP",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000040545",
+        "sec_registrant_name": "GENERAL ELECTRIC CO",
+        "sec_entity_name": "GENERAL ELECTRIC CO",
+        "sec_ticker_title": "GENERAL ELECTRIC CO",
+        "registry_token_name": "GE Aerospace xStock"
+      }
+    },
+    {
+      "slug": "general-motors",
+      "display_name": "General Motors",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "GM",
+          "mint": "XsSFgHPgZgYNSuz1ttNHNp8zUBBMZGngFcMMfKPK6JQ",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001467858",
+        "sec_registrant_name": "GENERAL MOTORS COMPANY",
+        "sec_entity_name": "GENERAL MOTORS COMPANY",
+        "sec_ticker_title": "General Motors Co",
+        "registry_token_name": "General Motors xStock"
+      }
+    },
+    {
+      "slug": "gilead-sciences",
+      "display_name": "Gilead Sciences",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "GILD",
+          "mint": "XsmAFboVqfDwGPgXfd7oCunvYAYSzzkuKE2BDRzwjGy",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000882095",
+        "sec_registrant_name": "GILEAD SCIENCES, INC.",
+        "sec_entity_name": "GILEAD SCIENCES, INC.",
+        "sec_ticker_title": "GILEAD SCIENCES, INC.",
+        "registry_token_name": "Gilead Sciences xStock"
+      }
+    },
+    {
+      "slug": "goldman-sachs-group",
+      "display_name": "Goldman Sachs",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "GS",
+          "mint": "XsgaUyp4jd1fNBCxgtTKkW64xnnhQcvgaxzsbAq5ZD1",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000886982",
+        "sec_registrant_name": "The Goldman Sachs Group, Inc.",
+        "sec_entity_name": "The Goldman Sachs Group, Inc.",
+        "sec_ticker_title": "GOLDMAN SACHS GROUP INC",
+        "registry_token_name": "Goldman Sachs xStock"
+      }
+    },
+    {
+      "slug": "home-depot",
+      "display_name": "Home Depot",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "HD",
+          "mint": "XszjVtyhowGjSC5odCqBpW1CtXXwXjYokymrk7fGKD3",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000354950",
+        "sec_registrant_name": "The Home Depot, Inc.",
+        "sec_entity_name": "The Home Depot, Inc.",
+        "sec_ticker_title": "HOME DEPOT, INC.",
+        "registry_token_name": "Home Depot xStock"
+      }
+    },
+    {
+      "slug": "honeywell-international",
+      "display_name": "Honeywell",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "HON",
+          "mint": "XsRbLZthfABAPAfumWNEJhPyiKDW6TvDVeAeW7oKqA2",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000773840",
+        "sec_registrant_name": "Honeywell International Inc",
+        "sec_entity_name": "Honeywell International Inc",
+        "sec_ticker_title": "HONEYWELL INTERNATIONAL INC",
+        "registry_token_name": "Honeywell xStock"
+      }
+    },
+    {
+      "slug": "howmet-aerospace",
+      "display_name": "Howmet Aerospace",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "HWM",
+          "mint": "XsCX8NnXq3qx6zUxXxWwjV2yQnGc9C5y6UyXvE6RG7r",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000004281",
+        "sec_registrant_name": "HOWMET AEROSPACE INC.",
+        "sec_entity_name": "HOWMET AEROSPACE INC.",
+        "sec_ticker_title": "Howmet Aerospace Inc.",
+        "registry_token_name": "Howmet Aerospace xStock"
+      }
+    },
+    {
+      "slug": "intel",
+      "display_name": "Intel",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "INTC",
+          "mint": "XshPgPdXFRWB8tP1j82rebb2Q9rPgGX37RuqzohmArM",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000050863",
+        "sec_registrant_name": "INTEL CORP",
+        "sec_entity_name": "INTEL CORP",
+        "sec_ticker_title": "INTEL CORP",
+        "registry_token_name": "Intel xStock"
+      }
+    },
+    {
+      "slug": "international-business-machines",
+      "display_name": "International Business Machines",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "IBM",
+          "mint": "XspwhyYPdWVM8XBHZnpS9hgyag9MKjLRyE3tVfmCbSr",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000051143",
+        "sec_registrant_name": "INTERNATIONAL BUSINESS MACHINES CORP",
+        "sec_entity_name": "INTERNATIONAL BUSINESS MACHINES CORP",
+        "sec_ticker_title": "INTERNATIONAL BUSINESS MACHINES CORP",
+        "registry_token_name": "International Business Machines xStock"
+      }
+    },
+    {
+      "slug": "intuit",
+      "display_name": "Intuit",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "INTU",
+          "mint": "XsfodJMz7SyMNsSgATVDcbuMiQDqQoAiRTL1xuyHNUn",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000896878",
+        "sec_registrant_name": "INTUIT INC.",
+        "sec_entity_name": "INTUIT INC.",
+        "sec_ticker_title": "INTUIT INC.",
+        "registry_token_name": "Intuit xStock"
+      }
+    },
+    {
+      "slug": "intuitive-surgical",
+      "display_name": "Intuitive Surgical",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ISRG",
+          "mint": "XsgBcHP3frsQGHr5EoDdoPZMANk52Y4JPg5BYx98NwL",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001035267",
+        "sec_registrant_name": "Intuitive Surgical, Inc.",
+        "sec_entity_name": "Intuitive Surgical, Inc.",
+        "sec_ticker_title": "INTUITIVE SURGICAL INC",
+        "registry_token_name": "Intuitive Surgical xStock"
+      }
+    },
+    {
+      "slug": "invesco",
+      "display_name": "Invesco",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "IVZ",
+          "mint": "XsM5qDSyGiTVyHoi2VixmaEacByd3UCUoWtNhEqsyoH",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000914208",
+        "sec_registrant_name": "Invesco Ltd.",
+        "sec_entity_name": "Invesco Ltd.",
+        "sec_ticker_title": "Invesco Ltd.",
+        "registry_token_name": "Invesco xStock"
+      }
+    },
+    {
+      "slug": "johnson-and-johnson",
+      "display_name": "Johnson & Johnson",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "JNJ",
+          "mint": "XsGVi5eo1Dh2zUpic4qACcjuWGjNv8GCt3dm5XcX6Dn",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000200406",
+        "sec_registrant_name": "Johnson & Johnson",
+        "sec_entity_name": "Johnson & Johnson",
+        "sec_ticker_title": "JOHNSON & JOHNSON",
+        "registry_token_name": "Johnson & Johnson xStock"
+      }
+    },
+    {
+      "slug": "jpmorgan-chase",
+      "display_name": "JPMorgan Chase",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "JPM",
+          "mint": "XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000019617",
+        "sec_registrant_name": "JPMORGAN CHASE & CO",
+        "sec_entity_name": "JPMORGAN CHASE & CO",
+        "sec_ticker_title": "JPMORGAN CHASE & CO",
+        "registry_token_name": "JPMorgan Chase xStock"
+      }
+    },
+    {
+      "slug": "kimberly-clark",
+      "display_name": "Kimberly-Clark",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "KMB",
+          "mint": "XsNnfg6KXzaRsH8PE9T9YEahq3MQpSZ3dQAa4hcL1SN",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000055785",
+        "sec_registrant_name": "KIMBERLY-CLARK CORPORATION",
+        "sec_entity_name": "KIMBERLY-CLARK CORPORATION",
+        "sec_ticker_title": "KIMBERLY CLARK CORP",
+        "registry_token_name": "Kimberly-Clark xStock"
+      }
+    },
+    {
+      "slug": "liberty-media",
+      "display_name": "Liberty Media",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "FWONK",
+          "mint": "XsDum7DWP825ChLAhSN5NYBpoCUsHJJdRKTPseA9VxR",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001560385",
+        "sec_registrant_name": "LIBERTY MEDIA CORPORATION",
+        "sec_entity_name": "LIBERTY MEDIA CORPORATION",
+        "sec_ticker_title": "Liberty Media Corp",
+        "registry_token_name": "Liberty Media xStock"
+      }
+    },
+    {
+      "slug": "linde",
+      "display_name": "Linde",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "LIN",
+          "mint": "XsSr8anD1hkvNMu8XQiVcmiaTP7XGvYu7Q58LdmtE8Z",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001707925",
+        "sec_registrant_name": "Linde plc",
+        "sec_entity_name": "Linde plc",
+        "sec_ticker_title": "LINDE PLC",
+        "registry_token_name": "Linde xStock"
+      }
+    },
+    {
+      "slug": "lockheed-martin",
+      "display_name": "Lockheed Martin",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "LMT",
+          "mint": "XssULacY8D3z3a8HoQuLid8wdJHcZLGpSST9MkNFzox",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000936468",
+        "sec_registrant_name": "LOCKHEED MARTIN CORPORATION",
+        "sec_entity_name": "LOCKHEED MARTIN CORPORATION",
+        "sec_ticker_title": "LOCKHEED MARTIN CORP",
+        "registry_token_name": "Lockheed Martin xStock"
+      }
+    },
+    {
+      "slug": "lowes-companies",
+      "display_name": "Lowe's Companies",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "LOW",
+          "mint": "XsixDLxXcKZBcRBddYiPZjB9FJcKMTLd4B7VBeKo3pB",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000060667",
+        "sec_registrant_name": "LOWES COMPANIES INC",
+        "sec_entity_name": "LOWES COMPANIES INC",
+        "sec_ticker_title": "LOWES COMPANIES INC",
+        "registry_token_name": "Lowe's Companies xStock"
+      }
+    },
+    {
+      "slug": "mara-holdings",
+      "display_name": "MARA",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MARA",
+          "mint": "XsguBZPkM9BDmxspmWe29EmrYZBv21ENcC27Pqh7grB",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001507605",
+        "sec_registrant_name": "MARA HOLDINGS, INC.",
+        "sec_entity_name": "MARA HOLDINGS, INC.",
+        "sec_ticker_title": "MARA Holdings, Inc.",
+        "registry_token_name": "MARA xStock"
+      }
+    },
+    {
+      "slug": "martin-marietta-materials",
+      "display_name": "Martin Marietta Materials",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MLM",
+          "mint": "Xsvi61uutcLdAsa5NxJ2c9geLgzUFM3tMtpJ44eoegt",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000916076",
+        "sec_registrant_name": "MARTIN MARIETTA MATERIALS INC",
+        "sec_entity_name": "MARTIN MARIETTA MATERIALS INC",
+        "sec_ticker_title": "MARTIN MARIETTA MATERIALS INC",
+        "registry_token_name": "Martin Marietta Materials xStock"
+      }
+    },
+    {
+      "slug": "mastercard",
+      "display_name": "Mastercard",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MA",
+          "mint": "XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001141391",
+        "sec_registrant_name": "Mastercard Incorporated",
+        "sec_entity_name": "Mastercard Incorporated",
+        "sec_ticker_title": "Mastercard Inc",
+        "registry_token_name": "Mastercard xStock"
+      }
+    },
+    {
+      "slug": "mcdonalds",
+      "display_name": "McDonald's",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MCD",
+          "mint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000063908",
+        "sec_registrant_name": "McDONALD'S CORPORATION",
+        "sec_entity_name": "McDONALD'S CORPORATION",
+        "sec_ticker_title": "MCDONALDS CORP",
+        "registry_token_name": "McDonald's xStock"
+      }
+    },
+    {
+      "slug": "medtronic",
+      "display_name": "Medtronic",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MDT",
+          "mint": "XsDgw22qRLTv5Uwuzn6T63cW69exG41T6gwQhEK22u2",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001613103",
+        "sec_registrant_name": "Medtronic plc",
+        "sec_entity_name": "Medtronic plc",
+        "sec_ticker_title": "Medtronic plc",
+        "registry_token_name": "Medtronic xStock"
+      }
+    },
+    {
+      "slug": "merck",
+      "display_name": "Merck",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MRK",
+          "mint": "XsnQnU7AdbRZYe2akqqpibDdXjkieGFfSkbkjX1Sd1X",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000310158",
+        "sec_registrant_name": "Merck & Co., Inc.",
+        "sec_entity_name": "Merck & Co., Inc.",
+        "sec_ticker_title": "Merck & Co., Inc.",
+        "registry_token_name": "Merck xStock"
+      }
+    },
+    {
+      "slug": "meta-platforms",
+      "display_name": "Meta",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "META",
+          "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001326801",
+        "sec_registrant_name": "Meta Platforms, Inc.",
+        "sec_entity_name": "Meta Platforms, Inc.",
+        "sec_ticker_title": "Meta Platforms, Inc.",
+        "registry_token_name": "Meta xStock"
+      }
+    },
+    {
+      "slug": "micron-technology",
+      "display_name": "Micron Technology",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MU",
+          "mint": "XsQLZycSZ7QnBBdBXQaTbQdiUcbRqjNJgyBGAMzhHav",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000723125",
+        "sec_registrant_name": "Micron Technology, Inc.",
+        "sec_entity_name": "Micron Technology, Inc.",
+        "sec_ticker_title": "MICRON TECHNOLOGY INC",
+        "registry_token_name": "Micron Technology xStock"
+      }
+    },
+    {
+      "slug": "microsoft",
+      "display_name": "Microsoft",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MSFT",
+          "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000789019",
+        "sec_registrant_name": "MICROSOFT CORPORATION",
+        "sec_entity_name": "MICROSOFT CORPORATION",
+        "sec_ticker_title": "MICROSOFT CORP",
+        "registry_token_name": "Microsoft xStock"
+      }
+    },
+    {
+      "slug": "morgan-stanley",
+      "display_name": "Morgan Stanley",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MS",
+          "mint": "XsUucbjDLYbER4WNNffn1eQ9cDnAcFVfLgSZeLHPDZS",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000895421",
+        "sec_registrant_name": "MORGAN STANLEY",
+        "sec_entity_name": "MORGAN STANLEY",
+        "sec_ticker_title": "MORGAN STANLEY",
+        "registry_token_name": "Morgan Stanley xStock"
+      }
+    },
+    {
+      "slug": "motorola-solutions",
+      "display_name": "Motorola Solutions",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MSI",
+          "mint": "Xsa1gZ38panjmJwh6cr9QQ1YpRBEzVfxrykWSsiWvJe",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000068505",
+        "sec_registrant_name": "Motorola Solutions, Inc.",
+        "sec_entity_name": "Motorola Solutions, Inc.",
+        "sec_ticker_title": "Motorola Solutions, Inc.",
+        "registry_token_name": "Motorola Solutions xStock"
+      }
+    },
+    {
+      "slug": "mueller-industries",
+      "display_name": "Mueller Industries",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MLI",
+          "mint": "XsikuTgNGjzibezDk9u22QGW8zQaGWyK61vN4gQE4Dc",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000089439",
+        "sec_registrant_name": "MUELLER INDUSTRIES INC",
+        "sec_entity_name": "MUELLER INDUSTRIES INC",
+        "sec_ticker_title": "MUELLER INDUSTRIES INC",
+        "registry_token_name": "Mueller Industries xStock"
+      }
+    },
+    {
+      "slug": "netflix",
+      "display_name": "Netflix",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "NFLX",
+          "mint": "XsEH7wWfJJu2ZT3UCFeVfALnVA6CP5ur7Ee11KmzVpL",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001065280",
+        "sec_registrant_name": "NETFLIX INC",
+        "sec_entity_name": "NETFLIX INC",
+        "sec_ticker_title": "NETFLIX INC",
+        "registry_token_name": "Netflix xStock"
+      }
+    },
+    {
+      "slug": "nike",
+      "display_name": "Nike",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "NKE",
+          "mint": "XsGYpMvKbVt6ViHqRd7cF3s746dAMFBQWcC49hB9VVP",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000320187",
+        "sec_registrant_name": "NIKE, Inc.",
+        "sec_entity_name": "NIKE, Inc.",
+        "sec_ticker_title": "NIKE, Inc.",
+        "registry_token_name": "Nike xStock"
+      }
+    },
+    {
+      "slug": "novo-nordisk",
+      "display_name": "Novo Nordisk",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "NVO",
+          "mint": "XsfAzPzYrYjd4Dpa9BU3cusBsvWfVB9gBcyGC87S57n",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000353278",
+        "sec_registrant_name": "NOVO NORDISK A/S",
+        "sec_entity_name": "NOVO NORDISK A/S",
+        "sec_ticker_title": "NOVO NORDISK A S",
+        "registry_token_name": "Novo Nordisk xStock"
+      }
+    },
+    {
+      "slug": "nvidia",
+      "display_name": "NVIDIA",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "NVDA",
+          "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001045810",
+        "sec_registrant_name": "NVIDIA CORP",
+        "sec_entity_name": "NVIDIA CORP",
+        "sec_ticker_title": "NVIDIA CORP",
+        "registry_token_name": "NVIDIA xStock"
+      }
+    },
+    {
+      "slug": "onto-innovation",
+      "display_name": "Onto Innovation",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ONTO",
+          "mint": "Xsu33VJj7s2tMUZfAQ8bbGgpDEnfXdCsKHSC4p6C5tS",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000704532",
+        "sec_registrant_name": "ONTO INNOVATION INC.",
+        "sec_entity_name": "ONTO INNOVATION INC.",
+        "sec_ticker_title": "ONTO INNOVATION INC.",
+        "registry_token_name": "Onto Innovation xStock"
+      }
+    },
+    {
+      "slug": "oracle",
+      "display_name": "Oracle",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "ORCL",
+          "mint": "XsjFwUPiLofddX5cWFHW35GCbXcSu1BCUGfxoQAQjeL",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001341439",
+        "sec_registrant_name": "Oracle Corporation",
+        "sec_entity_name": "Oracle Corporation",
+        "sec_ticker_title": "ORACLE CORP",
+        "registry_token_name": "Oracle xStock"
+      }
+    },
+    {
+      "slug": "packaging-corp-of-america",
+      "display_name": "Packaging Corp of America",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PKG",
+          "mint": "Xstq2wirnUgqHdMvvWafGVbdtg9y845zxAy7iVixkRU",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000075677",
+        "sec_registrant_name": "PACKAGING CORP OF AMERICA",
+        "sec_entity_name": "PACKAGING CORP OF AMERICA",
+        "sec_ticker_title": "PACKAGING CORP OF AMERICA",
+        "registry_token_name": "Packaging Corp of America xStock"
+      }
+    },
+    {
+      "slug": "palantir-technologies",
+      "display_name": "Palantir",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PLTR",
+          "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001321655",
+        "sec_registrant_name": "Palantir Technologies Inc.",
+        "sec_entity_name": "Palantir Technologies Inc.",
+        "sec_ticker_title": "Palantir Technologies Inc.",
+        "registry_token_name": "Palantir xStock"
+      }
+    },
+    {
+      "slug": "paypal-holdings",
+      "display_name": "PayPal",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PYPL",
+          "mint": "XshWQWYVp5ff8CrAEsGmLVKD47nBWi3Ygn5v8wXK27G",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001633917",
+        "sec_registrant_name": "PayPal Holdings, Inc.",
+        "sec_entity_name": "PayPal Holdings, Inc.",
+        "sec_ticker_title": "PayPal Holdings, Inc.",
+        "registry_token_name": "PayPal xStock"
+      }
+    },
+    {
+      "slug": "penske-automotive-group",
+      "display_name": "Penske Automotive",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PAG",
+          "mint": "Xs7waUdcn1ZQDsuFmHRerWEEazRHoWWzWSa6aB7QjHG",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001019849",
+        "sec_registrant_name": "Penske Automotive Group, Inc.",
+        "sec_entity_name": "Penske Automotive Group, Inc.",
+        "sec_ticker_title": "PENSKE AUTOMOTIVE GROUP, INC.",
+        "registry_token_name": "Penske Automotive xStock"
+      }
+    },
+    {
+      "slug": "pepsico",
+      "display_name": "PepsiCo",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PEP",
+          "mint": "Xsv99frTRUeornyvCfvhnDesQDWuvns1M852Pez91vF",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000077476",
+        "sec_registrant_name": "PepsiCo, Inc.",
+        "sec_entity_name": "PepsiCo, Inc.",
+        "sec_ticker_title": "PEPSICO INC",
+        "registry_token_name": "PepsiCo xStock"
+      }
+    },
+    {
+      "slug": "pfizer",
+      "display_name": "Pfizer",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PFE",
+          "mint": "XsAtbqkAP1HJxy7hFDeq7ok6yM43DQ9mQ1Rh861X8rw",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000078003",
+        "sec_registrant_name": "PFIZER INC",
+        "sec_entity_name": "PFIZER INC",
+        "sec_ticker_title": "PFIZER INC",
+        "registry_token_name": "Pfizer xStock"
+      }
+    },
+    {
+      "slug": "pg-and-e",
+      "display_name": "PG&E",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PCG",
+          "mint": "XsPq3VY73br4wpgi2a4b3jAdvuhstpknXVJ2fA4vNmk",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001004980",
+        "sec_registrant_name": "PG&E CORP",
+        "sec_entity_name": "PG&E CORP",
+        "sec_ticker_title": "PG&E Corp",
+        "registry_token_name": "PG&E xStock"
+      }
+    },
+    {
+      "slug": "philip-morris-international",
+      "display_name": "Philip Morris",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PM",
+          "mint": "Xsba6tUnSjDae2VcopDB6FGGDaxRrewFCDa5hKn5vT3",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001413329",
+        "sec_registrant_name": "Philip Morris International Inc.",
+        "sec_entity_name": "Philip Morris International Inc.",
+        "sec_ticker_title": "Philip Morris International Inc.",
+        "registry_token_name": "Philip Morris xStock"
+      }
+    },
+    {
+      "slug": "principal-financial-group",
+      "display_name": "Principal Financial",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PFG",
+          "mint": "XsChiU9gDeWj7HYrqioNUn8C81jaHZwegfGQdQXHnhd",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001126328",
+        "sec_registrant_name": "PRINCIPAL FINANCIAL GROUP, INC",
+        "sec_entity_name": "PRINCIPAL FINANCIAL GROUP, INC",
+        "sec_ticker_title": "PRINCIPAL FINANCIAL GROUP INC",
+        "registry_token_name": "Principal Financial xStock"
+      }
+    },
+    {
+      "slug": "procter-and-gamble",
+      "display_name": "Procter & Gamble",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PG",
+          "mint": "XsYdjDjNUygZ7yGKfQaB6TxLh2gC6RRjzLtLAGJrhzV",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000080424",
+        "sec_registrant_name": "The Procter & Gamble Company",
+        "sec_entity_name": "The Procter & Gamble Company",
+        "sec_ticker_title": "PROCTER & GAMBLE Co",
+        "registry_token_name": "Procter & Gamble xStock"
+      }
+    },
+    {
+      "slug": "progressive",
+      "display_name": "Progressive",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PGR",
+          "mint": "XsGDHfnSNxofQ2qXzcty9r4HB5HFszUCrQhjN7mbEcw",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000080661",
+        "sec_registrant_name": "PROGRESSIVE CORP/OH/",
+        "sec_entity_name": "PROGRESSIVE CORP/OH/",
+        "sec_ticker_title": "PROGRESSIVE CORP/OH/",
+        "registry_token_name": "Progressive xStock"
+      }
+    },
+    {
+      "slug": "public-service-enterprise-group",
+      "display_name": "Public Service Enterprise Group",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "PEG",
+          "mint": "XsUytoK53kCKfXC61Dn3ZM8sjyVBUpScF111pfMG69U",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000788784",
+        "sec_registrant_name": "Public Service Enterprise Group Incorporated",
+        "sec_entity_name": "Public Service Enterprise Group Incorporated",
+        "sec_ticker_title": "PUBLIC SERVICE ENTERPRISE GROUP INC",
+        "registry_token_name": "Public Service Enterprise xStock"
+      }
+    },
+    {
+      "slug": "qualcomm",
+      "display_name": "Qualcomm",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "QCOM",
+          "mint": "XsUUG8bjFN2KvzLTpzavvEKdAjMAeLTZiTeAQJ9uhvB",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000804328",
+        "sec_registrant_name": "QUALCOMM INC/DE",
+        "sec_entity_name": "QUALCOMM INC/DE",
+        "sec_ticker_title": "QUALCOMM INC/DE",
+        "registry_token_name": "Qualcomm xStock"
+      }
+    },
+    {
+      "slug": "reinsurance-group-of-america",
+      "display_name": "Reinsurance Group of America",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "RGA",
+          "mint": "XsFvsyP8i3Qpat1BK78Yjq3PsTNhD3SV5FHryJrWbHs",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000898174",
+        "sec_registrant_name": "REINSURANCE GROUP OF AMERICA, INCORPORATED",
+        "sec_entity_name": "REINSURANCE GROUP OF AMERICA, INCORPORATED",
+        "sec_ticker_title": "REINSURANCE GROUP OF AMERICA INC",
+        "registry_token_name": "Reinsurance Group of America xStock"
+      }
+    },
+    {
+      "slug": "riot-platforms",
+      "display_name": "Riot Platforms",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "RIOT",
+          "mint": "Xs31mE5EiqjSHEaiX9QDKCN6NvSGCqpJ6f1FNq2wri5",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001167419",
+        "sec_registrant_name": "RIOT PLATFORMS, INC.",
+        "sec_entity_name": "RIOT PLATFORMS, INC.",
+        "sec_ticker_title": "Riot Platforms, Inc.",
+        "registry_token_name": "Riot Platforms xStock"
+      }
+    },
+    {
+      "slug": "rivian-automotive",
+      "display_name": "Rivian Automotive",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "RIVN",
+          "mint": "XsoxDMY8s3ZV7zD4Yd87wAvURyxA8VXkd7w6HNuQkzj",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001874178",
+        "sec_registrant_name": "Rivian Automotive, Inc. / DE",
+        "sec_entity_name": "Rivian Automotive, Inc. / DE",
+        "sec_ticker_title": "Rivian Automotive, Inc. / DE",
+        "registry_token_name": "Rivian Automotive xStock"
+      }
+    },
+    {
+      "slug": "robinhood-markets",
+      "display_name": "Robinhood",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "HOOD",
+          "mint": "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001783879",
+        "sec_registrant_name": "Robinhood Markets, Inc.",
+        "sec_entity_name": "Robinhood Markets, Inc.",
+        "sec_ticker_title": "Robinhood Markets, Inc.",
+        "registry_token_name": "Robinhood xStock"
+      }
+    },
+    {
+      "slug": "roblox",
+      "display_name": "Roblox",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "RBLX",
+          "mint": "Xss5RAku5EH6UViFdvW7ss9xQjwQLsrs2opPMhb3k43",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001315098",
+        "sec_registrant_name": "Roblox Corporation",
+        "sec_entity_name": "Roblox Corporation",
+        "sec_ticker_title": "Roblox Corp",
+        "registry_token_name": "Roblox xStock"
+      }
+    },
+    {
+      "slug": "rtx",
+      "display_name": "RTX",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "RTX",
+          "mint": "XsN53tgjZA4QU8iuedPNHxxCbDqKcJqbrT1f8jBXzdC",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000101829",
+        "sec_registrant_name": "RTX CORPORATION",
+        "sec_entity_name": "RTX CORPORATION",
+        "sec_ticker_title": "RTX Corp",
+        "registry_token_name": "RTX xStock"
+      }
+    },
+    {
+      "slug": "salesforce",
+      "display_name": "Salesforce",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "CRM",
+          "mint": "XsczbcQ3zfcgAEt9qHQES8pxKAVG5rujPSHQEXi4kaN",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001108524",
+        "sec_registrant_name": "Salesforce, Inc.",
+        "sec_entity_name": "Salesforce, Inc.",
+        "sec_ticker_title": "Salesforce, Inc.",
+        "registry_token_name": "Salesforce xStock"
+      }
+    },
+    {
+      "slug": "sba-communications",
+      "display_name": "SBA Communications",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "SBAC",
+          "mint": "Xs3BuKwwLLSgKCKPBeSN5Wje5gP8McsHrt6pnqWzjhs",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001034054",
+        "sec_registrant_name": "SBA COMMUNICATIONS CORPORATION",
+        "sec_entity_name": "SBA COMMUNICATIONS CORPORATION",
+        "sec_ticker_title": "SBA COMMUNICATIONS CORP",
+        "registry_token_name": "SBA Communications xStock"
+      }
+    },
+    {
+      "slug": "servicenow",
+      "display_name": "ServiceNow",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "NOW",
+          "mint": "XsBnEFd2EtpwBRNVfN8qLZcVUnuqXRaGCSEEFChLfxL",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001373715",
+        "sec_registrant_name": "ServiceNow, Inc.",
+        "sec_entity_name": "ServiceNow, Inc.",
+        "sec_ticker_title": "ServiceNow, Inc.",
+        "registry_token_name": "ServiceNow xStock"
+      }
+    },
+    {
+      "slug": "snowflake",
+      "display_name": "Snowflake",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "SNOW",
+          "mint": "Xs3QCTNpPWTFYRQ9yPv9gsvWKNJGk45UQ1bb1w7xznc",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001640147",
+        "sec_registrant_name": "SNOWFLAKE INC.",
+        "sec_entity_name": "SNOWFLAKE INC.",
+        "sec_ticker_title": "Snowflake Inc.",
+        "registry_token_name": "Snowflake xStock"
+      }
+    },
+    {
+      "slug": "starbucks",
+      "display_name": "Starbucks",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "SBUX",
+          "mint": "Xs9gd8SGbYQn9kkUYQayn46BdqQbvvUshEF6ZpRAzM7",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000829224",
+        "sec_registrant_name": "Starbucks Corporation",
+        "sec_entity_name": "Starbucks Corporation",
+        "sec_ticker_title": "STARBUCKS CORP",
+        "registry_token_name": "Starbucks xStock"
+      }
+    },
+    {
+      "slug": "strategy",
+      "display_name": "Strategy",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "MSTR",
+          "mint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001050446",
+        "sec_registrant_name": "STRATEGY INC",
+        "sec_entity_name": "STRATEGY INC",
+        "sec_ticker_title": "Strategy Inc",
+        "registry_token_name": "MicroStrategy xStock"
+      }
+    },
+    {
+      "slug": "super-micro-computer",
+      "display_name": "Super Micro Computer",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "SMCI",
+          "mint": "XsMxAoJP47FQGLsVUvSS2QfBaHdNsd7DRU6nWRL8RSa",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001375365",
+        "sec_registrant_name": "Super Micro Computer, Inc.",
+        "sec_entity_name": "Super Micro Computer, Inc.",
+        "sec_ticker_title": "Super Micro Computer, Inc.",
+        "registry_token_name": "Super Micro Computer, Inc. xStock"
+      }
+    },
+    {
+      "slug": "taiwan-semiconductor-manufacturing",
+      "display_name": "TSMC",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TSM",
+          "mint": "XsafvsGtzFqqHgTnA3aPC83EAMkacU5mcGtcSayhpVV",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001046179",
+        "sec_registrant_name": "Taiwan Semiconductor Manufacturing Company Limited",
+        "sec_entity_name": "Taiwan Semiconductor Manufacturing Company Limited",
+        "sec_ticker_title": "TAIWAN SEMICONDUCTOR MANUFACTURING CO LTD",
+        "registry_token_name": "TSMC xStock"
+      }
+    },
+    {
+      "slug": "tesla",
+      "display_name": "Tesla",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TSLA",
+          "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001318605",
+        "sec_registrant_name": "Tesla, Inc.",
+        "sec_entity_name": "Tesla, Inc.",
+        "sec_ticker_title": "Tesla, Inc.",
+        "registry_token_name": "Tesla xStock"
+      }
+    },
+    {
+      "slug": "texas-instruments",
+      "display_name": "Texas Instruments",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TXN",
+          "mint": "XsU4fHhJEFcrwNh4RYuHmWdaoCfsrWKEm4UEs3zTJwH",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000097476",
+        "sec_registrant_name": "TEXAS INSTRUMENTS INCORPORATED",
+        "sec_entity_name": "TEXAS INSTRUMENTS INCORPORATED",
+        "sec_ticker_title": "TEXAS INSTRUMENTS INC",
+        "registry_token_name": "Texas Instruments xStock"
+      }
+    },
+    {
+      "slug": "texas-roadhouse",
+      "display_name": "Texas Roadhouse",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TXRH",
+          "mint": "XsWFY8Ems96uFPnZJ1NwXsqeH6bczLQDDvvvab14crQ",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001289460",
+        "sec_registrant_name": "Texas Roadhouse, Inc.",
+        "sec_entity_name": "Texas Roadhouse, Inc.",
+        "sec_ticker_title": "Texas Roadhouse, Inc.",
+        "registry_token_name": "Texas Roadhouse xStock"
+      }
+    },
+    {
+      "slug": "textron",
+      "display_name": "Textron",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TXT",
+          "mint": "XsjWGbe4McmJXNRd6hQYsS8dEsPKTfT38fxSebugRbn",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000217346",
+        "sec_registrant_name": "Textron Inc.",
+        "sec_entity_name": "Textron Inc.",
+        "sec_ticker_title": "TEXTRON INC",
+        "registry_token_name": "Textron xStock"
+      }
+    },
+    {
+      "slug": "thermo-fisher-scientific",
+      "display_name": "Thermo Fisher",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TMO",
+          "mint": "Xs8drBWy3Sd5QY3aifG9kt9KFs2K3PGZmx7jWrsrk57",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000097745",
+        "sec_registrant_name": "THERMO FISHER SCIENTIFIC INC.",
+        "sec_entity_name": "THERMO FISHER SCIENTIFIC INC.",
+        "sec_ticker_title": "THERMO FISHER SCIENTIFIC INC.",
+        "registry_token_name": "Thermo Fisher xStock"
+      }
+    },
+    {
+      "slug": "tjx-companies",
+      "display_name": "TJX Companies",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "TJX",
+          "mint": "XsPWZN3FYcrvpEnxrQqogbVZtxpRX9tFomymKw2dWJS",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000109198",
+        "sec_registrant_name": "The TJX Companies, Inc.",
+        "sec_entity_name": "The TJX Companies, Inc.",
+        "sec_ticker_title": "TJX COMPANIES INC /DE/",
+        "registry_token_name": "TJX Companies xStock"
+      }
+    },
+    {
+      "slug": "trump-media-and-technology-group",
+      "display_name": "Trump Media & Technology Group",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DJT",
+          "mint": "XscR1RVZydyrL6Wn7WqbW2k6EmkLuS8SqDzuyptwxoj",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001849635",
+        "sec_registrant_name": "Trump Media & Technology Group Corp.",
+        "sec_entity_name": "Trump Media & Technology Group Corp.",
+        "sec_ticker_title": "Trump Media & Technology Group Corp.",
+        "registry_token_name": "Trump Media & Technology Group xStock"
+      }
+    },
+    {
+      "slug": "uber-technologies",
+      "display_name": "Uber",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "UBER",
+          "mint": "XsAsZLF4MmsvS1sDxRMrUz7REjHfwbC9UAMXSRBqgEB",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001543151",
+        "sec_registrant_name": "Uber Technologies, Inc",
+        "sec_entity_name": "Uber Technologies, Inc",
+        "sec_ticker_title": "Uber Technologies, Inc",
+        "registry_token_name": "Uber xStock"
+      }
+    },
+    {
+      "slug": "union-pacific",
+      "display_name": "Union Pacific",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "UNP",
+          "mint": "Xsehrw5hHiQ16Vfxxctj8ewUhtRCzbCrBYS278ctAAy",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000100885",
+        "sec_registrant_name": "UNION PACIFIC CORP",
+        "sec_entity_name": "UNION PACIFIC CORP",
+        "sec_ticker_title": "UNION PACIFIC CORP",
+        "registry_token_name": "Union Pacific xStock"
+      }
+    },
+    {
+      "slug": "unitedhealth-group",
+      "display_name": "UnitedHealth",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "UNH",
+          "mint": "XszvaiXGPwvk2nwb3o9C1CX4K6zH8sez11E6uyup6fe",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000731766",
+        "sec_registrant_name": "UnitedHealth Group Incorporated",
+        "sec_entity_name": "UnitedHealth Group Incorporated",
+        "sec_ticker_title": "UNITEDHEALTH GROUP INC",
+        "registry_token_name": "UnitedHealth xStock"
+      }
+    },
+    {
+      "slug": "verizon-communications",
+      "display_name": "Verizon Communications",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "VZ",
+          "mint": "Xs4VKGG8TTan8UN3mC1ufsDMamBtBLE4Ahfkyv2tfuy",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000732712",
+        "sec_registrant_name": "VERIZON COMMUNICATIONS INC",
+        "sec_entity_name": "VERIZON COMMUNICATIONS INC",
+        "sec_ticker_title": "VERIZON COMMUNICATIONS INC",
+        "registry_token_name": "Verizon Communications xStock"
+      }
+    },
+    {
+      "slug": "vertex-pharmaceuticals",
+      "display_name": "Vertex Pharmaceuticals",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "VRTX",
+          "mint": "XsgCWpLUC3pv6JmNAFtkYmuwSaikShy8QZRuripgBzn",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000875320",
+        "sec_registrant_name": "VERTEX PHARMACEUTICALS INC / MA",
+        "sec_entity_name": "VERTEX PHARMACEUTICALS INC / MA",
+        "sec_ticker_title": "VERTEX PHARMACEUTICALS INC / MA",
+        "registry_token_name": "Vertex Pharmaceuticals xStock"
+      }
+    },
+    {
+      "slug": "visa",
+      "display_name": "Visa",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "V",
+          "mint": "XsqgsbXwWogGJsNcVZ3TyVouy2MbTkfCFhCGGGcQZ2p",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001403161",
+        "sec_registrant_name": "VISA INC.",
+        "sec_entity_name": "VISA INC.",
+        "sec_ticker_title": "VISA INC.",
+        "registry_token_name": "Visa xStock"
+      }
+    },
+    {
+      "slug": "walmart",
+      "display_name": "Walmart",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "WMT",
+          "mint": "Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000104169",
+        "sec_registrant_name": "WALMART INC.",
+        "sec_entity_name": "WALMART INC.",
+        "sec_ticker_title": "Walmart Inc.",
+        "registry_token_name": "Walmart xStock"
+      }
+    },
+    {
+      "slug": "walt-disney",
+      "display_name": "Walt Disney",
+      "display_name_basis": "reviewed_override",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "DIS",
+          "mint": "Xsg93jDV656ULQ5u9yT2x5DS9b4xGD8aDCtfESSW6Bb",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0001744489",
+        "sec_registrant_name": "WALT DISNEY CO/",
+        "sec_entity_name": "WALT DISNEY CO/",
+        "sec_ticker_title": "Walt Disney Co",
+        "registry_token_name": "The Walt Disney xStock"
+      }
+    },
+    {
+      "slug": "wells-fargo",
+      "display_name": "Wells Fargo",
+      "display_name_basis": "registry_token_name",
+      "listing_status": "us_listed",
+      "instruments": [
+        {
+          "source": "xstocks_registry",
+          "ticker": "WFC",
+          "mint": "XspHXejQ3A4VeimAqR1mAkvgTWgpmmoNR5CUhwCqzqr",
+          "binding_basis": "issuer_product_name"
+        }
+      ],
+      "evidence": {
+        "sec_cik": "0000072971",
+        "sec_registrant_name": "WELLS FARGO & COMPANY/MN",
+        "sec_entity_name": "WELLS FARGO & COMPANY/MN",
+        "sec_ticker_title": "WELLS FARGO & COMPANY/MN",
+        "registry_token_name": "Wells Fargo xStock"
+      }
+    }
+  ],
+  "excluded": []
+}

@@ -1,0 +1,408 @@
+{
+  "schema_version": "yakumo.generated-image-manifest.v1",
+  "asset_roots": [
+    "docs/ui-design/assets"
+  ],
+  "artifacts": [
+    {
+      "id": "benten-homepage-sumi-proof-2609131203",
+      "product": "benten",
+      "page": "homepage",
+      "theme": "sumi-proof",
+      "path": "docs/ui-design/assets/2609131203_benten_homepage_sumi-proof.png",
+      "sha256": "e3a553327f9eeac3d7a5de0bab7d1ab81076080b3799141a8b742b5072e164a0",
+      "recorded_at": "2026-09-13T12:03:41+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "accepted",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-13T12:03:41+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-homepage-spot-acquisition-2609140137",
+      "product": "benten",
+      "page": "homepage",
+      "theme": "spot-acquisition",
+      "path": "docs/ui-design/assets/2609140137_benten_homepage_spot-acquisition.png",
+      "sha256": "c0d853babaf5f1fa0e0b093b5b9c5313746b5c645d925ba44921c4648c8b505a",
+      "recorded_at": "2026-09-14T01:37:02+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "rejected",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-14T01:37:02+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-homepage-spot-acquisition-2609140138",
+      "product": "benten",
+      "page": "homepage",
+      "theme": "spot-acquisition",
+      "path": "docs/ui-design/assets/2609140138_benten_homepage_spot-acquisition.png",
+      "sha256": "e2d6afee59d5e12482c9c9601b3483098f2d50ef4d3f8db077c73d65ca76526b",
+      "recorded_at": "2026-09-14T01:38:35+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "rejected",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-14T01:38:35+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-homepage-spot-acquisition-2609140140",
+      "product": "benten",
+      "page": "homepage",
+      "theme": "spot-acquisition",
+      "path": "docs/ui-design/assets/2609140140_benten_homepage_spot-acquisition.png",
+      "sha256": "851895e1d10f92a9b894eae2a8904707d5c2a2a82e8cf2a261acf91dad5faea1",
+      "recorded_at": "2026-09-14T01:40:43+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-14T01:40:43+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-home-workspace-ink-neutral-2609140910",
+      "product": "benten",
+      "page": "home-workspace",
+      "theme": "ink-neutral",
+      "path": "docs/ui-design/assets/2609140910_benten_home-workspace_ink-neutral.png",
+      "sha256": "54b248cdc83c7d8e377c59c75826b5f7a1f9efb241d5e81987b49f0843127c38",
+      "recorded_at": "2026-09-14T09:10:39+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-14T09:10:39+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-token-dossier-ink-neutral-2609140916",
+      "product": "benten",
+      "page": "token-dossier",
+      "theme": "ink-neutral",
+      "path": "docs/ui-design/assets/2609140916_benten_token-dossier_ink-neutral.png",
+      "sha256": "70b5fd3b069eefe439ee96a47f5a69c94258fbba6a5d534233ef2f88304ee50d",
+      "recorded_at": "2026-09-14T09:16:04+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-14T09:16:04+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-home-workspace-shadcn-baseline-2609141052",
+      "product": "benten",
+      "page": "home-workspace",
+      "theme": "shadcn-baseline",
+      "path": "docs/ui-design/assets/2609141052_benten_home-workspace_shadcn-baseline.png",
+      "sha256": "5594b0ed6f515d1e0e01e6c6d886486bfe147111be46f46309ea3ebf529fc316",
+      "recorded_at": "2026-09-14T10:52:43+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-14T10:52:43+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-nvda-purchase-review-mineral-ink-2609240653",
+      "product": "benten",
+      "page": "nvda-purchase-review",
+      "theme": "mineral-ink",
+      "path": "docs/ui-design/assets/2609240653_benten_nvda-purchase-review_mineral-ink.png",
+      "sha256": "11ae85547cc91dda0a1278ed05b6b2d1486d0fe3233160c329e605e91f23557b",
+      "recorded_at": "2026-09-24T06:53:03+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T06:53:03+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-nvda-purchase-finalized-mineral-ink-2609240653",
+      "product": "benten",
+      "page": "nvda-purchase-finalized",
+      "theme": "mineral-ink",
+      "path": "docs/ui-design/assets/2609240653_benten_nvda-purchase-finalized_mineral-ink.png",
+      "sha256": "b7d33d226c5d36d6eca134480fb030fc06cf240b9fce449d1a5e8344765fad1a",
+      "recorded_at": "2026-09-24T06:53:28+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T06:53:28+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-nvda-purchase-expired-mineral-ink-2609240653",
+      "product": "benten",
+      "page": "nvda-purchase-expired",
+      "theme": "mineral-ink",
+      "path": "docs/ui-design/assets/2609240653_benten_nvda-purchase-expired_mineral-ink.png",
+      "sha256": "feabea42b9d63aed8093d17352e811cb6da23e83e8764ecadbb7b4a1db59a98e",
+      "recorded_at": "2026-09-24T06:53:37+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T06:53:37+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-nvda-purchase-mobile-states-mineral-ink-2609240653",
+      "product": "benten",
+      "page": "nvda-purchase-mobile-states",
+      "theme": "mineral-ink",
+      "path": "docs/ui-design/assets/2609240653_benten_nvda-purchase-mobile-states_mineral-ink.png",
+      "sha256": "18d7be93501b81abaf56e5096a9547da5031bb5621802bec7e957dac08f004f9",
+      "recorded_at": "2026-09-24T06:53:06+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T06:53:06+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-company-openai-mineral-ink-2609241117",
+      "product": "benten",
+      "page": "company-openai",
+      "theme": "mineral-ink",
+      "path": "docs/ui-design/assets/2609241117_benten_company-openai_mineral-ink.png",
+      "sha256": "c043620eff6019977e977997462ca2fa4de860c436a226c4ee787a0d07df90ac",
+      "recorded_at": "2026-09-24T11:17:13+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T11:17:13+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-company-openai-mobile-mineral-ink-2609241117",
+      "product": "benten",
+      "page": "company-openai-mobile",
+      "theme": "mineral-ink",
+      "path": "docs/ui-design/assets/2609241117_benten_company-openai-mobile_mineral-ink.png",
+      "sha256": "654de70717d4fe17a10bc0a6217d9bb9fe51ea735c6d58c48fec78da8316e5b0",
+      "recorded_at": "2026-09-24T11:17:05+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T11:17:05+09:00",
+        "tool": "Codex built-in image generation"
+      }
+    },
+    {
+      "id": "benten-app-icon-gofun-kincha-2609242331",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "gofun-kincha",
+      "path": "docs/ui-design/assets/2609242331_benten_app-icon_gofun-kincha.png",
+      "sha256": "fd959cbff8fc3e9204e8fd6aa3e632ec39571afe466fe946d7f0e9ef870be107",
+      "recorded_at": "2026-09-24T23:31:58+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "rejected",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T23:31:58+09:00",
+        "tool": "Codex built-in image generation (image edit of the accepted option-1 biwa-and-wave candidate)"
+      }
+    },
+    {
+      "id": "benten-app-icon-roiro-konjiki-2609242332",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "roiro-konjiki",
+      "path": "docs/ui-design/assets/2609242332_benten_app-icon_roiro-konjiki.png",
+      "sha256": "23b9e5139eb3eb5686496e49cc5f80ac68e2533e35b116b071b8d4178b7f7901",
+      "recorded_at": "2026-09-24T23:32:04+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T23:32:04+09:00",
+        "tool": "Codex built-in image generation (image edit of the accepted option-1 biwa-and-wave candidate)"
+      }
+    },
+    {
+      "id": "benten-app-icon-roiro-konjiki-2609242333",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "roiro-konjiki",
+      "path": "docs/ui-design/assets/2609242333_benten_app-icon_roiro-konjiki.png",
+      "sha256": "587cebcd8d686d5fb9548bac2d962dfd24eca2bf56b860c1ab3f8fb45f06b10f",
+      "recorded_at": "2026-09-24T23:33:57+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T23:33:57+09:00",
+        "tool": "Codex built-in image generation, then processed locally by scripts/design/flatten-app-icon.py: coverage mask from the dark generation docs/ui-design/assets/2609242332_benten_app-icon_roiro-konjiki.png (sha256 23b9e5139eb3eb5686496e49cc5f80ac68e2533e35b116b071b8d4178b7f7901), area-reduced to 1024 and recomposed in two flat colours (roiro #0C0C0C ground, konjiki #E6B422 mark)"
+      }
+    },
+    {
+      "id": "benten-app-icon-gofun-kincha-2609242333",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "gofun-kincha",
+      "path": "docs/ui-design/assets/2609242333_benten_app-icon_gofun-kincha.png",
+      "sha256": "12e4642818d261509679168bb8e8799dbe05970afda4fcb1084572e9055feb45",
+      "recorded_at": "2026-09-24T23:33:57+09:00",
+      "timestamp_basis": "generated_at",
+      "sequence": 0,
+      "verification_status": "verified",
+      "review_status": "review_pending",
+      "provenance": {
+        "kind": "generated",
+        "generated_at": "2026-09-24T23:33:57+09:00",
+        "tool": "Codex built-in image generation, then processed locally by scripts/design/flatten-app-icon.py: coverage mask from the dark generation docs/ui-design/assets/2609242332_benten_app-icon_roiro-konjiki.png (sha256 23b9e5139eb3eb5686496e49cc5f80ac68e2533e35b116b071b8d4178b7f7901), area-reduced to 1024 and recomposed in two flat colours (gofun #FFFFFC ground, kincha #C47222 mark)"
+      }
+    }
+  ],
+  "legacy_artifacts": [],
+  "current_references": [
+    {
+      "path": "docs/ui-design/README.md",
+      "product": "benten",
+      "page": "homepage",
+      "theme": "sumi-proof",
+      "marker": "generated-image-current:benten/homepage/sumi-proof"
+    },
+    {
+      "path": "docs/ui-design/spot-acquisition-design.md",
+      "product": "benten",
+      "page": "homepage",
+      "theme": "spot-acquisition",
+      "marker": "generated-image-current:benten/homepage/spot-acquisition"
+    },
+    {
+      "path": "docs/ui-design/unsigned-route-workspace-design.md",
+      "product": "benten",
+      "page": "home-workspace",
+      "theme": "ink-neutral",
+      "marker": "generated-image-current:benten/home-workspace/ink-neutral"
+    },
+    {
+      "path": "docs/ui-design/unsigned-route-workspace-design.md",
+      "product": "benten",
+      "page": "token-dossier",
+      "theme": "ink-neutral",
+      "marker": "generated-image-current:benten/token-dossier/ink-neutral"
+    },
+    {
+      "path": "docs/ui-design/shadcn-baseline-review.md",
+      "product": "benten",
+      "page": "home-workspace",
+      "theme": "shadcn-baseline",
+      "marker": "generated-image-current:benten/home-workspace/shadcn-baseline"
+    },
+    {
+      "path": "docs/ui-design/purchase-panel-design.md",
+      "product": "benten",
+      "page": "nvda-purchase-review",
+      "theme": "mineral-ink",
+      "marker": "generated-image-current:benten/nvda-purchase-review/mineral-ink"
+    },
+    {
+      "path": "docs/ui-design/purchase-panel-design.md",
+      "product": "benten",
+      "page": "nvda-purchase-finalized",
+      "theme": "mineral-ink",
+      "marker": "generated-image-current:benten/nvda-purchase-finalized/mineral-ink"
+    },
+    {
+      "path": "docs/ui-design/purchase-panel-design.md",
+      "product": "benten",
+      "page": "nvda-purchase-expired",
+      "theme": "mineral-ink",
+      "marker": "generated-image-current:benten/nvda-purchase-expired/mineral-ink"
+    },
+    {
+      "path": "docs/ui-design/purchase-panel-design.md",
+      "product": "benten",
+      "page": "nvda-purchase-mobile-states",
+      "theme": "mineral-ink",
+      "marker": "generated-image-current:benten/nvda-purchase-mobile-states/mineral-ink"
+    },
+    {
+      "path": "docs/ui-design/company-comparison-design.md",
+      "product": "benten",
+      "page": "company-openai",
+      "theme": "mineral-ink",
+      "marker": "generated-image-current:benten/company-openai/mineral-ink"
+    },
+    {
+      "path": "docs/ui-design/company-comparison-design.md",
+      "product": "benten",
+      "page": "company-openai-mobile",
+      "theme": "mineral-ink",
+      "marker": "generated-image-current:benten/company-openai-mobile/mineral-ink"
+    },
+    {
+      "path": "docs/ui-design/app-icon-design.md",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "roiro-konjiki",
+      "marker": "generated-image-current:benten/app-icon/roiro-konjiki"
+    },
+    {
+      "path": "docs/ui-design/app-icon-design.md",
+      "product": "benten",
+      "page": "app-icon",
+      "theme": "gofun-kincha",
+      "marker": "generated-image-current:benten/app-icon/gofun-kincha"
+    }
+  ]
+}

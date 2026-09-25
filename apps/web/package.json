@@ -1,0 +1,40 @@
+{
+  "name": "web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "predev": "pnpm --filter @benten/registry --filter @benten/solana --filter @benten/solana-rpc-relay build",
+    "dev": "next dev",
+    "prebuild": "pnpm --filter @benten/registry --filter @benten/solana --filter @benten/solana-rpc-relay build",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@benten/purchase": "workspace:*",
+    "@benten/registry": "workspace:*",
+    "@benten/solana": "workspace:*",
+    "@benten/solana-rpc-relay": "workspace:*",
+    "@meteora-ag/dlmm": "1.9.14",
+    "@solana-mobile/wallet-standard-mobile": "^0.4.0",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/web3.js": "^1.99.0",
+    "@wallet-standard/app": "1.1.1",
+    "@wallet-standard/base": "1.1.1",
+    "bn.js": "^5.2.1",
+    "next": "^14.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.6",
+    "@types/node": "^24.7.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.0"
+  }
+}

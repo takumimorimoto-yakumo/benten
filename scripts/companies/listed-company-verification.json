@@ -1,0 +1,12 @@
+{
+  "schema_version": "benten.listed-company-verification.v1",
+  "method": "Independent re-check of every map row against SEC EDGAR: each row's CIK against the live company_tickers.json and the CIK's submissions record (which lists the ticker), and each source-verified facts record's CIK and 10-K accession against the same CIK's submissions filings. Names were compared, not used to bind.",
+  "checked_on": "2026-09-24",
+  "checked_by": "independent re-check, separate from the generator run",
+  "counts": {
+    "map_companies": 129,
+    "map_cik_matches_sec": 129,
+    "verified_facts_records": 107,
+    "verified_facts_cik_and_accession_match": 107
+  }
+}

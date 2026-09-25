@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "benten.document-consolidation-receipt.v1",
+  "recordedDate": "2026-09-22",
+  "sourceRevision": "be1d2bb9a56e8b32be051dbe014c4f094ca37917",
+  "scope": "historical suspended purchase-first UI documents",
+  "authorization": "local consolidation and deletion approved by the current user task",
+  "deletedSources": [
+    {
+      "path": "docs/ui-design/spot-acquisition-consumer-matrix.md",
+      "byteLength": 6528,
+      "sha256": "f28d774682aeec0466041ccc848570b6b986e4b435d46d33ec478a8824d80095"
+    },
+    {
+      "path": "docs/ui-design/spot-acquisition-handoff.md",
+      "byteLength": 6439,
+      "sha256": "246b8fecb51e4abbc5b55727f77480ac67c18eb536d59bf664e9bd4c4fea5e99"
+    }
+  ],
+  "canonicalOutcome": {
+    "currentInformationContract": "docs/ui-design/README.md#current-information-ui-and-future-purchase-boundary",
+    "preservedRequirements": [
+      "read-only and no-sign/no-send current runtime",
+      "unknown outcome status lookup and no automatic resend",
+      "allowlist and coverage do not imply route availability",
+      "five-locale and accessibility acceptance criteria",
+      "independent visual QA"
+    ],
+    "proposalStatus": "historical only; not promoted or authorized for implementation"
+  },
+  "migratedInboundLinks": [
+    "docs/ui-design/spot-acquisition-design.md",
+    "docs/ui-design/ia-acquisition.md"
+  ],
+  "protectedArtifacts": [
+    "docs/ui-design/generated-image-manifest.v1.json",
+    "docs/ui-design/assets/2609140140_benten_homepage_spot-acquisition.png",
+    "docs/ui-design/prompts/2609140140_benten_homepage_spot-acquisition.txt",
+    "docs/ui-design/acceptance.md"
+  ],
+  "postMutationArtifacts": [
+    {
+      "path": "docs/ui-design/README.md",
+      "byteLength": 8168,
+      "sha256": "135f71fd713704c7e970ea113fb5a07854abe09f0fde98401833ec0ac0217759"
+    },
+    {
+      "path": "docs/ui-design/spot-acquisition-design.md",
+      "byteLength": 17735,
+      "sha256": "032ffb7668c041b837a699acc0dedae4013df4884206992f4426b144919c5a54"
+    },
+    {
+      "path": "docs/ui-design/ia-acquisition.md",
+      "byteLength": 16834,
+      "sha256": "3732158e5bef9f4a784eba697903f8e1af7f6aac2dc149fbec7286c7b4229ef2"
+    },
+    {
+      "path": "docs/ui-design/generated-image-manifest.v1.json",
+      "byteLength": 20192,
+      "sha256": "5da05974a709e3e2b152a1b60b2020931fbf8f7d2f7b87cb8d926b1e1e1c39ac"
+    },
+    {
+      "path": "docs/ui-design/acceptance.md",
+      "byteLength": 1448,
+      "sha256": "d920fe44838753723e3d0c5da8add9f44989643a52f2cabbf0ef632bcfe7deb4"
+    }
+  ],
+  "cohortMetrics": {
+    "beforeFileCount": 2,
+    "beforeByteLength": 12967,
+    "afterFileCount": 0,
+    "afterByteLength": 0,
+    "netFileCount": -2,
+    "netByteLength": -12967
+  },
+  "exactRestore": {
+    "command": "git restore --source=be1d2bb9a56e8b32be051dbe014c4f094ca37917 -- docs/ui-design/spot-acquisition-consumer-matrix.md docs/ui-design/spot-acquisition-handoff.md",
+    "verification": "recompute SHA-256 and compare with deletedSources"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@benten/public-api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@benten/mcp": "workspace:*",
+    "@benten/pricing": "workspace:*",
+    "@benten/registry": "workspace:*",
+    "@benten/solana-rpc-relay": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.4",
+    "typescript": "5.9.3",
+    "vitest": "5.0.0"
+  }
+}

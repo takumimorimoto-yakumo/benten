@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "artifact_revision": "2026-09-25-statement-history-97cbb53d",
+  "published_at": "2026-09-24T15:45:08Z",
+  "registry_as_of": "2026-09-12",
+  "registry_source_url": "https://docs.xstocks.fi/developers",
+  "financial_source_authority": "SEC EDGAR",
+  "registry_snapshot_sha256": "27441e02a030c11ba408c0e8b475b939f5ee2c0acf1f51d2fa43509c5a26a296",
+  "legacy_financial_snapshot_sha256": "1128ea10dc4499e327d033b57e0133e07e3a39f270eb2bb7779e625188db4f22",
+  "verified_overlay_sha256": "57140b461d10a7d54c91a036aaf225a2b2b178041af98c5431ab79cc74cbe50a",
+  "verified_annual_sha256": "34ec46415b1c1251ca119e93ceb6ad6a93b5af205d8f08e7bd872c7e09f8eaff",
+  "verified_statements_sha256": {
+    "pl": "3bb5d0f786683fa1108855465c171e75cfc2b321eb7e1e1b310151b8e64c2d77",
+    "bs": "151abd6c187e07a973b3319bab12dd1a4e4053d0f0bfcd15557997bd4c2b112e",
+    "cf": "1a270b3dc7a458a646b2a08e45dc9822899411f9c623da8d48df1c7c7e2b1a90",
+    "per_share": "770ef5673049f0904a515b9ccb33dd3c00fab206a7bd71f7b3003c4a37d99a42"
+  },
+  "record_counts": {
+    "registry": 154,
+    "eligible": 129,
+    "snapshot_available": 128,
+    "source_verified": 107,
+    "annual_years": 1182,
+    "statement_years": 4660
+  }
+}

@@ -1,0 +1,32 @@
+Use your built-in image generation tool (image_gen) to generate exactly ONE image from the prompt below. The attached image is the reference screenshot of the current page; use it as a visual reference for the generation. Do not edit or create any files, do not run any shell commands other than to locate the generated file, and do not use any other method to make the image. When done, print one final line: GENERATED_IMAGE_PATH=<absolute path under ~/.codex/generated_images>. If image generation is unavailable, print IMAGE_GEN_UNAVAILABLE and stop.
+
+PROMPT:
+UI mockup (ui-mockup), design reference only. Product: Benten, an open-source site of source-labeled facts for Solana xStock tokens. User story: an individual investor on the existing NVDA stock page wants to buy the NVDAx token with USDC in their own Solana wallet, and must understand exactly what the wallet approval will do and then verify what they received. Single job of this panel: review exact swap terms, approve in the wallet once, verify the result.
+
+Restyle faithfully to the attached reference screenshots of the CURRENT page: keep its exact visual language. Calm mineral grey-green page background (#eef0ec), near-white surfaces (#f9faf7), dark blue-green ink text (#14252b), muted grey-teal secondary text (#51646a), thin grey-green hairline borders (#c9d1cd), deep indigo-blue primary action (#234c61) with near-white text, muted pine green for verified/completed (#2f665a), subdued clay red only for errors (#a84a3a). System sans-serif UI font, serif only in the "Benten" wordmark, tabular figures for every number, monospace for addresses/signatures, small 4-8px radii, no shadows or only an imperceptible one, no gradients, no glow, no crypto neon, no illustrations, no third-party logos, no emoji, no charts, no prices, no rankings. Quiet, restrained, Japanese-calm (wabi-sabi restraint in spacing and tone), generous whitespace, left-aligned text. Sentence-case labels, no all-caps labels, no middle-dot separated meta strings, no arrows appended to button text.
+
+Page frame to keep from the reference: header with "Benten" serif wordmark, "Open-source financial facts for Solana xStocks.", nav links "How it works", "Registry", "Other providers", language links. Breadcrumb "← All xStocks". Title "NVDA" bold with "NVIDIA xStock" in muted color, small green pill "Financials". A "Registry record" table (rows: Underlying ticker NVDA; Token symbol NVDAx; Token name NVIDIA xStock; Mint Xsc9qv…mx9qEh; Issuer S7vYFF…sJuRaS; Issuer verified true; Token decimals 8).
+
+Never use the words quote, NAV, price target, recommended, best. Render all text legibly and exactly as given; do not invent extra copy, numbers or addresses. No browser chrome.
+
+Viewport: desktop browser 1440x900, full-page crop starting at the header.
+Layout: below the title, a two-column band. Left column (wider, about 60%): the existing "Registry record" section and table. Right column (about 26rem wide, top aligned with "Registry record"): a purchase panel on a near-white surface with a 1px hairline border and 8px radius.
+
+State: REVIEW READY (swap preview shown, waiting for the user to approve in the wallet).
+Purchase panel content top to bottom:
+1. Heading "Buy NVDAx with USDC" (bold, same size as "Registry record"). Muted line: "One fixed route: Meteora DLMM pool F4inHs…Vy2a. You approve and send in your own wallet. Benten never signs or holds funds."
+2. A quiet notice block (pale grey-green surface, 3px muted left border) titled "Before you buy" with four short lines: "The issuer prohibits US persons from buying or holding NVDAx." "Benten does not check whether you are eligible." "Availability from any country is not guaranteed." "This is not investment advice."
+3. Wallet row: small green dot + "Wallet connected" and monospace "7xKX…gAsU", quiet link button "Disconnect". Below: "USDC balance 25.00".
+4. Field label "Amount to pay (USDC)" with an input showing "1.00" and helper text "1000000 raw units. USDC uses 6 decimals."
+5. Subheading "Swap preview" and a two-column definition list with hairline row rules, right-aligned tabular values, each value with a small muted raw line under it:
+   You pay | 1.00 USDC (raw 1000000)
+   Expected to receive | 0.00441982 NVDAx (raw 441982)
+   Minimum you receive | 0.00437562 NVDAx (raw 437562)
+   Pool fee | 0.00225 USDC (includes protocol share 0.00025 USDC)
+   Slippage tolerance | 1.00%
+   Price impact | 0.01%
+   Preview expires | in 0:24
+   Small muted note under the list: "NVDAx amounts use the display multiplier read from the mint at 14:02:11."
+6. Full-width primary button "Approve in wallet" (deep indigo-blue). Next to or below it a quiet underlined text button "Refresh preview".
+7. Small muted footnote: "Your wallet shows the network fee in SOL. Benten sends once and never retries automatically."
+The left column continues with the start of "Legacy snapshot" below the table. Keep the panel calm and dense but readable; it is the only primary action on the page.

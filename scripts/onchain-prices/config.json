@@ -1,0 +1,90 @@
+{
+  "rpc": {
+    "default_url": "https://api.mainnet-beta.solana.com",
+    "url_env": "ONCHAIN_PRICES_RPC_URL",
+    "min_interval_ms": 350,
+    "max_retries": 8,
+    "backoff_base_ms": 2000,
+    "backoff_max_ms": 60000,
+    "timeout_ms": 30000
+  },
+  "cache_dir_env": "ONCHAIN_PRICES_CACHE_DIR",
+  "search": {
+    "method": "signatures",
+    "initial_window_slots": 150,
+    "window_growth": 4,
+    "max_slot_distance": 4500,
+    "max_signature_pages": 10,
+    "max_verifications_per_ticker_day": 12,
+    "min_usdc_raw": "1000000",
+    "slot_seconds_estimate": 0.4,
+    "max_block_time_probes": 40,
+    "blocks_method": {
+      "max_slot_distance": 750,
+      "max_blocks_per_day": 40
+    }
+  },
+  "session_calendar": {
+    "exchange": "NYSE",
+    "time_zone": "America/New_York",
+    "regular_close": "16:00",
+    "early_close": "13:00",
+    "full_closures": [
+      "2025-07-04",
+      "2025-09-01",
+      "2025-11-27",
+      "2025-12-25",
+      "2026-01-01",
+      "2026-01-19",
+      "2026-02-16",
+      "2026-04-03",
+      "2026-05-25",
+      "2026-06-19",
+      "2026-07-03",
+      "2026-09-07",
+      "2026-11-26",
+      "2026-12-25"
+    ],
+    "early_closes": [
+      "2025-07-03",
+      "2025-11-28",
+      "2025-12-24",
+      "2026-11-27",
+      "2026-12-24"
+    ],
+    "sources": [
+      {
+        "years": [
+          2026
+        ],
+        "url": "https://www.nyse.com/trade/hours-calendars",
+        "checked_at": "2026-09-24",
+        "finding": "Holidays and 1:00 p.m. early closes for 2026 as listed on the exchange page."
+      },
+      {
+        "years": [
+          2025
+        ],
+        "url": "https://www.nyse.com/trade/hours-calendars",
+        "checked_at": "2026-09-24",
+        "finding": "The page now lists 2026 to 2028 only; the 2025 dates are the exchange's previously published 2025 schedule and were not re-read from the page."
+      }
+    ]
+  },
+  "pool_probes": {
+    "directory": "https://api.geckoterminal.com/api/v2/networks/solana/tokens/{mint}/pools (first page, public, read only)",
+    "rule": "Candidates are the USDC pools of the xStock on the directory's first page with at least min_tx_24h transactions in the last 24 hours (used only to find candidate addresses). At each probe instant the successful pool transactions in the 24 hours before it are counted from the ledger (getSignaturesForAddress, at most 1000). The pool with the longest unbroken run of active probes ending at the latest probe is chosen; a tie goes to the larger sum of probe counts. One pool per ticker, fixed for the whole series.",
+    "min_tx_24h": 100,
+    "anchor_tolerance_seconds": 900,
+    "instants": [
+      "2025-07-15T12:00:00Z",
+      "2025-09-15T12:00:00Z",
+      "2025-11-14T12:00:00Z",
+      "2026-01-15T12:00:00Z",
+      "2026-03-16T12:00:00Z",
+      "2026-05-15T12:00:00Z",
+      "2026-07-15T12:00:00Z",
+      "2026-09-15T12:00:00Z"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+Tool: Codex built-in image generation (image edit), run through codex exec 0.156.1.
+Reference image (referenced_image_paths): the accepted option-1 biwa-and-wave candidate at 1024 px, SHA-256 382228ea66b0e787c429d44b6a6d183d5c519ca0f2b002c3f7a824ce564c5eaa (reduced from its 1254 px generation, SHA-256 30cb5e3ddbd120878f5ca7c2f8b0ee4be555a0d39347c87fa809477e0b1f205e; neither is committed).
+Prompt (verbatim):
+
+App icon for "Benten", a calm mobile finance app (individual investors compare ways to own a company on Solana and hold with their own wallet). Recolor and rescale the attached reference icon. The reference is the accepted mark: a single teardrop (biwa lute body) containing two thick wave bands. KEEP THE SHAPE EXACTLY: same teardrop outline, same pointed tip, same two wave bands, same stroke thicknesses, same proportions and same placement of every inner cut. Do not redraw, restyle, simplify, add or remove any element. Only two changes are allowed: the two colors, and the size of the mark.
+Size: shrink the whole mark uniformly, centered on the canvas, so that the entire mark (tip to bottom, left to right) fits inside a centered circle whose diameter is 68% of the canvas width. The tip must be well below the top edge; about 16% of the canvas height of empty background above the tip and below the bottom of the drop.
+Square 1024x1024, flat vector style, fully opaque full-bleed square background filling the entire canvas edge to edge. No rounded corners, no tile, no device frame, no border, no mockup. Exactly two flat colors: no gradient, no gloss, no highlight, no shadow, no texture, no noise, no glow, no 3D. No text.
+Colors: background is flat roiro lacquer black (#0C0C0C). The mark is flat konjiki gold (#E6B422). Only these two colors.

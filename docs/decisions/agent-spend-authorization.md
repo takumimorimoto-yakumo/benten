@@ -1,0 +1,40 @@
+---
+id: agent-spend-authorization
+title: Keep agent spending authorization and execution outside Benten
+date: 2026-09-14
+status: decided
+tags: [security, solana, agents]
+repos: [benten]
+plan_start: 2026-09-14
+plan_end: 2026-09-14
+---
+
+## Context
+
+The user has decided that **the user, not Benten, grants any automated spending authority**. The user or their chosen external wallet/agent/provider owns any delegation, signer, funding, order submission, revocation and reconciliation. Benten supplies publishable facts and machine-readable investigation tools; a future reviewed release may add unsigned route/quote/intent context. Existing `apps/web/app/providers.tsx` and `apps/web/components/WalletSection.tsx` contain explicit-connect, read-only wallet code, but are **not mounted in current app routes**. Current API/MCP remain snapshot-only and read-only under the [architecture](../../specs/vnext-architecture.md) and local no-sign/no-send guidance. This ADR changes product responsibility, not runtime authority.
+
+`decided` records only this user-fixed responsibility boundary. The feasibility, public contract, legal wording and release of an unsigned route/quote/intent tool remain exploratory and separately gated.
+
+## Product and trust-boundary decision
+
+**Benten will not issue, custody, administer or guarantee an autonomous trading grant.** It will not hold an owner or agent key/seed, install an SPL delegate, run a Benten policy vault/smart account, request a trade signature, submit an order, or operate a grant/revoke UI. A Benten API key authenticates tool access at most and is never wallet spending authority. Wallet connection is only a user-consented public-address/balance read; it does not sign, delegate or enable unattended trading. Benten does not prevent a user from independently authorizing their own external agent, but does not attest that this external setup is safe or active.
+
+Existing Benten capabilities are public registry/snapshot facts and read-only API/MCP. A non-exported, [draft-only validator](../../specs/delegated-spend-security.md) checks the syntax and arithmetic of untrusted proposals; it grants no funds and is not an agent product API. A future unsigned route/quote/intent tool requires exact allowlist, source/slot/freshness, Token-2022 units, executable-route and transaction-payload audit, legal wording and versioned public-contract review. It must say `not_authorization` and never advertise “safe automatic ordering” merely because a pool or wallet is visible.
+
+The user-side execution substrate must receive the user's separate signature or delegated authority and independently verify the actual transaction. A connected Benten wallet, Benten API key, unsigned intent or favorable fact cannot substitute for that authority. The external user/provider owns token/recipient/venue/amount/slippage/expiry limits, revocation, unknown-submission recovery and all execution receipts. Benten does not transform those externally asserted states into `active`, `revoked`, `confirmed` or eligible without a separately reviewed, trustworthy readback source.
+
+The prior security analysis remains relevant as **user-side risk disclosure**, not as a Benten implementation roadmap. [Solana Approve Delegate](https://solana.com/docs/tokens/basics/approve-delegate) allows a delegate to **transfer or burn** up to an allowance without binding recipient, venue, minOut or expiry; [Revoke](https://solana.com/docs/tokens/basics/revoke-delegate) takes effect only onchain. A funded ordinary agent wallet bounds loss by balance but lets its key holder choose any destination or price. The observed [Squads spending-limit UI](https://docs.squads.so/main/navigating-your-squad/settings/spending-limits) documents withdrawals, not proof of exact DEX swap protection. [Turnkey policy language](https://docs.turnkey.com/features/policies/language) can inspect top-level Solana instructions but misses indirect/CPI SPL transfers and unresolved ALT addresses; its [root quorum bypasses policies](https://docs.turnkey.com/features/policies/overview). None should be represented by Benten as a certified xStock trading policy. A user's external choice remains possible, at their own trust/risk boundary.
+
+Therefore **a Benten-operated autonomous spending service is out of product scope and unavailable**. This is not a claim that user-owned agents cannot technically trade. Any later proposal for Benten to own a policy vault, grant UI, signer, order endpoint or submission/receipt service is a **different project** requiring a new user decision, architecture, audit, legal review and live authorization; it cannot be inferred from this ADR. Today the public surfaces offer facts only. A future owner-signed trade or external autonomous trade happens in the owner's chosen environment, not inside Benten.
+
+## Tool boundary, external risk and reversal
+
+For Benten tools, an exact allowlisted mint is an identity gate, **not trade eligibility**. A future unsigned acquisition context must bind network/genesis, input/output mint and token program, venue/program/pool, raw amount and Token-2022 display context, provider/slot, fee/impact if known, independently described minOut, expiry and source; reject unknown accounts, unrelated recipients/signers, hidden transfers, stale quote, or unsupported route. Whether Benten can produce such a context safely is unverified. A ratio or slippage percentage measured only against an agent-supplied quote is not independent price protection. The external signer must re-audit the actual transaction and enforce its own policy; Benten does not issue a policy verdict.
+
+The external agent/wallet/provider retains every execution key and owns the user-side grant/revoke lifecycle. Benten never receives the owner's or agent's key/seed, obtains a blanket delegate, signs, sends, or promises to stop a third party by suspending a Benten API. A revoke is effective according to that external mechanism, not a Benten UI toggle; for SPL delegates, onchain finality matters. A transaction timeout without a known signature is `unknown_without_signature` for the external submitter and never permission for Benten to resend. Benten may not claim third-party settlement without separately verified chain evidence.
+
+The [bounded tool plan](../../specs/delegated-spend-security.md) separates Benten deliverables from external owner responsibilities. Its unsigned-context recommendation reverses to read-only if route/payload/legal testing fails. This product-scope decision changes only with a fresh explicit user decision to run a Benten execution service, plus independent security/legal/live gates. No current instruction authorizes a real grant, funded wallet, signing, submission, deployment or publication.
+
+## Source/evidence limits
+
+Official pages accessed 2026-09-14: [Solana Approve Delegate](https://solana.com/docs/tokens/basics/approve-delegate), [Revoke Delegate](https://solana.com/docs/tokens/basics/revoke-delegate), [PDA authority](https://solana.com/docs/core/pda), [transaction atomicity](https://solana.com/docs/core/transactions), [Squads spending limits](https://docs.squads.so/main/navigating-your-squad/settings/spending-limits), [Squads permissions](https://docs.squads.so/main/development/reference/permissions), [Turnkey policy language](https://docs.turnkey.com/features/policies/language), [Turnkey policy overview](https://docs.turnkey.com/features/policies/overview), and [xStocks legal overview](https://docs.xstocks.fi/docs/product-legal-overview). These establish mechanism and product restrictions, **not** a particular user's eligibility, any provider's current audit/deployment identity, xStock price-floor availability, or an executable Benten route. The judgement that published Squads withdrawal limits do not prove exact swaps is an inference from documented scope, pending program-level audit. The decision to keep authority outside Benten is the user's product instruction, not a conclusion inferred from these provider pages.

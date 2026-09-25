@@ -1,0 +1,592 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+/*
+ * Benten: the dark variant is `.dark` on <html> (set by the theme boot
+ * script, `features/theme`) or, when no script has run, the operating
+ * system's dark scheme. The generated rule was `&:is(.dark *)`.
+ */
+@custom-variant dark {
+  &:is(.dark, .dark *) { @slot; }
+  @media (prefers-color-scheme: dark) {
+    &:is(:root:not([data-theme-choice]), :root:not([data-theme-choice]) *) { @slot; }
+  }
+}
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: 'Geist Variable', sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* Benten: the generated `.dark` block, written once through the dark variant (above). */
+:root {
+  @variant dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+  html {
+    @apply font-sans;
+    }
+}
+/*
+ * Benten container sizes (Tailwind `@<name>:` variants). In rem, so they grow
+ * with the root font size: at 200% text a list needs twice the width.
+ */
+@theme {
+  /* A FactList goes to two columns only when it is at least this wide: the widest label column (13rem), the gap, and a value column no narrower than the label. */
+  --container-fact-list-split: 32rem;
+}
+
+/*
+ * Benten layout tokens. The generated shadcn tokens above stay untouched;
+ * every value Benten adds is named here and referenced from components.
+ */
+:root {
+  /* Widest content column shared by header, main, and footer. */
+  --page-max-width: 72rem;
+  /* Purchase rail width (design contract section 8), on every Dossier page. */
+  --purchase-panel-width: 26rem;
+  /* Dossier: facts column plus the purchase rail. */
+  --dossier-columns: minmax(0, 1fr) var(--purchase-panel-width);
+  /* Label/value rows: label column bounds, then the value. */
+  --fact-list-columns: minmax(8rem, 13rem) minmax(0, 1fr);
+  /* Stacked table rows on narrow screens: field label, then its value. */
+  --stacked-label-columns: minmax(6.5rem, 9rem) minmax(0, 1fr);
+  /* Home search: the field and its button share one row up to this width. */
+  --home-search-max-width: 36rem;
+  /* Home registry summary: four counts, then the wider purchase statement. */
+  --home-summary-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.6fr);
+
+  /* Purchase panel (design contract section 8). */
+  /* Sticky offset of the rail, and the rail height measured at runtime by StickyAside. */
+  --purchase-panel-sticky-top: 1.5rem;
+  --purchase-panel-height: 0px;
+  /* Trail dot diameter; large enough to carry the completed-step check mark. */
+  --purchase-trail-dot: .75rem;
+  /* Minimum height of every button and link in the panel. */
+  --touch-target-min: 2.75rem;
+  /* The only motion in the panel: a short crossfade when its state changes. */
+  --duration-state: .18s;
+  /* Left rule of the purchase notices. */
+  --notice-rule-width: 3px;
+  /* Completed trail steps and the connected mark. */
+  --verified: oklch(0.47 0.07 175);
+  --verified-surface: oklch(0.93 0.025 170);
+  /* Error notice surface: the destructive colour lightly tinted into the card. */
+  --attention-surface: color-mix(in oklch, var(--destructive) 7%, var(--card));
+  /* Form control boundary with at least 3:1 contrast on the card (the purchase amount and the Explore search). */
+  --control-border: var(--muted-foreground);
+
+  /* Verified facts table: the period column keeps room for a whole date on each line. */
+  --verified-period-min-width: 10rem;
+
+  /*
+   * Keyboard focus. The generated ring (--ring at 50%) is about 1.5:1 on the
+   * card, so controls get an opaque outline instead: --muted-foreground,
+   * 5.0:1 on the card and 4.6:1 on muted surfaces in light, 6.9:1 and 5.9:1
+   * in dark.
+   */
+  --focus-ring-color: var(--muted-foreground);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* Disabled Approve in wallet (design contract section 8): ink at least 5.14:1 on its surface, and never faded by opacity. */
+  --disabled-surface: var(--muted);
+  --disabled-ink: oklch(0.5 0 0);
+
+  /* Space kept above an in-page jump target (the purchase slot and its heading), matching the rail's sticky offset. */
+  --anchor-scroll-margin: var(--purchase-panel-sticky-top);
+
+  /*
+   * App shell (app IA section 3.2). The safe-area insets are 0 outside a
+   * notched or home-screen display; the viewport meta has viewport-fit=cover.
+   */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  /* Header row and bottom tab bar row. */
+  --app-header-height: 3.5rem;
+  /* The app mark before the Benten name in the header (the favicon file, shown smaller). */
+  --app-header-mark-size: 1.75rem;
+  --app-tab-bar-height: 3.5rem;
+  /* The pill behind the current tab's icon on the tab bar. */
+  --app-tab-indicator-height: 1.75rem;
+  --app-tab-indicator-width: 3.5rem;
+  /* Room the fixed tab bar takes at the bottom of the page below md. */
+  --app-tab-bar-space: calc(var(--app-tab-bar-height) + var(--safe-area-bottom));
+  /* Header menus (wallet, language). */
+  --app-menu-min-width: 11rem;
+  --app-menu-max-width: 18rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration-state: 0s; }
+}
+
+/*
+ * Benten component rules that utilities cannot express: the bottom-anchored
+ * sticky rail (the height variable is written on the rail element itself, so
+ * the formula must resolve there), per-language line breaking, and the
+ * programmatic-focus rule for headings.
+ */
+@media (width >= 64rem) {
+  [data-sticky-aside] {
+    align-self: start;
+    position: sticky;
+    top: min(var(--purchase-panel-sticky-top), calc(100dvh - var(--purchase-panel-height) - var(--purchase-panel-sticky-top)));
+  }
+}
+/*
+ * Per-language line breaking for every page, header and footer included:
+ * Japanese wraps at phrase boundaries so a short sentence end is not left
+ * alone on a line; Korean keeps words whole instead of breaking between
+ * syllables. The document language is the page locale (the purchase panel
+ * repeats the same value in its own lang attribute).
+ */
+html:lang(ja) body { word-break: auto-phrase; }
+html:lang(ko) body { word-break: keep-all; }
+/* Headings that receive focus programmatically are not controls; controls keep their focus ring. */
+[data-purchase-panel] [tabindex="-1"]:focus,
+[data-purchase-panel] [tabindex="-1"]:focus-visible,
+main h1[tabindex="-1"]:focus,
+main h1[tabindex="-1"]:focus-visible { outline: none; }
+/*
+ * Home-screen (standalone) display: there is no browser chrome, so the page
+ * does not rubber-band behind the fixed header and tab bar, and a long press
+ * on the app's own chrome does not open the link callout.
+ */
+@media (display-mode: standalone) {
+  html { overscroll-behavior-y: none; }
+  [data-app-header], [data-app-tabs] { -webkit-touch-callout: none; user-select: none; }
+}
+/* Below md a jump target or focused control is not hidden under the sticky header or the fixed tab bar. */
+html {
+  @variant max-md {
+    scroll-padding-top: calc(var(--app-header-height) + var(--safe-area-top));
+    scroll-padding-bottom: var(--app-tab-bar-space);
+  }
+}
+@keyframes purchase-state-in { from { opacity: .5; } to { opacity: 1; } }
+[data-purchase-stage] { animation: purchase-state-in var(--duration-state) ease-out; }
+
+/*
+ * Visible keyboard focus for every control: an opaque outline with an offset,
+ * replacing the translucent generated ring (see the tokens above and
+ * docs/ui-design/shadcn-baseline-review.md). Unlayered, so it wins over the
+ * generated `outline-none` utility.
+ */
+:where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+/* The outline is the indicator; the translucent generated ring would only blur its inner edge. */
+:where([data-slot=button], [data-slot=badge]):focus-visible { box-shadow: none; }
+
+/* Reduced motion: no transitions and no press nudge on the generated controls. */
+@media (prefers-reduced-motion: reduce) {
+  :where([data-slot=button], [data-slot=badge], [data-slot=input], [data-slot=table-row], input) {
+    transition: none;
+    translate: none;
+    transform: none;
+  }
+}
+
+/*
+ * Explore, the companies list and the company page (app IA sections 4.2 to
+ * 4.4). Layout values only; colours and type stay the generated tokens.
+ */
+:root {
+  /* Company page from lg: chart, statements and facts on the left, the one product card in the purchase-panel-wide right column. */
+  --company-columns: minmax(0, 1fr) var(--purchase-panel-width);
+  /* From lg (where the header scrolls away) the one product card stays in view while the chart and statements scroll. */
+  --company-products-sticky-top: var(--purchase-panel-sticky-top);
+  /* Explore from lg: heading and search on two thirds, the capability line on one third. */
+  --explore-intro-columns: minmax(0, 2fr) minmax(0, 1fr);
+  --explore-heading-max-width: 40rem;
+  --explore-search-max-width: 40rem;
+  /* The companies list keeps a row's name and symbol within one reading span. */
+  --directory-max-width: 48rem;
+  /* A-to-Z letter headings below md stick just under the sticky app header. */
+  --directory-letter-sticky-top: calc(var(--app-header-height) + var(--safe-area-top));
+}
+
+/*
+ * Product pages, the Pyth reference price and the buy flow (app IA sections
+ * 4.5, 5 and 6.3). Every value this block adds is named here.
+ */
+:root {
+  /* Reserved height of the Pyth figure before the price arrives: text-3xl at leading-tight, and one small line. */
+  --pyth-price-figure-height: 2.375rem;
+  --pyth-price-line-height: 1.25rem;
+  /* Room the pinned buy action bar takes below md: its fact line (text-sm), the touch-sized button, the gap and padding (2rem) and its top border. */
+  --product-action-bar-height: calc(1.25rem + var(--touch-target-min) + 2rem + 1px);
+  /* Inline padding of the buy flow's content, shared by its pinned action bar. */
+  --flow-inline-padding: 1rem;
+}
+/* Buy flow: the state's actions are pinned to the bottom of the flow, above the bottom safe area (app IA 5.1). */
+[data-purchase-variant="flow"] [data-purchase-actions] {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin-inline: calc(-1 * var(--flow-inline-padding));
+  padding: 0.75rem var(--flow-inline-padding) calc(0.75rem + var(--safe-area-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--background);
+}
+/* Below md the pinned buy action bar sits above the tab bar; the shell keeps room for both at the end of the page. */
+@media (width < 48rem) {
+  [data-app-shell]:has([data-product-capability="buyable"]) { padding-bottom: calc(var(--app-tab-bar-space) + var(--product-action-bar-height)); }
+}
+/*
+ * The in-flight purchase status line (app IA 5.1): below md it sits above
+ * the tab bar, and above the pinned buy action bar where one is shown; the
+ * shell keeps room for it at the end of the page.
+ */
+:root {
+  --purchase-status-height: calc(var(--touch-target-min) + 0.75rem);
+  --purchase-status-bottom: var(--app-tab-bar-space);
+}
+@media (width < 48rem) {
+  [data-app-shell]:has([data-product-capability="buyable"]) { --purchase-status-bottom: calc(var(--app-tab-bar-space) + var(--product-action-bar-height)); }
+  [data-app-shell]:has([data-purchase-status]) { padding-bottom: calc(var(--purchase-status-bottom) + var(--purchase-status-height)); }
+}
+/* The page behind an open buy flow does not scroll with it. */
+html:has([data-buy-flow]) { overflow: hidden; }
+
+/*
+ * The price and financials charts (company and product pages). In rem, so
+ * the plot grows with the text size; colours are the generated chart tokens.
+ */
+:root {
+  /* Plot height: shorter on a phone so the readout and legend stay near it. */
+  --chart-plot-height: 15rem;
+  /* The readout keeps this height whether empty or showing a day or a figure, so selecting never moves the page (a day: value, trade note, swap and pool lines). */
+  --chart-readout-min-height: 10rem;
+  /* The daily table scrolls inside this height. */
+  --chart-table-max-height: 24rem;
+}
+@media (width >= 48rem) {
+  :root { --chart-plot-height: 20rem; }
+}
+
+/*
+ * The search field's clear (x) control. Chrome and Safari draw it in the
+ * browser's own accent blue; here it is the Lucide x in the generated muted
+ * ink, and the foreground ink on hover, like the field's search icon.
+ */
+:root {
+  --search-clear-size: 1.25rem;
+  --search-clear-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'/%3E%3Cpath d='m6 6 12 12'/%3E%3C/svg%3E");
+}
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  inline-size: var(--search-clear-size);
+  block-size: var(--search-clear-size);
+  background-color: var(--muted-foreground);
+  -webkit-mask: var(--search-clear-icon) center / contain no-repeat;
+  mask: var(--search-clear-icon) center / contain no-repeat;
+  cursor: pointer;
+}
+input[type="search"]::-webkit-search-cancel-button:hover { background-color: var(--foreground); }
+
+/*
+ * Light and dark themes (features/theme). The generated tokens carry both
+ * themes (the dark variant at the top of this file); this block gives the
+ * colours Benten names their dark values, names the chart and scrim roles,
+ * and styles the header's theme menu. Tokens defined only as `var()` or
+ * `color-mix()` of generated tokens (control border, focus ring, attention
+ * surface, disabled surface) follow the theme through them;
+ * `tests/theme.test.ts` checks that every colour token resolves in dark.
+ */
+:root {
+  color-scheme: light;
+  /*
+   * Deviation from the generated light value (oklch(0.556 0 0), 4.34:1 on
+   * --muted): secondary text sits on muted surfaces (chart readout and empty
+   * states, tab indicator), so it is darkened to 4.6:1 there. The dark
+   * variant keeps its generated value.
+   */
+  --muted-foreground: oklch(0.54 0 0);
+  /* Chart roles (price and financials charts). Light keeps the generated neutral chart tokens as before. */
+  --chart-price: var(--foreground);
+  /* The edge drawn under the price line where it crosses a bar: the page background, so it follows the theme. */
+  --chart-price-halo: var(--background);
+  --chart-revenue: var(--chart-1);
+  /* The pale revenue fill has this edge, so the bar keeps 3:1 against the background. */
+  --chart-revenue-edge: var(--chart-2);
+  --chart-net-income: var(--chart-3);
+  /* The part of the range before the listing, and its dashed seam. */
+  --chart-before-listing: var(--muted);
+  --chart-seam: var(--muted-foreground);
+  /*
+   * The financial statements' small charts: a quiet fill with its edge (the
+   * tab's first amount), a middle and a strong solid, in the same encoding
+   * as the price and financials chart.
+   */
+  --chart-statement-quiet: var(--chart-1);
+  --chart-statement-quiet-edge: var(--chart-2);
+  --chart-statement-middle: var(--chart-3);
+  --chart-statement-strong: var(--chart-5);
+  /* Behind the buy flow sheet and the Activity dialog, at the opacity each sets. */
+  --scrim: var(--foreground);
+
+  @variant dark {
+    color-scheme: dark;
+    /* Completed trail steps and the connected mark: 7:1 on the dark card, and the check mark on it keeps 7:1. */
+    --verified: oklch(0.72 0.09 175);
+    --verified-surface: oklch(0.32 0.045 172);
+    /* Disabled Approve in wallet: still at least 5.14:1 on the dark muted surface. */
+    --disabled-ink: oklch(0.72 0 0);
+    /* Dark mirrors the light encoding: revenue a quiet fill with a strong edge, net income a strong solid. */
+    --chart-revenue: var(--chart-5);
+    --chart-net-income: var(--chart-1);
+    /*
+     * The statements' charts mirror it: the quiet fill darkest with the
+     * --chart-2 edge, the middle apart from that edge (the generated dark
+     * muted ink's lightness, about 7:1 on the background), the strong lightest.
+     */
+    --chart-statement-quiet: var(--chart-5);
+    --chart-statement-middle: oklch(0.708 0 0);
+    --chart-statement-strong: var(--chart-1);
+    /* A light scrim would brighten the page: dim with black. */
+    --scrim: oklch(0 0 0);
+  }
+}
+/* The theme button shows the applied choice's icon; with no boot script (no class, no choice) it is System. */
+[data-theme-icon] { display: none; }
+:root[data-theme-choice="light"] [data-theme-icon="light"],
+:root[data-theme-choice="dark"] [data-theme-icon="dark"],
+:root:not([data-theme-choice="light"], [data-theme-choice="dark"]) [data-theme-icon="system"] { display: block; }
+/* The radios are visually hidden inside their rows: the row shows their keyboard focus. */
+[data-theme-option]:has(input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(-1 * var(--focus-ring-width));
+}
+
+/*
+ * The header on narrow screens and at large text sizes. Its controls are
+ * sized in px with a text-relative part, not in rem alone: they stay at
+ * least 44px to tap, and at 200% text the back button, the mark, language,
+ * theme and wallet still fit one 390px row.
+ */
+:root {
+  --app-header-control-size: max(44px, calc(1rem + 20px));
+  /* From md the wallet button shows its label, truncated past this width. */
+  --app-header-wallet-max-width: 14rem;
+}
+
+/*
+ * Financial statements (company page and evidence page, app IA section 4.9).
+ * Layout values only; colours are the generated tokens.
+ */
+:root {
+  /* Height of the small chart above each table. */
+  --statements-chart-height: 10rem;
+  /* The item column that stays in place while the years scroll. */
+  --statements-label-width: 9.5rem;
+  /* A row is a touch target on a phone. */
+  --statements-row-height: var(--touch-target-min);
+  /* The readout sticks above the tab bar while the table is in view, and never takes more than this. */
+  --statements-readout-bottom: var(--app-tab-bar-space);
+  --statements-readout-max-height: 40svh;
+  /* The selected value's frame. */
+  --statements-selected-width: 2px;
+  /* Cell spacing: the shadcn table's, and room above and below a two-line item name. */
+  --statements-cell-padding: .75rem;
+  --statements-label-padding-block: .5rem;
+}
+@media (width >= 48rem) {
+  :root {
+    --statements-chart-height: 12rem;
+    --statements-label-width: 13rem;
+    --statements-row-height: 2.25rem;
+    --statements-readout-bottom: 0px;
+  }
+}
+/*
+ * The statement tables style their cells here rather than with utility
+ * classes on every cell (about 500 cells a page, five locales): the shadcn
+ * table look, the item column that stays in place, and how each value is
+ * known (reported plain, not verified muted and dotted, calculated italic).
+ */
+[data-statement-table] :is(th, td) {
+  height: var(--statements-row-height);
+  padding-inline: var(--statements-cell-padding);
+  border-bottom: 1px solid var(--border);
+  text-align: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+}
+[data-statement-table] thead th { font-weight: 500; }
+[data-statement-table] tbody tr:last-child > * { border-bottom: 0; }
+[data-statement-table] abbr { text-decoration: none; }
+[data-statement-table] [data-statement-item] {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  min-width: var(--statements-label-width);
+  max-width: var(--statements-label-width);
+  padding-block: var(--statements-label-padding-block);
+  border-inline-end: 1px solid var(--border);
+  background-color: var(--background);
+  text-align: start;
+  white-space: normal;
+}
+[data-statement-table] tbody [data-statement-item] { font-weight: 400; }
+[data-statement-table] [data-statement-total] > * { font-weight: 500; }
+[data-statement-status="unverified"] > data {
+  color: var(--muted-foreground);
+  text-decoration: underline dotted var(--muted-foreground);
+  text-underline-offset: 4px;
+}
+[data-statement-status="calculated"] > data { font-style: italic; }
+[data-statement-status="empty"] { color: var(--muted-foreground); }
+[data-statement-cell][role="gridcell"] { cursor: pointer; }
+/* Inside the scrolling table, the focus outline sits inside the cell so the scroll edge never clips it. */
+[data-statement-cell]:focus-visible { outline-offset: calc(-1 * var(--focus-ring-width)); }
+[data-statement-cell][aria-selected="true"] { background-color: var(--muted); box-shadow: inset 0 0 0 var(--statements-selected-width) var(--foreground); }
+/* A value scrolled into view (keyboard focus) never hides behind the item column that stays in place. */
+[data-statement-scroll] { scroll-padding-inline-start: var(--statements-label-width); }
+/* The evidence page's annual history from the statements: item and how it is known on the left, the exact value on the right. */
+[data-annual-statement] { border-collapse: collapse; }
+[data-annual-statement] caption { padding-block-end: var(--statements-label-padding-block); text-align: start; font-weight: 600; }
+[data-annual-statement] :is(th, td) { padding-block: var(--statements-label-padding-block); border-bottom: 1px solid var(--border); vertical-align: top; }
+[data-annual-statement] tbody th { padding-inline-end: var(--statements-cell-padding); text-align: start; font-weight: 400; }
+[data-annual-statement] tbody th small { display: flex; flex-direction: column; margin-top: .125rem; font-size: var(--text-xs); line-height: var(--text-xs--line-height); color: var(--muted-foreground); }
+[data-annual-statement] td { text-align: end; white-space: nowrap; font-variant-numeric: tabular-nums; }
+[data-annual-statement] [data-annual-not-verified] { font-weight: 500; color: var(--foreground); }
+
+/*
+ * Header menus below md (language, theme, wallet). The panel is placed
+ * against the viewport, not its button: it hangs from the header's bottom
+ * edge, lines up with the page's end gutter, and is never wider than the
+ * viewport between both gutters, so at 390px and 200% text its start edge
+ * stays on screen whichever button opened it. It scrolls instead of running
+ * under the tab bar.
+ */
+:root {
+  /* The inline padding of PageContainer below md. */
+  --page-gutter: 1rem;
+  --app-menu-top: calc(var(--app-header-height) + var(--safe-area-top));
+  --app-menu-viewport-width: calc(100vw - 2 * var(--page-gutter) - var(--safe-area-left) - var(--safe-area-right));
+  --app-menu-narrow-min-width: min(var(--app-menu-min-width), var(--app-menu-viewport-width));
+  --app-menu-narrow-max-width: min(var(--app-menu-max-width), var(--app-menu-viewport-width));
+  --app-menu-narrow-end: calc(var(--page-gutter) + var(--safe-area-right));
+  --app-menu-narrow-max-height: calc(100dvh - var(--app-menu-top) - var(--app-tab-bar-space) - 2 * var(--page-gutter));
+}

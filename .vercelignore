@@ -1,0 +1,11 @@
+.next/
+apps/public-api/dist/
+apps/public-web/.generated/
+apps/public-web/build/
+apps/public-web/build-capsule/
+apps/public-web/build-host/
+node_modules/
+packages/*/dist/
+CLAUDE.md
+.env
+.env.*

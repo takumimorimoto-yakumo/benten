@@ -1,0 +1,1250 @@
+{
+  "schema_version": "1.0",
+  "description": "Reviewed allowlist of directly reported XBRL concepts that may carry each verified fact. Order is priority: when one annual filing reports the same period and value under more than one listed concept, the first listed concept is recorded. A value is published only when a listed concept in a named annual filing reports exactly that value for exactly that period.",
+  "annual_forms": [
+    "10-K",
+    "20-F",
+    "40-F"
+  ],
+  "facts": {
+    "revenue": {
+      "period_type": "duration",
+      "statement": "pl",
+      "concepts": [
+        {
+          "concept": "us-gaap:Revenues",
+          "note": "Total revenues line."
+        },
+        {
+          "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+          "note": "ASC 606 contract revenue, the common top line since 2018."
+        },
+        {
+          "concept": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+          "note": "ASC 606 contract revenue including assessed taxes."
+        },
+        {
+          "concept": "us-gaap:SalesRevenueNet",
+          "note": "Pre-ASC 606 total net sales, used by many filers before 2018."
+        },
+        {
+          "concept": "us-gaap:RevenuesNetOfInterestExpense",
+          "note": "Total net revenue reported by banks and broker-dealers."
+        },
+        {
+          "concept": "us-gaap:RegulatedAndUnregulatedOperatingRevenue",
+          "note": "Total operating revenue reported by regulated utilities."
+        },
+        {
+          "concept": "ifrs-full:Revenue",
+          "note": "IFRS revenue reported by foreign private issuers."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:SalesRevenueGoodsNet",
+          "reason": "A component of revenue, not the total."
+        },
+        {
+          "concept": "us-gaap:SalesRevenueServicesNet",
+          "reason": "A component of revenue, not the total."
+        },
+        {
+          "concept": "us-gaap:InterestAndDividendIncomeOperating",
+          "reason": "A bank income proxy, not a reported revenue total."
+        }
+      ]
+    },
+    "net_income_parent": {
+      "period_type": "duration",
+      "statement": "pl",
+      "concepts": [
+        {
+          "concept": "us-gaap:NetIncomeLoss",
+          "note": "Net income attributable to the parent."
+        },
+        {
+          "concept": "us-gaap:NetIncomeLossAvailableToCommonStockholdersBasic",
+          "note": "Accepted only when the same filing and duration report consolidated net income (us-gaap:ProfitLoss) and consolidated net income minus the reported noncontrolling-interest shares equals the value, which confirms that the value is the parent share."
+        },
+        {
+          "concept": "ifrs-full:ProfitLossAttributableToOwnersOfParent",
+          "note": "IFRS profit attributable to owners of the parent."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:ProfitLoss",
+          "reason": "Consolidated net income including noncontrolling interests."
+        },
+        {
+          "concept": "ifrs-full:ProfitLoss",
+          "reason": "Consolidated profit including noncontrolling interests."
+        }
+      ]
+    },
+    "total_assets": {
+      "period_type": "instant",
+      "statement": "bs",
+      "concepts": [
+        {
+          "concept": "us-gaap:Assets",
+          "note": "Total assets."
+        },
+        {
+          "concept": "ifrs-full:Assets",
+          "note": "IFRS total assets."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "total_liabilities": {
+      "period_type": "instant",
+      "statement": "bs",
+      "concepts": [
+        {
+          "concept": "us-gaap:Liabilities",
+          "note": "Total liabilities."
+        },
+        {
+          "concept": "ifrs-full:Liabilities",
+          "note": "IFRS total liabilities."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:LiabilitiesAndStockholdersEquity",
+          "reason": "Balance-sheet total; total liabilities would have to be derived by subtraction."
+        }
+      ]
+    },
+    "operating_cf": {
+      "period_type": "duration",
+      "statement": "cf",
+      "concepts": [
+        {
+          "concept": "us-gaap:NetCashProvidedByUsedInOperatingActivities",
+          "note": "Net cash from operating activities."
+        },
+        {
+          "concept": "us-gaap:NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+          "note": "Accepted only when the same filing reports no nonzero operating cash flow from discontinued operations for the period, so the value is the operating cash flow total."
+        },
+        {
+          "concept": "ifrs-full:CashFlowsFromUsedInOperatingActivities",
+          "note": "IFRS cash flows from operating activities."
+        }
+      ],
+      "excluded_concepts": []
+    }
+  },
+  "statement_items_description": "Reviewed statement line items beyond the five facts above, with the same rule: a value is verified only when a listed concept in a named annual filing reports exactly that value for exactly that period. Order is priority. period_type 'cover_instant' is a count stated on the cover of the fiscal year's annual report as of a date 0-150 days after the period end. unit 'USD' values are whole dollars, 'USD_per_share' values are dollars per share with at most four decimals, and 'shares' values are whole shares.",
+  "statement_items": {
+    "cost_of_revenue": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Cost of revenue",
+      "concepts": [
+        {
+          "concept": "us-gaap:CostOfRevenue",
+          "note": "Total cost of revenue."
+        },
+        {
+          "concept": "us-gaap:CostOfGoodsAndServicesSold",
+          "note": "Total cost of goods and services sold."
+        },
+        {
+          "concept": "us-gaap:CostOfGoodsSold",
+          "note": "Pre-2018 cost of goods sold line."
+        },
+        {
+          "concept": "ifrs-full:CostOfSales",
+          "note": "IFRS cost of sales."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization",
+          "reason": "Excludes depreciation and amortization; not the total cost line."
+        },
+        {
+          "concept": "us-gaap:CostOfServices",
+          "reason": "A component of cost of revenue, not the total."
+        }
+      ]
+    },
+    "gross_profit": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Gross profit",
+      "concepts": [
+        {
+          "concept": "us-gaap:GrossProfit",
+          "note": "Gross profit line."
+        },
+        {
+          "concept": "ifrs-full:GrossProfit",
+          "note": "IFRS gross profit."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "sga": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Selling, general and administrative expense",
+      "concepts": [
+        {
+          "concept": "us-gaap:SellingGeneralAndAdministrativeExpense",
+          "note": "Total selling, general and administrative expense."
+        },
+        {
+          "concept": "ifrs-full:SellingGeneralAndAdministrativeExpense",
+          "note": "IFRS selling, general and administrative expense."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:GeneralAndAdministrativeExpense",
+          "reason": "A component when selling expense is reported separately."
+        },
+        {
+          "concept": "us-gaap:SellingAndMarketingExpense",
+          "reason": "A component when general and administrative expense is reported separately."
+        }
+      ]
+    },
+    "research_and_development": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Research and development expense",
+      "concepts": [
+        {
+          "concept": "us-gaap:ResearchAndDevelopmentExpense",
+          "note": "Research and development expense."
+        },
+        {
+          "concept": "us-gaap:ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+          "note": "Research and development expense reported apart from acquired in-process research and development."
+        },
+        {
+          "concept": "ifrs-full:ResearchAndDevelopmentExpense",
+          "note": "IFRS research and development expense."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "operating_income": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Operating income",
+      "concepts": [
+        {
+          "concept": "us-gaap:OperatingIncomeLoss",
+          "note": "Operating income or loss."
+        },
+        {
+          "concept": "ifrs-full:ProfitLossFromOperatingActivities",
+          "note": "IFRS profit from operating activities."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "interest_expense": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Interest expense",
+      "concepts": [
+        {
+          "concept": "us-gaap:InterestExpense",
+          "note": "Total interest expense."
+        },
+        {
+          "concept": "us-gaap:InterestExpenseNonoperating",
+          "note": "Nonoperating interest expense, the line that replaced InterestExpense in the 2024 taxonomy for most filers."
+        },
+        {
+          "concept": "us-gaap:InterestAndDebtExpense",
+          "note": "Interest and debt expense line."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:InterestExpenseDebt",
+          "reason": "Interest on debt only, a component of interest expense."
+        },
+        {
+          "concept": "us-gaap:InterestPaidNet",
+          "reason": "Cash paid for interest, a cash-flow disclosure."
+        }
+      ]
+    },
+    "pretax_income": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Income before income taxes",
+      "concepts": [
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "note": "Income from continuing operations before income taxes."
+        },
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
+          "note": "Income before income taxes, as presented by filers that show equity-method income below the tax line."
+        },
+        {
+          "concept": "ifrs-full:ProfitLossBeforeTax",
+          "note": "IFRS profit before tax."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesDomestic",
+          "reason": "Domestic component only."
+        },
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesForeign",
+          "reason": "Foreign component only."
+        }
+      ]
+    },
+    "income_tax": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Income tax expense",
+      "concepts": [
+        {
+          "concept": "us-gaap:IncomeTaxExpenseBenefit",
+          "note": "Income tax expense or benefit."
+        },
+        {
+          "concept": "ifrs-full:IncomeTaxExpenseContinuingOperations",
+          "note": "IFRS income tax expense."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:CurrentIncomeTaxExpenseBenefit",
+          "reason": "Current portion only."
+        },
+        {
+          "concept": "us-gaap:IncomeTaxesPaidNet",
+          "reason": "Cash paid for income taxes, a cash-flow disclosure."
+        }
+      ]
+    },
+    "net_income": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Net income (consolidated)",
+      "concepts": [
+        {
+          "concept": "us-gaap:ProfitLoss",
+          "note": "Consolidated net income including noncontrolling interests."
+        },
+        {
+          "concept": "us-gaap:NetIncomeLoss",
+          "note": "Accepted only when the same filing and duration report no nonzero net income attributable to noncontrolling or redeemable noncontrolling interests, so parent and consolidated net income are the same amount."
+        },
+        {
+          "concept": "ifrs-full:ProfitLoss",
+          "note": "IFRS consolidated profit."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:NetIncomeLossAvailableToCommonStockholdersBasic",
+          "reason": "After preferred dividends; not consolidated net income."
+        },
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperations",
+          "reason": "Continuing operations only."
+        }
+      ]
+    },
+    "net_income_noncontrolling": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Net income attributable to noncontrolling interests",
+      "concepts": [
+        {
+          "concept": "us-gaap:NetIncomeLossAttributableToNoncontrollingInterest",
+          "note": "Net income attributable to noncontrolling interests."
+        },
+        {
+          "concept": "ifrs-full:ProfitLossAttributableToNoncontrollingInterests",
+          "note": "IFRS profit attributable to non-controlling interests."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:ComprehensiveIncomeNetOfTaxAttributableToNoncontrollingInterest",
+          "reason": "Comprehensive income, not net income."
+        }
+      ]
+    },
+    "comprehensive_income_parent": {
+      "statement": "pl",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Comprehensive income attributable to the parent",
+      "concepts": [
+        {
+          "concept": "us-gaap:ComprehensiveIncomeNetOfTax",
+          "note": "Comprehensive income attributable to the parent."
+        },
+        {
+          "concept": "ifrs-full:ComprehensiveIncomeAttributableToOwnersOfParent",
+          "note": "IFRS comprehensive income attributable to owners of the parent."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:ComprehensiveIncomeNetOfTaxIncludingPortionAttributableToNoncontrollingInterest",
+          "reason": "Includes noncontrolling interests."
+        }
+      ]
+    },
+    "current_assets": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Current assets",
+      "concepts": [
+        {
+          "concept": "us-gaap:AssetsCurrent",
+          "note": "Total current assets."
+        },
+        {
+          "concept": "ifrs-full:CurrentAssets",
+          "note": "IFRS current assets."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "cash_and_equivalents": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Cash and cash equivalents",
+      "concepts": [
+        {
+          "concept": "us-gaap:CashAndCashEquivalentsAtCarryingValue",
+          "note": "Balance-sheet cash and cash equivalents."
+        },
+        {
+          "concept": "ifrs-full:CashAndCashEquivalents",
+          "note": "IFRS cash and cash equivalents."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "reason": "Includes restricted cash; the cash-flow statement total."
+        },
+        {
+          "concept": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+          "reason": "A fair-value disclosure, not the balance-sheet line."
+        }
+      ]
+    },
+    "receivables": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Accounts receivable, net",
+      "concepts": [
+        {
+          "concept": "us-gaap:AccountsReceivableNetCurrent",
+          "note": "Current accounts receivable, net of allowances."
+        },
+        {
+          "concept": "ifrs-full:TradeAndOtherCurrentReceivables",
+          "note": "IFRS current trade and other receivables."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:AccountsAndOtherReceivablesNetCurrent",
+          "reason": "Includes other receivables."
+        },
+        {
+          "concept": "us-gaap:AccountsReceivableGrossCurrent",
+          "reason": "Before allowances."
+        }
+      ]
+    },
+    "inventories": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Inventories",
+      "concepts": [
+        {
+          "concept": "us-gaap:InventoryNet",
+          "note": "Inventories, net."
+        },
+        {
+          "concept": "ifrs-full:Inventories",
+          "note": "IFRS inventories."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:InventoryGross",
+          "reason": "Before reserves."
+        }
+      ]
+    },
+    "ppe": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Property, plant and equipment, net",
+      "concepts": [
+        {
+          "concept": "us-gaap:PropertyPlantAndEquipmentNet",
+          "note": "Property, plant and equipment, net."
+        },
+        {
+          "concept": "ifrs-full:PropertyPlantAndEquipment",
+          "note": "IFRS property, plant and equipment."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:PropertyPlantAndEquipmentAndFinanceLeaseRightOfUseAssetAfterAccumulatedDepreciationAndAmortization",
+          "reason": "Includes finance-lease right-of-use assets."
+        },
+        {
+          "concept": "us-gaap:NoncurrentAssets",
+          "reason": "Long-lived assets by geography, a segment disclosure."
+        }
+      ]
+    },
+    "goodwill": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Goodwill",
+      "concepts": [
+        {
+          "concept": "us-gaap:Goodwill",
+          "note": "Goodwill."
+        },
+        {
+          "concept": "ifrs-full:Goodwill",
+          "note": "IFRS goodwill."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:GoodwillGross",
+          "reason": "Before accumulated impairment."
+        }
+      ]
+    },
+    "intangible_assets": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Intangible assets excluding goodwill",
+      "concepts": [
+        {
+          "concept": "us-gaap:IntangibleAssetsNetExcludingGoodwill",
+          "note": "Intangible assets other than goodwill, net."
+        },
+        {
+          "concept": "ifrs-full:IntangibleAssetsOtherThanGoodwill",
+          "note": "IFRS intangible assets other than goodwill."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:FiniteLivedIntangibleAssetsNet",
+          "reason": "Finite-lived intangibles only."
+        },
+        {
+          "concept": "us-gaap:IntangibleAssetsNetIncludingGoodwill",
+          "reason": "Includes goodwill."
+        }
+      ]
+    },
+    "current_liabilities": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Current liabilities",
+      "concepts": [
+        {
+          "concept": "us-gaap:LiabilitiesCurrent",
+          "note": "Total current liabilities."
+        },
+        {
+          "concept": "ifrs-full:CurrentLiabilities",
+          "note": "IFRS current liabilities."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "long_term_debt": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Long-term debt, noncurrent",
+      "concepts": [
+        {
+          "concept": "us-gaap:LongTermDebtNoncurrent",
+          "note": "Long-term debt excluding the current portion."
+        },
+        {
+          "concept": "us-gaap:LongTermDebtAndCapitalLeaseObligations",
+          "note": "Long-term debt and finance-lease obligations excluding the current portion."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:LongTermDebt",
+          "reason": "Includes the current portion."
+        },
+        {
+          "concept": "us-gaap:DebtInstrumentCarryingAmount",
+          "reason": "An instrument-level disclosure."
+        }
+      ]
+    },
+    "total_equity": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Total equity (consolidated)",
+      "concepts": [
+        {
+          "concept": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "note": "Total equity including noncontrolling interests."
+        },
+        {
+          "concept": "us-gaap:StockholdersEquity",
+          "note": "Accepted only when the same filing and date report no nonzero noncontrolling interest in equity, so parent and total equity are the same amount."
+        },
+        {
+          "concept": "ifrs-full:Equity",
+          "note": "IFRS total equity."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "equity_parent": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Equity attributable to the parent",
+      "concepts": [
+        {
+          "concept": "us-gaap:StockholdersEquity",
+          "note": "Stockholders' equity attributable to the parent."
+        },
+        {
+          "concept": "ifrs-full:EquityAttributableToOwnersOfParent",
+          "note": "IFRS equity attributable to owners of the parent."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "reason": "Includes noncontrolling interests."
+        }
+      ]
+    },
+    "noncontrolling_interest": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Noncontrolling interest in equity",
+      "concepts": [
+        {
+          "concept": "us-gaap:MinorityInterest",
+          "note": "Equity attributable to noncontrolling interests."
+        },
+        {
+          "concept": "ifrs-full:NoncontrollingInterests",
+          "note": "IFRS non-controlling interests."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "retained_earnings": {
+      "statement": "bs",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Retained earnings (accumulated deficit)",
+      "concepts": [
+        {
+          "concept": "us-gaap:RetainedEarningsAccumulatedDeficit",
+          "note": "Retained earnings or accumulated deficit."
+        },
+        {
+          "concept": "ifrs-full:RetainedEarnings",
+          "note": "IFRS retained earnings."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "investing_cf": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Net cash from investing activities",
+      "concepts": [
+        {
+          "concept": "us-gaap:NetCashProvidedByUsedInInvestingActivities",
+          "note": "Net cash from investing activities."
+        },
+        {
+          "concept": "us-gaap:NetCashProvidedByUsedInInvestingActivitiesContinuingOperations",
+          "note": "Accepted only when the same filing reports no nonzero investing cash flow from discontinued operations for the period."
+        },
+        {
+          "concept": "ifrs-full:CashFlowsFromUsedInInvestingActivities",
+          "note": "IFRS cash flows from investing activities."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "financing_cf": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Net cash from financing activities",
+      "concepts": [
+        {
+          "concept": "us-gaap:NetCashProvidedByUsedInFinancingActivities",
+          "note": "Net cash from financing activities."
+        },
+        {
+          "concept": "us-gaap:NetCashProvidedByUsedInFinancingActivitiesContinuingOperations",
+          "note": "Accepted only when the same filing reports no nonzero financing cash flow from discontinued operations for the period."
+        },
+        {
+          "concept": "ifrs-full:CashFlowsFromUsedInFinancingActivities",
+          "note": "IFRS cash flows from financing activities."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "capex": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Purchases of property, plant and equipment",
+      "concepts": [
+        {
+          "concept": "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment",
+          "note": "Cash paid for property, plant and equipment, reported as a positive payment."
+        },
+        {
+          "concept": "ifrs-full:PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+          "note": "IFRS purchase of property, plant and equipment."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:PaymentsToAcquireProductiveAssets",
+          "reason": "Includes intangible and other productive assets."
+        },
+        {
+          "concept": "us-gaap:SegmentExpenditureAdditionToLongLivedAssets",
+          "reason": "A segment disclosure, not the cash-flow line."
+        }
+      ]
+    },
+    "depreciation_amortization": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Depreciation and amortization",
+      "concepts": [
+        {
+          "concept": "us-gaap:DepreciationDepletionAndAmortization",
+          "note": "Depreciation, depletion and amortization in the cash-flow reconciliation."
+        },
+        {
+          "concept": "us-gaap:DepreciationAndAmortization",
+          "note": "Depreciation and amortization."
+        },
+        {
+          "concept": "ifrs-full:DepreciationAndAmortisationExpense",
+          "note": "IFRS depreciation and amortisation."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:Depreciation",
+          "reason": "Depreciation only."
+        },
+        {
+          "concept": "us-gaap:DepreciationAmortizationAndAccretionNet",
+          "reason": "Includes accretion."
+        }
+      ]
+    },
+    "dividends_paid": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Dividends paid",
+      "concepts": [
+        {
+          "concept": "us-gaap:PaymentsOfDividendsCommonStock",
+          "note": "Cash dividends paid to common stockholders."
+        },
+        {
+          "concept": "us-gaap:PaymentsOfDividends",
+          "note": "Cash dividends paid."
+        },
+        {
+          "concept": "ifrs-full:DividendsPaidClassifiedAsFinancingActivities",
+          "note": "IFRS dividends paid, financing activities."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:DividendsCommonStockCash",
+          "reason": "Dividends declared in the equity statement, not cash paid."
+        },
+        {
+          "concept": "us-gaap:DividendsCash",
+          "reason": "Dividends declared in the equity statement, not cash paid."
+        }
+      ]
+    },
+    "share_repurchase": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Repurchases of common stock",
+      "concepts": [
+        {
+          "concept": "us-gaap:PaymentsForRepurchaseOfCommonStock",
+          "note": "Cash paid to repurchase common stock."
+        },
+        {
+          "concept": "us-gaap:PaymentsForRepurchaseOfEquity",
+          "note": "Cash paid to repurchase equity."
+        },
+        {
+          "concept": "ifrs-full:PaymentsToAcquireOrRedeemEntitysShares",
+          "note": "IFRS payments to acquire or redeem the entity's shares."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+          "reason": "Equity-statement amount, not cash paid."
+        },
+        {
+          "concept": "us-gaap:StockRepurchasedDuringPeriodValue",
+          "reason": "Equity-statement amount, not cash paid."
+        }
+      ]
+    },
+    "debt_issued": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Proceeds from long-term debt",
+      "concepts": [
+        {
+          "concept": "us-gaap:ProceedsFromIssuanceOfLongTermDebt",
+          "note": "Proceeds from issuing long-term debt."
+        },
+        {
+          "concept": "us-gaap:ProceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet",
+          "note": "Proceeds from long-term debt and capital securities, as reported by banks."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:ProceedsFromIssuanceOfDebt",
+          "reason": "Includes short-term debt."
+        }
+      ]
+    },
+    "debt_repaid": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Repayments of long-term debt",
+      "concepts": [
+        {
+          "concept": "us-gaap:RepaymentsOfLongTermDebt",
+          "note": "Repayments of long-term debt."
+        },
+        {
+          "concept": "us-gaap:RepaymentsOfLongTermDebtAndCapitalSecurities",
+          "note": "Repayments of long-term debt and capital securities, as reported by banks."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:RepaymentsOfDebt",
+          "reason": "Includes short-term debt."
+        }
+      ]
+    },
+    "interest_paid": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Interest paid",
+      "concepts": [
+        {
+          "concept": "us-gaap:InterestPaidNet",
+          "note": "Cash paid for interest, net of capitalized interest."
+        },
+        {
+          "concept": "us-gaap:InterestPaid",
+          "note": "Cash paid for interest."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:InterestExpense",
+          "reason": "The income-statement expense, not cash paid."
+        }
+      ]
+    },
+    "income_taxes_paid": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Income taxes paid",
+      "concepts": [
+        {
+          "concept": "us-gaap:IncomeTaxesPaidNet",
+          "note": "Cash paid for income taxes, net of refunds."
+        },
+        {
+          "concept": "us-gaap:IncomeTaxesPaid",
+          "note": "Cash paid for income taxes."
+        }
+      ],
+      "excluded_concepts": []
+    },
+    "net_change_in_cash": {
+      "statement": "cf",
+      "period_type": "duration",
+      "unit": "USD",
+      "label": "Net change in cash",
+      "concepts": [
+        {
+          "concept": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsPeriodIncreaseDecreaseIncludingExchangeRateEffect",
+          "note": "Net change in cash, cash equivalents, and restricted cash."
+        },
+        {
+          "concept": "us-gaap:CashAndCashEquivalentsPeriodIncreaseDecrease",
+          "note": "Net change in cash and cash equivalents."
+        },
+        {
+          "concept": "ifrs-full:IncreaseDecreaseInCashAndCashEquivalents",
+          "note": "IFRS increase or decrease in cash and cash equivalents."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsPeriodIncreaseDecreaseExcludingExchangeRateEffect",
+          "reason": "Before the exchange-rate effect."
+        }
+      ]
+    },
+    "cash_end_of_period": {
+      "statement": "cf",
+      "period_type": "instant",
+      "unit": "USD",
+      "label": "Cash at end of period (cash-flow statement)",
+      "concepts": [
+        {
+          "concept": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "note": "Cash, cash equivalents, and restricted cash at the end of the period."
+        },
+        {
+          "concept": "us-gaap:CashAndCashEquivalentsAtCarryingValue",
+          "note": "Cash and cash equivalents at the end of the period, the cash-flow total before restricted cash was included."
+        },
+        {
+          "concept": "ifrs-full:CashAndCashEquivalents",
+          "note": "IFRS cash and cash equivalents."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations",
+          "reason": "Includes disposal groups."
+        }
+      ]
+    },
+    "eps_basic": {
+      "statement": "per_share",
+      "period_type": "duration",
+      "unit": "USD_per_share",
+      "label": "Earnings per share, basic",
+      "concepts": [
+        {
+          "concept": "us-gaap:EarningsPerShareBasic",
+          "note": "Basic earnings per share."
+        },
+        {
+          "concept": "us-gaap:EarningsPerShareBasicAndDiluted",
+          "note": "Basic and diluted earnings per share reported as one amount."
+        },
+        {
+          "concept": "ifrs-full:BasicEarningsLossPerShare",
+          "note": "IFRS basic earnings per share."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperationsPerBasicShare",
+          "reason": "Continuing operations only."
+        }
+      ]
+    },
+    "eps_diluted": {
+      "statement": "per_share",
+      "period_type": "duration",
+      "unit": "USD_per_share",
+      "label": "Earnings per share, diluted",
+      "concepts": [
+        {
+          "concept": "us-gaap:EarningsPerShareDiluted",
+          "note": "Diluted earnings per share."
+        },
+        {
+          "concept": "us-gaap:EarningsPerShareBasicAndDiluted",
+          "note": "Basic and diluted earnings per share reported as one amount."
+        },
+        {
+          "concept": "ifrs-full:DilutedEarningsLossPerShare",
+          "note": "IFRS diluted earnings per share."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:IncomeLossFromContinuingOperationsPerDilutedShare",
+          "reason": "Continuing operations only."
+        }
+      ]
+    },
+    "dividends_per_share": {
+      "statement": "per_share",
+      "period_type": "duration",
+      "unit": "USD_per_share",
+      "label": "Dividends per common share",
+      "concepts": [
+        {
+          "concept": "us-gaap:CommonStockDividendsPerShareDeclared",
+          "note": "Dividends declared per common share."
+        },
+        {
+          "concept": "us-gaap:CommonStockDividendsPerShareCashPaid",
+          "note": "Dividends paid per common share, for filers that report the paid amount only; the recorded concept names the basis."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:PreferredStockDividendsPerShareDeclared",
+          "reason": "Preferred stock."
+        }
+      ]
+    },
+    "shares_outstanding": {
+      "statement": "per_share",
+      "period_type": "cover_instant",
+      "unit": "shares",
+      "label": "Common shares outstanding (annual report cover date)",
+      "concepts": [
+        {
+          "concept": "dei:EntityCommonStockSharesOutstanding",
+          "note": "Shares outstanding stated on the cover of the fiscal year's annual report, as of the cover date recorded with the fact."
+        }
+      ],
+      "excluded_concepts": [
+        {
+          "concept": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic",
+          "reason": "A weighted average for the period, not a count."
+        }
+      ]
+    }
+  },
+  "statement_core_labels": {
+    "revenue": "Revenue",
+    "net_income_parent": "Net income attributable to the parent",
+    "total_assets": "Total assets",
+    "total_liabilities": "Total liabilities",
+    "operating_cf": "Net cash from operating activities"
+  },
+  "statement_order": {
+    "pl": [
+      "revenue",
+      "cost_of_revenue",
+      "gross_profit",
+      "sga",
+      "research_and_development",
+      "operating_income",
+      "interest_expense",
+      "pretax_income",
+      "income_tax",
+      "net_income",
+      "net_income_noncontrolling",
+      "net_income_parent",
+      "comprehensive_income_parent"
+    ],
+    "bs": [
+      "cash_and_equivalents",
+      "receivables",
+      "inventories",
+      "current_assets",
+      "ppe",
+      "goodwill",
+      "intangible_assets",
+      "total_assets",
+      "current_liabilities",
+      "long_term_debt",
+      "total_liabilities",
+      "equity_parent",
+      "noncontrolling_interest",
+      "total_equity",
+      "retained_earnings"
+    ],
+    "cf": [
+      "operating_cf",
+      "depreciation_amortization",
+      "investing_cf",
+      "capex",
+      "financing_cf",
+      "dividends_paid",
+      "share_repurchase",
+      "debt_issued",
+      "debt_repaid",
+      "net_change_in_cash",
+      "cash_end_of_period",
+      "interest_paid",
+      "income_taxes_paid"
+    ],
+    "per_share": [
+      "eps_basic",
+      "eps_diluted",
+      "dividends_per_share",
+      "shares_outstanding"
+    ]
+  },
+  "calculated_items_description": "Values computed from the reported values above, never reported by the filing. A calculated value exists only when every input exists in the same fiscal year; for 'divide' the denominator must be greater than zero. Ratios are fractions rounded to six decimal places. A calculated value inherits 'unverified_or_derived' when any input has that status.",
+  "calculated_items": {
+    "gross_margin": {
+      "statement": "pl",
+      "unit": "ratio",
+      "label": "Gross margin",
+      "operation": "divide",
+      "inputs": [
+        "gross_profit",
+        "revenue"
+      ],
+      "formula": "gross_profit / revenue",
+      "note": "Both inputs are duration values of the same fiscal year."
+    },
+    "operating_margin": {
+      "statement": "pl",
+      "unit": "ratio",
+      "label": "Operating margin",
+      "operation": "divide",
+      "inputs": [
+        "operating_income",
+        "revenue"
+      ],
+      "formula": "operating_income / revenue",
+      "note": "Both inputs are duration values of the same fiscal year."
+    },
+    "net_margin": {
+      "statement": "pl",
+      "unit": "ratio",
+      "label": "Net margin (parent)",
+      "operation": "divide",
+      "inputs": [
+        "net_income_parent",
+        "revenue"
+      ],
+      "formula": "net_income_parent / revenue",
+      "note": "Uses net income attributable to the parent."
+    },
+    "return_on_equity": {
+      "statement": "pl",
+      "unit": "ratio",
+      "label": "Return on equity (year-end equity)",
+      "operation": "divide",
+      "inputs": [
+        "net_income_parent",
+        "equity_parent"
+      ],
+      "formula": "net_income_parent / equity_parent",
+      "note": "Uses equity at the end of the fiscal year, not an average."
+    },
+    "return_on_assets": {
+      "statement": "pl",
+      "unit": "ratio",
+      "label": "Return on assets (year-end assets)",
+      "operation": "divide",
+      "inputs": [
+        "net_income_parent",
+        "total_assets"
+      ],
+      "formula": "net_income_parent / total_assets",
+      "note": "Uses total assets at the end of the fiscal year, not an average."
+    },
+    "equity_ratio": {
+      "statement": "bs",
+      "unit": "ratio",
+      "label": "Equity ratio",
+      "operation": "divide",
+      "inputs": [
+        "equity_parent",
+        "total_assets"
+      ],
+      "formula": "equity_parent / total_assets",
+      "note": "Parent equity over total assets at the same date."
+    },
+    "current_ratio": {
+      "statement": "bs",
+      "unit": "ratio",
+      "label": "Current ratio",
+      "operation": "divide",
+      "inputs": [
+        "current_assets",
+        "current_liabilities"
+      ],
+      "formula": "current_assets / current_liabilities",
+      "note": "Both at the same date."
+    },
+    "free_cash_flow": {
+      "statement": "cf",
+      "unit": "USD",
+      "label": "Free cash flow (operating cash flow minus capital expenditure)",
+      "operation": "subtract",
+      "inputs": [
+        "operating_cf",
+        "capex"
+      ],
+      "formula": "operating_cf - capex",
+      "note": "capex is the reported positive payment for property, plant and equipment. Free-cash-flow measures have no uniform definition; this one is exactly the stated formula."
+    }
+  }
+}

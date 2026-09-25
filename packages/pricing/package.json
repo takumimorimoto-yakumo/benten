@@ -1,0 +1,49 @@
+{
+  "name": "@benten/pricing",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Pyth reference prices for supported products, read key-free from Pyth price accounts on Solana, and holding valuations over them. Reads only.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    },
+    "./onchain-price": {
+      "types": "./dist/onchain-price.d.ts",
+      "default": "./dist/onchain-price.js"
+    },
+    "./onchain-daily": {
+      "types": "./dist/onchain-daily.d.ts",
+      "default": "./dist/onchain-daily.js"
+    },
+    "./response": {
+      "types": "./dist/response.d.ts",
+      "default": "./dist/response.js"
+    },
+    "./value": {
+      "types": "./dist/value.d.ts",
+      "default": "./dist/value.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@benten/solana": "workspace:*"
+  },
+  "devDependencies": {
+    "@solana/web3.js": "^1.99.0",
+    "@types/node": "^24.7.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.0"
+  }
+}
