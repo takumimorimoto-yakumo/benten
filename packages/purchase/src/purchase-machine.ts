@@ -18,6 +18,7 @@ import { PURCHASE_CONFIG } from "./config";
 import { PAY_CONFIG } from "./pay-config";
 import { NVDAX_DECIMALS, PAY_TOKEN_UNITS, resolvePayToken, type PayTokenId } from "./token-units";
 import { DEFAULT_PRODUCT, resolveProductTicker, type ProductTicker } from "./routes-table";
+import type { SaleReferenceCheck } from "./reference-price";
 import type { MeasuredResult } from "./result";
 
 /**
@@ -80,6 +81,8 @@ export interface PreviewTerms {
   side?: TradeSide;
   /** A sale may create the wallet's USDC account (a purchase reports `createsNvdaxAccount`). */
   createsUsdcAccount?: boolean;
+  /** Sales only: the Pyth reference the sale was checked against, for the review step to show. Display only. */
+  saleReference?: SaleReferenceCheck | null;
   /** The token the wallet pays with; `inputRaw` is in its raw units. */
   payToken: PayTokenId;
   /** `null` when paying with USDC (one leg). */
@@ -134,8 +137,14 @@ export interface PurchaseResultView extends MeasuredResult {
  * `sellTermsChanged` (sales only): the NVDAx display multiplier in effect
  * differs from the one the amount was converted with; the sale terms are
  * read again before another preview.
+ * `referenceUnavailable` (sales only): no usable Pyth reference price was
+ * read (`details` holds the reason, `REFERENCE_STALE` when it is out of
+ * date), so the sale stopped before anything was built.
  */
-export type PreviewFailure = "notEnoughSol" | "simulationFailed" | "routeCheck" | "relayBusy" | "relayUnavailable" | "overLimit" | "sellTermsChanged";
+/** The `referenceUnavailable` details when the Pyth reference price is older than its stale bound. */
+export const REFERENCE_STALE = "stale";
+
+export type PreviewFailure = "notEnoughSol" | "simulationFailed" | "routeCheck" | "relayBusy" | "relayUnavailable" | "overLimit" | "sellTermsChanged" | "referenceUnavailable";
 
 export type Attempt =
   | { phase: "editing" }

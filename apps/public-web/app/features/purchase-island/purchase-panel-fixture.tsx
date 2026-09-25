@@ -1,4 +1,4 @@
-import { PURCHASE_FIXTURES, type PurchaseFixtureName } from "@benten/purchase/fixtures";
+import { PANEL_FIXTURES, type PanelFixtureName } from "@benten/purchase/fixtures";
 import type { PublicWebLocale } from "@/i18n/locales";
 import { usePanelRefs } from "./purchase-island";
 import type { PurchaseFlowChrome } from "./purchase-panel-shell";
@@ -21,8 +21,8 @@ const NO_OP_HANDLERS: PanelHandlers = {
  * fixture. No RPC, no wallet, and every action is a no-op, so nothing can be
  * signed or sent.
  */
-export function PurchasePanelFixture({ name, locale, flow }: { name: PurchaseFixtureName; locale: PublicWebLocale; flow?: PurchaseFlowChrome }) {
+export function PurchasePanelFixture({ name, locale, flow }: { name: PanelFixtureName; locale: PublicWebLocale; flow?: PurchaseFlowChrome }) {
   const refs = usePanelRefs();
-  const fixture = PURCHASE_FIXTURES[name];
+  const fixture = PANEL_FIXTURES[name];
   return <PurchasePanelView state={fixture.state} now={fixture.now} locale={locale} handlers={NO_OP_HANDLERS} refs={refs} announcement="" flow={flow} />;
 }

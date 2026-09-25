@@ -78,12 +78,6 @@ export type ChartsCopy = {
     readonly price: (symbol: string, from: string, to: string) => string;
     readonly table: string;
   };
-  readonly delta: {
-    readonly value: (percent: string) => string;
-    readonly note: (tradeDate: string, pythTime: string, company: string) => string;
-    /** The last trade has no value for one share: no difference is shown. */
-    readonly unavailable: string;
-  };
   readonly opensNewTab: string;
 };
 
@@ -147,11 +141,6 @@ const en: ChartsCopy = {
     figures: (company, first, last) => `${company} revenue and net income for each fiscal year (${first} to ${last}).`,
     price: (symbol, from, to) => `${symbol} on-chain trade price for each day from ${from} to ${to}.`,
     table: "The same data is in the table below the chart.",
-  },
-  delta: {
-    value: (percent) => `On-chain price vs Pyth reference: ${percent}`,
-    note: (tradeDate, pythTime, company) => `Last on-chain trade: ${tradeDate}, near the NYSE close. Its price per token divided by the display multiplier then in effect gives USDC for one ${company} share; the Pyth reference price (${pythTime}) is in USD for one share.`,
-    unavailable: "No comparison with the Pyth reference price: the token's display multiplier history is unavailable, so the last on-chain trade has no value for one share.",
   },
   opensNewTab: "(opens in a new tab)",
 };
@@ -217,11 +206,6 @@ const ja: ChartsCopy = {
     price: (symbol, from, to) => `${symbol}の${from}から${to}までの日ごとのオンチェーン取引価格。`,
     table: "同じデータをチャートの下の表で確認できます。",
   },
-  delta: {
-    value: (percent) => `オンチェーン価格とPyth 参考価格の差: ${percent}`,
-    note: (tradeDate, pythTime, company) => `最後のオンチェーン取引: ${tradeDate}、NYSEの取引終了時刻付近。そのトークン1枚あたりの価格を当時の表示倍率で割った値が${company}株式1株あたりのUSDCです。Pyth 参考価格（${pythTime}）は1株あたりのUSDです。`,
-    unavailable: "Pyth 参考価格との差は表示していません。トークンの表示倍率の履歴がないため、最後のオンチェーン取引に1株あたりの値がありません。",
-  },
   opensNewTab: "（新しいタブで開きます）",
 };
 
@@ -285,11 +269,6 @@ const ko: ChartsCopy = {
     figures: (company, first, last) => `${company}의 ${first}부터 ${last}까지 연도별 매출과 순이익.`,
     price: (symbol, from, to) => `${symbol}의 ${from}부터 ${to}까지 일별 온체인 거래 가격.`,
     table: "같은 데이터를 차트 아래 표에서 볼 수 있습니다.",
-  },
-  delta: {
-    value: (percent) => `온체인 가격과 Pyth 참고 가격의 차이: ${percent}`,
-    note: (tradeDate, pythTime, company) => `마지막 온체인 거래: ${tradeDate}, NYSE 장 마감 무렵. 토큰 1개당 가격을 당시 표시 배수로 나눈 값이 ${company} 주식 1주당 USDC이며, Pyth 참고 가격(${pythTime})은 1주당 USD입니다.`,
-    unavailable: "Pyth 참고 가격과의 차이는 표시하지 않습니다. 토큰의 표시 배수 이력이 없어 마지막 온체인 거래에 1주당 값이 없습니다.",
   },
   opensNewTab: "(새 탭에서 열림)",
 };
@@ -355,11 +334,6 @@ const zhHans: ChartsCopy = {
     price: (symbol, from, to) => `${symbol} 从 ${from} 到 ${to} 每天的链上交易价格。`,
     table: "可在图表下方的表格中查看相同数据。",
   },
-  delta: {
-    value: (percent) => `链上价格与 Pyth 参考价格之差：${percent}`,
-    note: (tradeDate, pythTime, company) => `最近一次链上交易：${tradeDate}，接近 NYSE 收盘时。其每枚代币价格除以当时的显示倍数，即为每股 ${company} 股票的 USDC；Pyth 参考价格（${pythTime}）为每股 USD。`,
-    unavailable: "未显示与 Pyth 参考价格的差：代币的显示倍数历史不可用，因此最近一次链上交易没有每股数值。",
-  },
   opensNewTab: "（在新标签页中打开）",
 };
 
@@ -423,11 +397,6 @@ const zhHant: ChartsCopy = {
     figures: (company, first, last) => `${company} 各財年的營業收入與淨利（${first}至${last}）。`,
     price: (symbol, from, to) => `${symbol} 從 ${from} 到 ${to} 每天的鏈上交易價格。`,
     table: "可在圖表下方的表格查看相同資料。",
-  },
-  delta: {
-    value: (percent) => `鏈上價格與 Pyth 參考價格之差：${percent}`,
-    note: (tradeDate, pythTime, company) => `最近一次鏈上交易：${tradeDate}，接近 NYSE 收盤時。其每枚代幣價格除以當時的顯示倍數，即為每股 ${company} 股票的 USDC；Pyth 參考價格（${pythTime}）為每股 USD。`,
-    unavailable: "未顯示與 Pyth 參考價格的差：代幣的顯示倍數歷史無法取得，因此最近一次鏈上交易沒有每股數值。",
   },
   opensNewTab: "（在新分頁中開啟）",
 };

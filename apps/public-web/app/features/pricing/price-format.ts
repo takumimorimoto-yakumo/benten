@@ -112,7 +112,7 @@ function usdText(value: string, fractionDigits: number, locale: PublicWebLocale)
 }
 
 /** The main figure: the price rounded to cents (or to six digits below one dollar). */
-export function priceText(price: AvailablePrice, locale: PublicWebLocale): string {
+export function priceText(price: Pick<AvailablePrice, "price">, locale: PublicWebLocale): string {
   const digits = usdDigits(price.price);
   return usdText(roundDecimal(price.price, digits, "halfUp"), digits, locale);
 }

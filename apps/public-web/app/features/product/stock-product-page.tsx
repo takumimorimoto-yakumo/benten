@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { ChartData } from "@/features/charts/chart-data";
 import { ChartSection } from "@/features/charts/chart-section";
 import { CopyValue } from "@/features/purchase-island/copy-value";
+import { PriceComparisonPanel } from "@/features/price-comparison";
 import { PythReferencePrice } from "@/features/pricing/pyth-reference-price";
 import { LearnLink, PROVIDER_LEARN_TOPIC } from "@/features/static-pages/learn-links";
 import { formatNumber } from "@/i18n/format";
@@ -16,7 +17,7 @@ import type { StockProductView } from "./product-view";
  * reference price, what you own, the route and fees, whether Benten can buy
  * it, and its exact identity. Reading order (DOM and tab order): title,
  * price and capability, then the on-chain trade price chart (when the page
- * has chart data), what you own, route, identity. From `lg` the
+ * has chart data), the Pyth and on-chain comparison, what you own, route, identity. From `lg` the
  * price and capability sit in a sticky right column; below `md` the buy
  * action is pinned above the tab bar. The long source tables live on the
  * evidence page.
@@ -49,6 +50,7 @@ export function StockProductPage({ view, chart = null, locale }: { view: StockPr
         {chart ? (
           <Card><CardContent><ChartSection data={chart} variant="product" symbol={identity.symbol} company={underlying} provider="xstocks" locale={locale} /></CardContent></Card>
         ) : null}
+        <PriceComparisonPanel ticker={identity.ticker} symbol={identity.symbol} chart={chart} locale={locale} />
         <SectionCard id="what-you-own" heading={copy.whatYouOwn.heading}>
           <p className="max-w-prose">{copy.whatYouOwn.xstock(underlying ?? identity.ticker)}</p>
           <LearnLink topic={PROVIDER_LEARN_TOPIC.xstocks} locale={locale} />

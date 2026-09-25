@@ -1,6 +1,6 @@
 import type { Config } from "@react-router/dev/config";
 import { listProviderAssets, listPublicAssets } from "@benten/registry";
-import { PURCHASE_FIXTURES } from "@benten/purchase/fixtures";
+import { PANEL_FIXTURES } from "@benten/purchase/fixtures";
 import { publishedCompanies } from "./app/lib/company.server.js";
 import { DEV_CATALOG_ENABLED } from "./app/lib/dev-catalog-flag.js";
 import { notFoundDocumentPaths } from "./app/lib/not-found.js";
@@ -17,7 +17,7 @@ if (!catalog.found) {
 
 // `pnpm dev:catalog` only (a build with the flag fails): the purchase fixture
 // pages have a loader, which `ssr: false` accepts only on listed paths.
-const devCatalogPaths = DEV_CATALOG_ENABLED ? Object.keys(PURCHASE_FIXTURES).map((name) => `/_catalog/purchase/${name}`) : [];
+const devCatalogPaths = DEV_CATALOG_ENABLED ? Object.keys(PANEL_FIXTURES).map((name) => `/_catalog/purchase/${name}`) : [];
 
 export default {
   buildDirectory: process.env.BENTEN_PUBLIC_WEB_BUILD_DIRECTORY ?? "build",

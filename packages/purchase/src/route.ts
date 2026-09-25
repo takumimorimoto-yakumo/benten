@@ -46,6 +46,7 @@ export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqX
  */
 export const NVDA_REFERENCE_FEED = {
   feedId: "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+  pythSymbol: "Equity.US.NVDA/USD",
   priceAccounts: [
     { shard: 0, address: "2w1Tg1XTZbUib7srfRoStJ4v5JXVsK7roQEGMsMaGZFC" },
     { shard: 1, address: "5VETJ8h3p4JrESYrzhjTDAWPEjDjfcnduqe9CjxgqBNd" },

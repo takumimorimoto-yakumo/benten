@@ -36,10 +36,13 @@ export type PurchaseCopy = {
     errorEmpty: string; errorPrecision: string; errorOverLimit: (max: string, limit: string) => string; errorOverBalance: (balance: string) => string; errorNotReady: string;
     youSell: string; consumed: (amount: string, raw: string) => string; expected: string; minimum: string; minimumNote: string; accountCreation: string;
     overLimit: { title: string; body: (usdc: string, limit: string) => string };
-    /** A sale stopped by a failed check (pool, quote, reference price or transaction); no retry from the panel. */
+    /** A sale stopped by a failed check (pool, quote, reference value or transaction); no retry from the panel. */
     routeCheck: PurchaseErrorCopy;
     /** The display multiplier changed after the amount was converted; the terms are read again. */
     termsChanged: PurchaseErrorCopy;
+    /** No usable Pyth reference was read: `referenceStale` when it is out of date (overnight, weekends), `referenceUnavailable` otherwise. */
+    referenceStale: PurchaseErrorCopy;
+    referenceUnavailable: PurchaseErrorCopy;
     startNew: string; resultHeading: string; receivedLabel: string; received: (amount: string) => string; soldLabel: string;
   };
   error: { expired: { title: string; body: (time: string) => string }; rejected: PurchaseErrorCopy; notEnoughSol: { title: string; body: (withDeposit: boolean) => string }; simulationFailed: PurchaseErrorCopy; routeCheck: PurchaseErrorCopy; relayBusy: PurchaseErrorCopy; relayUnavailable: PurchaseErrorCopy; trackingRelay: PurchaseErrorCopy; walletUnknown: PurchaseErrorCopy & { explorer: string }; earlierRequest: PurchaseErrorCopy; failedOnChain: PurchaseErrorCopy; dropped: PurchaseErrorCopy; notFinalized: { title: string; body: (minutes: string) => string }; technicalDetails: string };
@@ -72,8 +75,10 @@ const purchaseEn = (s: string): PurchaseCopy => ({
     errorEmpty: "Enter an amount of NVDAx.", errorPrecision: "NVDAx has at most 8 decimal places.", errorOverLimit: (max, limit) => `One sale may use at most ${max} NVDAx, about ${limit} USDC. Enter a smaller amount.`, errorOverBalance: (balance) => `This is more than your NVDAx balance of ${balance}.`, errorNotReady: "Your balance and the per-sale limit are still being read.",
     youSell: "You sell", consumed: (amount, raw) => `Used by the pool: ${amount} NVDAx (raw ${raw})`, expected: "Expected USDC", minimum: "Minimum USDC you receive", minimumNote: "The transaction fails instead of giving you less USDC than this.", accountCreation: "Your wallet will also create your USDC token account, which needs a small refundable SOL deposit.",
     overLimit: { title: "Above the per-sale limit", body: (usdc, limit) => `The pool expects to return ${usdc} USDC for this amount, above the limit of ${limit} USDC per sale. Enter a smaller amount. Nothing was signed or sent.` },
-    routeCheck: { title: "Sale paused: a check failed", body: "The pool, the expected USDC or the Pyth reference value did not pass Benten's checks, for example because the Pyth reference is not current, so Benten stopped before building a transaction. Nothing was signed or sent." },
+    routeCheck: { title: "Sale paused: a check failed", body: "The pool, the expected USDC or the Pyth reference value did not pass Benten's checks, so Benten stopped before building a transaction. Nothing was signed or sent." },
     termsChanged: { title: "The NVDAx display multiplier changed", body: "The multiplier your amount was converted with is no longer in effect, so Benten stopped before building a transaction. Nothing was signed or sent. Benten reads the current terms again: check the amount, then refresh the preview." },
+    referenceStale: { title: "Sale paused: the Pyth reference is out of date outside trading hours", body: "Benten checks every sale against the Pyth NVDA/USD reference. Pyth does not update it outside US stock trading hours (overnight and on weekends), so it goes out of date then. Its latest update is too old, so Benten stopped before building a transaction. Nothing was signed or sent. Refresh the preview once the reference updates again." },
+    referenceUnavailable: { title: "Sale paused: the Pyth reference could not be read", body: "Benten checks every sale against the Pyth NVDA/USD reference, and no usable update of it could be read, so Benten stopped before building a transaction. Nothing was signed or sent." },
     startNew: "Start a new sale", resultHeading: "Sale result", receivedLabel: "USDC received", received: (amount) => `USDC received: ${amount}.`, soldLabel: "NVDAx sold",
   },
   error: {
@@ -121,8 +126,10 @@ const purchaseJa = (s: string): PurchaseCopy => ({
     errorEmpty: "NVDAxの数量を入力してください。", errorPrecision: "NVDAxは小数点以下8桁までです。", errorOverLimit: (max, limit) => `1回の売却で使えるのは最大 ${max} NVDAx（約 ${limit} USDC）です。少ない数量を入力してください。`, errorOverBalance: (balance) => `NVDAx残高 ${balance} を超えています。`, errorNotReady: "残高と1回あたりの上限をまだ読み取っています。",
     youSell: "売却する数量", consumed: (amount, raw) => `プールが使う数量: ${amount} NVDAx (raw ${raw})`, expected: "受け取る見込みのUSDC", minimum: "受け取る最小USDC", minimumNote: "これより少ないUSDCになる場合、トランザクションは失敗します。", accountCreation: "ウォレットはあなたのUSDCトークンアカウントも作成します。少額の返還されるSOLのデポジットが必要です。",
     overLimit: { title: "1回あたりの上限を超えています", body: (usdc, limit) => `この数量では約 ${usdc} USDCを受け取る見込みで、1回あたりの上限 ${limit} USDCを超えます。少ない数量を入力してください。署名も送信もしていません。` },
-    routeCheck: { title: "売却を停止しました: 確認に失敗しました", body: "プール、受け取る見込みのUSDC、Pythの参照値のいずれかがBentenの確認を通らなかったため（Pythの参照値が最新でない場合など）、Bentenはトランザクションを作成する前に停止しました。署名も送信もされていません。" },
+    routeCheck: { title: "売却を停止しました: 確認に失敗しました", body: "プール、受け取る見込みのUSDC、Pythの参照値のいずれかがBentenの確認を通らなかったため、Bentenはトランザクションを作成する前に停止しました。署名も送信もされていません。" },
     termsChanged: { title: "NVDAxの表示倍率が変わりました", body: "数量の換算に使った倍率がすでに適用されていないため、Bentenはトランザクションを作成する前に停止しました。署名も送信もされていません。現在の条件を読み直すので、数量を確認してからプレビューを更新してください。" },
+    referenceStale: { title: "売却を停止しました: 取引時間外のためPythの参照値が古くなっています", body: "Bentenはすべての売却をPythのNVDA/USD参照値と照合しています。Pythは米国株の取引時間外（夜間と週末）にはこの値を更新しないため、その間は値が古くなります。最新の更新から時間が経ちすぎているため、Bentenはトランザクションを作成する前に停止しました。署名も送信もされていません。参照値が再び更新されてからプレビューを更新してください。" },
+    referenceUnavailable: { title: "売却を停止しました: Pythの参照値を読み取れませんでした", body: "Bentenはすべての売却をPythのNVDA/USD参照値と照合していますが、使える更新を読み取れなかったため、トランザクションを作成する前に停止しました。署名も送信もされていません。" },
     startNew: "新しい売却を始める", resultHeading: "売却結果", receivedLabel: "受け取ったUSDC", received: (amount) => `受け取ったUSDC: ${amount}。`, soldLabel: "売却したNVDAx",
   },
   error: {
@@ -170,8 +177,10 @@ const purchaseKo = (s: string): PurchaseCopy => ({
     errorEmpty: "NVDAx 수량을 입력하세요.", errorPrecision: "NVDAx는 소수점 이하 최대 8자리입니다.", errorOverLimit: (max, limit) => `1회 판매에 사용할 수 있는 수량은 최대 ${max} NVDAx(약 ${limit} USDC)입니다. 더 적은 수량을 입력하세요.`, errorOverBalance: (balance) => `NVDAx 잔액 ${balance}을(를) 초과합니다.`, errorNotReady: "잔액과 1회 한도를 아직 읽는 중입니다.",
     youSell: "판매 수량", consumed: (amount, raw) => `풀이 사용하는 수량: ${amount} NVDAx (raw ${raw})`, expected: "받을 것으로 예상되는 USDC", minimum: "받는 최소 USDC", minimumNote: "이보다 적은 USDC가 되면 트랜잭션은 실패합니다.", accountCreation: "지갑이 USDC 토큰 계정도 만듭니다. 돌려받는 소액의 SOL 예치금이 필요합니다.",
     overLimit: { title: "1회 한도 초과", body: (usdc, limit) => `이 수량으로는 약 ${usdc} USDC를 받을 것으로 예상되어 1회 한도 ${limit} USDC를 초과합니다. 더 적은 수량을 입력하세요. 서명하거나 전송한 것은 없습니다.` },
-    routeCheck: { title: "판매 중지: 확인 실패", body: "풀, 받을 것으로 예상되는 USDC 또는 Pyth 참조 값이 Benten의 확인을 통과하지 못해(예: Pyth 참조 값이 최신이 아닌 경우) Benten은 트랜잭션을 만들기 전에 중지했습니다. 서명되거나 전송된 것은 없습니다." },
+    routeCheck: { title: "판매 중지: 확인 실패", body: "풀, 받을 것으로 예상되는 USDC 또는 Pyth 참조 값이 Benten의 확인을 통과하지 못해Benten은 트랜잭션을 만들기 전에 중지했습니다. 서명되거나 전송된 것은 없습니다." },
     termsChanged: { title: "NVDAx 표시 배율이 바뀌었습니다", body: "수량 환산에 사용한 배율이 더 이상 적용되지 않아 Benten은 트랜잭션을 만들기 전에 중지했습니다. 서명되거나 전송된 것은 없습니다. 현재 조건을 다시 읽으니 수량을 확인한 뒤 미리보기를 새로 고치세요." },
+    referenceStale: { title: "판매 중지: 거래 시간 외라 Pyth 참조 값이 오래됨", body: "Benten은 모든 판매를 Pyth NVDA/USD 참조 값과 대조합니다. Pyth는 미국 주식 거래 시간 외(야간과 주말)에는 이 값을 업데이트하지 않으므로 그동안 값이 오래됩니다. 마지막 업데이트가 너무 오래되어 Benten은 트랜잭션을 만들기 전에 중지했습니다. 서명되거나 전송된 것은 없습니다. 참조 값이 다시 업데이트된 뒤 미리보기를 새로 고치세요." },
+    referenceUnavailable: { title: "판매 중지: Pyth 참조 값을 읽을 수 없음", body: "Benten은 모든 판매를 Pyth NVDA/USD 참조 값과 대조하는데, 사용할 수 있는 업데이트를 읽지 못해 트랜잭션을 만들기 전에 중지했습니다. 서명되거나 전송된 것은 없습니다." },
     startNew: "새 판매 시작", resultHeading: "판매 결과", receivedLabel: "받은 USDC", received: (amount) => `받은 USDC: ${amount}.`, soldLabel: "판매한 NVDAx",
   },
   error: {
@@ -219,8 +228,10 @@ const purchaseZhHans = (s: string): PurchaseCopy => ({
     errorEmpty: "请输入 NVDAx 数量。", errorPrecision: "NVDAx 最多有 8 位小数。", errorOverLimit: (max, limit) => `每次卖出最多可使用 ${max} NVDAx（约 ${limit} USDC）。请输入较小的数量。`, errorOverBalance: (balance) => `超过了你的 NVDAx 余额 ${balance}。`, errorNotReady: "仍在读取你的余额和每次卖出的上限。",
     youSell: "你卖出", consumed: (amount, raw) => `池使用的数量：${amount} NVDAx（raw ${raw}）`, expected: "预计收到的 USDC", minimum: "你至少收到的 USDC", minimumNote: "如果少于此数量的 USDC，交易将失败。", accountCreation: "你的钱包还会创建你的 USDC 代币账户，需要少量可退还的 SOL 押金。",
     overLimit: { title: "超过每次卖出的上限", body: (usdc, limit) => `按此数量，池预计给出 ${usdc} USDC，超过每次 ${limit} USDC 的上限。请输入较小的数量。未签名也未发送任何内容。` },
-    routeCheck: { title: "卖出已暂停：检查未通过", body: "池、预计收到的 USDC 或 Pyth 参考值未通过 Benten 的检查（例如 Pyth 参考值不是最新的），因此 Benten 在创建交易之前停止。未签名也未发送任何内容。" },
+    routeCheck: { title: "卖出已暂停：检查未通过", body: "池、预计收到的 USDC 或 Pyth 参考值未通过 Benten 的检查，因此 Benten 在创建交易之前停止。未签名也未发送任何内容。" },
     termsChanged: { title: "NVDAx 显示倍数已变化", body: "用于换算你输入数量的倍数已不再生效，因此 Benten 在创建交易之前停止。未签名也未发送任何内容。Benten 会重新读取当前条件，请确认数量后刷新预览。" },
+    referenceStale: { title: "卖出已暂停：交易时间以外 Pyth 参考值已过时", body: "Benten 会将每笔卖出与 Pyth NVDA/USD 参考值核对。在美国股票交易时间以外（夜间和周末），Pyth 不更新该值，因此它会过时。其最近一次更新已过旧，因此 Benten 在创建交易之前停止。未签名也未发送任何内容。请在参考值再次更新后刷新预览。" },
+    referenceUnavailable: { title: "卖出已暂停：无法读取 Pyth 参考值", body: "Benten 会将每笔卖出与 Pyth NVDA/USD 参考值核对，但未能读取到可用的更新，因此在创建交易之前停止。未签名也未发送任何内容。" },
     startNew: "开始新的卖出", resultHeading: "卖出结果", receivedLabel: "收到的 USDC", received: (amount) => `收到的 USDC：${amount}。`, soldLabel: "卖出的 NVDAx",
   },
   error: {
@@ -268,8 +279,10 @@ const purchaseZhHant = (s: string): PurchaseCopy => ({
     errorEmpty: "請輸入 NVDAx 數量。", errorPrecision: "NVDAx 最多有 8 位小數。", errorOverLimit: (max, limit) => `每次賣出最多可使用 ${max} NVDAx（約 ${limit} USDC）。請輸入較小的數量。`, errorOverBalance: (balance) => `超過你的 NVDAx 餘額 ${balance}。`, errorNotReady: "仍在讀取你的餘額和每次賣出的上限。",
     youSell: "你賣出", consumed: (amount, raw) => `池使用的數量：${amount} NVDAx（raw ${raw}）`, expected: "預計收到的 USDC", minimum: "你至少收到的 USDC", minimumNote: "如果少於此數量的 USDC，交易將失敗。", accountCreation: "你的錢包也會建立你的 USDC 代幣帳戶，需要少量可退還的 SOL 押金。",
     overLimit: { title: "超過每次賣出的上限", body: (usdc, limit) => `依此數量，池預計給出 ${usdc} USDC，超過每次 ${limit} USDC 的上限。請輸入較小的數量。未簽署也未傳送任何內容。` },
-    routeCheck: { title: "賣出已暫停：檢查未通過", body: "池、預計收到的 USDC 或 Pyth 參考值未通過 Benten 的檢查（例如 Pyth 參考值不是最新的），因此 Benten 在建立交易之前停止。未簽署也未傳送任何內容。" },
+    routeCheck: { title: "賣出已暫停：檢查未通過", body: "池、預計收到的 USDC 或 Pyth 參考值未通過 Benten 的檢查，因此 Benten 在建立交易之前停止。未簽署也未傳送任何內容。" },
     termsChanged: { title: "NVDAx 顯示倍數已變更", body: "用於換算你輸入數量的倍數已不再生效，因此 Benten 在建立交易之前停止。未簽署也未傳送任何內容。Benten 會重新讀取目前條件，請確認數量後重新整理預覽。" },
+    referenceStale: { title: "賣出已暫停：交易時間以外 Pyth 參考值已過時", body: "Benten 會將每筆賣出與 Pyth NVDA/USD 參考值核對。在美國股票交易時間以外（夜間和週末），Pyth 不更新該值，因此它會過時。其最近一次更新已過舊，因此 Benten 在建立交易之前停止。未簽署也未傳送任何內容。請在參考值再次更新後重新整理預覽。" },
+    referenceUnavailable: { title: "賣出已暫停：無法讀取 Pyth 參考值", body: "Benten 會將每筆賣出與 Pyth NVDA/USD 參考值核對，但未能讀取到可用的更新，因此在建立交易之前停止。未簽署也未傳送任何內容。" },
     startNew: "開始新的賣出", resultHeading: "賣出結果", receivedLabel: "收到的 USDC", received: (amount) => `收到的 USDC：${amount}。`, soldLabel: "賣出的 NVDAx",
   },
   error: {

@@ -3,7 +3,8 @@
  * route reversed): read the route mints and the Pyth reference price, refuse
  * a multiplier other than the one the amount was converted with, build the
  * unsigned exact-in sale, bound its amounts, check the quote against the
- * reference value (`reference-price.ts`), audit the exact wire bytes
+ * reference value (`reference-price.ts`; without a usable reference price
+ * the preview fails as `referenceUnavailable`), audit the exact wire bytes
  * (decoded as a legacy transaction only) and run an unsigned simulation. Only a preview that
  * passes all of them reaches `reviewReady`; its audited bytes are what the
  * wallet is later asked to approve.
@@ -20,7 +21,7 @@ import { previewExpiry } from "./purchase-machine";
 import { InvalidSwapInputError, RoutePoolMismatchError } from "./quote";
 import { USDC_DECIMALS } from "./route";
 import { SELL_ROUTE } from "./routes-table";
-import { readNvdaReferencePrice, saleReferenceFailure } from "./reference-price";
+import { readNvdaReferencePrice, saleReferenceCheck, saleReferenceFailure } from "./reference-price";
 import { createRelayConnection, multiplierReading, readRouteMints, relayFailureOf, type RelayConnection } from "./rpc";
 import { classifySimulationError } from "./simulation";
 import { transactionErrorCode } from "./tracker";
@@ -79,7 +80,7 @@ export async function prepareSellPreview(walletAddress: string, nvdaxInRaw: bigi
       return { ok: false, failure: "sellTermsChanged", details: `multiplier ${inputMultiplier} is now ${nvdaxMultiplier.value}`, createsNvdaxAccount: false };
     }
     // Fail closed without a usable reference price: the sale is never bounded by the pool quote alone.
-    if (!reference.ok) return { ok: false, failure: "routeCheck", details: `reference price unavailable: ${reference.reason}`, createsNvdaxAccount: false };
+    if (!reference.ok) return { ok: false, failure: "referenceUnavailable", details: reference.reason, createsNvdaxAccount: false };
 
     const built = await buildNvdaxSellExactIn({
       connection: relay.connection,
@@ -93,7 +94,8 @@ export async function prepareSellPreview(walletAddress: string, nvdaxInRaw: bigi
     // Bound the reviewed amounts independently of the builder's own limit check.
     const amountFailure = sellAmountFailure({ inputRaw: nvdaxInRaw, usdcOutRaw, minimumUsdcOutRaw });
     if (amountFailure) return { ok: false, failure: "routeCheck", details: amountFailure, createsNvdaxAccount: false };
-    const referenceFailure = saleReferenceFailure({ nvdaxInRaw, multiplier: nvdaxMultiplier.value, usdcOutRaw, price: reference.price });
+    const referenceInput = { nvdaxInRaw, multiplier: nvdaxMultiplier.value, usdcOutRaw, price: reference.price };
+    const referenceFailure = saleReferenceFailure(referenceInput);
     if (referenceFailure) return { ok: false, failure: "routeCheck", details: referenceFailure, createsNvdaxAccount: false };
     const wireTransaction = Uint8Array.from(built.transaction.serialize({ requireAllSignatures: false, verifySignatures: false }));
 
@@ -143,6 +145,8 @@ export async function prepareSellPreview(walletAddress: string, nvdaxInRaw: bigi
         nvdaxMultiplier,
         createsNvdaxAccount: false,
         createsUsdcAccount: audit.createsUsdcAccount,
+        // Display only: what the reference check above was run against.
+        saleReference: saleReferenceCheck(referenceInput),
         lastValidBlockHeight: built.lastValidBlockHeight,
         wireTransaction,
       },

@@ -18,6 +18,8 @@ import { PublicKey } from "@solana/web3.js";
 import { isStaleAt, observeFeedAccounts } from "@benten/pricing/observe";
 import { referenceValue } from "@benten/pricing/value";
 
+import { formatRawUnits } from "./amount";
+import { REFERENCE_STALE } from "./purchase-machine";
 import { BPS_DENOMINATOR, PURCHASE_CONFIG } from "./config";
 import { NVDA_REFERENCE_FEED, NVDAX_DECIMALS, USDC_DECIMALS } from "./route";
 import type { RelayConnection } from "./rpc";
@@ -39,7 +41,7 @@ export function referencePriceOf(accounts: ReadonlyArray<PriceAccount>, nowMs: n
   if (!observation.ok) return { ok: false, reason: observation.reason };
   const { update } = observation;
   const publishTime = Number(update.publishTime);
-  if (isStaleAt(publishTime, nowMs)) return { ok: false, reason: "stale" };
+  if (isStaleAt(publishTime, nowMs)) return { ok: false, reason: REFERENCE_STALE };
   if (update.price <= 0n) return { ok: false, reason: "not_positive" };
   return { ok: true, price: { priceRaw: update.price, exponent: update.exponent, publishTime } };
 }
@@ -64,6 +66,14 @@ export interface SaleReferenceInput {
   price: ReferencePrice;
 }
 
+/** The NVDAx sold valued at the reference price (the one valuation both the check and the review display use). */
+function soldValue(input: SaleReferenceInput) {
+  return referenceValue(
+    { rawAmount: input.nvdaxInRaw.toString(), decimals: NVDAX_DECIMALS, hasScaledUiAmount: true, scaledUiMultiplier: input.multiplier },
+    { price_raw: input.price.priceRaw.toString(), exponent: input.price.exponent },
+  );
+}
+
 /**
  * `null` when the sale passes both reference checks, otherwise the reason.
  * Exact on `bigint`: with the value `V = digits / 10^scale` USD, the limit
@@ -71,10 +81,7 @@ export interface SaleReferenceInput {
  * `V x 10^6 <= L x (1 + headroom)` and `Q >= V x 10^6 x (1 - tolerance)`.
  */
 export function saleReferenceFailure(input: SaleReferenceInput): string | null {
-  const valued = referenceValue(
-    { rawAmount: input.nvdaxInRaw.toString(), decimals: NVDAX_DECIMALS, hasScaledUiAmount: true, scaledUiMultiplier: input.multiplier },
-    { price_raw: input.price.priceRaw.toString(), exponent: input.price.exponent },
-  );
+  const valued = soldValue(input);
   if (valued.status !== "valued") return `reference value unavailable: ${valued.reason}`;
   const bps = BigInt(BPS_DENOMINATOR);
   const scale = 10n ** BigInt(valued.exact.scale);
@@ -89,4 +96,39 @@ export function saleReferenceFailure(input: SaleReferenceInput): string | null {
     return `the pool quotes ${input.usdcOutRaw} raw USDC, below the reference value of ${valued.value} USD by more than the tolerance`;
   }
   return null;
+}
+
+/**
+ * What a sale preview was checked against, carried to the review step for
+ * display only: the feed, the reference price and when Pyth published it,
+ * and the NVDAx sold valued at that price. Nothing reads it back into a
+ * check; `saleReferenceFailure` alone decides whether the sale passes.
+ */
+export interface SaleReferenceCheck {
+  feedId: string;
+  pythSymbol: string;
+  /** `priceRaw x 10^exponent` USD for one underlying share, exact decimal. */
+  price: string;
+  /** Unix seconds. */
+  publishTime: number;
+  /** The NVDAx sold at that price, USD truncated like Holdings values. */
+  valueUsd: string;
+}
+
+/** `priceRaw x 10^exponent` as an exact decimal string. */
+function exactPrice(price: ReferencePrice): string {
+  return price.exponent >= 0 ? (price.priceRaw * 10n ** BigInt(price.exponent)).toString() : formatRawUnits(price.priceRaw, -price.exponent);
+}
+
+/** The display values of a reference check; `null` when the amount cannot be valued (the check itself then fails). */
+export function saleReferenceCheck(input: SaleReferenceInput): SaleReferenceCheck | null {
+  const valued = soldValue(input);
+  if (valued.status !== "valued") return null;
+  return {
+    feedId: NVDA_REFERENCE_FEED.feedId,
+    pythSymbol: NVDA_REFERENCE_FEED.pythSymbol,
+    price: exactPrice(input.price),
+    publishTime: input.price.publishTime,
+    valueUsd: valued.value,
+  };
 }

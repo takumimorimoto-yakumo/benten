@@ -5,7 +5,7 @@
  * data table and the plot always show the same points.
  */
 import { CHART_CONFIG, CHART_RANGES, type ChartRange } from "./chart-config";
-import { isDrawableFigure, type ChartData, type FinancialMetric, type FinancialPoint, type IsoDate, type PricePoint } from "./chart-data";
+import { isDrawableFigure, type ChartData, type FinancialMetric, type FinancialPoint, type IsoDate, type LatestTrade, type PricePoint } from "./chart-data";
 
 const DAY_MS = 86_400_000;
 
@@ -196,6 +196,17 @@ export function latestTrade(data: ChartData): (PricePoint & { readonly value: nu
     if (point.value !== null) return point;
   }
   return null;
+}
+
+/**
+ * The last trade the price comparison panel compares with Pyth: from the
+ * page's price file reference, or (fixture data) the inline series, whose
+ * sample value stands for one share.
+ */
+export function comparableTrade(data: ChartData): LatestTrade | null {
+  if (data.priceFile) return data.priceFile.latest;
+  const inline = data.price?.fixture ? latestTrade(data) : null;
+  return inline ? { ...inline, per_share: inline.value } : null;
 }
 
 /** What the chart shows as selected: one day, or one figure of one fiscal year. */

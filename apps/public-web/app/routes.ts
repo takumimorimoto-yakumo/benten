@@ -36,7 +36,7 @@ const publicRoutes = [
 ] satisfies RouteConfig;
 
 // Holdings and Activity fixture pages and the charts and statements pages of the Living Catalog (development only, like the lines below).
-const portfolioCatalogRoutes = [route("_catalog/portfolio/:fixture", "routes/dev-portfolio-fixture.tsx"), route("_catalog/charts", "routes/dev-catalog-charts.tsx"), route("_catalog/statements", "routes/dev-catalog-statements.tsx")];
+const portfolioCatalogRoutes = [route("_catalog/portfolio/:fixture", "routes/dev-portfolio-fixture.tsx"), route("_catalog/charts", "routes/dev-catalog-charts.tsx"), route("_catalog/statements", "routes/dev-catalog-statements.tsx"), route("_catalog/price-comparison", "routes/dev-catalog-price-comparison.tsx")];
 
 // The Living Catalog and its purchase fixture pages exist only in `pnpm dev:catalog`. It is never part of a
 // build: it is not in the route manifest, the client graph, or the prerender list.

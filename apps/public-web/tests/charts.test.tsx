@@ -4,7 +4,7 @@ import { CHART_CONFIG } from "../app/features/charts/chart-config.ts";
 import { onchainDailySeries, onchainDailyTickers, type OnchainDailySeries } from "@benten/pricing/onchain-daily";
 import { financialSeriesFromAnnualFacts, hasChartData, priceSeriesFromReadModel, type ChartData, type PriceFileRef } from "../app/features/charts/chart-data.ts";
 import { fixtureChartData, FIXTURE_AS_OF, FIXTURE_LISTED_ON } from "../app/features/charts/chart-fixture.ts";
-import { availableRanges, chartContent, chartModel, latestTrade, nearestPriceIndex, niceTicks, xAxisTicks, xTicks } from "../app/features/charts/chart-model.ts";
+import { availableRanges, chartContent, chartModel, comparableTrade, latestTrade, nearestPriceIndex, niceTicks, xAxisTicks, xTicks } from "../app/features/charts/chart-model.ts";
 import { ChartSection } from "../app/features/charts/chart-section.tsx";
 import { ChartReadout } from "../app/features/charts/chart-readout.tsx";
 import { signedPercentText } from "../app/features/charts/chart-format.ts";
@@ -337,6 +337,25 @@ describe("ChartSection prerender", () => {
       }
     });
   }
+
+  it("leaves the last trade vs Pyth difference to the product page's comparison panel", () => {
+    const noMultiplier: ChartData = { ...REAL, financials: null, priceFile: { ...REAL.priceFile!, latest: { ...REAL.priceFile!.latest, per_share: null } } };
+    for (const locale of PUBLIC_WEB_LOCALES) {
+      for (const data of [{ ...REAL, financials: null }, noMultiplier, { price: FULL.price, financials: null }]) {
+        const html = renderToStaticMarkup(<ChartSection data={data} variant="product" symbol={nvda.symbol} company="NVIDIA" provider="xstocks" locale={locale} />);
+        expect(html, locale).not.toContain("data-chart-pyth-comparison");
+        expect(html, locale).not.toContain("data-term=\"pyth-reference-price\"");
+      }
+      expect(Object.keys(CHARTS_MESSAGES[locale]), locale).not.toContain("delta");
+    }
+  });
+
+  it("gives the panel the last comparable trade: the price file's, or the fixture series' last value for one share", () => {
+    expect(comparableTrade(REAL)).toEqual(REAL.priceFile!.latest);
+    const inline = latestTrade(FULL)!;
+    expect(comparableTrade({ price: FULL.price, financials: null })).toEqual({ ...inline, per_share: inline.value });
+    expect(comparableTrade({ price: { ...FULL.price!, fixture: false }, financials: null })).toBeNull();
+  });
 
   it("renders nothing without data, and links every day's swap and every year's filing", () => {
     expect(renderToStaticMarkup(<ChartSection data={{ price: null, financials: null }} variant="company" symbol="X" company={null} provider="xstocks" locale="en" />)).toBe("");

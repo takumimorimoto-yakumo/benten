@@ -239,6 +239,7 @@ class PublishablePngTest(unittest.TestCase):
         "apps/public-web/app/i18n/pages-nav-messages.ts",
         "apps/public-web/app/i18n/charts-messages.ts",
         "apps/public-web/app/i18n/statements-messages.ts",
+        "apps/public-web/app/i18n/comparison-messages.ts",
     )
 
     def stage_public_web_catalogs(self, registered: tuple[str, ...]) -> None:

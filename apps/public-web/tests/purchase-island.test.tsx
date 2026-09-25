@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { createRef } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { PURCHASE_FIXTURES, type PurchaseFixtureName } from "../../../packages/purchase/src/fixtures.ts";
+import { PURCHASE_FIXTURES, SALE_FIXTURES, type PurchaseFixtureName } from "../../../packages/purchase/src/fixtures.ts";
 import type { ApprovalOutcome } from "../../../packages/purchase/src/wallet-standard.ts";
 import { DossierPage } from "../app/features/dossier/dossier-page.tsx";
 import { PurchasePanelView, type PanelHandlers, type PanelRefs } from "../app/features/purchase-island/purchase-panel-view.tsx";
@@ -107,6 +107,17 @@ describe("purchase panel rendering (every fixture, every locale)", () => {
       const html = render(name, locale);
       const rendered = text(html);
       for (const sentence of [notice.heading, notice.usPersons, notice.noEligibilityCheck, notice.noAvailabilityGuarantee, notice.notAdvice]) expect(rendered, name).toContain(sentence);
+      expect(rendered, name).not.toMatch(FORBIDDEN[locale]);
+      expect(html, name).toContain(`lang="${locale}"`);
+    }
+  });
+
+  it.each(PUBLIC_WEB_LOCALES)("renders every sale fixture with the sale notice, its locale, and no forbidden words (%s)", (locale) => {
+    const copy = purchaseMessagesFor(locale);
+    for (const [name, fixture] of Object.entries(SALE_FIXTURES)) {
+      const html = renderToStaticMarkup(<PurchasePanelView state={fixture.state} now={fixture.now} locale={locale} handlers={HANDLERS} refs={refs()} announcement="" />);
+      const rendered = text(html);
+      for (const sentence of [copy.sell.noticeHeading, copy.notice.notAdvice]) expect(rendered, name).toContain(sentence);
       expect(rendered, name).not.toMatch(FORBIDDEN[locale]);
       expect(html, name).toContain(`lang="${locale}"`);
     }

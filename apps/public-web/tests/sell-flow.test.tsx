@@ -278,7 +278,7 @@ describe("sale preview failures use the sale's own wording", () => {
   });
 
   it("shows a failed sale check as a paused sale, never a paused purchase, and offers no retry", () => {
-    const failed = run(PREVIEWING, { type: "previewFailed", requestId: 1, failure: "routeCheck", details: "reference price unavailable: stale" });
+    const failed = run(PREVIEWING, { type: "previewFailed", requestId: 1, failure: "routeCheck", details: "the pool quotes 1 raw USDC, below the reference value of 2.23 USD by more than the tolerance" });
     for (const locale of PUBLIC_WEB_LOCALES) {
       const copy = PURCHASE_MESSAGES[locale];
       const html = text(render(failed, locale));
@@ -286,6 +286,57 @@ describe("sale preview failures use the sale's own wording", () => {
       expect(html, locale).not.toContain(copy.error.routeCheck.title);
       expect(html, locale).not.toContain(copy.action.refresh);
       expect(html, locale).not.toContain(copy.action.tryAgain);
+    }
+  });
+});
+
+describe("the sale review shows what the sale was checked against", () => {
+  const reference = { feedId: "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593", pythSymbol: "Equity.US.NVDA/USD", price: "225.24123", publishTime: BUILT_AT / 1000 - 4, valueUsd: "2.25" };
+  const checked = run(PREVIEWING, { type: "previewSucceeded", requestId: 1, preview: preview({ saleReference: reference }) });
+
+  it("states the Pyth feed, the price, its publish time and the amount's value in every locale", () => {
+    for (const locale of PUBLIC_WEB_LOCALES) {
+      const html = render(checked, locale);
+      expect(html, locale).toContain(`data-pyth-reference-check="${reference.feedId}"`);
+      expect(html, locale).toContain(`data-pyth-publish-time="${new Date(reference.publishTime * 1000).toISOString()}"`);
+      expect(text(html), locale).toContain("NVDA/USD");
+      expect(text(html), locale).toMatch(/225\.24/);
+      expect(text(html), locale).toMatch(/2\.25/);
+    }
+    expect(text(render(checked))).toContain("Checked against the Pyth reference price NVDA/USD: $225.24");
+    expect(text(render(checked))).toContain("Value of this amount at that price: $2.25.");
+  });
+
+  it("keeps the line through an expired preview and while the wallet is asked", () => {
+    expect(render(run(checked, { type: "approveRequested", now: BUILT_AT + 1_000 }))).toContain("data-pyth-reference-check");
+    expect(render(checked, "en", BUILT_AT + PURCHASE_CONFIG.previewTtlMs + 1_000)).toContain("data-pyth-reference-check");
+  });
+
+  it("shows no line for a preview that carries no reference", () => {
+    expect(render(REVIEW)).not.toContain("data-pyth-reference-check");
+  });
+});
+
+describe("a sale stopped without a usable Pyth reference", () => {
+  it("says the reference is out of date outside trading hours, with a refresh, in every locale", () => {
+    const failed = run(PREVIEWING, { type: "previewFailed", requestId: 1, failure: "referenceUnavailable", details: "stale" });
+    for (const locale of PUBLIC_WEB_LOCALES) {
+      const copy = PURCHASE_MESSAGES[locale];
+      const html = text(render(failed, locale));
+      expect(html, locale).toContain(copy.sell.referenceStale.title);
+      expect(html, locale).toContain(copy.sell.referenceStale.body);
+      expect(html, locale).not.toContain(copy.sell.routeCheck.title);
+      expect(html, locale).toContain(copy.action.refresh);
+    }
+  });
+
+  it("says the reference could not be read for any other reason", () => {
+    const failed = run(PREVIEWING, { type: "previewFailed", requestId: 1, failure: "referenceUnavailable", details: "malformed_price_account" });
+    for (const locale of PUBLIC_WEB_LOCALES) {
+      const copy = PURCHASE_MESSAGES[locale];
+      const html = text(render(failed, locale));
+      expect(html, locale).toContain(copy.sell.referenceUnavailable.title);
+      expect(html, locale).not.toContain(copy.sell.referenceStale.title);
     }
   });
 });

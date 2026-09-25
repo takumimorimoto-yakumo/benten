@@ -33,7 +33,7 @@ import { DirectoryCatalogSpecimens } from "@/features/explore/directory-catalog-
 import { NotFoundPage } from "@/features/references/not-found-page";
 import { ProviderPage } from "@/features/references/provider-page";
 import type { ProviderView } from "@/features/references/provider-view";
-import { PURCHASE_FIXTURES, type PurchaseFixtureName } from "@benten/purchase/fixtures";
+import { PANEL_FIXTURES, type PanelFixtureName } from "@benten/purchase/fixtures";
 import { ProductCatalogSpecimens } from "@/features/product/product-catalog";
 
 const FIXTURE_SOURCE = {
@@ -225,12 +225,12 @@ export default function DevCatalog() {
             <Input aria-label="Read-only input" readOnly defaultValue="Read-only" />
           </div>
         </Specimen>
-        <Specimen title="Purchase panel (every reducer fixture; no RPC, no wallet)">
+        <Specimen title="Purchase and sale panel (every reducer fixture; no RPC, no wallet)">
           <p className="text-sm text-muted-foreground">Each state also opens in the real NVDA Dossier at <code>/_catalog/purchase/&lt;fixture&gt;?locale=&lt;locale&gt;</code>.</p>
           <div className="grid items-start gap-6 md:grid-cols-[repeat(auto-fill,minmax(min(100%,var(--purchase-panel-width)),1fr))]">
-            {(Object.keys(PURCHASE_FIXTURES) as PurchaseFixtureName[]).map((name) => (
+            {(Object.keys(PANEL_FIXTURES) as PanelFixtureName[]).map((name) => (
               <div key={name} className="flex flex-col gap-2">
-                <h3 className="text-sm font-medium"><a className="underline underline-offset-4" href={`/_catalog/purchase/${name}`}>{PURCHASE_FIXTURES[name].label}</a></h3>
+                <h3 className="text-sm font-medium"><a className="underline underline-offset-4" href={`/_catalog/purchase/${name}`}>{PANEL_FIXTURES[name].label}</a></h3>
                 <PurchasePanelFixture name={name} locale={locale} />
               </div>
             ))}
@@ -243,7 +243,7 @@ export default function DevCatalog() {
           </div>
         </Specimen>
         <Specimen title="Price and financials charts">
-          <p className="text-sm text-muted-foreground">Every chart state, from the labelled fixture, is on <a className="underline underline-offset-4" href="/_catalog/charts">/_catalog/charts</a>; every state of the financial statements (tabs, cell states, readouts, chart states) is on <a className="underline underline-offset-4" href="/_catalog/statements">/_catalog/statements</a>.</p>
+          <p className="text-sm text-muted-foreground">Every chart state, from the labelled fixture, is on <a className="underline underline-offset-4" href="/_catalog/charts">/_catalog/charts</a>; every state of the financial statements (tabs, cell states, readouts, chart states) is on <a className="underline underline-offset-4" href="/_catalog/statements">/_catalog/statements</a>; every state of the Pyth and on-chain price comparison and the review steps' Pyth reference check line is on <a className="underline underline-offset-4" href="/_catalog/price-comparison">/_catalog/price-comparison</a>.</p>
         </Specimen>
         {/* Product pages, the Pyth reference price and the buy flow. */}
         <ProductCatalogSpecimens locale={locale} />

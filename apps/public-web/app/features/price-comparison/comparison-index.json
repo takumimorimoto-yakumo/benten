@@ -1,0 +1,1421 @@
+{
+  "schema_version": "benten.public-web.price-comparison-index.v1",
+  "feed_map_revision": "2026-09-24.1",
+  "schedule_source": {
+    "checked_at": "2026-09-25"
+  },
+  "schedules": [
+    "America/New_York;0930-1600,0930-1600,0930-1600,0930-1600,0930-1600,C,C;0907/C,1126/C,1127/0930-1300,1224/0930-1300,1225/C,0101/C,0118/C,0215/C,0326/C,0531/C,0618/C,0705/C",
+    "America/New_York;O,O,O,O,O,O,O;"
+  ],
+  "entries": [
+    {
+      "ticker": "ABNB",
+      "mint": "XscSc1zjbVizEnhCzzehJ9fzztm3WRKdn9pjmriKDuN",
+      "underlying": {
+        "feed_id": "ccab508da0999d36e1ac429391d67b3ac5abf1900978ea1a56dab6b1b932168e",
+        "pyth_symbol": "Equity.US.ABNB/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ABT",
+      "mint": "XsHtf5RpxsQ7jeJ9ivNewouZKJHbPxhPoEy6yYvULr7",
+      "underlying": {
+        "feed_id": "4aac40f432e039ab06236eb9bd3c58347f953d8f05b29aaac295b99cc47ee429",
+        "pyth_symbol": "Equity.US.ABT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ACN",
+      "mint": "Xs5UJzmCRQ8DWZjskExdSQDnbE6iLkRu2jjrRAB1JSU",
+      "underlying": {
+        "feed_id": "68848984b74a7766ad23cdccd8e78e9ef339dcfb86b7e96990f27447c20967ed",
+        "pyth_symbol": "Equity.US.ACN/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ADBE",
+      "mint": "XsDZMGEU8zadWFCkTtPBoPWYcUX3JHVmghnwf2Mve2q",
+      "underlying": {
+        "feed_id": "df82dc88ea742bb42bdb845e5fc3ca4eef2354c67357d338221e8a696891b4ca",
+        "pyth_symbol": "Equity.US.ADBE/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ADI",
+      "mint": "Xs3CytsvJshAYy1TQjq2o2yVWCyEGinNpvkB6f3Qs31",
+      "underlying": {
+        "feed_id": "a388977cbd7b063e456a31267919d86395af058a7558e892dde3c6b38c6240bb",
+        "pyth_symbol": "Equity.US.ADI/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AFRM",
+      "mint": "XsKfV36es7HHpJFKrDqaaXSFC1dwsrwLit4N67JH5LV",
+      "underlying": {
+        "feed_id": "137b11f6e570f46d5cbcf1ebe05ba1bbc677d419ba6eefb5e7f0786c11adae06",
+        "pyth_symbol": "Equity.US.AFRM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ALLY",
+      "mint": "XsRifLZvp2XvCpPFQNK6XGTjHSL7sTZmmGyEs4NLAV2",
+      "underlying": {
+        "feed_id": "0d6c41f292267e021b5bebd48a9b4dd1697e10bb9b9a5b06411c74c570d1135c",
+        "pyth_symbol": "Equity.US.ALLY/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AMAT",
+      "mint": "XsQZdaWUAGC4R3fgD2N1fupKvJfJq6YM51ccnsLUWFA",
+      "underlying": {
+        "feed_id": "b9bc74cc1243b706efacf664ed206d08ab1dda79e8b87752c7c44b3bdf1b9e08",
+        "pyth_symbol": "Equity.US.AMAT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AMD",
+      "mint": "XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF",
+      "underlying": {
+        "feed_id": "3622e381dbca2efd1859253763b1adc63f7f9abb8e76da1aa8e638a57ccde93e",
+        "pyth_symbol": "Equity.US.AMD/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AMGN",
+      "mint": "XsgKwBMbv8LDzEYRgbKtyqsub6QB56PQVzgTGbiGaNe",
+      "underlying": {
+        "feed_id": "10946973bfcc936b423d52ee2c5a538d96427626fe6d1a7dae14b1c401d1e794",
+        "pyth_symbol": "Equity.US.AMGN/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AMT",
+      "mint": "XsvYPZkrDDg7259oDv5E76HSmeLWgHPgNEQ44KVbJJU",
+      "underlying": {
+        "feed_id": "8a80397a6e962b6e260d620e3c68d08ab94bdc82fd27d2c506d41b8a52280364",
+        "pyth_symbol": "Equity.US.AMT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AMZN",
+      "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+      "underlying": {
+        "feed_id": "b5d0e0fa58a1f8b81498ae670ce93c872d14434b72c364885d4fa1b257cbb07a",
+        "pyth_symbol": "Equity.US.AMZN/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "7148fbe6e493ff2580305c92a8d7f8628c9943b11b9b253aebc24863fec290e8",
+        "pyth_symbol": "Crypto.AMZNX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "ARM",
+      "mint": "XswUFSYE5CWsZM3X3yo6e2pZvxcAzx912DonGvgUFka",
+      "underlying": {
+        "feed_id": "957bf692b35cc62f222dbf4dc6929130df42fe17c9f03373f44c01f78b05391e",
+        "pyth_symbol": "Equity.US.ARM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ASML",
+      "mint": "XshuHQ6o6SVpUNawvnnTMxsZ4tacZsNgVCLorv7TkFq",
+      "underlying": {
+        "feed_id": "1a6e324589a0e355919fb1c0389edc3fdf4c46034626bd82aad4e47714cfa94f",
+        "pyth_symbol": "Equity.US.ASML/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AUR",
+      "mint": "Xs7x2HYEazWDXpYQYPBiRYh6o2AbkYrdrFwaBfBxyaU",
+      "underlying": {
+        "feed_id": "91d942b363c77592a40d4590a96283e9ad95c55ec40a06f57d9a840229786715",
+        "pyth_symbol": "Equity.US.AUR/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AVGO",
+      "mint": "XsgSaSvNSqLTtFuyWPBhK9196Xb9Bbdyjj4fH3cPJGo",
+      "underlying": {
+        "feed_id": "d0c9aef79b28308b256db7742a0a9b08aaa5009db67a52ea7fa30ed6853f243b",
+        "pyth_symbol": "Equity.US.AVGO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "AZN",
+      "mint": "Xs3ZFkPYT2BN7qBMqf1j1bfTeTm1rFzEFSsQ1z3wAKU",
+      "underlying": {
+        "feed_id": "7fb3b27d9039f8ca0a435fe0fdf724a3a5a2309ab62ad07ca775e5ab2100c1be",
+        "pyth_symbol": "Equity.US.AZN/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "BA",
+      "mint": "XsBcnKnZMsPaerLiUQ4eMFy4Fjysot4RugYXYDjiqCP",
+      "underlying": {
+        "feed_id": "8419416ba640c8bbbcf2d464561ed7dd860db1e38e51cec9baf1e34c4be839ae",
+        "pyth_symbol": "Equity.US.BA/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "BAC",
+      "mint": "XswsQk4duEQmCbGzfqUUWYmi7pV7xpJ9eEmLHXCaEQP",
+      "underlying": {
+        "feed_id": "21debc1718a4b76ff74dadf801c261d76c46afaafb74d9645b65e00b80f5ee3e",
+        "pyth_symbol": "Equity.US.BAC/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "BAX",
+      "mint": "XsFo6dYyRQwVtxbfdGs3zwyyQ1QBkh8D4ANjWXN3zTo",
+      "underlying": {
+        "feed_id": "72c3b869b1188eaaacd19da9fac87253d8d4adfa651e5b1b4fd371168445a108",
+        "pyth_symbol": "Equity.US.BAX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "BITX",
+      "mint": "XsraCsjDB8cYn672MZSxCzZBhrodEPXD7pWd5EiRUhm",
+      "underlying": {
+        "feed_id": "6acec4867e7c4b0610d0422ff34cdd368552e846ea9df4fc2bbb4681126f724f",
+        "pyth_symbol": "Equity.US.BITX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CAT",
+      "mint": "XsRvd1meWQ9kW1SrZPa1jokQqmBoPWWjd6wGTgdp5E6",
+      "underlying": {
+        "feed_id": "ad04597ba688c350a97265fcb60585d6a80ebd37e147b817c94f101a32e58b4c",
+        "pyth_symbol": "Equity.US.CAT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CHD",
+      "mint": "Xs712gQLCYkFSYJwdu3pE5itNfyKwsXQ1HEGZF8Esc5",
+      "underlying": {
+        "feed_id": "29f6892fec85377d66086b3c323e298c2a0bf133551e9a0a91c150b95517aec5",
+        "pyth_symbol": "Equity.US.CHD/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CMCSA",
+      "mint": "XsvKCaNsxg2GN8jjUmq71qukMJr7Q1c5R2Mk9P8kcS8",
+      "underlying": {
+        "feed_id": "1bd6720eea4df323c076c9bbc1e98e8f5fe4bd16584e56468c5fb6b1a6072725",
+        "pyth_symbol": "Equity.US.CMCSA/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "COIN",
+      "mint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+      "underlying": {
+        "feed_id": "fee33f2a978bf32dd6b662b65ba8083c6773b494f8401194ec1870c640860245",
+        "pyth_symbol": "Equity.US.COIN/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "641435d5dffb5311140b480517c79986d8488d5cf08a11eec53b83ad02cab33f",
+        "pyth_symbol": "Crypto.COINX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "COP",
+      "mint": "Xs58CxmUcgT17reeVV64se747XuRfjsJQnpb8DX9TDq",
+      "underlying": {
+        "feed_id": "d54d8d4e3774ea53660e660ecd03aa9daa31eed9b7e67d1a2aed3095b3e6720d",
+        "pyth_symbol": "Equity.US.COP/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "COPX",
+      "mint": "XsybfiKkD4UmjkAGT2uR8X2sq9AWFtvGJM2KTffoALZ",
+      "underlying": {
+        "feed_id": "8bbaca50510ba7108093fd89100523a01d4eee8087de21c9ca807292933e5479",
+        "pyth_symbol": "Equity.US.COPX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CPT",
+      "mint": "XsvoRXtZZfwvkLhp4qKPR9B9mcbuWakDUWnPszYw2BT",
+      "underlying": {
+        "feed_id": "d71412c0ef13b400c49514108d5236f47c5c30906ac8ae7c65b40bca8a6a984b",
+        "pyth_symbol": "Equity.US.CPT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CRCL",
+      "mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+      "underlying": {
+        "feed_id": "92b8527aabe59ea2b12230f7b532769b133ffb118dfbd48ff676f14b273f1365",
+        "pyth_symbol": "Equity.US.CRCL/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "c13184461c0c80d98ffcd89be627c2220b94a96c7c67f0c4b16bc12fd3b17758",
+        "pyth_symbol": "Crypto.CRCLX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "CRM",
+      "mint": "XsczbcQ3zfcgAEt9qHQES8pxKAVG5rujPSHQEXi4kaN",
+      "underlying": {
+        "feed_id": "feff234600320f4d6bb5a01d02570a9725c1e424977f2b823f7231e6857bdae8",
+        "pyth_symbol": "Equity.US.CRM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CRWD",
+      "mint": "Xs7xXqkcK7K8urEqGg52SECi79dRp2cEKKuYjUePYDw",
+      "underlying": {
+        "feed_id": "baed936d3c6c2e34104e92c6b015b97ce96adc5ab4f04230c1270e1162e7a270",
+        "pyth_symbol": "Equity.US.CRWD/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CSCO",
+      "mint": "Xsr3pdLQyXvDJBFgpR5nexCEZwXvigb8wbPYp4YoNFf",
+      "underlying": {
+        "feed_id": "3f4b77dd904e849f70e1e812b7811de57202b49bc47c56391275c0f45f2ec481",
+        "pyth_symbol": "Equity.US.CSCO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "CVX",
+      "mint": "XsNNMt7WTNA2sV3jrb1NNfNgapxRF5i4i6GcnTRRHts",
+      "underlying": {
+        "feed_id": "f464e36fd4ef2f1c3dc30801a9ab470dcdaaa0af14dd3cf6ae17a7fca9e051c5",
+        "pyth_symbol": "Equity.US.CVX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "DASH",
+      "mint": "XsuW1yxtbifjEYojFLmoavTWBT7hsuUXXeReAWK9X91",
+      "underlying": {
+        "feed_id": "af9f76555c0147ec660100ff1639eb128e48c4f16b0aec229b736c04e082de23",
+        "pyth_symbol": "Equity.US.DASH/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "DE",
+      "mint": "Xsh3Lt6pLpH65udstiFuZThJ6gyQTL6ryVXtNwEy5zd",
+      "underlying": {
+        "feed_id": "c2d23f236142a519929b147c4dbe8720475724918c8b8473db0283f8cf044184",
+        "pyth_symbol": "Equity.US.DE/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "DELL",
+      "mint": "Xsu7Tc5J2fVUE4H5vYAiSr34cvLJeCsYPMjAYnayQn6",
+      "underlying": {
+        "feed_id": "a2950270a22ce39a22cb3488ba91e60474cd93c6d01da2ecc5a97c1dd40f4995",
+        "pyth_symbol": "Equity.US.DELL/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "DIS",
+      "mint": "Xsg93jDV656ULQ5u9yT2x5DS9b4xGD8aDCtfESSW6Bb",
+      "underlying": {
+        "feed_id": "703e36203020ae6761e6298975764e266fb869210db9b35dd4e4225fa68217d0",
+        "pyth_symbol": "Equity.US.DIS/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "DJT",
+      "mint": "XscR1RVZydyrL6Wn7WqbW2k6EmkLuS8SqDzuyptwxoj",
+      "underlying": {
+        "feed_id": "cabf6dfb723b12ac8a67e919379d177903580f8d3ae2fad3897198dc07a5a861",
+        "pyth_symbol": "Equity.US.DJT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "DXCM",
+      "mint": "Xsspestq9YiZofYG2pvuHgYM1aKdRNocveBodzrGjbg",
+      "underlying": {
+        "feed_id": "7afba60a06a553edc3339b53c2e46c2700b076b3f9c9067b88b93f0a12213fbf",
+        "pyth_symbol": "Equity.US.DXCM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "F",
+      "mint": "XsBNJXGu68cBH5hgFxdqZkeh8cMQv32jeEtZtYTYvfS",
+      "underlying": {
+        "feed_id": "6c267962d46cec4a5baf6105de67ef08e1306f75973ce6eb8db8527f06e28f33",
+        "pyth_symbol": "Equity.US.F/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "FIVE",
+      "mint": "Xs7zvvE6QUtYmpMBrz4oWJexS7WSJPwJs7vQsvMCpaG",
+      "underlying": {
+        "feed_id": "5a68b463343e82512e5ea36024037971bb44328de682711a671801dc31c22967",
+        "pyth_symbol": "Equity.US.FIVE/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "FWONK",
+      "mint": "XsDum7DWP825ChLAhSN5NYBpoCUsHJJdRKTPseA9VxR",
+      "underlying": {
+        "feed_id": "85cd26ce8d989a2e1648eb0463f2482303fe0dcc737d620d19247ae75e6d1189",
+        "pyth_symbol": "Equity.US.FWONK/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "GE",
+      "mint": "XsfsBjSZoXXKJsxoSt8TyLYsjhBAKFaDPZTCQbFRirP",
+      "underlying": {
+        "feed_id": "e1d3115c6e7ac649faca875b3102f1000ab5e06b03f6903e0d699f0f5315ba86",
+        "pyth_symbol": "Equity.US.GE/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "GILD",
+      "mint": "XsmAFboVqfDwGPgXfd7oCunvYAYSzzkuKE2BDRzwjGy",
+      "underlying": {
+        "feed_id": "29148f7de5819fe7467e99f5f0b22e8fb124d958d8f668c3c17e607d7ed1eb09",
+        "pyth_symbol": "Equity.US.GILD/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "GLD",
+      "mint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+      "underlying": {
+        "feed_id": "e190f467043db04548200354889dfe0d9d314c08b8d4e62fabf4d5a3140fecca",
+        "pyth_symbol": "Equity.US.GLD/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "e7d1138d0083368634087268c64b7bea0b4101a6365f83915cba9e76a8364b96",
+        "pyth_symbol": "Crypto.GLDX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "GM",
+      "mint": "XsSFgHPgZgYNSuz1ttNHNp8zUBBMZGngFcMMfKPK6JQ",
+      "underlying": {
+        "feed_id": "df8109bbec79e2b24ce326c3be5ca0036a88ed20800ec0aa54ccc2bc7811bd3b",
+        "pyth_symbol": "Equity.US.GM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "GME",
+      "mint": "Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc",
+      "underlying": {
+        "feed_id": "6f9cd89ef1b7fd39f667101a91ad578b6c6ace4579d5f7f285a4b06aa4504be6",
+        "pyth_symbol": "Equity.US.GME/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "GOOGL",
+      "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+      "underlying": {
+        "feed_id": "5a48c03e9b9cb337801073ed9d166817473697efff0d138874e0f6a33d6d5aa6",
+        "pyth_symbol": "Equity.US.GOOGL/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "b911b0329028cd0283e4259c33809d62942bd2716a58084e5f31d64c00b5424e",
+        "pyth_symbol": "Crypto.GOOGLX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "GS",
+      "mint": "XsgaUyp4jd1fNBCxgtTKkW64xnnhQcvgaxzsbAq5ZD1",
+      "underlying": {
+        "feed_id": "9c68c0c6999765cf6e27adf75ed551b34403126d3b0d5b686a2addb147ed4554",
+        "pyth_symbol": "Equity.US.GS/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "HD",
+      "mint": "XszjVtyhowGjSC5odCqBpW1CtXXwXjYokymrk7fGKD3",
+      "underlying": {
+        "feed_id": "b3a83dbe70b62241b0f916212e097465a1b31085fa30da3342dd35468ca17ca5",
+        "pyth_symbol": "Equity.US.HD/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "HON",
+      "mint": "XsRbLZthfABAPAfumWNEJhPyiKDW6TvDVeAeW7oKqA2",
+      "underlying": {
+        "feed_id": "107918baaaafb79cd9df1c8369e44ac21136d95f3ca33f2373b78f24ba1e3e6a",
+        "pyth_symbol": "Equity.US.HON/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "HOOD",
+      "mint": "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg",
+      "underlying": {
+        "feed_id": "306736a4035846ba15a3496eed57225b64cc19230a50d14f3ed20fd7219b7849",
+        "pyth_symbol": "Equity.US.HOOD/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "dd49a9ac6df5cbfa9d8fc6371f7ae927a74d5c6763c1c01b4220d70314c647f9",
+        "pyth_symbol": "Crypto.HOODX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "HWM",
+      "mint": "XsCX8NnXq3qx6zUxXxWwjV2yQnGc9C5y6UyXvE6RG7r",
+      "underlying": {
+        "feed_id": "b8f2bb034ab00c83a9a4e4bc4f8254c139631f56f11deb6f99f00c34ce032478",
+        "pyth_symbol": "Equity.US.HWM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "IBM",
+      "mint": "XspwhyYPdWVM8XBHZnpS9hgyag9MKjLRyE3tVfmCbSr",
+      "underlying": {
+        "feed_id": "cfd44471407f4da89d469242546bb56f5c626d5bef9bd8b9327783065b43c3ef",
+        "pyth_symbol": "Equity.US.IBM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "INTC",
+      "mint": "XshPgPdXFRWB8tP1j82rebb2Q9rPgGX37RuqzohmArM",
+      "underlying": {
+        "feed_id": "c1751e085ee292b8b3b9dd122a135614485a201c35dfc653553f0e28c1baf3ff",
+        "pyth_symbol": "Equity.US.INTC/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "INTU",
+      "mint": "XsfodJMz7SyMNsSgATVDcbuMiQDqQoAiRTL1xuyHNUn",
+      "underlying": {
+        "feed_id": "43ef64ff6af44e0648f0328ee56e88fee57943b0aa077c24ef175bb9ecd37133",
+        "pyth_symbol": "Equity.US.INTU/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ISRG",
+      "mint": "XsgBcHP3frsQGHr5EoDdoPZMANk52Y4JPg5BYx98NwL",
+      "underlying": {
+        "feed_id": "ad4dc1db82c47e0822afef9d9eca7bf693cdad20dd61fcd5aa1b6895b1b90190",
+        "pyth_symbol": "Equity.US.ISRG/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "IVZ",
+      "mint": "XsM5qDSyGiTVyHoi2VixmaEacByd3UCUoWtNhEqsyoH",
+      "underlying": {
+        "feed_id": "45b4d37b660364a2bf23a9bdc0ed53b12b84fb85a334b711ba77d6a6533a3bff",
+        "pyth_symbol": "Equity.US.IVZ/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "IWM",
+      "mint": "XsbELVbLGBkn7xfMfyYuUipKGt1iRUc2B7pYRvFTFu3",
+      "underlying": {
+        "feed_id": "eff690a187797aa225723345d4612abec0bf0cec1ae62347c0e7b1905d730879",
+        "pyth_symbol": "Equity.US.IWM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "JNJ",
+      "mint": "XsGVi5eo1Dh2zUpic4qACcjuWGjNv8GCt3dm5XcX6Dn",
+      "underlying": {
+        "feed_id": "12848738d5db3aef52f51d78d98fc8b8b8450ffb19fb3aeeb67d38f8c147ff63",
+        "pyth_symbol": "Equity.US.JNJ/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "JPM",
+      "mint": "XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C",
+      "underlying": {
+        "feed_id": "7f4f157e57bfcccd934c566df536f34933e74338fe241a5425ce561acdab164e",
+        "pyth_symbol": "Equity.US.JPM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "KMB",
+      "mint": "XsNnfg6KXzaRsH8PE9T9YEahq3MQpSZ3dQAa4hcL1SN",
+      "underlying": {
+        "feed_id": "894f78037ec2465fbbd50c75abb95a5059d5d9ca5f092e2e6736685885569322",
+        "pyth_symbol": "Equity.US.KMB/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "KO",
+      "mint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+      "underlying": {
+        "feed_id": "9aa471dccea36b90703325225ac76189baf7e0cc286b8843de1de4f31f9caa7d",
+        "pyth_symbol": "Equity.US.KO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "LIN",
+      "mint": "XsSr8anD1hkvNMu8XQiVcmiaTP7XGvYu7Q58LdmtE8Z",
+      "underlying": {
+        "feed_id": "9146c5c900d9aea9579819cf50d1ae18b54dea58eea3c9a198102e4e458e652b",
+        "pyth_symbol": "Equity.US.LIN/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "LLY",
+      "mint": "Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH",
+      "underlying": {
+        "feed_id": "70dcf5fd56553d0023693e4b590336a8c9bcfd0d98dd9f093b1f697820d98325",
+        "pyth_symbol": "Equity.US.LLY/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "LMT",
+      "mint": "XssULacY8D3z3a8HoQuLid8wdJHcZLGpSST9MkNFzox",
+      "underlying": {
+        "feed_id": "880d96a272d5ccbb3cd6f6aacb881a996cb4976b3f252b58c595cd2a418b6ea9",
+        "pyth_symbol": "Equity.US.LMT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "LOW",
+      "mint": "XsixDLxXcKZBcRBddYiPZjB9FJcKMTLd4B7VBeKo3pB",
+      "underlying": {
+        "feed_id": "ab31ec9dbcacacfb26e5ea6c249d69f5ae8b9c691aac6ccc5919b6107efa1c3a",
+        "pyth_symbol": "Equity.US.LOW/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MA",
+      "mint": "XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC",
+      "underlying": {
+        "feed_id": "639db3fe6951d2465bd722768242e68eb0285f279cb4fa97f677ee8f80f1f1c0",
+        "pyth_symbol": "Equity.US.MA/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MARA",
+      "mint": "XsguBZPkM9BDmxspmWe29EmrYZBv21ENcC27Pqh7grB",
+      "underlying": {
+        "feed_id": "0fc2ad77a9ab75bcbc3ebd7a9ff60facd08c517309e2d684baa979c910a0e43e",
+        "pyth_symbol": "Equity.US.MARA/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MCD",
+      "mint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+      "underlying": {
+        "feed_id": "d3178156b7c0f6ce10d6da7d347952a672467b51708baaf1a57ffe1fb005824a",
+        "pyth_symbol": "Equity.US.MCD/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "27cac3c00ed32285b8686611bbc4a654279c1ea11ab4dc90822c2edd20734bca",
+        "pyth_symbol": "Crypto.MCDX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "MDT",
+      "mint": "XsDgw22qRLTv5Uwuzn6T63cW69exG41T6gwQhEK22u2",
+      "underlying": {
+        "feed_id": "1d762c633d4166a8d061518e187047afda1868cc524990262d8144e39dbb815f",
+        "pyth_symbol": "Equity.US.MDT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "META",
+      "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+      "underlying": {
+        "feed_id": "78a3e3b8e676a8f73c439f5d749737034b139bbbe899ba5775216fba596607fe",
+        "pyth_symbol": "Equity.US.META/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "bf3e5871be3f80ab7a4d1f1fd039145179fb58569e159aee1ccd472868ea5900",
+        "pyth_symbol": "Crypto.METAX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "MLI",
+      "mint": "XsikuTgNGjzibezDk9u22QGW8zQaGWyK61vN4gQE4Dc",
+      "underlying": {
+        "feed_id": "e1548338663e981fde5c43aa16f21bbde73164994b790aed663fc4190fc6e9db",
+        "pyth_symbol": "Equity.US.MLI/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MLM",
+      "mint": "Xsvi61uutcLdAsa5NxJ2c9geLgzUFM3tMtpJ44eoegt",
+      "underlying": {
+        "feed_id": "58dfd9c50639f1a6c7ea8a1a94d07d69989b51a4265801420895c292fd68e7d4",
+        "pyth_symbol": "Equity.US.MLM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MMM",
+      "mint": "XsTEo8W2L8JprN57bmJgatDT84z57ReJYizr5f32BfP",
+      "underlying": {
+        "feed_id": "fd05a384ba19863cbdfc6575bed584f041ef50554bab3ab482eabe4ea58d9f81",
+        "pyth_symbol": "Equity.US.MMM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MRK",
+      "mint": "XsnQnU7AdbRZYe2akqqpibDdXjkieGFfSkbkjX1Sd1X",
+      "underlying": {
+        "feed_id": "c81114e16ec3cbcdf20197ac974aed5a254b941773971260ce09e7caebd6af46",
+        "pyth_symbol": "Equity.US.MRK/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MS",
+      "mint": "XsUucbjDLYbER4WNNffn1eQ9cDnAcFVfLgSZeLHPDZS",
+      "underlying": {
+        "feed_id": "97b55381ff94c6c0a22f3e0c8cdc2186a3561bf3dfe3cfaebf4786c9318b770f",
+        "pyth_symbol": "Equity.US.MS/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MSFT",
+      "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+      "underlying": {
+        "feed_id": "d0ca23c1cc005e004ccf1db5bf76aeb6a49218f43dac3d4b275e92de12ded4d1",
+        "pyth_symbol": "Equity.US.MSFT/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "bb723a70af731ab56b9a650eb7e8ac22b7bc07ea77f8670bd1fa9a37bf6df3f5",
+        "pyth_symbol": "Crypto.MSFTX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "MSI",
+      "mint": "Xsa1gZ38panjmJwh6cr9QQ1YpRBEzVfxrykWSsiWvJe",
+      "underlying": {
+        "feed_id": "cc7851b525bd7f0d8ce00e409d59d6cd5ecdfbc5a2df1aaee3c4948426976100",
+        "pyth_symbol": "Equity.US.MSI/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "MSTR",
+      "mint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+      "underlying": {
+        "feed_id": "e1e80251e5f5184f2195008382538e847fafc36f751896889dd3d1b1f6111f09",
+        "pyth_symbol": "Equity.US.MSTR/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "53f95ba4e23ed15ea56083e2ee9a5eec48055d6f59033d4bb95f1ca2a2349c28",
+        "pyth_symbol": "Crypto.MSTRX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "MU",
+      "mint": "XsQLZycSZ7QnBBdBXQaTbQdiUcbRqjNJgyBGAMzhHav",
+      "underlying": {
+        "feed_id": "152244dc24665ca7dd3f257b8f442dc449b6346f48235b7b229268cb770dda2d",
+        "pyth_symbol": "Equity.US.MU/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "0ce20662c616102659948a2e6ccf7ce05c930366af42b71240086eafb7cfa860",
+        "pyth_symbol": "Crypto.MUX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "NFLX",
+      "mint": "XsEH7wWfJJu2ZT3UCFeVfALnVA6CP5ur7Ee11KmzVpL",
+      "underlying": {
+        "feed_id": "8376cfd7ca8bcdf372ced05307b24dced1f15b1afafdeff715664598f15a3dd2",
+        "pyth_symbol": "Equity.US.NFLX/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "02a67e6184e6c9dd65e14745a2a80df8b2b3d2ca91b4b191404936003d9929ae",
+        "pyth_symbol": "Crypto.NFLXX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "NKE",
+      "mint": "XsGYpMvKbVt6ViHqRd7cF3s746dAMFBQWcC49hB9VVP",
+      "underlying": {
+        "feed_id": "67649450b4ca4bfff97cbaf96d2fd9e40f6db148cb65999140154415e4378e14",
+        "pyth_symbol": "Equity.US.NKE/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "NOW",
+      "mint": "XsBnEFd2EtpwBRNVfN8qLZcVUnuqXRaGCSEEFChLfxL",
+      "underlying": {
+        "feed_id": "69d2eebcc3c62889f1c0105ff347f296eb435cba8d2e4705a486fd47a8fe1a1b",
+        "pyth_symbol": "Equity.US.NOW/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "NVDA",
+      "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+      "underlying": {
+        "feed_id": "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+        "pyth_symbol": "Equity.US.NVDA/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "4244d07890e4610f46bbde67de8f43a4bf8b569eebe904f136b469f148503b7f",
+        "pyth_symbol": "Crypto.NVDAX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "NVO",
+      "mint": "XsfAzPzYrYjd4Dpa9BU3cusBsvWfVB9gBcyGC87S57n",
+      "underlying": {
+        "feed_id": "8dde322496e031d942b9eee8ca769d618cd2e69b18196644369379f5a1e7c23d",
+        "pyth_symbol": "Equity.US.NVO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ONTO",
+      "mint": "Xsu33VJj7s2tMUZfAQ8bbGgpDEnfXdCsKHSC4p6C5tS",
+      "underlying": {
+        "feed_id": "c4db80e9a68aca4575714c9f5387368239d63965850a359b68b676355a799d7d",
+        "pyth_symbol": "Equity.US.ONTO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "ORCL",
+      "mint": "XsjFwUPiLofddX5cWFHW35GCbXcSu1BCUGfxoQAQjeL",
+      "underlying": {
+        "feed_id": "e47ff732eaeb6b4163902bdee61572659ddf326511917b1423bae93fcdf3153c",
+        "pyth_symbol": "Equity.US.ORCL/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PCG",
+      "mint": "XsPq3VY73br4wpgi2a4b3jAdvuhstpknXVJ2fA4vNmk",
+      "underlying": {
+        "feed_id": "026e4a35b33c438e4c75b2bf8f5f8298b26165eff133b1da2b4559985ecab11e",
+        "pyth_symbol": "Equity.US.PCG/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PEG",
+      "mint": "XsUytoK53kCKfXC61Dn3ZM8sjyVBUpScF111pfMG69U",
+      "underlying": {
+        "feed_id": "b0d68bb7055327a5ec773094129a00f6794ae064b9286a1b55eb2b975bc17dc0",
+        "pyth_symbol": "Equity.US.PEG/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PEP",
+      "mint": "Xsv99frTRUeornyvCfvhnDesQDWuvns1M852Pez91vF",
+      "underlying": {
+        "feed_id": "be230eddb16aad5ad273a85e581e74eb615ebf67d378f885768d9b047df0c843",
+        "pyth_symbol": "Equity.US.PEP/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PFE",
+      "mint": "XsAtbqkAP1HJxy7hFDeq7ok6yM43DQ9mQ1Rh861X8rw",
+      "underlying": {
+        "feed_id": "0704ad7547b3dfee329266ee53276349d48e4587cb08264a2818288f356efd1d",
+        "pyth_symbol": "Equity.US.PFE/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PFG",
+      "mint": "XsChiU9gDeWj7HYrqioNUn8C81jaHZwegfGQdQXHnhd",
+      "underlying": {
+        "feed_id": "f2be31eeb67f9e2bb7228aaab13fd3a7b836cfc3e6832b876d488363c21dd24a",
+        "pyth_symbol": "Equity.US.PFG/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PG",
+      "mint": "XsYdjDjNUygZ7yGKfQaB6TxLh2gC6RRjzLtLAGJrhzV",
+      "underlying": {
+        "feed_id": "ad2fda41998f4e7be99a2a7b27273bd16f183d9adfc014a4f5e5d3d6cd519bf4",
+        "pyth_symbol": "Equity.US.PG/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PGR",
+      "mint": "XsGDHfnSNxofQ2qXzcty9r4HB5HFszUCrQhjN7mbEcw",
+      "underlying": {
+        "feed_id": "1ab9bd7ed68a12736e9feb89044e6ab23b1abfa7b66e06f85653752ec0a890e1",
+        "pyth_symbol": "Equity.US.PGR/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PKG",
+      "mint": "Xstq2wirnUgqHdMvvWafGVbdtg9y845zxAy7iVixkRU",
+      "underlying": {
+        "feed_id": "84ce9993f3e19e52be7d567c8bf7714407cab2afa0d3a752ac09bc49b0153663",
+        "pyth_symbol": "Equity.US.PKG/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PLTR",
+      "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+      "underlying": {
+        "feed_id": "11a70634863ddffb71f2b11f2cff29f73f3db8f6d0b78c49f2b5f4ad36e885f0",
+        "pyth_symbol": "Equity.US.PLTR/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PM",
+      "mint": "Xsba6tUnSjDae2VcopDB6FGGDaxRrewFCDa5hKn5vT3",
+      "underlying": {
+        "feed_id": "a32f875eb39e23f087ea0db141b00857630c2c5011bfbe53a2a4d186f37cb583",
+        "pyth_symbol": "Equity.US.PM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PPLT",
+      "mint": "Xst6eFD4YT6sz9RLMysN9SyvaZWtraSdVJQGu5ZkAme",
+      "underlying": {
+        "feed_id": "782410278b6c8aa2d437812281526012808404aa14c243f73fb9939eeb88d430",
+        "pyth_symbol": "Equity.US.PPLT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "PYPL",
+      "mint": "XshWQWYVp5ff8CrAEsGmLVKD47nBWi3Ygn5v8wXK27G",
+      "underlying": {
+        "feed_id": "773c3b11f6be58e8151966a9f5832696d8cd08884ccc43ac8965a7ebea911533",
+        "pyth_symbol": "Equity.US.PYPL/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "QCOM",
+      "mint": "XsUUG8bjFN2KvzLTpzavvEKdAjMAeLTZiTeAQJ9uhvB",
+      "underlying": {
+        "feed_id": "54350ebf587c3f14857efcfec50e5c4f6e10220770c2266e9fe85bd5e42e4022",
+        "pyth_symbol": "Equity.US.QCOM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "QQQ",
+      "mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+      "underlying": {
+        "feed_id": "9695e2b96ea7b3859da9ed25b7a46a920a776e2fdae19a7bcfdf2b219230452d",
+        "pyth_symbol": "Equity.US.QQQ/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "178a6f73a5aede9d0d682e86b0047c9f333ed0efe5c6537ca937565219c4054d",
+        "pyth_symbol": "Crypto.QQQX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "RBLX",
+      "mint": "Xss5RAku5EH6UViFdvW7ss9xQjwQLsrs2opPMhb3k43",
+      "underlying": {
+        "feed_id": "d62134a195739141d0649991f11fe0f9cd9eb83fd890bc3ba41dfdd18c1a49f4",
+        "pyth_symbol": "Equity.US.RBLX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "RIOT",
+      "mint": "Xs31mE5EiqjSHEaiX9QDKCN6NvSGCqpJ6f1FNq2wri5",
+      "underlying": {
+        "feed_id": "46417522a59b245c5af35c33c13426d991b36514c4c85aaefe1cf787e7daad90",
+        "pyth_symbol": "Equity.US.RIOT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "RIVN",
+      "mint": "XsoxDMY8s3ZV7zD4Yd87wAvURyxA8VXkd7w6HNuQkzj",
+      "underlying": {
+        "feed_id": "1e59e3164331ce560683eae0c69efe9650ff1bc834225772ddb330aa808f72f0",
+        "pyth_symbol": "Equity.US.RIVN/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "RTX",
+      "mint": "XsN53tgjZA4QU8iuedPNHxxCbDqKcJqbrT1f8jBXzdC",
+      "underlying": {
+        "feed_id": "97c483cc4172de7ac1a3cc0814f442e4747e64008723f2705d6e9fdff3ba4d3d",
+        "pyth_symbol": "Equity.US.RTX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "SBAC",
+      "mint": "Xs3BuKwwLLSgKCKPBeSN5Wje5gP8McsHrt6pnqWzjhs",
+      "underlying": {
+        "feed_id": "15d10cdf550966316121a3e07b86eec98be08afa1f3abc634818156d32094b31",
+        "pyth_symbol": "Equity.US.SBAC/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "SBUX",
+      "mint": "Xs9gd8SGbYQn9kkUYQayn46BdqQbvvUshEF6ZpRAzM7",
+      "underlying": {
+        "feed_id": "86cd9abb315081b136afc72829058cf3aaf1100d4650acb2edb6a8e39f03ef75",
+        "pyth_symbol": "Equity.US.SBUX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "SLV",
+      "mint": "XsxAd6okt8y1RRK6gNg7iJaqiWNiq5Md5EDf3ZrF2dm",
+      "underlying": {
+        "feed_id": "6fc08c9963d266069cbd9780d98383dabf2668322a5bef0b9491e11d67e5d7e7",
+        "pyth_symbol": "Equity.US.SLV/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "SMCI",
+      "mint": "XsMxAoJP47FQGLsVUvSS2QfBaHdNsd7DRU6nWRL8RSa",
+      "underlying": {
+        "feed_id": "8f34132a42f8bb7a47568d77a910f97174a30719e16904e9f2915d5b2c6c2d52",
+        "pyth_symbol": "Equity.US.SMCI/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "SNOW",
+      "mint": "Xs3QCTNpPWTFYRQ9yPv9gsvWKNJGk45UQ1bb1w7xznc",
+      "underlying": {
+        "feed_id": "14291d2651ecf1f9105729bdc59553c1ce73fb3d6c931dd98a9d2adddc37e00f",
+        "pyth_symbol": "Equity.US.SNOW/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "SPY",
+      "mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+      "underlying": {
+        "feed_id": "19e09bb805456ada3979a7d1cbb4b6d63babc3a0f8e8a9509f68afa5c4c11cd5",
+        "pyth_symbol": "Equity.US.SPY/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "2817b78438c769357182c04346fddaad1178c82f4048828fe0997c3c64624e14",
+        "pyth_symbol": "Crypto.SPYX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "STRC",
+      "mint": "Xs78JED6PFZxWc2wCEPspZW9kL3Se5J7L5TChKgsidH",
+      "underlying": {
+        "feed_id": "27c7bbc9755d847f7fc63620c2edcc6a91d2c0c67a28c7999907b59c505b3c17",
+        "pyth_symbol": "Equity.US.STRC/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "5f5193ed44dd1f4b0732dbffa2e27caf953e16a2d911854c8c3766d8bc609a47",
+        "pyth_symbol": "Crypto.STRCX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "STZ",
+      "mint": "Xs6eATub8cqKdztx4asCRFMSzMwtNqAUWiDaUPXxUtD",
+      "underlying": {
+        "feed_id": "bcbe7f4f918381ad7891595dabea1c1a0b662e48cc533d48f308aa4883a0802d",
+        "pyth_symbol": "Equity.US.STZ/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TJX",
+      "mint": "XsPWZN3FYcrvpEnxrQqogbVZtxpRX9tFomymKw2dWJS",
+      "underlying": {
+        "feed_id": "1e0192ac474db72a6937c45460929dcef6efebf4d4b493685d020d1bc3b265a2",
+        "pyth_symbol": "Equity.US.TJX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TMO",
+      "mint": "Xs8drBWy3Sd5QY3aifG9kt9KFs2K3PGZmx7jWrsrk57",
+      "underlying": {
+        "feed_id": "244fdf268ed7ecfad2cf84529c46d0fcef7a643428ff4ef8b16e8dbb63e0f2d9",
+        "pyth_symbol": "Equity.US.TMO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TQQQ",
+      "mint": "XsjQP3iMAaQ3kQScQKthQpx9ALRbjKAjQtHg6TFomoc",
+      "underlying": {
+        "feed_id": "5aa9f82dc2e0f5f8271fd163e980010101517da59f4b72b71c7056a5950b2f9d",
+        "pyth_symbol": "Equity.US.TQQQ/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TSLA",
+      "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+      "underlying": {
+        "feed_id": "16dad506d7db8da01c87581c87ca897a012a153557d4d578c3b9c9e1bc0632f1",
+        "pyth_symbol": "Equity.US.TSLA/USD",
+        "schedule": 0
+      },
+      "token": {
+        "feed_id": "47a156470288850a440df3a6ce85a55917b813a19bb5b31128a33a986566a362",
+        "pyth_symbol": "Crypto.TSLAX/USD",
+        "schedule": 1
+      }
+    },
+    {
+      "ticker": "TSM",
+      "mint": "XsafvsGtzFqqHgTnA3aPC83EAMkacU5mcGtcSayhpVV",
+      "underlying": {
+        "feed_id": "e722560a66e4ab00522ef20a38fa2ba5d1b41f1c5404723ed895d202a7af7cc4",
+        "pyth_symbol": "Equity.US.TSM/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TXN",
+      "mint": "XsU4fHhJEFcrwNh4RYuHmWdaoCfsrWKEm4UEs3zTJwH",
+      "underlying": {
+        "feed_id": "c5b94c7ece9c3ac984e1439a8fac86270d0f988bbbcc838b456e2d7311754bdc",
+        "pyth_symbol": "Equity.US.TXN/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TXRH",
+      "mint": "XsWFY8Ems96uFPnZJ1NwXsqeH6bczLQDDvvvab14crQ",
+      "underlying": {
+        "feed_id": "bd022edbd573a52f57b7e930b8b4c51db94407f3b6a99d08abed9c9a79a0a27d",
+        "pyth_symbol": "Equity.US.TXRH/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "TXT",
+      "mint": "XsjWGbe4McmJXNRd6hQYsS8dEsPKTfT38fxSebugRbn",
+      "underlying": {
+        "feed_id": "2fc0a41f1d62126539e3b1ca29029e66d991724b2189f63059a5f5682129ab28",
+        "pyth_symbol": "Equity.US.TXT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "UBER",
+      "mint": "XsAsZLF4MmsvS1sDxRMrUz7REjHfwbC9UAMXSRBqgEB",
+      "underlying": {
+        "feed_id": "c04665f62a0eabf427a834bb5da5f27773ef7422e462d40c7468ef3e4d39d8f1",
+        "pyth_symbol": "Equity.US.UBER/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "UNH",
+      "mint": "XszvaiXGPwvk2nwb3o9C1CX4K6zH8sez11E6uyup6fe",
+      "underlying": {
+        "feed_id": "05380f8817eb1316c0b35ac19c3caa92c9aa9ea6be1555986c46dce97fed6afd",
+        "pyth_symbol": "Equity.US.UNH/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "UNP",
+      "mint": "Xsehrw5hHiQ16Vfxxctj8ewUhtRCzbCrBYS278ctAAy",
+      "underlying": {
+        "feed_id": "b095647f688415d4102a858e1b25c1af15750f0e516a0d561cb35ebe30deb183",
+        "pyth_symbol": "Equity.US.UNP/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "V",
+      "mint": "XsqgsbXwWogGJsNcVZ3TyVouy2MbTkfCFhCGGGcQZ2p",
+      "underlying": {
+        "feed_id": "c719eb7bab9b2bc060167f1d1680eb34a29c490919072513b545b9785b73ee90",
+        "pyth_symbol": "Equity.US.V/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "VOO",
+      "mint": "Xsd7TduTbjuYCFL7Uoujb8SbkZLmUsuYNLn7KdvX21x",
+      "underlying": {
+        "feed_id": "236b30dd09a9c00dfeec156c7b1efd646c0f01825a1758e3e4a0679e3bdff179",
+        "pyth_symbol": "Equity.US.VOO/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "VRTX",
+      "mint": "XsgCWpLUC3pv6JmNAFtkYmuwSaikShy8QZRuripgBzn",
+      "underlying": {
+        "feed_id": "ac9de86ae3dcff03514bde733f5793f1446b2cd31f1539a1c449acc3e76cacc1",
+        "pyth_symbol": "Equity.US.VRTX/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "VTI",
+      "mint": "XsssYEQjzxBCFgvYFFNuhJFBeHNdLWYeUSP8F45cDr9",
+      "underlying": {
+        "feed_id": "26c67e91769aeba33a09469c705a1863794014dac416e4270661f489309ae862",
+        "pyth_symbol": "Equity.US.VTI/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "VXUS",
+      "mint": "XsLT5v4DAd1kwViPQh3SZiT5kzJfNLxzJxJN1dySZTe",
+      "underlying": {
+        "feed_id": "48a13d42218646bba8cc114cd394a283b11c0e07dd14a885efd5caec640c5289",
+        "pyth_symbol": "Equity.US.VXUS/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "VZ",
+      "mint": "Xs4VKGG8TTan8UN3mC1ufsDMamBtBLE4Ahfkyv2tfuy",
+      "underlying": {
+        "feed_id": "6672325a220c0ee1166add709d5ba2e51c185888360c01edc76293257ef68b58",
+        "pyth_symbol": "Equity.US.VZ/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "WFC",
+      "mint": "XspHXejQ3A4VeimAqR1mAkvgTWgpmmoNR5CUhwCqzqr",
+      "underlying": {
+        "feed_id": "67ac585d05128c7b6a88660be04acd18b2bddd6308e98b71b9f3ba0f0e781296",
+        "pyth_symbol": "Equity.US.WFC/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "WMT",
+      "mint": "Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci",
+      "underlying": {
+        "feed_id": "327ae981719058e6fb44e132fb4adbf1bd5978b43db0661bfdaefd9bea0c82dc",
+        "pyth_symbol": "Equity.US.WMT/USD",
+        "schedule": 0
+      },
+      "token": null
+    },
+    {
+      "ticker": "XOM",
+      "mint": "XsaHND8sHyfMfsWPj6kSdd5VwvCayZvjYgKmmcNL5qh",
+      "underlying": {
+        "feed_id": "4a1a12070192e8db9a89ac235bb032342a390dde39389b4ee1ba8e41e7eae5d8",
+        "pyth_symbol": "Equity.US.XOM/USD",
+        "schedule": 0
+      },
+      "token": null
+    }
+  ]
+}

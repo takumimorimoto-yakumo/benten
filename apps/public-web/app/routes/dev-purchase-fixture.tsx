@@ -6,7 +6,7 @@
  * network. Never part of a build or the prerender list.
  */
 import { data, type LoaderFunctionArgs } from "react-router";
-import { isPurchaseFixtureName } from "@benten/purchase/fixtures";
+import { isPanelFixtureName } from "@benten/purchase/fixtures";
 import { SiteShell } from "@/components/site/site-shell";
 import { DossierPage } from "@/features/dossier/dossier-page";
 import { PurchasePanelFixture } from "@/features/purchase-island/purchase-panel-fixture";
@@ -17,7 +17,7 @@ const FIXED_ROUTE_TICKER = "NVDA";
 
 export function loader({ params, request }: LoaderFunctionArgs) {
   const name = params.fixture;
-  if (!isPurchaseFixtureName(name)) throw new Response("Unknown fixture", { status: 404 });
+  if (!isPanelFixtureName(name)) throw new Response("Unknown fixture", { status: 404 });
   const requested = new URL(request.url).searchParams.get("locale");
   const locale = isPublicWebLocale(requested) ? requested : DEFAULT_LOCALE;
   return data({ document: { locale }, fixture: name, view: createDossierView(FIXED_ROUTE_TICKER) });

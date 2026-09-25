@@ -161,6 +161,8 @@
   --purchase-panel-width: 26rem;
   /* Dossier: facts column plus the purchase rail. */
   --dossier-columns: minmax(0, 1fr) var(--purchase-panel-width);
+  /* Pyth and on-chain price comparison: one column per observation, wrapping on narrow content widths. */
+  --price-comparison-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
   /* Label/value rows: label column bounds, then the value. */
   --fact-list-columns: minmax(8rem, 13rem) minmax(0, 1fr);
   /* Stacked table rows on narrow screens: field label, then its value. */

@@ -190,6 +190,7 @@ localization_manifests = {
         "apps/public-web/app/i18n/pages-nav-messages.ts",
         "apps/public-web/app/i18n/charts-messages.ts",
         "apps/public-web/app/i18n/statements-messages.ts",
+        "apps/public-web/app/i18n/comparison-messages.ts",
     },
 }
 for localization_manifest_path, expected_catalog_paths in localization_manifests.items():

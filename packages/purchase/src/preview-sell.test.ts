@@ -67,7 +67,7 @@ describe("sale preview: the reference price bounds the sale before anything is b
     it(`stops the sale when the reference price is ${reason}`, async () => {
       readNvdaReferencePrice.mockResolvedValue({ ok: false, reason });
       const failure = await failureOf();
-      expect(failure).toMatchObject({ failure: "routeCheck", details: `reference price unavailable: ${reason}` });
+      expect(failure).toMatchObject({ failure: "referenceUnavailable", details: reason });
       expect(buildNvdaxSellExactIn).not.toHaveBeenCalled();
       expect(simulateTransaction).not.toHaveBeenCalled();
     });

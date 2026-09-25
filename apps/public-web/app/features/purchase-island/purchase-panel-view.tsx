@@ -13,6 +13,7 @@ import {
   hasUnresolvedEarlierRequest,
   isAmountLocked,
   isPostSend,
+  REFERENCE_STALE,
   sellMaxRaw,
   spendableRaw,
   type Attempt,
@@ -22,12 +23,15 @@ import {
 } from "@benten/purchase/purchase-machine";
 import { PAY_TOKEN_IDS, PAY_TOKEN_UNITS, USDC_SYMBOL, type PayTokenId } from "@benten/purchase/route";
 import { productRoute, SELL_ROUTE } from "@benten/purchase/routes-table";
+import type { SaleReferenceCheck } from "@benten/purchase/reference-price";
 import { ExternalLink } from "@/components/external-link";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { EMPTY_VALUE, joinSentences } from "@/i18n/format";
 import type { PublicWebLocale } from "@/i18n/locales";
 import { purchaseMessagesFor, type PurchaseCopy } from "@/i18n/purchase-messages";
+import { PythReferenceCheckLine, type PythReferenceCheck } from "@/features/price-comparison/reference-check";
+import { formatUsdValue } from "@/lib/observation-format";
 import { cn } from "@/lib/utils";
 import { CopyValue } from "./copy-value";
 import { shortenAddress } from "./display";
@@ -463,6 +467,21 @@ function TechnicalDetails({ label, details }: { label: string; details: string }
   );
 }
 
+/** What a sale preview was checked against, in the reference check line's terms (display only; a purchase has none). */
+function saleReferenceLine(reference: SaleReferenceCheck | null | undefined, locale: PublicWebLocale): PythReferenceCheck | null {
+  if (!reference) return null;
+  return {
+    price: {
+      feed_id: reference.feedId,
+      pyth_symbol: reference.pythSymbol,
+      price: reference.price,
+      publish_time: new Date(reference.publishTime * 1000).toISOString(),
+      publish_time_unix: reference.publishTime,
+    },
+    valueText: formatUsdValue(reference.valueUsd, locale),
+  };
+}
+
 /** Stage (preview, trail, result or error) and the state's actions, in contract order. */
 function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, locale: PublicWebLocale, handlers: PanelHandlers, refs: PanelRefs): { stage: ReactNode; actions: ReactNode } {
   const attempt = state.attempt;
@@ -479,6 +498,7 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
       const overLimit = selling ? copy.sell.overLimit : copy.pay.overLimit;
       const error = attempt.failure === "overLimit" ? overLimit
         : attempt.failure === "sellTermsChanged" ? copy.sell.termsChanged
+        : attempt.failure === "referenceUnavailable" ? (attempt.details === REFERENCE_STALE ? copy.sell.referenceStale : copy.sell.referenceUnavailable)
         : selling && attempt.failure === "routeCheck" ? copy.sell.routeCheck
         : copy.error[attempt.failure];
       const body = attempt.failure === "notEnoughSol"
@@ -507,6 +527,7 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
           {attempt.phase === "reviewReady" && attempt.notice === "rejected" ? <PurchaseAlert title={copy.error.rejected.title} titleRef={refs.errorTitle}><p>{copy.error.rejected.body}</p></PurchaseAlert> : null}
           <h3 ref={refs.previewHeading} tabIndex={-1} className="text-base font-semibold">{expired ? copy.preview.headingExpired : copy.preview.heading}</h3>
           <PurchaseTermsList preview={preview} now={now} expired={expired} copy={copy.preview} payCopy={copy.pay} sellCopy={copy.sell} locale={locale} />
+          <PythReferenceCheckLine check={saleReferenceLine(preview.saleReference, locale)} locale={locale} />
           {attempt.phase === "awaitingWallet" ? <PurchaseTrail steps={trailSteps(attempt, copy, locale)} copy={copy.trail} /> : null}
         </>
       );

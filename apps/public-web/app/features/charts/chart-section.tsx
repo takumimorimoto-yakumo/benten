@@ -48,7 +48,6 @@ import { availableRanges, chartModel, labelsByYear, type ChartModel, type ChartS
 import { ChartReadout } from "./chart-readout";
 import { ChartTables } from "./chart-table";
 import { usePriceFile } from "./price-file";
-import { PythComparison } from "./pyth-comparison";
 
 type Plot = (props: ChartPlotProps) => React.ReactNode;
 
@@ -63,7 +62,7 @@ function usePlot(): { state: PlotState; retry: () => void } {
 
 export type ChartSectionProps = {
   readonly data: ChartData;
-  /** `company`: price and figures; `product`: the price with the Pyth comparison. */
+  /** `company`: price and figures; `product`: the price alone (the Pyth comparison is the product page's own panel). */
   readonly variant: "company" | "product";
   /** The token's display symbol (NVDAx), and its company's display name when it has one. */
   readonly symbol: string;
@@ -229,7 +228,6 @@ export function ChartSection({ data: given, variant, symbol, company, provider, 
         {hydrated && ranges.length > 1 ? <RangeControl ranges={ranges} range={range} onChange={changeRange} locale={locale} /> : null}
       </div>
       {fixture ? <p data-chart-fixture="" className="rounded-lg border border-dashed px-3 py-2 text-sm font-medium">{copy.fixture}</p> : null}
-      {variant === "product" && header ? <PythComparison data={data} company={company} locale={locale} /> : null}
       <figure className="m-0 flex min-w-0 flex-col gap-3">
         <div
           data-chart-plot=""

@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { FEED_MAP, PRICING_CONFIG } from "@benten/pricing";
 
 import { PURCHASE_CONFIG } from "./config";
-import { referencePriceOf, saleReferenceFailure, type ReferencePrice } from "./reference-price";
+import { SALE_FIXTURES } from "./fixtures";
+import { referencePriceOf, saleReferenceCheck, saleReferenceFailure, type ReferencePrice } from "./reference-price";
 import { NVDA_REFERENCE_FEED, NVDAX_MINT } from "./route";
 
 const NOW_MS = 1_800_000_000_000;
@@ -27,6 +28,7 @@ describe("the pinned NVDA/USD reference feed", () => {
     const entry = FEED_MAP.entries.find((candidate) => candidate.role === "xstock_underlying_share" && candidate.binding.mint === NVDAX_MINT.toBase58());
     expect(entry).toBeDefined();
     expect(entry?.pyth_symbol).toBe("Equity.US.NVDA/USD");
+    expect(NVDA_REFERENCE_FEED.pythSymbol).toBe(entry?.pyth_symbol);
     expect(entry?.valuation.use).toBe(true);
     expect(NVDA_REFERENCE_FEED.feedId).toBe(entry?.feed_id);
     expect(NVDA_REFERENCE_FEED.priceAccounts).toEqual(entry?.price_accounts);
@@ -97,5 +99,49 @@ describe("saleReferenceFailure (independent of the pool quote)", () => {
   it("passes the sale measured at the limit on mainnet (2026-09-25)", () => {
     // 4470655 raw NVDAx at multiplier 1.001701196801074 and NVDA/USD 225.24: worth about 10.087 USD, quoted at 10 USDC.
     expect(check(4_470_655n, 10_000_000n, "1.001701196801074", { priceRaw: 22_524_000n, exponent: -5, publishTime: NOW_S })).toBeNull();
+  });
+});
+
+describe("saleReferenceCheck (the values the review step shows, display only)", () => {
+  const input = { nvdaxInRaw: 4_470_655n, multiplier: "1.001701196801074", usdcOutRaw: 10_000_000n, price: { priceRaw: 22_524_000n, exponent: -5, publishTime: NOW_S } };
+
+  it("carries the feed, the exact price, its publish time and the amount's truncated value", () => {
+    expect(saleReferenceCheck(input)).toEqual({
+      feedId: NVDA_REFERENCE_FEED.feedId,
+      pythSymbol: "Equity.US.NVDA/USD",
+      price: "225.24",
+      publishTime: NOW_S,
+      valueUsd: "10.08",
+    });
+  });
+
+  it("keeps every digit of the price", () => {
+    expect(saleReferenceCheck({ ...input, price: { priceRaw: 22_524_123n, exponent: -5, publishTime: NOW_S } })?.price).toBe("225.24123");
+    expect(saleReferenceCheck({ ...input, price: { priceRaw: 225n, exponent: 0, publishTime: NOW_S } })?.price).toBe("225");
+  });
+
+  it("is null when the amount cannot be valued, and does not change the check's verdict", () => {
+    const unvalued = { ...input, multiplier: "0" };
+    expect(saleReferenceCheck(unvalued)).toBeNull();
+    expect(saleReferenceFailure(unvalued)).toMatch(/reference value unavailable/);
+    expect(saleReferenceFailure(input)).toBeNull();
+  });
+});
+
+describe("the sale review fixture", () => {
+  it("carries exactly what saleReferenceCheck derives from its own amounts, and passes the check", () => {
+    const { attempt } = SALE_FIXTURES.sellReviewReady.state;
+    if (attempt.phase !== "reviewReady") throw new Error("the sale fixture is not in review");
+    const { preview } = attempt;
+    const shown = preview.saleReference;
+    if (!shown || !preview.nvdaxMultiplier) throw new Error("the sale fixture carries no reference");
+    const input = {
+      nvdaxInRaw: preview.inputRaw,
+      multiplier: preview.nvdaxMultiplier.value,
+      usdcOutRaw: preview.outputRaw,
+      price: { priceRaw: 22_524_000n, exponent: -5, publishTime: shown.publishTime },
+    };
+    expect(saleReferenceFailure(input)).toBeNull();
+    expect(saleReferenceCheck(input)).toEqual(shown);
   });
 });

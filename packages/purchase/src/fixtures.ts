@@ -12,7 +12,9 @@ import { encodeBase58 } from "./base58";
 import { PURCHASE_CONFIG } from "./config";
 import {
   INITIAL_PURCHASE_STATE,
+  INITIAL_SELL_STATE,
   purchaseReducer,
+  REFERENCE_STALE,
   type PreviewTerms,
   type PurchaseAction,
   type PurchaseState,
@@ -54,8 +56,8 @@ function preview(overrides: Partial<Omit<PreviewTerms, "id">> = {}): Omit<Previe
   };
 }
 
-function replay(actions: PurchaseAction[]): PurchaseState {
-  return actions.reduce(purchaseReducer, INITIAL_PURCHASE_STATE);
+function replay(actions: PurchaseAction[], from: PurchaseState = INITIAL_PURCHASE_STATE): PurchaseState {
+  return actions.reduce(purchaseReducer, from);
 }
 
 const DETECTED: PurchaseAction[] = [{ type: "walletsDetected", wallets: [WALLET], unsupported: [] }];
@@ -125,6 +127,36 @@ const SKR_PREVIEW = preview({
   protocolFeeRaw: 1_008n,
 });
 
+/**
+ * Sale fixtures (NVDAx in, USDC out). 0.0224 NVDAx at the fixture multiplier
+ * is 2236195 raw; the pool output (5.0214 USDC) and the NVDA/USD reference
+ * (225.24, published four seconds before the build) are specimens chosen to
+ * pass the reference check, which values the amount at 5.04 USD.
+ */
+const SELL_CONNECTED: PurchaseAction[] = [
+  ...CONNECTED.filter((action) => action.type !== "balanceLoaded"),
+  { type: "balanceLoaded", address: FIXTURE_WALLET_ADDRESS, raw: 20_000_000n },
+  { type: "sellTermsRequested" },
+  { type: "sellTermsLoaded", address: FIXTURE_WALLET_ADDRESS, multiplier: FIXTURE_MULTIPLIER.value, capRaw: 4_470_655n },
+];
+const SELL_PREVIEWING: PurchaseAction[] = [...SELL_CONNECTED, { type: "amountEdited", text: "0.0224" }, { type: "previewRequested" }];
+const FIXTURE_REFERENCE_PUBLISHED = FIXTURE_BUILT_AT / 1000 - 4;
+const SELL_PREVIEW = preview({
+  side: "sell",
+  inputRaw: 2_236_195n,
+  consumedInputRaw: 2_236_195n,
+  outputRaw: 5_021_400n,
+  minimumOutputRaw: 4_971_186n,
+  createsUsdcAccount: false,
+  saleReference: {
+    feedId: "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+    pythSymbol: "Equity.US.NVDA/USD",
+    price: "225.24",
+    publishTime: FIXTURE_REFERENCE_PUBLISHED,
+    valueUsd: "5.04",
+  },
+});
+
 export interface PurchaseFixture {
   label: string;
   state: PurchaseState;
@@ -190,6 +222,18 @@ export const PURCHASE_FIXTURES = {
 
 export type PurchaseFixtureName = keyof typeof PURCHASE_FIXTURES;
 
-export function isPurchaseFixtureName(value: string | undefined): value is PurchaseFixtureName {
-  return value !== undefined && Object.prototype.hasOwnProperty.call(PURCHASE_FIXTURES, value);
+/** Sale (sell side) fixtures, kept apart from the purchase fixtures whose checks assume the buy side. */
+export const SALE_FIXTURES = {
+  sellReviewReady: { label: "sell: reviewReady (checked against the Pyth reference)", state: replay([...SELL_PREVIEWING, { type: "previewSucceeded", requestId: 1, preview: SELL_PREVIEW }], INITIAL_SELL_STATE), now: FIXTURE_NOW },
+  sellReferenceStale: { label: "sell: previewFailed, the Pyth reference is stale", state: replay([...SELL_PREVIEWING, { type: "previewFailed", requestId: 1, failure: "referenceUnavailable", details: REFERENCE_STALE }], INITIAL_SELL_STATE), now: FIXTURE_NOW },
+  sellReferenceUnreadable: { label: "sell: previewFailed, no usable Pyth reference", state: replay([...SELL_PREVIEWING, { type: "previewFailed", requestId: 1, failure: "referenceUnavailable", details: "malformed_price_account" }], INITIAL_SELL_STATE), now: FIXTURE_NOW },
+} satisfies Record<string, PurchaseFixture>;
+
+/** Every panel fixture (purchase and sale), as the Living Catalog lists and opens them. */
+export const PANEL_FIXTURES = { ...PURCHASE_FIXTURES, ...SALE_FIXTURES };
+
+export type PanelFixtureName = keyof typeof PANEL_FIXTURES;
+
+export function isPanelFixtureName(value: string | undefined): value is PanelFixtureName {
+  return value !== undefined && Object.prototype.hasOwnProperty.call(PANEL_FIXTURES, value);
 }
