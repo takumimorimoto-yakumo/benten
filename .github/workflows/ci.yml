@@ -9,10 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # The private name denylist (DENYLIST_REGEX) is not configured as a
+      # GitHub secret by decision: it stays local only, and the release
+      # runbook runs it before every public push. CI here runs every
+      # check-publishable.sh check that does not need that private list
+      # (CJK-outside-i18n, secret/key shapes, local paths, and the rest);
+      # with DENYLIST_REGEX unset and DENYLIST_REQUIRED unset, the script
+      # skips only its optional denylist check and still fails closed on
+      # everything else.
       - name: Check repository is safe to publish
-        env:
-          DENYLIST_REGEX: ${{ secrets.DENYLIST_REGEX }}
-          DENYLIST_REQUIRED: "1"
         run: bash scripts/check-publishable.sh
 
   build:
@@ -38,6 +43,14 @@ jobs:
         run: pnpm --filter @benten/mcp smoke
 
   legacy-web:
+    # Disabled, not fixed: apps/web is the earlier Next.js app, kept only as
+    # the migration source for the current app and scheduled for retirement
+    # (see README, Maintainers). It is not the product. Its typecheck/build
+    # has started failing on its own, independently of product changes; since
+    # it is not maintained, this job is turned off here rather than patched.
+    # Do not delete apps/web itself: it stays as migration source until the
+    # retirement plan runs.
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

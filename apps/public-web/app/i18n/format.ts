@@ -162,7 +162,12 @@ export function timeZoneLabel(epochMs: number): string {
   const short = zoneNamePart(epochMs, "short");
   if (abbreviationPattern.test(short) && short !== offsetPrefix) return short;
   const offset = zoneNamePart(epochMs, "shortOffset");
-  return offset.startsWith(offsetPrefix) ? `${utcLabel}${offset.slice(offsetPrefix.length)}` : offset || utcLabel;
+  const label = offset.startsWith(offsetPrefix) ? `${utcLabel}${offset.slice(offsetPrefix.length)}` : offset || utcLabel;
+  // A zero offset (for example Africa/Abidjan): different ICU builds write it
+  // as bare "GMT"/"UTC" or as "GMT+0"/"UTC+0" for the same zone, so this label
+  // would otherwise depend on the runtime's ICU data rather than the zone.
+  // Normalize both spellings to the plain label.
+  return /^UTC[+-]0$/.test(label) ? utcLabel : label;
 }
 
 /** A date and/or time in the locale's own form, followed by `timeZoneLabel` ("09:37:05 UTC+9"). */

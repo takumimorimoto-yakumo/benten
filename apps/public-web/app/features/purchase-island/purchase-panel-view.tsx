@@ -174,10 +174,24 @@ function WalletStep({ state, copy, handlers, locked }: { state: PurchaseState; c
   }
   // Before a wallet is connected the step keeps the prerendered frame's reserved height, so nothing below moves.
   const reserve = { title: copy.wallet.notDetectedTitle, body: copy.wallet.notDetectedBody };
-  if (state.detection === "pending") return <WalletStepReserve reserve={reserve}><p className="flex min-h-(--touch-target-min) items-center text-sm text-muted-foreground">{copy.wallet.detecting}</p></WalletStepReserve>;
+  // Not connected yet still names the accepted pay tokens, so a reviewer who has no wallet extension
+  // installed can still see that USDC, SOL and SKR are all accepted; a link's own pay token (`?pay=sol`) is named once it is prefilled, ahead of the wallet.
+  const payHint = state.payToken === "USDC" ? copy.wallet.payTokensHint : copy.wallet.payTokenSelectedHint(state.payToken);
+  const payHintLine = <p data-purchase-pay-hint="" className="text-sm text-muted-foreground">{payHint}</p>;
+  if (state.detection === "pending") {
+    return (
+      <WalletStepReserve reserve={reserve}>
+        <div className="flex flex-col gap-2">
+          {payHintLine}
+          <p className="flex min-h-(--touch-target-min) items-center text-sm text-muted-foreground">{copy.wallet.detecting}</p>
+        </div>
+      </WalletStepReserve>
+    );
+  }
   return (
     <WalletStepReserve reserve={reserve}>
     <div data-purchase-wallet="disconnected" className="flex flex-col gap-2">
+      {payHintLine}
       {state.wallets.length === 0 ? (
         <div className="flex flex-col gap-1">
           <h3 className="text-sm font-semibold">{copy.wallet.notDetectedTitle}</h3>

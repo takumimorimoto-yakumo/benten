@@ -7,15 +7,22 @@ a company through a Solana token. The investor starts from the company, not
 the token: Benten shows which tokens on Solana reference that company, which
 exact mint each one is, what the provider says the holder owns, where each
 statement comes from, and a live Pyth reference price where a reviewed feed
-exists. For one token, NVIDIA's xStock (NVDAx), the investor can buy with USDC
-from their own wallet inside the app and then check that the tokens arrived.
-Benten never holds keys or funds, and it gives no advice, ranking or
-recommendation.
+exists. For one token, NVIDIA's xStock (NVDAx), the investor can buy with
+USDC, SOL or SKR from their own wallet inside the app — SOL and SKR swap
+through one fixed two-leg route to USDC first, and every purchase is capped
+at 10 USDC's worth — and then check that the tokens arrived. Benten's server
+never holds a key and never signs; the investor's own wallet signs and sends
+every transaction. Benten gives no advice, ranking or recommendation.
 
 The name comes from Benzaiten (Benten) / Saraswati: the goddess of knowledge
 and wealth.
 
 Links: [live demo](https://benten-mu.vercel.app) · [repository](https://github.com/takumimorimoto-yakumo/benten)
+
+An MCP client (Claude, ChatGPT, or any Streamable HTTP client) can connect at
+`https://benten-mu.vercel.app/api/mcp` — no account, no key. See [MCP server
+(for agents)](#mcp-server-for-agents) below for the tool list, the local
+stdio server and the chat-connector steps.
 
 ## What you can do
 
@@ -25,7 +32,7 @@ Links: [live demo](https://benten-mu.vercel.app) · [repository](https://github.
 | Company | `/company/{slug}` | Every Solana token Benten covers for that company, each with its provider, a one-line rights summary and its Pyth reference price where a feed exists; SEC-sourced facts for US-listed issuers |
 | Product | `/stock/{ticker}`, `/provider/prestocks/{id}` | One token: exact mint, provider, what the holder owns, reference price, and whether Benten can buy it |
 | Evidence | `/stock/{ticker}/evidence`, `/provider/prestocks/{id}/evidence` | The registry record, sources, filing references, digests and explicit unknowns behind each statement |
-| Buy | `/stock/NVDA/buy` | Swap USDC for NVDAx in the user's own wallet, with a full preview before approval and status tracking to finalized |
+| Buy | `/stock/NVDA/buy` | Swap USDC, SOL or SKR for NVDAx in the user's own wallet, with a full preview before approval and status tracking to finalized |
 | Holdings | `/holdings` | After an explicit refresh, the covered tokens the connected wallet holds, read from its token accounts, valued at the Pyth reference price where the feed is approved for valuation |
 | Activity | `/activity` | Purchases made from this browser, with their final status and the NVDAx amount measured from the finalized transaction |
 
@@ -79,19 +86,25 @@ Reading needs no wallet; only Buy and Holdings ask for one.
 
 ## Purchase limits
 
-- One token, one route: NVDAx (`Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh`)
-  for USDC through one fixed Meteora DLMM pool
-  (`F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a`). No other token can be
-  bought in Benten, and no router or other pool is used.
-- At most 10 USDC per transaction, because the fixed pool holds only about
-  $428 of liquidity. Slippage is fixed at 100 bps, and a preview expires
-  after 30 seconds.
-- Before approval the flow shows the raw and display USDC input, the expected
-  and minimum NVDAx output, fees, slippage and the expiry. The Token-2022
-  scaled-amount multiplier is read at quote time, never from a stored value.
-- The flow sends once and never retries automatically. It tracks the signature
-  to finalized and reports the NVDAx change from the transaction's token
-  balances.
+- One product, one destination: NVDAx
+  (`Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh`). Pay with USDC through the
+  one fixed Meteora DLMM pool
+  (`F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a`), or pay with SOL or SKR
+  through that token's own pinned first-leg pool into USDC, then the same
+  fixed NVDAx pool. No other token can be bought in Benten, and no router or
+  other pool is used for either leg.
+- At most 10 USDC per transaction — or the SOL/SKR amount whose first leg
+  quotes at most 10 USDC — because the fixed NVDAx pool holds only about $428
+  of liquidity. Slippage is fixed at 100 bps on every leg, and a preview
+  expires after 30 seconds.
+- Before approval the flow shows the raw and display pay-token input, each
+  leg's expected and minimum output, fees, slippage and the expiry. The
+  Token-2022 scaled-amount multiplier is read at quote time, never from a
+  stored value.
+- The flow sends once and never retries automatically. It tracks the
+  signature to finalized and reports the NVDAx change from the transaction's
+  token balances. Benten's server builds and quotes the swap; it never signs
+  — the investor's own wallet signs and sends.
 - The issuer does not offer or sell NVDAx to US persons, and transfers may
   only be made to non-US persons. Benten does not check eligibility, and
   availability from any country is not guaranteed.
@@ -155,7 +168,7 @@ Notes on each source:
 | `packages/solana-rpc-relay` | The read-only relay logic and its limits |
 | `packages/solana` | Covered product mints and Solana venue observation helpers |
 | `packages/mcp` | MCP server for agents over the same bundled data |
-| `apps/web` | The earlier Next.js app, kept only as the migration source and scheduled for retirement ([plan](./specs/next-retirement-execution-plan.md)). It is not the product |
+| `apps/web` | The earlier Next.js app, kept only as the migration source and scheduled for retirement (execution plan in Maintainers, below). It is not the product |
 
 Facts API routes (all `GET`, snapshot only, no network):
 
@@ -357,3 +370,9 @@ contract is in [public data v2](./specs/contracts/public-data-v2.md), the
 Benten provides facts and tools, not opinions. It offers no investment advice,
 recommendation, valuation, rating or prediction. See
 [DISCLAIMER.md](./DISCLAIMER.md).
+
+## Maintainers
+
+Internal planning documents that are not part of the product above:
+
+- [`apps/web` retirement execution plan](./specs/next-retirement-execution-plan.md)
