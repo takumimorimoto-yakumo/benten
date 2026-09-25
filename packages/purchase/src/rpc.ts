@@ -8,13 +8,14 @@
  */
 
 import { Connection, PublicKey, type FetchFn } from "@solana/web3.js";
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
+import { TOKEN_PROGRAM_ID } from "@benten/solana";
 
 import { PURCHASE_CONFIG } from "./config";
 import { decodeMint, effectiveMultiplier, type MintInfo } from "./mint-info";
 import type { MultiplierReading } from "./purchase-machine";
 import type { FinalizedTransactionMeta, TokenBalanceEntry } from "./result";
-import { NVDAX_MINT, PAY_TOKENS, USDC_MINT, type PayTokenId } from "./route";
+import { PAY_TOKENS, USDC_MINT, type PayTokenId } from "./route";
+import { DEFAULT_PRODUCT, productRoute, SELL_ROUTE, type ProductTicker } from "./routes-table";
 import { associatedTokenAddress } from "./tx-allowlist";
 
 export type RelayFailure = "rateLimited" | "unavailable";
@@ -101,6 +102,21 @@ export async function readPayBalance(relay: RelayConnection, walletAddress: stri
   return amount;
 }
 
+/**
+ * The wallet's NVDAx balance (the sale route, `SELL_ROUTE`) in raw units (Token-2022 associated token
+ * account; a missing account is a zero balance). Raw units of the mint, not
+ * the Scaled UI display amount.
+ */
+export async function readNvdaxBalance(relay: RelayConnection, walletAddress: string): Promise<bigint> {
+  const owner = new PublicKey(walletAddress);
+  const account = await relay.connection.getAccountInfo(new PublicKey(associatedTokenAddress(owner, SELL_ROUTE.productMint, SELL_ROUTE.tokenProgram)));
+  if (!account) return 0n;
+  if (!account.owner.equals(SELL_ROUTE.tokenProgram)) throw new Error("NVDAx token account has an unexpected owner program");
+  const amount = tokenAccountAmount(account.data, SELL_ROUTE.productMint);
+  if (amount === null) throw new Error("NVDAx token account could not be read");
+  return amount;
+}
+
 /** Read a pay token's mint. `null` when it is missing or not owned by the legacy SPL Token program. */
 export async function readPayMint(relay: RelayConnection, payToken: PayTokenId): Promise<MintInfo | null> {
   const account = await relay.connection.getAccountInfo(PAY_TOKENS[payToken].mint);
@@ -108,29 +124,36 @@ export async function readPayMint(relay: RelayConnection, payToken: PayTokenId):
   return decodeMint(account.data);
 }
 
+/** `nvdax` is the product mint of the route read (named for the first product). */
 export interface RouteMints {
   usdc: MintInfo;
   nvdax: MintInfo;
 }
 
-/** Read both route mints. `null` when either is missing or owned by an unexpected token program. */
-export async function readRouteMints(relay: RelayConnection): Promise<RouteMints | null> {
-  const [usdc, nvdax] = await relay.connection.getMultipleAccountsInfo([USDC_MINT, NVDAX_MINT]);
-  if (!usdc || !nvdax || !usdc.owner.equals(TOKEN_PROGRAM_ID) || !nvdax.owner.equals(TOKEN_2022_PROGRAM_ID)) return null;
+/**
+ * Read both mints of a product's route (default NVDA): USDC and the product
+ * mint from the routes table. `null` when either is missing or owned by a
+ * token program other than the table's. The product mint's Scaled UI Amount
+ * extension, if any, is decoded from the account read here.
+ */
+export async function readRouteMints(relay: RelayConnection, product: ProductTicker = DEFAULT_PRODUCT): Promise<RouteMints | null> {
+  const route = productRoute(product);
+  const [usdc, nvdax] = await relay.connection.getMultipleAccountsInfo([USDC_MINT, route.productMint]);
+  if (!usdc || !nvdax || !usdc.owner.equals(TOKEN_PROGRAM_ID) || !nvdax.owner.equals(route.tokenProgram)) return null;
   const usdcInfo = decodeMint(usdc.data);
   const nvdaxInfo = decodeMint(nvdax.data);
   return usdcInfo && nvdaxInfo ? { usdc: usdcInfo, nvdax: nvdaxInfo } : null;
 }
 
-/** The NVDAx display multiplier in effect now, or `null` when the extension is absent or unreadable. */
+/** A product's display multiplier in effect now, or `null` when the extension is absent or unreadable. */
 export function multiplierReading(mint: MintInfo, now: number): MultiplierReading | null {
   return mint.scaledUiAmount ? { value: effectiveMultiplier(mint.scaledUiAmount, now), readAt: now } : null;
 }
 
-/** Re-read the NVDAx multiplier (result time). A failed read is not fatal: amounts fall back to raw units. */
-export async function readNvdaxMultiplier(relay: RelayConnection, now: () => number): Promise<MultiplierReading | null> {
+/** Re-read a product's multiplier (result time; default NVDA). A failed read is not fatal: amounts fall back to raw units. */
+export async function readNvdaxMultiplier(relay: RelayConnection, now: () => number, product: ProductTicker = DEFAULT_PRODUCT): Promise<MultiplierReading | null> {
   try {
-    const mints = await readRouteMints(relay);
+    const mints = await readRouteMints(relay, product);
     return mints ? multiplierReading(mints.nvdax, now()) : null;
   } catch {
     return null;

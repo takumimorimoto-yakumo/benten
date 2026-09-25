@@ -166,10 +166,18 @@ function QuantityCell({ row, copy, locale }: { row: HoldingRow; copy: HoldingsCo
 
 function BuyCell({ row, copy }: { row: HoldingRow; copy: HoldingsCopy }) {
   if (!row.product.buyHref) return null;
+  const sellable = row.product.sellHref !== null && /^[1-9]\d*$/.test(row.rawAmount);
   return (
-    <a href={row.product.buyHref} data-cta="buy" className={cn(buttonVariants({ variant: "outline" }), "h-(--touch-target-min) md:h-8")}>
-      {copy.buy(row.product.symbol)}
-    </a>
+    <div className="flex flex-wrap gap-2">
+      <a href={row.product.buyHref} data-cta="buy" className={cn(buttonVariants({ variant: "outline" }), "h-(--touch-target-min) md:h-8")}>
+        {copy.buy(row.product.symbol)}
+      </a>
+      {sellable ? (
+        <a href={row.product.sellHref!} data-cta="sell" className={cn(buttonVariants({ variant: "outline" }), "h-(--touch-target-min) md:h-8")}>
+          {copy.sell(row.product.symbol)}
+        </a>
+      ) : null}
+    </div>
   );
 }
 

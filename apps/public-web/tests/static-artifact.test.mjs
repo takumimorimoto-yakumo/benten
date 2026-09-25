@@ -51,15 +51,15 @@ const DIRECTORY_PAGES_PER_LOCALE = 1;
 const NOT_FOUND_BODIES = 5 * 4;
 /** App shell tab pages per locale: Holdings and Activity. */
 const APP_SHELL_PAGES_PER_LOCALE = 2;
-/** Product subpages per locale: an evidence page per xStock and provider instrument, and the one buy flow frame. */
-const productSubpagesPerLocale = (catalog) => catalog.items.length + providerAssets.entries.length + 1;
+/** Product subpages per locale: an evidence page per xStock and provider instrument, a buy flow frame per buyable xStock, and the one sell flow frame. */
+const productSubpagesPerLocale = (catalog) => catalog.items.length + providerAssets.entries.length + BUYABLE_TICKERS.length + 1;
 /** Static information pages per locale: About, four learn topics and three legal documents. */
 const STATIC_INFORMATION_PAGES = ["/about", "/learn/xstocks", "/learn/prestocks", "/learn/reference-prices", "/learn/self-custody", "/legal/terms", "/legal/privacy", "/legal/disclaimer"];
 
 test("the capsule has exactly one HTML document and one data artifact per generated public path", async () => {
   const catalog = publicCatalog();
   const expected = 5 * (catalog.items.length + 1) + 5 * REFERENCE_PAGES_PER_LOCALE + 5 * APP_SHELL_PAGES_PER_LOCALE + 5 * DIRECTORY_PAGES_PER_LOCALE + NOT_FOUND_BODIES + 5 * productSubpagesPerLocale(catalog) + 5 * STATIC_INFORMATION_PAGES.length;
-  assert.equal(expected, 2370);
+  assert.equal(expected, 2410);
   assert.equal(companyMap.companies.length, 8);
   assert.equal(listedCompanyMap.companies.length, 129);
   assert.equal(providerAssets.entries.length + PUBLISHED_COMPANIES.length, REFERENCE_PAGES_PER_LOCALE);
@@ -289,7 +289,7 @@ test("the chart island is a dynamic chunk that only company and product pages ca
   for (const path of reaching) {
     assert.ok(CHART_ROUTE_CHUNK.test(path) || importers.includes(path) || islandGraph.has(path) || onlyChartRoutes(path), `${path} is not a company or product route but reaches the chart island`);
   }
-  for (const route of ["home", "companies", "holdings", "activity", "learn", "about", "legal", "stock-evidence", "provider-evidence", "buy"]) {
+  for (const route of ["home", "companies", "holdings", "activity", "learn", "about", "legal", "stock-evidence", "provider-evidence", "buy", "sell"]) {
     for (const path of routeChunks.filter((candidate) => new RegExp(`^assets/(?:locale-)?${route}-[\\w-]{8}\\.js$`).test(candidate))) {
       assert.equal(closure([path], { followDynamic: true }).has(entry), false, `the ${route} route chunk ${path} must not reach the chart island`);
     }
@@ -319,7 +319,14 @@ test("the Mobile Wallet Adapter registration is an Android-only dynamic chunk of
 });
 
 const LOCALE_PREFIXES = { en: "", ja: "/ja", ko: "/ko", "zh-Hans": "/zh-Hans", "zh-Hant": "/zh-Hant" };
+/** The product whose buy flow and evidence page the detailed checks below read (the first route). */
 const FIXED_ROUTE_TICKER = "NVDA";
+/**
+ * Every buyable xStock (one pinned pool each), written out here rather than
+ * read from the purchase package so that a route added or dropped there
+ * fails this test until the published pages are checked again.
+ */
+const BUYABLE_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"];
 /**
  * Words the Dossier must never present: quotes, NAV, advice, recommendations.
  * Non-Latin terms are escaped (ja: advice/recommend/estimate; ko: advice/recommend/market price;
@@ -357,11 +364,11 @@ test("every product document states its language and states its capability: one 
       assert.ok(main.includes(`data-product-mint="">${identity.mint}<`), `${locale} ${identity.ticker} full mint`);
       assert.ok(main.includes(`href="${LOCALE_PREFIXES[locale]}/stock/${identity.ticker}/evidence"`), `${locale} ${identity.ticker} evidence link`);
       assert.match(main, /data-term="pyth-reference-price"/, `${locale} ${identity.ticker} Pyth reference price block`);
-      if (identity.ticker === FIXED_ROUTE_TICKER) {
+      if (BUYABLE_TICKERS.includes(identity.ticker)) {
         buyableDocuments += 1;
         const buy = [...main.matchAll(/<a\b[^>]*data-cta="buy"[^>]*>/g)].map((match) => match[0]);
         assert.equal(buy.length, 1, `${locale} one Buy link`);
-        assert.ok(buy[0].includes(`href="${LOCALE_PREFIXES[locale]}/stock/${FIXED_ROUTE_TICKER}/buy"`), `${locale} Buy opens the flow`);
+        assert.ok(buy[0].includes(`href="${LOCALE_PREFIXES[locale]}/stock/${identity.ticker}/buy"`), `${locale} Buy opens the flow`);
         assert.equal(count(main, /[\s"]bg-primary[\s"]/g), 1, `${locale} the Buy link is the page's one filled control`);
         assert.equal(main.includes('data-product-capability="not-buyable"'), false);
       } else {
@@ -374,7 +381,7 @@ test("every product document states its language and states its capability: one 
       }
     }
   }
-  assert.equal(buyableDocuments, 5, "exactly the fixed-route token in each locale has the Buy link");
+  assert.equal(buyableDocuments, 5 * BUYABLE_TICKERS.length, "exactly the buyable tokens in each locale have the Buy link");
 });
 
 function homeDocumentPath(locale) {
@@ -436,7 +443,7 @@ test("every companies document lists each product xStock and company exactly onc
     const unlinked = /data-directory-unlinked=""[\s\S]*?<\/ul>/.exec(main)?.[0] ?? "";
     assert.deepEqual([...unlinked.matchAll(/data-directory-token="([^"]+)"/g)].map((match) => match[1]).sort(), [], `${label} no unlinked token`);
     assert.deepEqual([...main.matchAll(/data-directory-filter="([^"]+)"/g)].map((match) => match[1]), ["all", "private", "us-listed", "funds"], `${label} group filter`);
-    assert.equal(count(main, /data-term="buy-in-benten"/g), 1, `${label} one buyable row`);
+    assert.equal(count(main, /data-term="buy-in-benten"/g), BUYABLE_TICKERS.length, `${label} one buyable row per buyable token`);
     assert.ok(/data-directory-company="nvidia"[^>]*>[\s\S]*?data-term="buy-in-benten"/.test(main), `${label} the tag is on the NVIDIA row`);
     for (const withheld of xstocks.filter(isWithheldFromProduct)) assert.equal(main.includes(withheld.mint) || main.includes(`/stock/${withheld.ticker}"`), false, `${label} omits ${withheld.ticker}`);
     assertAppVocabulary(main, locale, label);
@@ -698,6 +705,7 @@ function assertReferenceMain(main, locale, label) {
 test("every published company page follows the IA order, with one card per product in map order and no reference value", async () => {
   const values = providerAssets.entries.flatMap((entry) => [...entry.references.map((reference) => reference.value), ...(entry.supply_reference ? [entry.supply_reference.value] : [])]);
   let buyActions = 0;
+  let expectedBuyActions = 0;
   for (const locale of Object.keys(LOCALE_PREFIXES)) {
     const prefix = LOCALE_PREFIXES[locale];
     for (const company of PUBLISHED_COMPANIES) {
@@ -718,9 +726,11 @@ test("every published company page follows the IA order, with one card per produ
       assert.ok(order.every((index, position) => index >= 0 && (position === 0 || index > order[position - 1])), `${label} section order`);
       assert.equal(main.includes("data-company-notice"), keys.length >= 2, `${label} notice only with two or more products`);
       const buy = [...main.matchAll(/<div data-cta="buy"[^>]*>[\s\S]*?<a href="([^"]+)"/g)].map((match) => match[1]);
+      const buyable = company.instruments.filter((instrument) => instrument.source === "xstocks_registry" && BUYABLE_TICKERS.includes(instrument.ticker));
       if (company.slug === "nvidia") assert.deepEqual(buy, [`${prefix}/stock/NVDA/buy`], `${label} one buy action, to the buy flow`);
-      else assert.deepEqual(buy, [], `${label} no buy action`);
+      else assert.deepEqual(buy, buyable.map((instrument) => `${prefix}/stock/${instrument.ticker}/buy`), `${label} a buy action for each buyable product, to its buy flow`);
       buyActions += buy.length;
+      expectedBuyActions += buyable.length;
       if (company.listing_status === "us_listed") assert.ok(main.includes('data-company-map-review="pending"'), `${label} says the generated map is not yet reviewed`);
       else assert.equal(main.includes("data-company-map-review"), false, `${label} reviewed map`);
       for (const value of values) assert.equal(html.includes(value), false, `${label} must not render reference value ${value}`);
@@ -733,7 +743,8 @@ test("every published company page follows the IA order, with one card per produ
       assertAppVocabulary(main, locale, label);
     }
   }
-  assert.equal(buyActions, 5, "the buy action exists only on the NVIDIA page, once per locale");
+  assert.ok(expectedBuyActions > 5, "company pages of buyable products other than NVIDIA are published");
+  assert.equal(buyActions, expectedBuyActions, "a buy action exists only for a buyable product on its company page, once per locale");
 });
 
 test("company documents are exactly the published companies; US-listed pages show the SEC registrant once and never claim or deny a human review", async () => {
@@ -1013,11 +1024,51 @@ test("the buy flow frame is prerendered in five locales as a modal over the iner
   }
 });
 
-test("only the fixed-route product has a buy flow document", async () => {
+test("the sell flow frame is prerendered in five locales as a modal over the inert product page, loading the island only dynamically", async () => {
+  const { chunks, closure } = await clientGraph();
+  for (const locale of Object.keys(LOCALE_PREFIXES)) {
+    const html = await readFile(pageDocumentPath(locale, `/stock/${FIXED_ROUTE_TICKER}/sell`), "utf8");
+    const label = `${locale} sell flow`;
+    assert.match(html, new RegExp(`<html lang="${locale}"`), label);
+    assert.match(html, /<meta name="robots" content="noindex"/, `${label} noindex`);
+    const dialog = /<div data-buy-flow=""[^>]*>/.exec(html)?.[0] ?? "";
+    assert.ok(dialog.includes('role="dialog"') && dialog.includes('aria-modal="true"') && dialog.includes('aria-labelledby="purchase-heading"'), `${label} modal dialog`);
+    const flow = html.slice(html.indexOf("<div data-buy-flow"));
+    assert.match(flow, new RegExp(`<section id="purchase"[^>]* data-purchase-variant="flow" data-phase="frame" lang="${locale}" data-trade-side="sell"`), `${label} sell frame section`);
+    assert.match(flow, /data-purchase-step=""[^>]*>(?=[^<]*1)(?=[^<]*3)[^<]+</, `${label} step 1 of 3`);
+    const notice = PURCHASE_NOTICE_BLOCK.exec(flow);
+    assert.ok(notice, `${label} notice`);
+    assert.equal(notice[0].match(/<li>/g)?.length, 4, `${label} four notice sentences`);
+    assert.equal(flow.includes("data-purchase-wallet"), false, `${label} no wallet step before the island`);
+    const background = /<div class="contents" inert="">([\s\S]*?)<div data-buy-flow=""/.exec(html)?.[1] ?? "";
+    assert.ok(background.includes("data-app-header"), `${label} the product page with its shell is inert`);
+    assert.equal(html.includes("purchase-island-"), false, `${label} never names the island chunk`);
+    for (const path of closure([...documentRoots(html)], { followDynamic: false })) {
+      assert.equal(PURCHASE_ISLAND_CHUNK.test(path), false, `${label} statically loads ${path}`);
+    }
+  }
+  const sellRoute = [...chunks.keys()].filter((path) => /^assets\/(?:locale-)?sell-[\w-]+\.js$/.test(path));
+  assert.ok(sellRoute.length > 0, "the sell route has its own chunk");
+});
+
+test("only the fixed-route product has a sell flow document", async () => {
   const { items } = publicCatalog();
   for (const locale of Object.keys(LOCALE_PREFIXES)) {
     for (const { identity } of items) {
       if (identity.ticker === FIXED_ROUTE_TICKER) continue;
+      await assert.rejects(access(pageDocumentPath(locale, `/stock/${identity.ticker}/sell`)), `${locale} ${identity.ticker} has no sell flow`);
+    }
+  }
+});
+
+test("only the buyable products have a buy flow document", async () => {
+  const { items } = publicCatalog();
+  for (const locale of Object.keys(LOCALE_PREFIXES)) {
+    for (const { identity } of items) {
+      if (BUYABLE_TICKERS.includes(identity.ticker)) {
+        await access(pageDocumentPath(locale, `/stock/${identity.ticker}/buy`));
+        continue;
+      }
       await assert.rejects(access(pageDocumentPath(locale, `/stock/${identity.ticker}/buy`)), `${locale} ${identity.ticker} has no buy flow`);
     }
     for (const entry of providerAssets.entries) {

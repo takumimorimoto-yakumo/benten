@@ -275,6 +275,9 @@ importers:
 
   packages/purchase:
     dependencies:
+      '@benten/pricing':
+        specifier: workspace:*
+        version: link:../pricing
       '@benten/solana':
         specifier: workspace:*
         version: link:../solana
@@ -297,6 +300,9 @@ importers:
         specifier: ^5.2.1
         version: 5.2.5
     devDependencies:
+      '@benten/registry':
+        specifier: workspace:*
+        version: link:../registry
       '@types/bn.js':
         specifier: ^5.1.6
         version: 5.2.0

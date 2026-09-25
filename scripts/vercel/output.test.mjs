@@ -338,12 +338,12 @@ test("edge, malformed, withheld and API targets answer the same for every method
 });
 
 test("user-visible acceptance: pages, withheld 404s, canonical 308 and Content-Type", async () => {
-  for (const path of ["/", "/ja", "/stock/NVDA", "/ja/stock/NVDA", "/companies", "/company/openai", "/provider/prestocks/OPENAI", "/about", "/learn/prestocks", "/legal/privacy", "/ja/legal/privacy", "/zh-Hant/learn/self-custody"]) {
+  for (const path of ["/", "/ja", "/stock/NVDA", "/ja/stock/NVDA", "/stock/NVDA/sell", "/ja/stock/NVDA/sell", "/companies", "/company/openai", "/provider/prestocks/OPENAI", "/about", "/learn/prestocks", "/legal/privacy", "/ja/legal/privacy", "/zh-Hant/learn/self-custody"]) {
     const response = await raw(hostedPortBound, "GET", path);
     assert.equal(response.status, 200, path);
     assert.equal(response.headers["content-type"], "text/html; charset=utf-8", path);
   }
-  for (const path of ["/stock/SPCX", "/ja/stock/SPCX", "/provider/tessera/tOpenAI", "/en", "/nothing-here"]) {
+  for (const path of ["/stock/SPCX", "/ja/stock/SPCX", "/stock/SPCX/sell", "/provider/tessera/tOpenAI", "/en", "/nothing-here"]) {
     const response = await raw(hostedPortBound, "GET", path);
     assert.equal(response.status, 404, path);
     assert.equal(response.headers["content-type"], "text/html; charset=utf-8", path);
@@ -436,6 +436,10 @@ test("the remote MCP endpoint answers a connector without Origin and refuses a f
   const over = await both("POST", "/api/mcp", { headers: { ...MCP_HEADERS, host: PREVIEW_HOST }, body: JSON.stringify({ jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "prepare_purchase", arguments: { amount_usdc: "10.01" } } }) });
   assert.equal(JSON.parse(over.remote.body.toString("utf8")).result.structuredContent.data.reason, "over_limit");
   assert.deepEqual(material(over.remote), material(over.local));
+  // The ticker reaches the hosted reader: a registry product with no route is refused before any upstream read, on both sides.
+  const unrouted = await both("POST", "/api/mcp", { headers: { ...MCP_HEADERS, host: PREVIEW_HOST }, body: JSON.stringify({ jsonrpc: "2.0", id: 5, method: "tools/call", params: { name: "prepare_purchase", arguments: { ticker: "AMZN", amount_usdc: "2" } } }) });
+  assert.equal(JSON.parse(unrouted.remote.body.toString("utf8")).result.structuredContent.data.reason, "not_purchasable");
+  assert.deepEqual(material(unrouted.remote), material(unrouted.local));
   const own = await both("POST", "/api/mcp", { headers: { ...MCP_HEADERS, host: PREVIEW_HOST, origin: `https://${PREVIEW_HOST}` }, body: MCP_INITIALIZE });
   assert.equal(own.remote.status, 200);
   const get = await both("GET", "/api/mcp", { headers: { host: PREVIEW_HOST } });

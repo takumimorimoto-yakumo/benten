@@ -4,21 +4,24 @@
  * fixtures; it performs no I/O and never talks to a wallet itself.
  */
 import { useId, type ReactNode, type RefObject } from "react";
-import { parseTokenInput, type AmountError } from "@benten/purchase/amount";
+import { parseScaledInput, parseTokenInput, type AmountError } from "@benten/purchase/amount";
 import { PURCHASE_CONFIG } from "@benten/purchase/config";
 import { clockText, minutesText, nvdaxText, tokenText, usdcText } from "@benten/purchase/display";
 import { PAY_CONFIG } from "@benten/purchase/pay-config";
 import {
+  attemptProduct,
   hasUnresolvedEarlierRequest,
   isAmountLocked,
   isPostSend,
+  sellMaxRaw,
   spendableRaw,
   type Attempt,
   type PreviewTerms,
   type PurchaseState,
   type Tracking,
 } from "@benten/purchase/purchase-machine";
-import { NVDAX_SYMBOL, NVDAX_USDC_POOL, PAY_TOKEN_IDS, PAY_TOKEN_UNITS, USDC_SYMBOL, type PayTokenId } from "@benten/purchase/route";
+import { PAY_TOKEN_IDS, PAY_TOKEN_UNITS, USDC_SYMBOL, type PayTokenId } from "@benten/purchase/route";
+import { productRoute, SELL_ROUTE } from "@benten/purchase/routes-table";
 import { ExternalLink } from "@/components/external-link";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -30,7 +33,7 @@ import { CopyValue } from "./copy-value";
 import { shortenAddress } from "./display";
 import { PanelButton } from "./panel-button";
 import { PurchaseAlert } from "./purchase-alert";
-import { PURCHASE_HEADING_ID, PURCHASE_SECTION_ID, PurchasePanelShell, purchaseFrameFrom, WalletStepReserve, type PurchaseFlowChrome } from "./purchase-panel-shell";
+import { PURCHASE_HEADING_ID, PURCHASE_SECTION_ID, PurchasePanelShell, purchaseFrameFrom, saleFrameFrom, WalletStepReserve, type PurchaseFlowChrome } from "./purchase-panel-shell";
 import { PurchaseTermsList } from "./purchase-terms-list";
 import { PurchaseTrail, type TrailStep } from "./purchase-trail";
 
@@ -73,7 +76,31 @@ function payText(raw: bigint, payToken: PayTokenId, locale: PublicWebLocale): st
   return `${tokenText(raw, PAY_TOKEN_UNITS[payToken].decimals, locale)} ${payToken}`;
 }
 
+/** NVDAx display text of a raw amount at the multiplier the sale field was checked with. */
+function sellNvdaxText(raw: bigint, state: PurchaseState, locale: PublicWebLocale): string {
+  const terms = state.sellTerms;
+  const scaled = terms.kind === "loaded" ? nvdaxText(raw, { value: terms.multiplier, readAt: 0 }, locale) : null;
+  return scaled ?? raw.toString();
+}
+
+function sellAmountErrorText(error: AmountError, state: PurchaseState, copy: PurchaseCopy, locale: PublicWebLocale): string {
+  const sell = copy.sell;
+  switch (error) {
+    case "empty": return sell.errorEmpty;
+    case "format": return copy.amount.errorFormat;
+    case "precision": return sell.errorPrecision;
+    case "zero": return copy.amount.errorZero;
+    case "notReady": return sell.errorNotReady;
+    case "overLimit": {
+      const max = state.sellTerms.kind === "loaded" ? sellNvdaxText(state.sellTerms.capRaw, state, locale) : "";
+      return sell.errorOverLimit(max, usdcText(PURCHASE_CONFIG.maxUsdcOutRaw, locale));
+    }
+    case "overBalance": return sell.errorOverBalance(state.balance.kind === "loaded" ? `${sellNvdaxText(state.balance.raw, state, locale)} ${SELL_ROUTE.symbol}` : "");
+  }
+}
+
 function amountErrorText(error: AmountError, state: PurchaseState, copy: PurchaseCopy, locale: PublicWebLocale): string {
+  if (state.side === "sell") return sellAmountErrorText(error, state, copy, locale);
   const token = state.payToken;
   if (token !== "USDC") {
     const decimals = String(PAY_TOKEN_UNITS[token].decimals);
@@ -91,6 +118,8 @@ function amountErrorText(error: AmountError, state: PurchaseState, copy: Purchas
     case "zero": return copy.amount.errorZero;
     case "overLimit": return copy.amount.errorOverLimit(usdcText(PURCHASE_CONFIG.maxUsdcInRaw, locale));
     case "overBalance": return copy.amount.errorOverBalance(state.balance.kind === "loaded" ? usdcText(state.balance.raw, locale) : "");
+    // Only a sale waits for its terms; a purchase field is always checkable.
+    case "notReady": return copy.amount.errorFormat;
   }
 }
 
@@ -140,7 +169,7 @@ function PreviewNotes({ preview, copy, locale }: { preview: PreviewTerms; copy: 
   const notes = [
     preview.nvdaxMultiplier ? copy.preview.multiplierNote(clockText(preview.nvdaxMultiplier.readAt, locale)) : copy.preview.multiplierUnavailable,
     // Two legs may also create the USDC and wrapped SOL accounts, whether or not the NVDAx one exists.
-    ...(preview.firstLeg !== null ? [copy.pay.accountCreation] : preview.createsNvdaxAccount ? [copy.preview.accountCreation] : []),
+    ...(preview.side === "sell" ? (preview.createsUsdcAccount ? [copy.sell.accountCreation] : []) : preview.firstLeg !== null ? [copy.pay.accountCreation] : preview.createsNvdaxAccount ? [copy.preview.accountCreation] : []),
     copy.preview.networkFee,
   ];
   return <p data-purchase-notes="" className="text-xs text-muted-foreground">{joinSentences(notes, locale)}</p>;
@@ -285,16 +314,107 @@ function AmountField({ state, copy, locale, handlers, refs }: { state: PurchaseS
   );
 }
 
+/**
+ * The sale's amount field: NVDAx in display units (what the wallet shows),
+ * converted to raw units through the multiplier read with the per-sale cap.
+ * The maximum is the smaller of the balance and the cap at the USDC limit.
+ */
+function SellAmountField({ state, copy, locale, handlers, refs }: { state: PurchaseState; copy: PurchaseCopy; locale: PublicWebLocale; handlers: PanelHandlers; refs: PanelRefs }) {
+  const id = useId();
+  const sell = copy.sell;
+  const locked = isAmountLocked(state.attempt.phase);
+  const terms = state.sellTerms;
+  const helper = terms.kind === "loaded" ? parseScaledInput(state.amountText, SELL_ROUTE.decimals, terms.multiplier) : { ok: false as const };
+  const balanceText = state.balance.kind === "loaded"
+    ? sell.balance(`${sellNvdaxText(state.balance.raw, state, locale)} ${SELL_ROUTE.symbol}`)
+    : state.balance.kind === "unavailable" ? sell.balanceUnavailable : sell.balanceLoading;
+  const maxRaw = sellMaxRaw(state);
+  const limitText = maxRaw !== null
+    ? sell.max(sellNvdaxText(maxRaw, state, locale), usdcText(PURCHASE_CONFIG.maxUsdcOutRaw, locale))
+    : terms.kind === "unavailable" ? sell.limitUnavailable : sell.limitLoading;
+  const describedBy = [`${id}-limit`, `${id}-helper`, state.amountError ? `${id}-error` : null].filter(Boolean).join(" ");
+  return (
+    <div data-purchase-field="" data-sell-field="" className="flex flex-col gap-1">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <label htmlFor={`${id}-input`} className="text-sm font-semibold">{sell.amountLabel}</label>
+        <span className="text-xs text-muted-foreground tabular-nums">{balanceText}</span>
+      </div>
+      <Input
+        ref={refs.amountInput}
+        id={`${id}-input`}
+        inputMode="decimal"
+        autoComplete="off"
+        spellCheck={false}
+        value={state.amountText}
+        readOnly={locked}
+        aria-invalid={state.amountError ? true : undefined}
+        aria-describedby={describedBy}
+        className="h-(--touch-target-min) border-(--control-border) text-base tabular-nums read-only:bg-muted"
+        onChange={(event) => handlers.onAmountChange(event.target.value)}
+        onBlur={handlers.onAmountBlur}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !locked) handlers.onPreview();
+        }}
+      />
+      <p id={`${id}-limit`} data-sell-limit="" className="text-xs text-muted-foreground tabular-nums">{limitText}</p>
+      <p id={`${id}-helper`} className="text-xs text-muted-foreground">{helper.ok ? sell.helperRaw(helper.raw.toString()) : copy.amount.helperSeparator}</p>
+      {state.amountError ? <p id={`${id}-error`} className="text-sm font-medium text-destructive">{amountErrorText(state.amountError, state, copy, locale)}</p> : null}
+    </div>
+  );
+}
+
+/** A sale's result, measured from the finalized transaction: USDC received, NVDAx sold. */
+function SellResultBlock({ attempt, copy, locale, refs }: { attempt: Extract<Attempt, { phase: "result" }>; copy: PurchaseCopy; locale: PublicWebLocale; refs: PanelRefs }) {
+  const result = attempt.result;
+  const sell = copy.sell;
+  // The measurement is the wallet's balance change: a sale lowers NVDAx and raises USDC.
+  const receivedRaw = -result.usdcPaidRaw;
+  const soldRaw = -result.nvdaxDeltaRaw;
+  // A sale lowers NVDAx and raises USDC; a measured change the other way is not shown as an amount.
+  const soldKnown = soldRaw >= 0n;
+  const soldScaled = soldKnown ? nvdaxText(soldRaw, result.nvdaxMultiplier, locale) : null;
+  return (
+    <div data-purchase-result="" data-sell-result="" className="flex flex-col gap-1">
+      <h3 ref={refs.resultHeading} tabIndex={-1} className="text-base font-semibold">{sell.resultHeading}</h3>
+      <p className="text-sm">{sell.receivedLabel}</p>
+      {receivedRaw >= 0n ? (
+        <>
+          <p className="text-2xl leading-tight font-bold tracking-tight tabular-nums wrap-anywhere">{`${usdcText(receivedRaw, locale)} ${USDC_SYMBOL}`}</p>
+          <p className="text-xs text-muted-foreground tabular-nums">{copy.preview.raw(receivedRaw.toString())}</p>
+        </>
+      ) : <p className="text-2xl leading-tight font-bold tracking-tight tabular-nums">{EMPTY_VALUE}</p>}
+      <dl className="mt-2 border-y">
+        <div className="grid grid-cols-1 gap-x-3 py-1.5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-baseline">
+          <dt className="text-sm text-muted-foreground">{sell.soldLabel}</dt>
+          <dd className="flex flex-col lg:items-end">
+            {soldKnown ? (
+              <>
+                <span className="text-sm font-semibold tabular-nums">{soldScaled === null ? copy.preview.rawOnly(soldRaw.toString()) : `${soldScaled} ${SELL_ROUTE.symbol}`}</span>
+                <span className="text-xs text-muted-foreground tabular-nums">{copy.preview.raw(soldRaw.toString())}</span>
+              </>
+            ) : <span className="text-sm tabular-nums">{EMPTY_VALUE}</span>}
+          </dd>
+        </div>
+      </dl>
+      <div className="mt-2 flex flex-col gap-1 text-xs text-muted-foreground">
+        <p>{copy.result.source}</p>
+        <p>{result.nvdaxMultiplier ? copy.preview.multiplierNote(clockText(result.nvdaxMultiplier.readAt, locale)) : copy.preview.multiplierUnavailable}</p>
+      </div>
+    </div>
+  );
+}
+
 function ResultBlock({ attempt, copy, locale, refs }: { attempt: Extract<Attempt, { phase: "result" }>; copy: PurchaseCopy; locale: PublicWebLocale; refs: PanelRefs }) {
   const result = attempt.result;
+  const product = productRoute(attempt.tracking.product);
   const magnitude = result.nvdaxDeltaRaw < 0n ? -result.nvdaxDeltaRaw : result.nvdaxDeltaRaw;
-  const scaled = nvdaxText(magnitude, result.nvdaxMultiplier, locale);
+  const scaled = nvdaxText(magnitude, result.nvdaxMultiplier, locale, product.decimals);
   const sign = result.nvdaxDeltaRaw < 0n ? "-" : "+";
   return (
     <div data-purchase-result="" className="flex flex-col gap-1">
       <h3 ref={refs.resultHeading} tabIndex={-1} className="text-base font-semibold">{copy.result.heading}</h3>
       <p className="text-sm">{copy.result.receivedLabel}</p>
-      <p className="text-2xl leading-tight font-bold tracking-tight tabular-nums wrap-anywhere">{scaled === null ? `${sign}${copy.preview.rawOnly(magnitude.toString())}` : `${sign}${scaled} ${NVDAX_SYMBOL}`}</p>
+      <p className="text-2xl leading-tight font-bold tracking-tight tabular-nums wrap-anywhere">{scaled === null ? `${sign}${copy.preview.rawOnly(magnitude.toString())}` : `${sign}${scaled} ${product.symbol}`}</p>
       <p className="text-xs text-muted-foreground tabular-nums">{copy.preview.raw(`${sign}${magnitude.toString()}`)}</p>
       <dl className="mt-2 border-y">
         <div className="grid grid-cols-1 gap-x-3 py-1.5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-baseline">
@@ -353,12 +473,17 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
     case "previewing":
       return { stage: null, actions: <PanelButton busy className="flex-1">{copy.action.previewing}</PanelButton> };
     case "previewFailed": {
-      const limit = usdcText(PURCHASE_CONFIG.maxUsdcInRaw, locale);
+      const selling = state.side === "sell";
+      const limit = usdcText(selling ? PURCHASE_CONFIG.maxUsdcOutRaw : PURCHASE_CONFIG.maxUsdcInRaw, locale);
       const quotedUsdc = attempt.failure === "overLimit" && attempt.details && /^\d+$/.test(attempt.details) ? usdcText(BigInt(attempt.details), locale) : "";
-      const error = attempt.failure === "overLimit" ? copy.pay.overLimit : copy.error[attempt.failure];
+      const overLimit = selling ? copy.sell.overLimit : copy.pay.overLimit;
+      const error = attempt.failure === "overLimit" ? overLimit
+        : attempt.failure === "sellTermsChanged" ? copy.sell.termsChanged
+        : selling && attempt.failure === "routeCheck" ? copy.sell.routeCheck
+        : copy.error[attempt.failure];
       const body = attempt.failure === "notEnoughSol"
         ? copy.error.notEnoughSol.body(attempt.createsNvdaxAccount)
-        : attempt.failure === "overLimit" ? copy.pay.overLimit.body(quotedUsdc, limit) : (error as { body: string }).body;
+        : attempt.failure === "overLimit" ? overLimit.body(quotedUsdc, limit) : (error as { body: string }).body;
       const showDetails = attempt.details && attempt.failure !== "relayBusy" && attempt.failure !== "relayUnavailable" && attempt.failure !== "overLimit";
       const stage = (
         <PurchaseAlert title={error.title} titleRef={refs.errorTitle}>
@@ -381,7 +506,7 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
           {expired ? <PurchaseAlert title={copy.error.expired.title} titleRef={refs.errorTitle}><p>{copy.error.expired.body(clockText(preview.builtAt, locale))}</p></PurchaseAlert> : null}
           {attempt.phase === "reviewReady" && attempt.notice === "rejected" ? <PurchaseAlert title={copy.error.rejected.title} titleRef={refs.errorTitle}><p>{copy.error.rejected.body}</p></PurchaseAlert> : null}
           <h3 ref={refs.previewHeading} tabIndex={-1} className="text-base font-semibold">{expired ? copy.preview.headingExpired : copy.preview.heading}</h3>
-          <PurchaseTermsList preview={preview} now={now} expired={expired} copy={copy.preview} payCopy={copy.pay} locale={locale} />
+          <PurchaseTermsList preview={preview} now={now} expired={expired} copy={copy.preview} payCopy={copy.pay} sellCopy={copy.sell} locale={locale} />
           {attempt.phase === "awaitingWallet" ? <PurchaseTrail steps={trailSteps(attempt, copy, locale)} copy={copy.trail} /> : null}
         </>
       );
@@ -413,7 +538,7 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
         stage: <PurchaseAlert title={copy.error.walletUnknown.title} titleRef={refs.errorTitle}><p>{copy.error.walletUnknown.body}</p></PurchaseAlert>,
         actions: (
           <>
-            <PanelButton variant="outline" onClick={handlers.onStartNew}>{copy.action.startNew}</PanelButton>
+            <PanelButton variant="outline" onClick={handlers.onStartNew}>{state.side === "sell" ? copy.sell.startNew : copy.action.startNew}</PanelButton>
             <PanelLink href={PURCHASE_CONFIG.explorerAddressUrl(attempt.preview.walletAddress)} copy={copy}>{copy.error.walletUnknown.explorer}</PanelLink>
           </>
         ),
@@ -463,13 +588,13 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
         stage: (
           <>
             <PurchaseTrail steps={trailSteps(attempt, copy, locale)} copy={copy.trail} />
-            <ResultBlock attempt={attempt} copy={copy} locale={locale} refs={refs} />
+            {state.side === "sell" ? <SellResultBlock attempt={attempt} copy={copy} locale={locale} refs={refs} /> : <ResultBlock attempt={attempt} copy={copy} locale={locale} refs={refs} />}
             <SignatureLine tracking={attempt.tracking} copy={copy} />
           </>
         ),
         actions: (
           <>
-            <PanelButton variant="outline" onClick={handlers.onStartNew}>{copy.action.startNew}</PanelButton>
+            <PanelButton variant="outline" onClick={handlers.onStartNew}>{state.side === "sell" ? copy.sell.startNew : copy.action.startNew}</PanelButton>
             <PanelLink href={PURCHASE_CONFIG.explorerTxUrl(attempt.tracking.signature)} copy={copy}>{copy.result.explorer}</PanelLink>
           </>
         ),
@@ -503,7 +628,7 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
         ),
         actions: (
           <>
-            <PanelButton variant="outline" onClick={handlers.onStartNew}>{copy.action.startNew}</PanelButton>
+            <PanelButton variant="outline" onClick={handlers.onStartNew}>{state.side === "sell" ? copy.sell.startNew : copy.action.startNew}</PanelButton>
             <PanelLink href={PURCHASE_CONFIG.explorerTxUrl(attempt.tracking.signature)} copy={copy}>{copy.result.explorer}</PanelLink>
           </>
         ),
@@ -516,27 +641,30 @@ function stageAndActions(state: PurchaseState, now: number, copy: PurchaseCopy, 
             <SignatureLine tracking={attempt.tracking} copy={copy} />
           </>
         ),
-        actions: <PanelButton variant="outline" onClick={handlers.onStartNew}>{copy.action.startNew}</PanelButton>,
+        actions: <PanelButton variant="outline" onClick={handlers.onStartNew}>{state.side === "sell" ? copy.sell.startNew : copy.action.startNew}</PanelButton>,
       };
   }
 }
 
 export function PurchasePanelView({ state, now, locale, handlers, refs, announcement, flow }: { state: PurchaseState; now: number; locale: PublicWebLocale; handlers: PanelHandlers; refs: PanelRefs; announcement: string; flow?: PurchaseFlowChrome }) {
-  const copy = purchaseMessagesFor(locale);
+  // The attempt's product (a tracked purchase keeps its own), else the page's; its symbol and pool name the copy.
+  const product = productRoute(attemptProduct(state));
+  const copy = purchaseMessagesFor(locale, product.symbol);
   const attempt = state.attempt;
   const postSend = isPostSend(attempt.phase);
-  const pool = NVDAX_USDC_POOL.toBase58();
+  const pool = product.pool.toBase58();
   const connected = state.connection.kind === "connected";
   const showField = connected && !postSend && attempt.phase !== "walletOutcomeUnknown";
+  const selling = state.side === "sell";
   const locked = isAmountLocked(attempt.phase);
   const { stage, actions } = stageAndActions(state, now, copy, locale, handlers, refs);
   const preview = PREVIEW_PHASES.has(attempt.phase) ? (attempt as Extract<Attempt, { preview: PreviewTerms }>).preview : null;
 
   return (
-    <PurchasePanelShell frame={purchaseFrameFrom(copy, pool)} locale={locale} phase={attempt.phase} flow={flow}>
+    <PurchasePanelShell frame={selling ? saleFrameFrom(copy, pool) : purchaseFrameFrom(copy, pool)} locale={locale} phase={attempt.phase} flow={flow} side={state.side}>
       {!postSend ? <WalletStep state={state} copy={copy} handlers={handlers} locked={locked} /> : null}
-      {showField ? <PayTokenField state={state} copy={copy} handlers={handlers} /> : null}
-      {showField ? <AmountField state={state} copy={copy} locale={locale} handlers={handlers} refs={refs} /> : null}
+      {showField && !selling ? <PayTokenField state={state} copy={copy} handlers={handlers} /> : null}
+      {showField ? (selling ? <SellAmountField state={state} copy={copy} locale={locale} handlers={handlers} refs={refs} /> : <AmountField state={state} copy={copy} locale={locale} handlers={handlers} refs={refs} />) : null}
       {hasUnresolvedEarlierRequest(state) ? <PurchaseAlert title={copy.error.earlierRequest.title} announce={false}><p>{copy.error.earlierRequest.body}</p></PurchaseAlert> : null}
       {stage ? <div key={attempt.phase} data-purchase-stage="" className="flex min-w-0 flex-col gap-1.5">{stage}</div> : null}
       {actions ? <div data-purchase-actions="" className={cn("flex flex-wrap items-center gap-2")}>{actions}</div> : null}

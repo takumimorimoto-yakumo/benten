@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Framework-independent browser purchase logic for the fixed NVDAx/USDC route. Consumed from source by bundlers; nothing here signs or sends.",
+  "description": "Framework-independent browser purchase logic for the fixed product/USDC routes of the routes table. Consumed from source by bundlers; nothing here signs or sends.",
   "exports": {
     "./server-quote": {
       "types": "./src/server-quote.ts",
@@ -17,6 +17,7 @@
     "test": "vitest run src"
   },
   "dependencies": {
+    "@benten/pricing": "workspace:*",
     "@benten/solana": "workspace:*",
     "@benten/solana-rpc-relay": "workspace:*",
     "@meteora-ag/dlmm": "1.9.14",
@@ -26,6 +27,7 @@
     "bn.js": "^5.2.1"
   },
   "devDependencies": {
+    "@benten/registry": "workspace:*",
     "@types/bn.js": "^5.1.6",
     "@types/node": "^24.7.0",
     "typescript": "^5.9.0",

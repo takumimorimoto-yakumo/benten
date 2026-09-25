@@ -85,6 +85,14 @@ function CopySignature({ signature, copy }: { signature: string; copy: ActivityC
   );
 }
 
+/**
+ * A sale on the fixed route: the Scaled UI token (NVDAx) went in and a plain
+ * token (USDC) came out. Every purchase is the other way round.
+ */
+export function isSaleRecord(record: Pick<ActivityRecord, "inputMint" | "outputMint">, tokens: ReadonlyMap<string, ActivityToken>): boolean {
+  return tokens.get(record.inputMint)?.scaledUi === true && tokens.get(record.outputMint)?.scaledUi === false;
+}
+
 export function ActivityRecordCard({ record, locale, tokens, productHref, connected, check, onCheck, nowMs, copyable }: {
   record: ActivityRecord;
   locale: PublicWebLocale;
@@ -102,17 +110,21 @@ export function ActivityRecordCard({ record, locale, tokens, productHref, connec
   const headingId = `activity-${record.id}`;
   const input = tokens.get(record.inputMint);
   const output = tokens.get(record.outputMint);
+  const sale = isSaleRecord(record, tokens);
+  // A purchase is named by the token it bought, a sale by the token it sold.
   const symbol = output?.symbol ?? shortenAddress(record.outputMint);
+  const tradedSymbol = sale ? (input?.symbol ?? shortenAddress(record.inputMint)) : symbol;
+  const heading = sale ? copy.sell(tradedSymbol) : copy.buy(tradedSymbol);
   const finalized = record.phase === "finalized";
   const onMainnet = record.genesisHash === ACTIVITY_CONFIG.mainnetGenesisHash;
   const checkable = record.signature !== null && onMainnet && (!isFinalPhase(record.phase) || (finalized && record.receivedRaw === null));
-  const note = copy.phaseNote[record.phase];
+  const note = (sale ? copy.salePhaseNote[record.phase] : undefined) ?? copy.phaseNote[record.phase];
   const time = (value: number) => formatObservationTime(value, locale, nowMs);
   return (
     <article aria-labelledby={headingId} className="flex flex-col gap-3 rounded-lg border bg-card p-4" data-activity-record={record.phase}>
       <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h2 id={headingId} className="text-base font-semibold">
-          {productHref ? <a href={productHref} className="underline-offset-4 hover:underline">{copy.buy(symbol)}</a> : copy.buy(symbol)}
+          {productHref ? <a href={productHref} className="underline-offset-4 hover:underline">{heading}</a> : heading}
         </h2>
         <p className="flex items-center gap-1.5 text-sm font-medium [&>svg]:size-4" data-activity-phase={record.phase}>
           {PHASE_ICON[record.phase]}

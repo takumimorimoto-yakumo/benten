@@ -16,7 +16,7 @@ export type ShellCopy = {
   theme: { label: string; system: string; light: string; dark: string };
   wallet: {
     connect: string; connecting: string; account: (address: string) => string; menuLabel: string;
-    copyAddress: string; addressCopied: string; copyUnavailable: string; switchWallet: string; disconnect: string; disconnectLocked: string;
+    copyAddress: string; addressCopied: string; copyUnavailable: string; switchWallet: string; disconnect: string; disconnectLocked: string; disconnectLockedSale: string;
     detecting: string; listLabel: string; connectNamed: (name: string) => string; notDetectedTitle: string; notDetectedBody: string;
     unsupported: (name: string) => string; connectRejected: string; connectFailed: string; needsJavaScript: string;
     /** Android: a Mobile Wallet Adapter connect found no wallet app on the device. */
@@ -36,6 +36,7 @@ const en: ShellCopy = {
     connect: "Connect wallet", connecting: "Connecting...", account: (address) => `Wallet ${address}`, menuLabel: "Wallet",
     copyAddress: "Copy address", addressCopied: "Address copied", copyUnavailable: "Copy is not available in this browser", switchWallet: "Switch wallet", disconnect: "Disconnect",
     disconnectLocked: "You cannot disconnect while a purchase is in progress.",
+    disconnectLockedSale: "You cannot disconnect while a sale is in progress.",
     detecting: "Looking for a Solana wallet...", listLabel: "Wallets found in this browser", connectNamed: (name) => `Connect ${name}`,
     notDetectedTitle: "No Solana wallet found", notDetectedBody: "This browser has no Solana wallet that supports Wallet Standard. Install or unlock one, then reload this page.",
     unsupported: (name) => `${name} cannot send Solana mainnet transactions from this page. Choose another wallet.`,
@@ -62,6 +63,7 @@ const ja: ShellCopy = {
     connect: "ウォレットを接続", connecting: "接続中…", account: (address) => `ウォレット ${address}`, menuLabel: "ウォレット",
     copyAddress: "アドレスをコピー", addressCopied: "アドレスをコピーしました", copyUnavailable: "このブラウザではコピーできません", switchWallet: "ウォレットを切り替え", disconnect: "接続を解除",
     disconnectLocked: "購入の処理中は接続を解除できません。",
+    disconnectLockedSale: "売却の処理中は接続を解除できません。",
     detecting: "Solanaウォレットを探しています…", listLabel: "このブラウザで見つかったウォレット", connectNamed: (name) => `${name}を接続`,
     notDetectedTitle: "Solanaウォレットが見つかりません", notDetectedBody: "このブラウザにWallet Standard対応のSolanaウォレットがありません。ウォレットをインストールまたはロック解除してから、このページを再読み込みしてください。",
     unsupported: (name) => `${name}はこのページからSolanaメインネットのトランザクションを送信できません。別のウォレットを選んでください。`,
@@ -88,6 +90,7 @@ const ko: ShellCopy = {
     connect: "지갑 연결", connecting: "연결 중…", account: (address) => `지갑 ${address}`, menuLabel: "지갑",
     copyAddress: "주소 복사", addressCopied: "주소를 복사했습니다", copyUnavailable: "이 브라우저에서는 복사할 수 없습니다", switchWallet: "지갑 전환", disconnect: "연결 해제",
     disconnectLocked: "구매가 진행 중일 때는 연결을 해제할 수 없습니다.",
+    disconnectLockedSale: "판매가 진행 중일 때는 연결을 해제할 수 없습니다.",
     detecting: "Solana 지갑을 찾는 중…", listLabel: "이 브라우저에서 찾은 지갑", connectNamed: (name) => `${name} 연결`,
     notDetectedTitle: "Solana 지갑을 찾을 수 없습니다", notDetectedBody: "이 브라우저에 Wallet Standard를 지원하는 Solana 지갑이 없습니다. 지갑을 설치하거나 잠금을 해제한 뒤 이 페이지를 새로고침하세요.",
     unsupported: (name) => `${name}은(는) 이 페이지에서 Solana 메인넷 트랜잭션을 보낼 수 없습니다. 다른 지갑을 선택하세요.`,
@@ -114,6 +117,7 @@ const zhHans: ShellCopy = {
     connect: "连接钱包", connecting: "正在连接…", account: (address) => `钱包 ${address}`, menuLabel: "钱包",
     copyAddress: "复制地址", addressCopied: "已复制地址", copyUnavailable: "此浏览器无法复制", switchWallet: "切换钱包", disconnect: "断开连接",
     disconnectLocked: "购买进行中时无法断开连接。",
+    disconnectLockedSale: "卖出进行中时无法断开连接。",
     detecting: "正在查找 Solana 钱包…", listLabel: "在此浏览器中找到的钱包", connectNamed: (name) => `连接 ${name}`,
     notDetectedTitle: "未找到 Solana 钱包", notDetectedBody: "此浏览器中没有支持 Wallet Standard 的 Solana 钱包。请安装或解锁钱包，然后重新加载此页面。",
     unsupported: (name) => `${name} 无法从此页面发送 Solana 主网交易。请选择其他钱包。`,
@@ -140,6 +144,7 @@ const zhHant: ShellCopy = {
     connect: "連接錢包", connecting: "正在連接…", account: (address) => `錢包 ${address}`, menuLabel: "錢包",
     copyAddress: "複製地址", addressCopied: "已複製地址", copyUnavailable: "此瀏覽器無法複製", switchWallet: "切換錢包", disconnect: "中斷連接",
     disconnectLocked: "購買進行中時無法中斷連接。",
+    disconnectLockedSale: "賣出進行中時無法中斷連接。",
     detecting: "正在尋找 Solana 錢包…", listLabel: "在此瀏覽器中找到的錢包", connectNamed: (name) => `連接 ${name}`,
     notDetectedTitle: "找不到 Solana 錢包", notDetectedBody: "此瀏覽器中沒有支援 Wallet Standard 的 Solana 錢包。請安裝或解鎖錢包，然後重新載入此頁面。",
     unsupported: (name) => `${name} 無法從此頁面傳送 Solana 主網交易。請選擇其他錢包。`,

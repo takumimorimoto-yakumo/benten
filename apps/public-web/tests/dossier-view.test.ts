@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { FUNDAMENTALS_FIELDS, getAnnualHistory, getVerifiedFundamentals, listPublicAssets } from "../../../packages/registry/src/index.ts";
 import { NVDAX_MINT } from "../../../packages/purchase/src/route.ts";
+import { PRODUCT_ROUTES, PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
 import { createDossierView } from "../app/lib/dossier.server.ts";
 import { LEGACY_GROUPS, VERIFIED_FACT_ORDER } from "../app/features/dossier/dossier-view.ts";
 
@@ -23,9 +24,10 @@ describe("Dossier view projection", () => {
     }
   });
 
-  it("marks only the exact fixed-route mint as purchasable", () => {
+  it("marks only the exact routes-table mints as purchasable", () => {
     const fixed = tickers().filter((ticker) => createDossierView(ticker).purchase === "fixed_route");
-    expect(fixed).toEqual(["NVDA"]);
+    expect(fixed.sort()).toEqual([...PRODUCT_TICKERS].sort());
+    for (const ticker of PRODUCT_TICKERS) expect(createDossierView(ticker).identity.mint).toBe(PRODUCT_ROUTES[ticker].productMint.toBase58());
     expect(createDossierView("NVDA").identity.mint).toBe(NVDAX_MINT.toBase58());
   });
 

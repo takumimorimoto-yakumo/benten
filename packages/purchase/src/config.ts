@@ -27,6 +27,40 @@ export const PURCHASE_CONFIG = {
    */
   maxUsdcInRaw: 10_000_000n,
   /**
+   * Selling NVDAx back to USDC in the same pool: the limit mirrors the
+   * purchase limit on the USDC side, so the quoted USDC output of one sale is
+   * at most this (raw, 6 decimals). The NVDAx field is also capped at the
+   * amount the pool quotes for exactly this much USDC.
+   */
+  maxUsdcOutRaw: 10_000_000n,
+  /**
+   * A sale is also bounded independently of the pool quote: the NVDAx sold is
+   * valued at the key-free Pyth reference price (NVDA/USD x the Scaled UI
+   * multiplier in effect), and the sale is refused when that value exceeds
+   * `maxUsdcOutRaw` by more than this headroom (basis points). The headroom
+   * matches `saleReferenceToleranceBps`: a quote at the USDC limit that passes
+   * the tolerance check can be worth at most about that much more, so the two
+   * checks agree at the limit and neither refuses what the other allows.
+   */
+  saleReferenceValueHeadroomBps: 300,
+  /**
+   * A sale is refused when the pool's quoted USDC output is below the
+   * reference value of the NVDAx sold by more than this (basis points), so a
+   * pool quote far under the reference price is never offered. 3% covers the
+   * gap measured on 2026-09-25 at the 10 USDC limit (the pool quoted 0.86%
+   * under the reference value, fee 0.10% and price impact 0.38% included)
+   * with about 2 points to spare for the pool lagging the reference outside
+   * US market hours. Wider would let a badly skewed pool through; narrower
+   * would refuse ordinary sales. The slippage minimum is applied on top.
+   */
+  saleReferenceToleranceBps: 300,
+  /**
+   * Compute-unit limit of a sale. The builder sets exactly this limit (the
+   * SDK's own estimate is replaced) and the sale audit refuses a higher one.
+   * One DLMM swap measured on mainnet uses well under this.
+   */
+  sellComputeUnitLimit: 200_000,
+  /**
    * Query parameter of a buy-flow link that carries a suggested USDC amount
    * (for example `/stock/NVDA/buy?amount=5.00`). The flow only prefills the
    * field with it after the amount checks; it never starts a preview or a
@@ -44,12 +78,34 @@ export const PURCHASE_CONFIG = {
    * Server-side quote reader (the remote MCP `prepare_purchase` tool), per
    * server instance: how long the amount-independent route state (mints,
    * pool, bin arrays) is reused before one refresh reads it again, and how
-   * long a failed refresh is answered before the next attempt. Refreshes
-   * never overlap, so upstream reads stay at most 60000 / serverQuoteMinRefreshMs
-   * refreshes a minute whatever the number of callers.
+   * long a failed refresh is answered before the next attempt (the first
+   * wait; consecutive failures double it). Refreshes of one state never
+   * overlap, and every upstream request of the reader draws on one shared
+   * budget (below), whatever the number of callers.
    */
   serverQuoteCacheMs: 5_000,
   serverQuoteMinRefreshMs: 1_000,
+  /**
+   * Upper bound of a state's wait after failed refreshes: the wait starts at
+   * `serverQuoteMinRefreshMs` and doubles with each consecutive failure
+   * (1, 2, 4, ... seconds) up to this. A pause after an upstream 429 or
+   * `Retry-After` is capped here too.
+   */
+  serverQuoteMaxBackoffMs: 30_000,
+  /**
+   * Shared upstream budget of one server quote reader (per server instance),
+   * over every state together: a token bucket that refills this many
+   * upstream requests a minute. A refresh that finds no token left answers
+   * `busy` without reaching the upstream.
+   */
+  serverQuoteUpstreamPerMinute: 300,
+  /**
+   * Tokens the bucket holds at most (and starts with): one cold refresh of
+   * every state (10 states x 5 requests), so a fresh instance can serve each
+   * route once before the per-minute rate applies. Any minute is then at most
+   * this plus `serverQuoteUpstreamPerMinute` requests.
+   */
+  serverQuoteUpstreamBurst: 50,
   /** Wallet Standard chain this route runs on. */
   chain: "solana:mainnet",
   /** Same-origin read-only relay (`@benten/solana-rpc-relay`). */

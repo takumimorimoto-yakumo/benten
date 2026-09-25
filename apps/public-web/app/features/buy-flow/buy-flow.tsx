@@ -1,5 +1,5 @@
 /**
- * The buy flow at `/stock/NVDA/buy` (app IA section 5.1): the purchase panel
+ * The buy flow at `/stock/{TICKER}/buy` of a buyable product (app IA section 5.1): the purchase panel
  * as a full-screen task below `md` (header and tab bar covered) and as a
  * right-side sheet over the dimmed product page from `md`.
  *
@@ -37,9 +37,18 @@ function fromProduct(state: unknown): boolean {
   return typeof state === "object" && state !== null && (state as { fromProduct?: unknown }).fromProduct === true;
 }
 
-export function BuyFlow({ locale, frame, productHref }: { locale: PublicWebLocale; frame: PurchaseFrame; productHref: string }) {
+/**
+ * `side="sell"` is the sell flow at `/stock/NVDA/sell`: the same full-screen
+ * frame over the product page, showing the sale installed into the shell
+ * (`installSale`) instead of the purchase. A sale takes no link prefill and
+ * always sells NVDAx, whatever `ticker` says (the sale panel ignores a product choice).
+ */
+export function BuyFlow({ locale, frame, ticker, productHref, side = "buy" }: { locale: PublicWebLocale; frame: PurchaseFrame; ticker: string; productHref: string; side?: "buy" | "sell" }) {
   const copy = productMessagesFor(locale).flow;
-  const { purchase, installPurchase } = useAppSession();
+  const session = useAppSession();
+  const selling = side === "sell";
+  const purchase = selling ? session.sale : session.purchase;
+  const install = selling ? session.installSale : session.installPurchase;
   const hydrated = useHydrated();
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,7 +59,7 @@ export function BuyFlow({ locale, frame, productHref }: { locale: PublicWebLocal
     if (purchase) return;
     let active = true;
     void import("@/features/purchase-island").then((module) => {
-      if (active) installPurchase(module.createInstalledPurchase);
+      if (active) install(selling ? module.createInstalledSale : module.createInstalledPurchase);
     });
     return () => {
       active = false;
@@ -62,11 +71,11 @@ export function BuyFlow({ locale, frame, productHref }: { locale: PublicWebLocal
   // A link pay token and amount fill the panel once per visit of this URL; an invalid link is ignored.
   const prefilledKeyRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!purchase || prefilledKeyRef.current === location.key) return;
+    if (!purchase || selling || prefilledKeyRef.current === location.key) return;
     prefilledKeyRef.current = location.key;
     const link = readDeepLink(location.search);
     if (link) purchase.prefillPurchase(link);
-  }, [purchase, location.key, location.search]);
+  }, [purchase, selling, location.key, location.search]);
 
   function close() {
     // Back to the entry the flow was opened from, or to the product page when the flow was opened directly.
@@ -117,9 +126,9 @@ export function BuyFlow({ locale, frame, productHref }: { locale: PublicWebLocal
       <Link to={productHref} replace preventScrollReset tabIndex={-1} aria-hidden="true" data-buy-flow-backdrop="" onClick={(event) => { event.preventDefault(); close(); }} className="hidden flex-1 bg-(color:--scrim)/30 md:block" />
       <div data-buy-flow-sheet="" className="h-full w-full overflow-y-auto overscroll-contain bg-background md:w-(--purchase-panel-width) md:border-s md:shadow-xl">
         {Panel ? (
-          <Panel locale={locale} flow={{ leading }} />
+          <Panel locale={locale} flow={{ leading }} product={ticker} />
         ) : (
-          <PurchasePanelShell frame={frame} locale={locale} phase="frame" copyable={hydrated} flow={{ leading, step: flowStepText("frame", locale) }}>
+          <PurchasePanelShell frame={frame} locale={locale} phase="frame" copyable={hydrated} side={side} flow={{ leading, step: flowStepText("frame", locale) }}>
             <WalletStepReserve reserve={frame.walletReserve}>
               <noscript><p data-purchase-noscript="" className="text-sm text-muted-foreground">{frame.noScript}</p></noscript>
             </WalletStepReserve>

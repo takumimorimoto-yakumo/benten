@@ -2,7 +2,8 @@ import { formatBpsAsPercent, formatPriceImpactPct } from "@benten/purchase/amoun
 import { PURCHASE_CONFIG } from "@benten/purchase/config";
 import { clockText, countdownText, nvdaxText, tokenText, usdcText } from "@benten/purchase/display";
 import type { PreviewTerms } from "@benten/purchase/purchase-machine";
-import { NVDAX_SYMBOL, PAY_TOKEN_UNITS, USDC_SYMBOL } from "@benten/purchase/route";
+import { PAY_TOKEN_UNITS, USDC_SYMBOL } from "@benten/purchase/route";
+import { productRoute } from "@benten/purchase/routes-table";
 import { EMPTY_VALUE } from "@/i18n/format";
 import type { PublicWebLocale } from "@/i18n/locales";
 import type { PurchaseCopy } from "@/i18n/purchase-messages";
@@ -20,10 +21,11 @@ type Row = {
   readonly note?: string;
 };
 
-/** NVDAx value text: scaled display amount, or raw units when no multiplier was read. */
+/** Product value text (the preview's product): scaled display amount, or raw units when no multiplier was read. */
 function nvdaxValue(raw: bigint, preview: PreviewTerms, copy: PurchaseCopy["preview"], locale: PublicWebLocale): string {
-  const scaled = nvdaxText(raw, preview.nvdaxMultiplier, locale);
-  return scaled === null ? copy.rawOnly(raw.toString()) : `${scaled} ${NVDAX_SYMBOL}`;
+  const product = productRoute(preview.product);
+  const scaled = nvdaxText(raw, preview.nvdaxMultiplier, locale, product.decimals);
+  return scaled === null ? copy.rawOnly(raw.toString()) : `${scaled} ${product.symbol}`;
 }
 
 /** The amounts, one full-width row each; the remaining terms sit in a two-column table below them. */
@@ -47,7 +49,37 @@ function impactText(pct: string, copy: PurchaseCopy["preview"]): string {
  * wallet at approval, which an expired preview no longer allows; a refreshed
  * preview shows them again.
  */
-export function PurchaseTermsList({ preview, now, expired, copy, payCopy, locale }: { preview: PreviewTerms; now: number; expired: boolean; copy: PurchaseCopy["preview"]; payCopy: PurchaseCopy["pay"]; locale: PublicWebLocale }) {
+/**
+ * A sale's rows: NVDAx sold, expected and minimum USDC, then the pool's fee
+ * (charged in NVDAx when `feeOnInput`), slippage, price impact and expiry.
+ */
+function sellRows(preview: PreviewTerms, now: number, expired: boolean, copy: PurchaseCopy["preview"], sellCopy: PurchaseCopy["sell"], locale: PublicWebLocale): Row[] {
+  const usdc = (raw: bigint) => `${usdcText(raw, locale)} ${USDC_SYMBOL}`;
+  const feeText = (raw: bigint) => preview.feeOnInput ? (preview.nvdaxMultiplier === null ? copy.rawOnly(raw.toString()) : nvdaxValue(raw, preview, copy, locale)) : usdc(raw);
+  return [
+    {
+      key: "pay",
+      label: sellCopy.youSell,
+      value: nvdaxValue(preview.inputRaw, preview, copy, locale),
+      beside: [copy.raw(preview.inputRaw.toString())],
+      lines: preview.consumedInputRaw !== preview.inputRaw ? [sellCopy.consumed(nvdaxText(preview.consumedInputRaw, preview.nvdaxMultiplier, locale) ?? preview.consumedInputRaw.toString(), preview.consumedInputRaw.toString())] : [],
+    },
+    { key: "expected", label: sellCopy.expected, value: usdc(preview.outputRaw), beside: [copy.raw(preview.outputRaw.toString())], lines: [] },
+    { key: "minimum", label: sellCopy.minimum, value: usdc(preview.minimumOutputRaw), beside: [copy.raw(preview.minimumOutputRaw.toString())], lines: [], note: sellCopy.minimumNote },
+    { key: "fee", label: copy.poolFee, value: feeText(preview.feeRaw), beside: [], lines: [copy.protocolShare(feeText(preview.protocolFeeRaw))] },
+    { key: "slippage", label: copy.slippage, value: `${formatBpsAsPercent(PURCHASE_CONFIG.slippageBps)}%`, beside: [], lines: [] },
+    { key: "impact", label: copy.priceImpact, value: impactText(preview.priceImpactPct, copy), beside: [], lines: [] },
+    {
+      key: "expires",
+      label: copy.expires,
+      value: expired ? copy.expired : copy.expiresIn(countdownText(preview.expiresAt - now)),
+      beside: [copy.expiresAt(clockText(preview.expiresAt, locale))],
+      lines: [],
+    },
+  ];
+}
+
+export function PurchaseTermsList({ preview, now, expired, copy, payCopy, sellCopy, locale }: { preview: PreviewTerms; now: number; expired: boolean; copy: PurchaseCopy["preview"]; payCopy: PurchaseCopy["pay"]; sellCopy?: PurchaseCopy["sell"]; locale: PublicWebLocale }) {
   const feeRawOnly = !preview.feeOnInput && preview.nvdaxMultiplier === null;
   const feeText = (raw: bigint) => preview.feeOnInput ? `${usdcText(raw, locale)} ${USDC_SYMBOL}` : feeRawOnly ? copy.rawOnly(raw.toString()) : nvdaxValue(raw, preview, copy, locale);
   const leg = preview.firstLeg;
@@ -74,7 +106,7 @@ export function PurchaseTermsList({ preview, now, expired, copy, payCopy, locale
       note: payCopy.usdcInNote,
     },
   ];
-  const rows: Row[] = [
+  const rows: Row[] = preview.side === "sell" && sellCopy ? sellRows(preview, now, expired, copy, sellCopy, locale) : [
     {
       key: "pay",
       label: copy.youPay,

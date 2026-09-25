@@ -1,6 +1,7 @@
 /**
- * Read-only exact-in quote on the pinned NVDAx/USDC Meteora DLMM pool: read
- * the pool, check its pinned identity, and ask the SDK for the swap quote.
+ * Read-only exact-in quote on a product's pinned product/USDC Meteora DLMM
+ * pool (`routes-table.ts`; default NVDAx): read the pool, check its pinned
+ * identity, and ask the SDK for the swap quote.
  * Shared by the browser swap builder (`build-swap.ts`), which then builds the
  * unsigned transaction from the same pool read, and by the server-side quote
  * reader (`server-quote.ts`), which builds nothing. The server-side reader
@@ -18,18 +19,22 @@ import DLMM from "@meteora-ag/dlmm";
 
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
 
-import { NVDAX_MINT, NVDAX_USDC_POOL, USDC_MINT, type PayLeg } from "./route";
+import { USDC_MINT, type PayLeg } from "./route";
+import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
 
 const MAX_SLIPPAGE_BPS = 10_000;
 
 /**
  * `swapForY` selects the swap direction in the Meteora DLMM SDK: `true` means
  * "swap token X for token Y" (input X, output Y); `false` means the reverse
- * (input Y, output X). USDC is this pool's token Y and NVDAx is token X, so a
- * USDC-in / NVDAx-out exact-in swap is `swapForY = false`. This is fixed by
- * the pool's own mint assignment, not a caller choice.
+ * (input Y, output X). USDC is token Y of every product pool and the product
+ * token X (the table's only orientation, `product_x_usdc_y`), so a USDC-in /
+ * product-out exact-in swap is `swapForY = false`. This is fixed by the
+ * pool's own mint assignment, which `readPoolState` checks, not a caller choice.
  */
 export const SWAP_FOR_Y = false;
+/** Selling NVDAx (token X) for USDC (token Y) in the same pool is the other fixed direction. */
+export const SELL_SWAP_FOR_Y = true;
 
 export class RoutePoolMismatchError extends Error {
   constructor(message: string) {
@@ -74,7 +79,7 @@ export interface PoolQuoteReading {
   quote: RouteQuote;
 }
 
-/** The amount-independent part of a quote: the pinned pool and the bin arrays in the swap direction. */
+/** The amount-independent part of a quote: a pinned pool and the bin arrays in the swap direction. */
 export interface PoolState {
   pool: Pool;
   binArrays: BinArrays;
@@ -90,33 +95,45 @@ function checkQuoteInput(usdcInAmountRaw: bigint, slippageBps: number): void {
 }
 
 /**
- * Read the pinned pool, check its identity, and read the bin arrays a
- * USDC-in swap walks. Nothing here depends on the amount, so one reading can
+ * Read a product's pinned pool, check its identity, and read the bin arrays
+ * a swap in `swapForY`'s direction walks. Both are named options so the two
+ * cannot be confused: `product` defaults to NVDA and `swapForY` to
+ * `SWAP_FOR_Y` (a USDC-in purchase); a sale passes `SELL_SWAP_FOR_Y`.
+ * Nothing here depends on the amount, so one reading can
  * quote many amounts through `quoteOnPoolState`.
  *
  * Throws `RoutePoolMismatchError` if the pool read back from RPC does not
  * carry the pinned mint/token-program identity. Any other failure (RPC
  * unreachable, SDK error) propagates as-is.
  */
-export async function readPoolState(connection: Connection): Promise<PoolState> {
-  const pool = await DLMM.create(connection, NVDAX_USDC_POOL);
+export interface ReadPoolStateOptions {
+  /** The product whose pinned pool is read (default NVDA). */
+  product?: ProductTicker;
+  /** The swap direction whose bin arrays are read (default `SWAP_FOR_Y`, a USDC-in purchase). */
+  swapForY?: boolean;
+}
+
+export async function readPoolState(connection: Connection, options: ReadPoolStateOptions = {}): Promise<PoolState> {
+  const { product = DEFAULT_PRODUCT, swapForY = SWAP_FOR_Y } = options;
+  const route = productRoute(product);
+  const pool = await DLMM.create(connection, route.pool);
 
   const tokenXMint = pool.tokenX.mint.address;
   const tokenYMint = pool.tokenY.mint.address;
-  if (!tokenXMint.equals(NVDAX_MINT) || !tokenYMint.equals(USDC_MINT)) {
+  if (!pool.pubkey.equals(route.pool) || !tokenXMint.equals(route.productMint) || !tokenYMint.equals(USDC_MINT)) {
     throw new RoutePoolMismatchError(
-      `pool ${NVDAX_USDC_POOL.toBase58()} mints (X=${tokenXMint.toBase58()}, Y=${tokenYMint.toBase58()}) ` +
-        `do not match the pinned identity (X=${NVDAX_MINT.toBase58()}, Y=${USDC_MINT.toBase58()})`,
+      `pool ${route.pool.toBase58()} mints (X=${tokenXMint.toBase58()}, Y=${tokenYMint.toBase58()}) ` +
+        `do not match the pinned identity (X=${route.productMint.toBase58()}, Y=${USDC_MINT.toBase58()})`,
     );
   }
-  if (!pool.tokenX.owner.equals(TOKEN_2022_PROGRAM_ID) || !pool.tokenY.owner.equals(TOKEN_PROGRAM_ID)) {
+  if (!pool.tokenX.owner.equals(route.tokenProgram) || !route.tokenProgram.equals(TOKEN_2022_PROGRAM_ID) || !pool.tokenY.owner.equals(TOKEN_PROGRAM_ID)) {
     throw new RoutePoolMismatchError(
-      `pool ${NVDAX_USDC_POOL.toBase58()} token-program owners (X=${pool.tokenX.owner.toBase58()}, ` +
+      `pool ${route.pool.toBase58()} token-program owners (X=${pool.tokenX.owner.toBase58()}, ` +
         `Y=${pool.tokenY.owner.toBase58()}) do not match the pinned identity (X=Token-2022, Y=Token)`,
     );
   }
 
-  const binArrays = await pool.getBinArrayForSwap(SWAP_FOR_Y);
+  const binArrays = await pool.getBinArrayForSwap(swapForY);
   return { pool, binArrays };
 }
 
@@ -146,16 +163,16 @@ export function quoteOnPoolState(state: PoolState, usdcInAmountRaw: bigint, slip
 }
 
 /**
- * Read the pinned pool and quote an exact-in USDC amount on it.
+ * Read a product's pinned pool (default NVDA) and quote an exact-in USDC amount on it.
  *
  * Throws `InvalidSwapInputError` for a non-positive input amount or an
  * out-of-range slippage value, and `RoutePoolMismatchError` if the pool read
  * back from RPC does not carry the pinned mint/token-program identity. Any
  * other failure (RPC unreachable, SDK error) propagates as-is.
  */
-export async function readPoolQuote(connection: Connection, usdcInAmountRaw: bigint, slippageBps: number): Promise<PoolQuoteReading> {
+export async function readPoolQuote(connection: Connection, usdcInAmountRaw: bigint, slippageBps: number, product: ProductTicker = DEFAULT_PRODUCT): Promise<PoolQuoteReading> {
   checkQuoteInput(usdcInAmountRaw, slippageBps);
-  return quoteOnPoolState(await readPoolState(connection), usdcInAmountRaw, slippageBps);
+  return quoteOnPoolState(await readPoolState(connection, { product }), usdcInAmountRaw, slippageBps);
 }
 
 /**

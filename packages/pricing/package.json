@@ -15,6 +15,10 @@
       "types": "./dist/config.d.ts",
       "default": "./dist/config.js"
     },
+    "./observe": {
+      "types": "./dist/observe.d.ts",
+      "default": "./dist/observe.js"
+    },
     "./onchain-price": {
       "types": "./dist/onchain-price.d.ts",
       "default": "./dist/onchain-price.js"

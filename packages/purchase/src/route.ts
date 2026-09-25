@@ -1,21 +1,35 @@
 /**
- * The one verified purchase route: pinned identities only, no SDK import, so
- * server components can compare a registry entry against it cheaply.
+ * The verified purchase routes: pinned identities only, never derived from
+ * caller input. The per-product pools live in `routes-table.ts`; this module
+ * keeps the shared constants (USDC, the DLMM program, the pay-token legs).
  *
- * Observed read-only in `docs/route-feasibility-2026-09-14.md` and referenced
- * from `specs/stocklana-submission-plan-2026-09-23.md` (P1-2). Never derived
- * from caller input.
+ * The NVDAx route was observed read-only in
+ * `docs/route-feasibility-2026-09-14.md` and referenced from
+ * `specs/stocklana-submission-plan-2026-09-23.md` (P1-2).
  */
 
 import { PublicKey } from "@solana/web3.js";
 
+import { PRODUCT_ROUTES, productRouteForMint } from "./routes-table";
 import { PAY_TOKEN_UNITS, type PayTokenId } from "./token-units";
 
-/** The fixed Meteora DLMM pool the purchase swaps through. */
-export const NVDAX_USDC_POOL = new PublicKey("F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a");
-/** NVDAx mint. Token-2022, 8 decimals. This pool's token X. */
-export const NVDAX_MINT = new PublicKey("Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh");
-/** USDC mint. Legacy SPL Token, 6 decimals. This pool's token Y. */
+export {
+  DEFAULT_PRODUCT,
+  PRODUCT_ROUTES,
+  PRODUCT_TICKERS,
+  productRoute,
+  productRouteForMint,
+  purchasableRoute,
+  resolveProductTicker,
+  type ProductRoute,
+  type ProductTicker,
+} from "./routes-table";
+
+/** The NVDAx route's pool (`PRODUCT_ROUTES.NVDA`), kept under its original name. */
+export const NVDAX_USDC_POOL = PRODUCT_ROUTES.NVDA.pool;
+/** NVDAx mint. Token-2022, 8 decimals. Its pool's token X. */
+export const NVDAX_MINT = PRODUCT_ROUTES.NVDA.productMint;
+/** USDC mint. Legacy SPL Token, 6 decimals. Token Y of every product pool. */
 export const USDC_MINT = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
 /** Meteora DLMM program that owns the pool. */
 export const DLMM_PROGRAM_ID = new PublicKey("LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo");
@@ -23,6 +37,21 @@ export const DLMM_PROGRAM_ID = new PublicKey("LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM
 export const COMPUTE_BUDGET_PROGRAM_ID = new PublicKey("ComputeBudget111111111111111111111111111111");
 /** SPL Memo program v2, passed to the DLMM swap as an account for Token-2022 transfers. */
 export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr");
+
+/**
+ * The Pyth NVDA/USD feed (`Equity.US.NVDA/USD`, one underlying share) a sale
+ * is valued against, read key-free from its receiver-owned price accounts.
+ * Pinned here so the browser does not load the whole feed map; a test keeps
+ * it equal to the reviewed feed map entry bound to `NVDAX_MINT`.
+ */
+export const NVDA_REFERENCE_FEED = {
+  feedId: "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+  priceAccounts: [
+    { shard: 0, address: "2w1Tg1XTZbUib7srfRoStJ4v5JXVsK7roQEGMsMaGZFC" },
+    { shard: 1, address: "5VETJ8h3p4JrESYrzhjTDAWPEjDjfcnduqe9CjxgqBNd" },
+  ],
+  receiverProgram: "rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ",
+} as const;
 
 /** Decimals the route is verified for (SDK-free home: `token-units.ts`). */
 export { NVDAX_DECIMALS, SKR_DECIMALS, SOL_DECIMALS, USDC_DECIMALS } from "./token-units";
@@ -41,7 +70,7 @@ export const SKR_MINT = new PublicKey("SKRbvo6Gf7GondiT3BbTfuRDPqLWei4j2Qy2NPGZh
 /**
  * First leg of a two-leg purchase: one pinned Meteora DLMM pool whose token X
  * is the pay token and whose token Y is USDC. Both mints are legacy SPL Token.
- * The pool's USDC output is the exact input of the fixed NVDAx/USDC pool.
+ * The pool's USDC output is the exact input of the product's pinned pool.
  * Observed read-only on 2026-09-25 (Meteora DLMM API and a mainnet build):
  *  - SOL/USDC 5rCf1D...: bin step 4, base fee 0.04%, about $6.9M liquidity.
  *  - SKR/USDC 3EFvYX...: bin step 50, base fee 0.3%, about $29K liquidity,
@@ -79,12 +108,12 @@ export const PAY_TOKENS: Readonly<Record<PayTokenId, PayTokenRoute>> = {
 
 /** Symbols as shown in the panel. Display labels only, never used to resolve a token. */
 export const USDC_SYMBOL = "USDC";
-export const NVDAX_SYMBOL = "NVDAx";
+export const NVDAX_SYMBOL = PRODUCT_ROUTES.NVDA.symbol;
 
 /**
- * Whether a registry entry is the one token this route can buy. Exact mint
- * comparison against the pinned constant; never a ticker, symbol or name match.
+ * Whether a registry entry's mint is one Benten can buy. Exact mint
+ * comparison against the routes table; never a ticker, symbol or name match.
  */
 export function isPurchasableMint(mint: string): boolean {
-  return mint === NVDAX_MINT.toBase58();
+  return productRouteForMint(mint) !== null;
 }

@@ -1,21 +1,31 @@
 /**
- * Server-side, read-only quote of the fixed NVDAx/USDC route for the remote
- * MCP `prepare_purchase` tool. It reads the route mints and the pinned pool
- * from the server-configured upstream RPC (the relay's upstream) and returns
- * facts: the quote, when it stops being current, and the buy-flow link query.
- * Paying with SOL or SKR, it quotes the same fixed two-leg route as the buy
- * page (pay token -> USDC in the token's pinned pool, then exactly that leg's
- * USDC minimum -> NVDAx in the fixed pool) and refuses a first leg quoted
- * above the per-transaction USDC limit.
+ * Server-side, read-only quote of a product's fixed route (the routes table,
+ * `routes-table.ts`; default NVDAx/USDC) for the remote MCP
+ * `prepare_purchase` tool. It reads the product's route mints and pinned
+ * pool from the server-configured upstream RPC (the relay's upstream) and
+ * returns facts: the quote, when it stops being current, and the buy-flow
+ * link query. Paying with SOL or SKR, it quotes the same fixed two-leg route
+ * as the buy page (pay token -> USDC in the token's pinned pool, then
+ * exactly that leg's USDC minimum -> the product in its pinned pool) and
+ * refuses a first leg quoted above the per-transaction USDC limit.
  *
  * Upstream reads are bounded per reader (one per server instance), whatever
- * the number of callers: each amount-independent state (the route mints,
- * pool and bin arrays; and per pay token, its mint, first-leg pool and bin
- * arrays) is read by at most one refresh at a time and reused for
- * `serverQuoteCacheMs`; every amount is quoted locally from it. A failed
- * refresh is answered for `serverQuoteMinRefreshMs` before the next one, so
- * each state runs at most 60000 / serverQuoteMinRefreshMs refreshes per
- * minute.
+ * the number of callers: each amount-independent state (per product, its
+ * route mints, pool and bin arrays; and per pay token, its mint, first-leg
+ * pool and bin arrays) is its own independent state, read by at most one
+ * refresh at a time and reused for `serverQuoteCacheMs`; every amount is
+ * quoted locally from it. Three limits apply on top, all per reader:
+ *  - every upstream request draws one token from one shared bucket
+ *    (`serverQuoteUpstreamPerMinute` a minute, at most
+ *    `serverQuoteUpstreamBurst` saved); a refresh that finds none answers
+ *    `busy` without reaching the upstream;
+ *  - a state's failed refreshes are answered for a wait that starts at
+ *    `serverQuoteMinRefreshMs` and doubles with each consecutive failure up
+ *    to `serverQuoteMaxBackoffMs`; a success resets it;
+ *  - an upstream 429, or any response carrying `Retry-After`, pauses every
+ *    state's refreshes together (for `Retry-After`, or a doubling wait over
+ *    consecutive 429s, capped at `serverQuoteMaxBackoffMs`), answering
+ *    `busy`. A cached state still current is served during the pause.
  *
  * It builds no transaction, signs nothing and sends nothing: the user opens
  * the link, the page reads a fresh quote, and the user's own wallet shows and
@@ -32,10 +42,11 @@ import { PURCHASE_CONFIG } from "./config";
 import { deepLinkQuery } from "./deep-link";
 import { previewExpiry } from "./purchase-machine";
 import { quoteLegOnPoolState, quoteOnPoolState, readLegPoolState, readPoolState, type PoolState, type RouteQuote } from "./quote";
-import { NVDAX_DECIMALS, NVDAX_MINT, NVDAX_SYMBOL, NVDAX_USDC_POOL, PAY_TOKEN_UNITS, PAY_TOKENS, resolvePayToken, USDC_DECIMALS, USDC_MINT, USDC_SYMBOL, type PayTokenId } from "./route";
+import { PAY_TOKEN_UNITS, PAY_TOKENS, resolvePayToken, USDC_DECIMALS, USDC_MINT, USDC_SYMBOL, type PayTokenId } from "./route";
+import { DEFAULT_PRODUCT, PRODUCT_ROUTES, PRODUCT_TICKERS, resolveProductTicker, type ProductTicker } from "./routes-table";
 import { readPayMint, readRouteMints, type RelayConnection } from "./rpc";
 
-export type ServerQuoteFailure = "invalid_amount" | "invalid_pay_token" | "over_limit" | "busy" | "route_check" | "upstream_unavailable";
+export type ServerQuoteFailure = "invalid_amount" | "invalid_pay_token" | "not_purchasable" | "over_limit" | "busy" | "route_check" | "upstream_unavailable";
 
 export interface ServerQuoteRoute {
   pool: string;
@@ -79,11 +90,20 @@ export type ServerQuoteResult =
   | { ok: false; reason: ServerQuoteFailure; max_amount_usdc: string; retryable: boolean };
 
 /**
- * Reads one quote for an amount text in `payToken` units. `payToken` is
- * matched exactly against the pay-token allowlist (`resolvePayToken`);
- * omitted, the amount is USDC.
+ * Reads one quote for an amount text in `payToken` units, buying `ticker`.
+ * `payToken` is matched exactly against the pay-token allowlist
+ * (`resolvePayToken`); omitted, the amount is USDC. `ticker` is matched
+ * exactly against the routes table keys (`resolveProductTicker`; the caller
+ * resolves user input through the registry first); omitted, the product is
+ * NVDA. Anything else answers `not_purchasable`.
  */
-export type ServerQuoteReader = (amountText: string, payToken?: string) => Promise<ServerQuoteResult>;
+export type ServerQuoteReader = (amountText: string, payToken?: string, ticker?: string) => Promise<ServerQuoteResult>;
+
+/**
+ * Independent cached states of one reader: one per product route and one per
+ * two-leg pay token. They share one upstream budget (`createUpstreamGuard`).
+ */
+export const SERVER_QUOTE_STATE_COUNT = PRODUCT_TICKERS.length + 2;
 
 export interface ServerQuoteOptions {
   /**
@@ -98,16 +118,19 @@ export interface ServerQuoteOptions {
 
 const MAX_AMOUNT_USDC = formatRawUnits(PURCHASE_CONFIG.maxUsdcInRaw, USDC_DECIMALS);
 
-const ROUTE: ServerQuoteRoute = {
-  pool: NVDAX_USDC_POOL.toBase58(),
-  dex: "Meteora DLMM",
-  input_mint: USDC_MINT.toBase58(),
-  input_symbol: USDC_SYMBOL,
-  input_decimals: USDC_DECIMALS,
-  output_mint: NVDAX_MINT.toBase58(),
-  output_symbol: NVDAX_SYMBOL,
-  output_decimals: NVDAX_DECIMALS,
-};
+function productQuoteRoute(product: ProductTicker): ServerQuoteRoute {
+  const route = PRODUCT_ROUTES[product];
+  return {
+    pool: route.pool.toBase58(),
+    dex: "Meteora DLMM",
+    input_mint: USDC_MINT.toBase58(),
+    input_symbol: USDC_SYMBOL,
+    input_decimals: USDC_DECIMALS,
+    output_mint: route.productMint.toBase58(),
+    output_symbol: route.symbol,
+    output_decimals: route.decimals,
+  };
+}
 
 type LegPayToken = Exclude<PayTokenId, "USDC">;
 
@@ -131,13 +154,105 @@ function failure(reason: ServerQuoteFailure, retryable: boolean): FailedQuote {
   return { ok: false, reason, max_amount_usdc: MAX_AMOUNT_USDC, retryable };
 }
 
-function timedFetch(fetchImpl: typeof fetch): FetchFn {
-  return (input, init) => fetchImpl(input as string, {
-    ...(init as RequestInit),
-    redirect: "error",
-    cache: "no-store",
-    signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
-  }) as ReturnType<FetchFn>;
+/** The wait after `count` consecutive failures: `serverQuoteMinRefreshMs` doubled per failure, capped at `serverQuoteMaxBackoffMs`. */
+export function backoffMs(count: number): number {
+  const base = PURCHASE_CONFIG.serverQuoteMinRefreshMs;
+  const max = PURCHASE_CONFIG.serverQuoteMaxBackoffMs;
+  if (count <= 1) return Math.min(base, max);
+  // Past 2^15 x base the cap applies anyway; stop doubling to keep the number finite.
+  return Math.min(base * 2 ** Math.min(count - 1, 15), max);
+}
+
+/** The HTTP date form a `Retry-After` may carry (IMF-fixdate, for example `Sun, 06 Nov 1994 08:49:37 GMT`). */
+const IMF_FIXDATE = /^[A-Z][a-z]{2}, \d{2} [A-Z][a-z]{2} \d{4} \d{2}:\d{2}:\d{2} GMT$/;
+
+/**
+ * `Retry-After` as milliseconds from `nowMs`, or `null` when absent or
+ * unreadable. Only the two standard forms are read: delta seconds (digits
+ * only) and an IMF-fixdate; anything else (a sign, a fraction, another date
+ * form the platform's lenient parser would accept) is `null`.
+ */
+export function retryAfterMs(value: string | null, nowMs: number): number | null {
+  if (value === null) return null;
+  const text = value.trim();
+  if (/^\d+$/.test(text)) return Number(text) * 1_000;
+  if (!IMF_FIXDATE.test(text)) return null;
+  const date = Date.parse(text);
+  return Number.isFinite(date) ? Math.max(0, date - nowMs) : null;
+}
+
+/**
+ * The reader's shared upstream protection: one token bucket over every
+ * request, and one pause for every state after an upstream 429 or
+ * `Retry-After`. Time is the reader's `now`.
+ */
+export function createUpstreamGuard(now: () => number) {
+  const perMinute = PURCHASE_CONFIG.serverQuoteUpstreamPerMinute;
+  const burst = PURCHASE_CONFIG.serverQuoteUpstreamBurst;
+  let tokens: number = burst;
+  let refilledAt = now();
+  let pausedUntil = 0;
+  let rateLimits = 0;
+
+  function refill(at: number): void {
+    tokens = Math.min(burst, tokens + (Math.max(0, at - refilledAt) * perMinute) / 60_000);
+    refilledAt = at;
+  }
+
+  return {
+    /** Whether a refresh may start now: not paused, and at least one token left. */
+    open(): boolean {
+      const at = now();
+      refill(at);
+      return at >= pausedUntil && tokens >= 1;
+    },
+    /** Take one token for one upstream request; `false` (nothing taken) while paused or out of tokens. */
+    take(): boolean {
+      const at = now();
+      refill(at);
+      if (at < pausedUntil || tokens < 1) return false;
+      tokens -= 1;
+      return true;
+    },
+    /** Read an upstream response: a 429 or a `Retry-After` pauses every state. Returns whether it did. */
+    observe(response: Response): boolean {
+      const at = now();
+      const limited = response.status === 429;
+      const retryAfter = retryAfterMs(response.headers.get("retry-after"), at);
+      if (!limited && retryAfter === null) {
+        rateLimits = 0;
+        return false;
+      }
+      if (limited) rateLimits += 1;
+      const wait = Math.min(Math.max(retryAfter ?? 0, limited ? backoffMs(rateLimits) : 0), PURCHASE_CONFIG.serverQuoteMaxBackoffMs);
+      pausedUntil = Math.max(pausedUntil, at + wait);
+      return true;
+    },
+  };
+}
+
+type UpstreamGuard = ReturnType<typeof createUpstreamGuard>;
+
+/** Marks one refresh that the guard stopped (no token, a pause, or an upstream 429 / `Retry-After`). */
+interface RefreshAttempt {
+  limited: boolean;
+}
+
+function guardedFetch(fetchImpl: typeof fetch, guard: UpstreamGuard, attempt: RefreshAttempt): FetchFn {
+  return (async (input, init) => {
+    if (!guard.take()) {
+      attempt.limited = true;
+      throw new Error("the upstream budget is spent or paused");
+    }
+    const response = await fetchImpl(input as string, {
+      ...(init as RequestInit),
+      redirect: "error",
+      cache: "no-store",
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+    });
+    if (guard.observe(response)) attempt.limited = true;
+    return response;
+  }) as FetchFn;
 }
 
 interface CachedState extends PoolState {
@@ -149,33 +264,40 @@ interface CachedState extends PoolState {
 
 type RefreshOutcome = CachedState | FailedQuote;
 type StateRead = (connection: Connection) => Promise<PoolState | FailedQuote>;
+type ConnectionFor = (upstream: URL, attempt: RefreshAttempt) => Connection;
 
 /**
  * One cached amount-independent state: at most one refresh at a time, reused
- * for `serverQuoteCacheMs`, and a failed refresh answered for
- * `serverQuoteMinRefreshMs` before the next attempt.
+ * for `serverQuoteCacheMs`. A failed refresh is answered for `backoffMs` of
+ * the consecutive failures before the next attempt. A refresh the shared
+ * guard stops answers `busy` and does not count as a failure (the guard's
+ * own pause and budget govern the next attempt).
  */
-function createCachedState(read: StateRead, connectionFor: (upstream: URL) => Connection, now: () => number) {
+function createCachedState(read: StateRead, connectionFor: ConnectionFor, guard: UpstreamGuard, now: () => number) {
   let state: CachedState | null = null;
   let refreshing: Promise<RefreshOutcome> | null = null;
-  let lastFailure: { at: number; upstream: string; result: FailedQuote } | null = null;
+  let lastFailure: { at: number; upstream: string; result: FailedQuote; count: number } | null = null;
 
-  async function readState(upstream: URL): Promise<RefreshOutcome> {
+  async function readState(upstream: URL): Promise<{ outcome: RefreshOutcome; limited: boolean }> {
+    const attempt: RefreshAttempt = { limited: false };
     try {
-      const outcome = await read(connectionFor(upstream));
-      return "pool" in outcome ? { ...outcome, at: now(), upstream: upstream.href } : outcome;
+      const outcome = await read(connectionFor(upstream, attempt));
+      if (attempt.limited && !("pool" in outcome)) return { outcome: failure("busy", true), limited: true };
+      return { outcome: "pool" in outcome ? { ...outcome, at: now(), upstream: upstream.href } : outcome, limited: false };
     } catch (error) {
-      return error instanceof Error && error.name === "RoutePoolMismatchError" ? failure("route_check", false) : failure("upstream_unavailable", true);
+      if (attempt.limited) return { outcome: failure("busy", true), limited: true };
+      return { outcome: error instanceof Error && error.name === "RoutePoolMismatchError" ? failure("route_check", false) : failure("upstream_unavailable", true), limited: false };
     }
   }
 
   function refresh(upstream: URL): Promise<RefreshOutcome> {
-    refreshing ??= readState(upstream).then((outcome) => {
+    refreshing ??= readState(upstream).then(({ outcome, limited }) => {
       if ("pool" in outcome) {
         state = outcome;
         lastFailure = null;
-      } else {
-        lastFailure = { at: now(), upstream: upstream.href, result: outcome };
+      } else if (!limited) {
+        const count = lastFailure && lastFailure.upstream === upstream.href ? lastFailure.count + 1 : 1;
+        lastFailure = { at: now(), upstream: upstream.href, result: outcome, count };
       }
       return outcome;
     }).finally(() => {
@@ -187,7 +309,9 @@ function createCachedState(read: StateRead, connectionFor: (upstream: URL) => Co
   return (upstream: URL): Promise<RefreshOutcome> => {
     if (state && state.upstream === upstream.href && now() - state.at < PURCHASE_CONFIG.serverQuoteCacheMs) return Promise.resolve(state);
     if (refreshing) return refreshing;
-    if (lastFailure && lastFailure.upstream === upstream.href && now() - lastFailure.at < PURCHASE_CONFIG.serverQuoteMinRefreshMs) return Promise.resolve(lastFailure.result);
+    if (lastFailure && lastFailure.upstream === upstream.href && now() - lastFailure.at < backoffMs(lastFailure.count)) return Promise.resolve(lastFailure.result);
+    // The shared budget is spent or every state is paused: answer busy without reaching the upstream.
+    if (!guard.open()) return Promise.resolve(failure("busy", true));
     return refresh(upstream);
   };
 }
@@ -199,17 +323,23 @@ function relayOf(connection: Connection): RelayConnection {
 /** One reader per server instance: one cache and one refresh at a time per amount-independent state. */
 export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuoteReader {
   const now = options.now ?? Date.now;
-  const connectionFor = (upstream: URL) => new Connection(upstream.href, {
+  // One guard for the whole reader: every state's requests draw on the same budget and pause together.
+  const guard = createUpstreamGuard(now);
+  const connectionFor: ConnectionFor = (upstream, attempt) => new Connection(upstream.href, {
     commitment: PURCHASE_CONFIG.readCommitment,
     disableRetryOnRateLimit: true,
-    fetch: timedFetch(options.fetchImpl ?? fetch),
+    fetch: guardedFetch(options.fetchImpl ?? fetch, guard, attempt),
   });
 
-  const routeState = createCachedState(async (connection) => {
-    const mints = await readRouteMints(relayOf(connection));
-    if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== NVDAX_DECIMALS) return failure("route_check", false);
-    return readPoolState(connection);
-  }, connectionFor, now);
+  // One independent state per product route: a busy or failing pool never delays another product's quotes.
+  const routeStates = {} as Record<ProductTicker, ReturnType<typeof createCachedState>>;
+  for (const product of PRODUCT_TICKERS) {
+    routeStates[product] = createCachedState(async (connection) => {
+      const mints = await readRouteMints(relayOf(connection), product);
+      if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== PRODUCT_ROUTES[product].decimals) return failure("route_check", false);
+      return readPoolState(connection, { product });
+    }, connectionFor, guard, now);
+  }
 
   const legStates = {} as Record<LegPayToken, ReturnType<typeof createCachedState>>;
   for (const payToken of ["SOL", "SKR"] as const satisfies readonly LegPayToken[]) {
@@ -218,7 +348,7 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
       const [mint, pool] = await Promise.all([readPayMint(relayOf(connection), payToken), readLegPoolState(connection, token.leg!)]);
       if (!mint || mint.decimals !== token.decimals) return failure("route_check", false);
       return pool;
-    }, connectionFor, now);
+    }, connectionFor, guard, now);
   }
 
   function secondLeg(state: PoolState, usdcRaw: bigint): RouteQuote | null {
@@ -229,9 +359,12 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
     }
   }
 
-  return async (amountText, payTokenText) => {
+  return async (amountText, payTokenText, tickerText) => {
     const payToken = payTokenText === undefined ? "USDC" : resolvePayToken(payTokenText);
     if (payToken === null) return failure("invalid_pay_token", false);
+    const product = tickerText === undefined ? DEFAULT_PRODUCT : resolveProductTicker(tickerText);
+    if (product === null) return failure("not_purchasable", false);
+    const routeState = routeStates[product];
     const parsed = parsePayTokenInput(typeof amountText === "string" ? amountText : "", payToken);
     if (!parsed.ok) return failure(parsed.error === "overLimit" ? "over_limit" : "invalid_amount", false);
     const amount = { raw: parsed.raw, text: formatRawUnits(parsed.raw, PAY_TOKEN_UNITS[payToken].decimals) };
@@ -253,7 +386,7 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
         max_amount_usdc: MAX_AMOUNT_USDC,
         slippage_bps: PURCHASE_CONFIG.slippageBps,
         first_leg: null,
-        route: ROUTE,
+        route: productQuoteRoute(product),
         quote,
         quoted_at_ms: outcome.at,
         expires_at_ms: previewExpiry(outcome.at),
@@ -290,7 +423,7 @@ export function createServerQuoteReader(options: ServerQuoteOptions): ServerQuot
       max_amount_usdc: MAX_AMOUNT_USDC,
       slippage_bps: PURCHASE_CONFIG.slippageBps,
       first_leg: { route: legRoute(payToken), quote: first },
-      route: ROUTE,
+      route: productQuoteRoute(product),
       quote,
       quoted_at_ms: quotedAt,
       expires_at_ms: previewExpiry(quotedAt),

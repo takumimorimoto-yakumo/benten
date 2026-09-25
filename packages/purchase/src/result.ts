@@ -5,7 +5,8 @@
  * `bigint`. Never taken from the preview numbers.
  */
 
-import { NVDAX_MINT, PAY_TOKENS, USDC_MINT, type PayTokenId } from "./route";
+import { PAY_TOKENS, USDC_MINT, type PayTokenId } from "./route";
+import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
 
 export interface TokenBalanceEntry {
   accountIndex: number;
@@ -24,7 +25,7 @@ export interface FinalizedTransactionMeta {
 }
 
 export interface MeasuredResult {
-  /** NVDAx received by the wallet, raw units (8 decimals). */
+  /** The product received by the wallet, raw units of its mint (named for the first product). */
   nvdaxDeltaRaw: bigint;
   /** USDC that left the wallet, raw units (6 decimals). Negative when USDC arrived (a two-leg purchase leaves any USDC above its minimum). */
   usdcPaidRaw: bigint;
@@ -76,17 +77,18 @@ function feePayerLamportsSpent(meta: FinalizedTransactionMeta): bigint | null {
 }
 
 /**
- * Measure the purchase for the wallet that approved it. Returns `null` when
+ * Measure the purchase of `product` (default NVDA) for the wallet that
+ * approved it. Returns `null` when
  * the transaction's token balances are unavailable or unreadable, or when it
  * failed (a failed transaction bought nothing).
  */
 
-export function measurePurchase(meta: FinalizedTransactionMeta | null | undefined, walletAddress: string, payToken: PayTokenId = "USDC"): MeasuredResult | null {
+export function measurePurchase(meta: FinalizedTransactionMeta | null | undefined, walletAddress: string, payToken: PayTokenId = "USDC", product: ProductTicker = DEFAULT_PRODUCT): MeasuredResult | null {
   if (!meta || (meta.err !== null && meta.err !== undefined)) return null;
   const pre = meta.preTokenBalances;
   const post = meta.postTokenBalances;
   if (!Array.isArray(pre) || !Array.isArray(post)) return null;
-  const nvdaxDeltaRaw = tokenDeltaRaw(pre, post, walletAddress, NVDAX_MINT.toBase58());
+  const nvdaxDeltaRaw = tokenDeltaRaw(pre, post, walletAddress, productRoute(product).productMint.toBase58());
   const usdcDeltaRaw = tokenDeltaRaw(pre, post, walletAddress, USDC_MINT.toBase58());
   if (nvdaxDeltaRaw === null || usdcDeltaRaw === null) return null;
   const route = PAY_TOKENS[payToken];

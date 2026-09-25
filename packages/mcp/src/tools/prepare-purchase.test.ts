@@ -140,6 +140,7 @@ describe("prepare_purchase", () => {
         amount_usdc: { anyOf: [{ type: "string", maxLength: 32 }, { type: "number", exclusiveMinimum: 0 }] },
         amount: { anyOf: [{ type: "string", maxLength: 32 }, { type: "number", exclusiveMinimum: 0 }] },
         pay_token: { type: "string", maxLength: 16, enum: ["USDC", "SOL", "SKR"] },
+        ticker: { type: "string", maxLength: 16, enum: ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"] },
         wallet_address: { type: "string", maxLength: 64 },
       },
     });
@@ -244,5 +245,56 @@ describe("prepare_purchase", () => {
       const result = await preparePurchase(args, { quote: async () => answer, siteOrigin: null });
       expect(result.data, JSON.stringify(args)).toMatchObject({ prepared: false, reason: "service_unavailable" });
     }
+  });
+
+  describe("ticker", () => {
+    const META_MINT = "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu";
+    const metaQuote = () => quoted({
+      route: { ...(quoted() as Extract<PurchaseQuoteResult, { ok: true }>).route, pool: "D8pGWVN3vWeyexBtMZjyyPbcLhM1oeTEMibE9h3nNRYL", output_mint: META_MINT, output_symbol: "METAx" },
+      amount_usdc: "2.00", amount_raw: "2000000", buy_query: "?amount=2.00",
+    });
+
+    it("passes the registry's canonical ticker to the reader and links that product's buy flow", async () => {
+      const quote = vi.fn(async (_amount: string, _pay?: string, _ticker?: string) => metaQuote());
+      const result = await preparePurchase({ ticker: "META", amount_usdc: "2" }, { quote, siteOrigin: "https://benten.example" });
+      expect(quote).toHaveBeenCalledWith("2", undefined, "META");
+      expect(result.data).toMatchObject({
+        prepared: true,
+        product: { ticker: "META", symbol: "METAx", mint: META_MINT },
+        route: { output_mint: META_MINT, output_symbol: "METAx" },
+        purchase_url: "https://benten.example/stock/META/buy?amount=2.00",
+      });
+      expect(result.eligibility).toMatch(/xStocks to US persons/);
+    });
+
+    it("resolves the ticker through the registry first: an unknown ticker never reaches the reader", async () => {
+      const quote = vi.fn(async () => metaQuote());
+      for (const ticker of ["NOPE", "META!", "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu", "SPCX"]) {
+        const result = await preparePurchase({ ticker, amount_usdc: "2" }, { quote, siteOrigin: null });
+        expect(result.data, ticker).toMatchObject({ prepared: false, reason: "invalid_ticker" });
+      }
+      const typed = await preparePurchase({ ticker: 5, amount_usdc: "2" }, { quote, siteOrigin: null });
+      expect(typed.data).toMatchObject({ prepared: false, reason: "invalid_ticker" });
+      expect(quote).not.toHaveBeenCalled();
+    });
+
+    it("answers not_purchasable when the reader has no route for a registry product", async () => {
+      const quote = vi.fn(async () => ({ ok: false, reason: "not_purchasable", max_amount_usdc: "10.00", retryable: false }) as PurchaseQuoteResult);
+      const result = await preparePurchase({ ticker: "AMZN", amount_usdc: "2" }, { quote, siteOrigin: null });
+      expect(quote).toHaveBeenCalledWith("2", undefined, "AMZN");
+      expect(result.data).toMatchObject({ prepared: false, reason: "not_purchasable", retryable: false });
+    });
+
+    it("refuses an answer for another product than the one asked for", async () => {
+      const result = await preparePurchase({ ticker: "META", amount_usdc: "2" }, { quote: async () => quoted(), siteOrigin: null });
+      expect(result.data).toMatchObject({ prepared: false, reason: "service_unavailable" });
+      const inverse = await preparePurchase({ amount_usdc: "2" }, { quote: async () => metaQuote(), siteOrigin: null });
+      expect(inverse.data).toMatchObject({ prepared: false, reason: "service_unavailable" });
+    });
+
+    it("names every advertised ticker in the description, with NVDA as the default", () => {
+      for (const ticker of ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"]) expect(PREPARE_PURCHASE_DESCRIPTION).toContain(ticker);
+      expect(PREPARE_PURCHASE_DESCRIPTION).toMatch(/default NVDA/);
+    });
   });
 });

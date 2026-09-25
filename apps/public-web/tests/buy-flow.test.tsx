@@ -16,7 +16,8 @@ import { approveOnce, createPurchaseStore, prefillPurchase } from "../app/featur
 import { readDeepLink } from "../../../packages/purchase/src/deep-link.ts";
 import { PUBLIC_WEB_LOCALES, type PublicWebLocale } from "../app/i18n/locales.ts";
 import { PRODUCT_MESSAGES } from "../app/i18n/product-messages.ts";
-import { PURCHASE_MESSAGES } from "../app/i18n/purchase-messages.ts";
+import { PURCHASE_MESSAGES, purchaseMessagesFor } from "../app/i18n/purchase-messages.ts";
+import { PRODUCT_ROUTES, PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
 import { createPurchaseFrame } from "../app/lib/purchase-frame.server.ts";
 
 const HANDLERS: PanelHandlers = {
@@ -101,7 +102,7 @@ describe("buy flow steps (app IA 5.2)", () => {
     for (const locale of PUBLIC_WEB_LOCALES) {
       const frame = renderToStaticMarkup(
         <MemoryRouter initialEntries={["/stock/NVDA/buy"]}>
-          <BuyFlow locale={locale} frame={createPurchaseFrame(locale)} productHref="/stock/NVDA" />
+          <BuyFlow locale={locale} frame={createPurchaseFrame(locale)} ticker="NVDA" productHref="/stock/NVDA" />
         </MemoryRouter>,
       );
       expect(frame, locale).toMatch(/<div data-buy-flow="" role="dialog" aria-modal="true" aria-labelledby="purchase-heading"/);
@@ -336,3 +337,52 @@ describe("buy-flow link amount (MCP prepare_purchase)", () => {
     }
   });
 });
+
+describe("buy flow per product (routes table)", () => {
+  /** A fixture state moved onto `product`: the page's product, and the preview's or tracked attempt's. */
+  function onProduct(state: PurchaseState, product: (typeof PRODUCT_TICKERS)[number]): PurchaseState {
+    const attempt = state.attempt;
+    const moved = "preview" in attempt
+      ? { ...attempt, preview: { ...attempt.preview, product } }
+      : "tracking" in attempt ? { ...attempt, tracking: { ...attempt.tracking, product } } : attempt;
+    return { ...state, product, attempt: moved as PurchaseState["attempt"] };
+  }
+
+  it.each([...PRODUCT_TICKERS])("prerenders the %s frame with its own heading and pool", (ticker) => {
+    const route = PRODUCT_ROUTES[ticker];
+    for (const locale of PUBLIC_WEB_LOCALES) {
+      const frame = createPurchaseFrame(locale, ticker);
+      expect(frame.heading, locale).toBe(purchaseMessagesFor(locale, route.symbol).heading);
+      expect(frame.heading, locale).toContain(route.symbol);
+      expect(frame.pool).toBe(route.pool.toBase58());
+    }
+  });
+
+  it("has no frame for a product without a route", () => {
+    expect(() => createPurchaseFrame("en", "AMZN")).toThrow(/no fixed route/);
+    expect(() => createPurchaseFrame("en", "meta")).toThrow(/no fixed route/);
+  });
+
+  it("shows the attempt's product in the panel: its symbol, its pool and its amounts", () => {
+    const meta = PRODUCT_ROUTES.META;
+    const ready = onProduct(PURCHASE_FIXTURES.reviewReady.state, "META");
+    const html = renderToStaticMarkup(<PurchasePanelView state={ready} now={PURCHASE_FIXTURES.reviewReady.now} locale="en" handlers={HANDLERS} refs={refs()} announcement="" />);
+    expect(text(html)).toContain("Buy METAx");
+    // The route line names the pool shortened (first and last characters).
+    const short = (pool: string) => `${pool.slice(0, 4)}`;
+    expect(text(html)).toContain(short(meta.pool.toBase58()));
+    expect(text(html)).not.toContain(short(PRODUCT_ROUTES.NVDA.pool.toBase58()));
+    expect(text(html)).toMatch(/METAx/);
+    expect(text(html)).not.toMatch(/NVDAx/);
+  });
+
+  it("records a purchase of META with the META pool as its route and the META mint as its output", () => {
+    const ready = onProduct(PURCHASE_FIXTURES.reviewReady.state, "META");
+    const awaiting = purchaseReducer(ready, { type: "approveRequested", now: FIXTURE_BUILT_AT + 1_000 });
+    const opened = activityWriteFor(ready, awaiting, FIXTURE_BUILT_AT + 1_000)!;
+    expect(opened).toMatchObject({ phase: "opened", routeId: PRODUCT_ROUTES.META.pool.toBase58(), outputMint: PRODUCT_ROUTES.META.productMint.toBase58() });
+    const submitted = purchaseReducer(awaiting, { type: "walletSigned", signature: "5".repeat(88), now: FIXTURE_BUILT_AT + 2_000 });
+    expect(activityWriteFor(awaiting, submitted, FIXTURE_BUILT_AT + 2_000)).toMatchObject({ phase: "sent", routeId: PRODUCT_ROUTES.META.pool.toBase58(), outputMint: PRODUCT_ROUTES.META.productMint.toBase58() });
+  });
+});
+

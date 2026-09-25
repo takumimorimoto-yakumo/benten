@@ -51,7 +51,7 @@ const en: ProductCopy = {
     route: { heading: "Route and fees", fees: (slippage) => `The pool fee, the slippage tolerance (${slippage}) and the minimum you receive are shown in the swap preview before you approve. Your wallet shows the network fee in SOL.`, copyPool: { copy: "Copy address", copied: "Copied", unavailable: "Copy unavailable" } },
     capability: {
       buyable: "Buy in Benten", buy: (symbol) => `Buy ${symbol}`,
-      notBuyableHeading: "Not buyable in Benten", notBuyableBody: "Benten builds purchases only for NVDAx, through one fixed pool.",
+      notBuyableHeading: "Not buyable in Benten", notBuyableBody: "Benten builds purchases only for a fixed list of xStocks, each through one fixed pool.",
       compareOnlyHeading: "Compare only", compareOnlyBody: (symbol) => `Benten does not offer buying ${symbol}. Benten will offer it only when it can show its terms before you approve.`,
     },
     identity: { heading: "Token identity", mint: "Mint", issuer: "Issuer", decimals: "Decimals", provider: "Provider", copy: { copy: "Copy mint", copied: "Copied", unavailable: "Copy unavailable" }, evidence: "Evidence and sources" },
@@ -83,7 +83,7 @@ const ja: ProductCopy = {
     route: { heading: "経路と手数料", fees: (slippage) => `プール手数料、スリッページ許容幅（${slippage}）、最低受取額は、承認する前にスワップのプレビューに表示されます。ネットワーク手数料(SOL)はウォレットに表示されます。`, copyPool: { copy: "アドレスをコピー", copied: "コピーしました", unavailable: "コピーできません" } },
     capability: {
       buyable: "Bentenで購入できます", buy: (symbol) => `${symbol}を購入`,
-      notBuyableHeading: "Bentenでは購入できません", notBuyableBody: "Bentenが購入を組み立てるのは、1つの固定プールを通じてNVDAxを購入する場合だけです。",
+      notBuyableHeading: "Bentenでは購入できません", notBuyableBody: "Bentenが購入を組み立てるのは、決められた一部のxStocksを、それぞれ1つの固定プールを通じて購入する場合だけです。",
       compareOnlyHeading: "比較のみ", compareOnlyBody: (symbol) => `Bentenは${symbol}の購入を提供していません。承認の前に条件を示せるようになった場合にだけ提供します。`,
     },
     identity: { heading: "トークンの識別情報", mint: "Mint", issuer: "発行体", decimals: "小数桁数", provider: "提供元", copy: { copy: "Mintをコピー", copied: "コピーしました", unavailable: "コピーできません" }, evidence: "根拠と出典" },
@@ -115,7 +115,7 @@ const ko: ProductCopy = {
     route: { heading: "경로와 수수료", fees: (slippage) => `풀 수수료, 슬리피지 허용 범위(${slippage}), 최소 수령량은 승인하기 전에 스왑 미리보기에 표시됩니다. 네트워크 수수료(SOL)는 지갑에 표시됩니다.`, copyPool: { copy: "주소 복사", copied: "복사했습니다", unavailable: "복사할 수 없습니다" } },
     capability: {
       buyable: "Benten에서 구매할 수 있습니다", buy: (symbol) => `${symbol} 구매`,
-      notBuyableHeading: "Benten에서 구매할 수 없습니다", notBuyableBody: "Benten은 하나의 고정된 풀을 통해 NVDAx를 구매하는 경우에만 구매를 구성합니다.",
+      notBuyableHeading: "Benten에서 구매할 수 없습니다", notBuyableBody: "Benten은 정해진 일부 xStocks를 각각 하나의 고정된 풀을 통해 구매하는 경우에만 구매를 구성합니다.",
       compareOnlyHeading: "비교만 가능", compareOnlyBody: (symbol) => `Benten은 ${symbol}의 구매를 제공하지 않습니다. 승인 전에 조건을 보여 줄 수 있을 때에만 제공합니다.`,
     },
     identity: { heading: "토큰 식별 정보", mint: "Mint", issuer: "발행사", decimals: "소수 자릿수", provider: "제공자", copy: { copy: "Mint 복사", copied: "복사했습니다", unavailable: "복사할 수 없습니다" }, evidence: "근거와 출처" },
@@ -147,7 +147,7 @@ const zhHans: ProductCopy = {
     route: { heading: "路径与费用", fees: (slippage) => `池手续费、滑点容忍度（${slippage}）和最低到账数量会在你批准前显示在兑换预览中。网络费（SOL）显示在你的钱包中。`, copyPool: { copy: "复制地址", copied: "已复制", unavailable: "无法复制" } },
     capability: {
       buyable: "可在 Benten 中购买", buy: (symbol) => `购买 ${symbol}`,
-      notBuyableHeading: "无法在 Benten 中购买", notBuyableBody: "Benten 只为通过一个固定池购买 NVDAx 构建交易。",
+      notBuyableHeading: "无法在 Benten 中购买", notBuyableBody: "Benten 只为通过各自的一个固定池购买指定的几种 xStocks 构建交易。",
       compareOnlyHeading: "仅供比较", compareOnlyBody: (symbol) => `Benten 不提供 ${symbol} 的购买。只有在批准前能展示其条款时才会提供。`,
     },
     identity: { heading: "代币身份", mint: "Mint", issuer: "发行人", decimals: "小数位数", provider: "提供方", copy: { copy: "复制 Mint", copied: "已复制", unavailable: "无法复制" }, evidence: "依据与来源" },
@@ -179,7 +179,7 @@ const zhHant: ProductCopy = {
     route: { heading: "路徑與費用", fees: (slippage) => `池手續費、滑點容忍度（${slippage}）和最低到帳數量會在你核准前顯示在兌換預覽中。網路費（SOL）顯示在你的錢包中。`, copyPool: { copy: "複製地址", copied: "已複製", unavailable: "無法複製" } },
     capability: {
       buyable: "可在 Benten 中購買", buy: (symbol) => `購買 ${symbol}`,
-      notBuyableHeading: "無法在 Benten 中購買", notBuyableBody: "Benten 只為透過一個固定池購買 NVDAx 建立交易。",
+      notBuyableHeading: "無法在 Benten 中購買", notBuyableBody: "Benten 只為透過各自的一個固定池購買指定的幾種 xStocks 建立交易。",
       compareOnlyHeading: "僅供比較", compareOnlyBody: (symbol) => `Benten 不提供 ${symbol} 的購買。只有在核准前能展示其條款時才會提供。`,
     },
     identity: { heading: "代幣身分", mint: "Mint", issuer: "發行人", decimals: "小數位數", provider: "提供方", copy: { copy: "複製 Mint", copied: "已複製", unavailable: "無法複製" }, evidence: "依據與來源" },

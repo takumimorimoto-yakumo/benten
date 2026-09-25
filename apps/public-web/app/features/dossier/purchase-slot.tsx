@@ -38,7 +38,7 @@ function PurchaseFramePlaceholder({ frame, locale, hydrated }: { frame: Purchase
  * back to this page shows the same purchase, still tracked, instead of a new
  * one.
  */
-function FixedRoutePurchase({ mint, locale, frame }: { mint: string; locale: PublicWebLocale; frame: PurchaseFrame | null }) {
+function FixedRoutePurchase({ mint, ticker, locale, frame }: { mint: string; ticker: string; locale: PublicWebLocale; frame: PurchaseFrame | null }) {
   const { purchase, installPurchase } = useAppSession();
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
@@ -57,7 +57,7 @@ function FixedRoutePurchase({ mint, locale, frame }: { mint: string; locale: Pub
   const Panel = purchase?.Panel;
   return (
     <div id={PURCHASE_SLOT_ID} className={SLOT_CLASS} data-purchase-slot="fixed_route" data-purchase-mint={mint}>
-      {Panel ? <Panel locale={locale} /> : frame ? <PurchaseFramePlaceholder frame={frame} locale={locale} hydrated={hydrated} /> : null}
+      {Panel ? <Panel locale={locale} product={ticker} /> : frame ? <PurchaseFramePlaceholder frame={frame} locale={locale} hydrated={hydrated} /> : null}
     </div>
   );
 }
@@ -72,7 +72,7 @@ export function PurchaseSlot({ view, locale, frame = null, fixture }: { view: Do
   if (view.purchase === "fixed_route") {
     // Development-only Living Catalog fixtures render a reducer state in place of the live island.
     if (fixture) return <div id={PURCHASE_SLOT_ID} className={SLOT_CLASS} data-purchase-slot="fixed_route" data-purchase-mint={view.identity.mint}>{fixture}</div>;
-    return <FixedRoutePurchase mint={view.identity.mint} locale={locale} frame={frame} />;
+    return <FixedRoutePurchase mint={view.identity.mint} ticker={view.identity.ticker} locale={locale} frame={frame} />;
   }
   const copy = messagesFor(locale).dossier.purchase;
   return (

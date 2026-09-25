@@ -44,8 +44,8 @@ export function ExplorePage({ view, locale }: { view: ExploreView; locale: Publi
           <ExploreSearch locale={locale} labels={view.suggestions} />
         </div>
         <div className="flex min-w-0 flex-col gap-4 lg:pb-1">
-          {view.buyable ? (
-            <p data-term="buy-in-benten" data-explore-capability="" className="max-w-prose text-muted-foreground">{copy.explore.capability(view.buyable.symbol, view.buyable.name)}</p>
+          {view.buyable.length > 0 ? (
+            <p data-term="buy-in-benten" data-explore-capability="" className="max-w-prose text-muted-foreground">{copy.explore.capability(new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(view.buyable.map((token) => token.symbol)))}</p>
           ) : (
             <p data-explore-capability="" className="max-w-prose text-muted-foreground">{copy.explore.noBuyable}</p>
           )}

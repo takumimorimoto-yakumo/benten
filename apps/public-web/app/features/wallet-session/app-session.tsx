@@ -21,8 +21,11 @@ import { browserEnvironment, registerMobileWallet } from "./mobile-wallet";
 export type InstalledPurchase = {
   /** Wallet bridge, previews, tracking and result reads. Renders nothing; mounted once by the shell. */
   readonly Runtime: ComponentType;
-  /** The purchase panel, bound to the same purchase state. `flow` renders it as the buy flow (Close and step line). */
-  readonly Panel: ComponentType<{ locale: PublicWebLocale; flow?: { readonly leading: ReactNode } }>;
+  /**
+   * The purchase panel, bound to the same purchase state. `flow` renders it as the buy flow (Close and step line);
+   * `product` is the page's ticker, matched exactly against the routes table by the reducer.
+   */
+  readonly Panel: ComponentType<{ locale: PublicWebLocale; flow?: { readonly leading: ReactNode }; product?: string }>;
   /** The shell's status line while a sent purchase is tracked (app IA 5.1); renders nothing otherwise. */
   readonly Status: ComponentType<{ locale: PublicWebLocale }>;
   /** Select a link's already-checked pay token and fill the amount in its units; never starts a preview or a wallet request. */
@@ -34,6 +37,9 @@ type AppSession = {
   readonly purchase: InstalledPurchase | null;
   /** Install the purchase island once; later calls keep the first installation and its state. */
   installPurchase(create: () => InstalledPurchase): void;
+  /** The sale (NVDAx to USDC), installed by the sell flow the same way and kept for the visit. */
+  readonly sale: InstalledPurchase | null;
+  installSale(create: () => InstalledPurchase): void;
 };
 
 const BROWSER_WALLETS: WalletSessionAdapter = {
@@ -58,6 +64,8 @@ const AppSessionContext = createContext<AppSession>({
   session: createWalletSession(INERT_ADAPTER),
   purchase: null,
   installPurchase: () => undefined,
+  sale: null,
+  installSale: () => undefined,
 });
 
 export function AppSessionProvider({ children }: { children: ReactNode }) {
@@ -85,11 +93,20 @@ export function AppSessionProvider({ children }: { children: ReactNode }) {
     installed.current = create();
     setPurchase(installed.current);
   }, []);
-  const value = useMemo(() => ({ session, purchase, installPurchase }), [session, purchase, installPurchase]);
+  const installedSale = useRef<InstalledPurchase | null>(null);
+  const [sale, setSale] = useState<InstalledPurchase | null>(null);
+  const installSale = useCallback((create: () => InstalledPurchase) => {
+    if (installedSale.current) return;
+    installedSale.current = create();
+    setSale(installedSale.current);
+  }, []);
+  const value = useMemo(() => ({ session, purchase, installPurchase, sale, installSale }), [session, purchase, installPurchase, sale, installSale]);
   const Runtime = purchase?.Runtime;
+  const SaleRuntime = sale?.Runtime;
   return (
     <AppSessionContext.Provider value={value}>
       {Runtime ? <Runtime /> : null}
+      {SaleRuntime ? <SaleRuntime /> : null}
       {children}
     </AppSessionContext.Provider>
   );

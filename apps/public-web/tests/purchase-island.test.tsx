@@ -84,7 +84,8 @@ describe("purchase catalog", () => {
 
   it("names the jump link exactly like the panel heading in every locale", () => {
     for (const locale of PUBLIC_WEB_LOCALES) {
-      expect(MESSAGES[locale].dossier.purchase.jumpLink, locale).toBe(PURCHASE_MESSAGES[locale].heading);
+      expect(MESSAGES[locale].dossier.purchase.jumpLink("NVDAx"), locale).toBe(PURCHASE_MESSAGES[locale].heading);
+      expect(MESSAGES[locale].dossier.purchase.jumpLink("METAx"), locale).toBe(purchaseMessagesFor(locale, "METAx").heading);
       expect(PURCHASE_MESSAGES[locale].jumpLink, locale).toBe(PURCHASE_MESSAGES[locale].heading);
     }
   });
@@ -395,10 +396,10 @@ describe("purchase placement on the Dossier", () => {
   });
 
   it("gives other tokens the quiet unavailable notice in the same slot and no jump link", () => {
-    const html = page("TSLA", "en");
+    const html = page("AMZN", "en");
     expect(html).toContain('data-purchase-slot="unsupported"');
     expect(html).not.toContain("data-purchase-jump");
-    expect(text(html)).toContain("Purchase not available for TSLAx");
+    expect(text(html)).toContain("Purchase not available for AMZNx");
     const slot = html.slice(html.indexOf('id="purchase-slot"'));
     expect(slot.slice(0, slot.indexOf("</aside>"))).not.toMatch(/<a |<button/);
   });

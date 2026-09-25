@@ -33,6 +33,7 @@ const SECOND_WALLET = { id: "Second Wallet", name: "Second Wallet" };
 function preview(overrides: Partial<Omit<PreviewTerms, "id">> = {}): Omit<PreviewTerms, "id"> {
   return {
     walletAddress: FIXTURE_WALLET_ADDRESS,
+    product: "NVDA",
     payToken: "USDC",
     firstLeg: null,
     inputRaw: 1_000_000n,

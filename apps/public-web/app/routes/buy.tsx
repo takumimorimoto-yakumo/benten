@@ -11,9 +11,9 @@ export const handle = { buyFlow: true };
 
 export function loader({ params, request }: LoaderFunctionArgs) {
   const document = createProductSubpageDocument({ locale: params.locale, pathname: new URL(request.url).pathname, subpage: "buy", ticker: params.ticker });
-  // Only the product whose mint equals the pinned route constant has a flow; every other ticker is not found.
+  // Only a product whose mint is in the routes table has a flow; every other ticker is not found.
   if (createDossierView(document.ticker!).purchase !== "fixed_route") throw data(null, { status: 404 });
-  return data({ document, frame: createPurchaseFrame(document.locale) });
+  return data({ document, frame: createPurchaseFrame(document.locale, document.ticker!) });
 }
 
 type BuyLoaderData = Awaited<ReturnType<typeof loader>>["data"];
@@ -29,5 +29,5 @@ export function meta({ loaderData }: MetaArgs<typeof loader>) {
 
 export default function Buy({ loaderData }: { loaderData: BuyLoaderData }) {
   const { document, frame } = loaderData;
-  return <BuyFlow locale={document.locale} frame={frame} productHref={dossierPath(document.locale, document.ticker!)} />;
+  return <BuyFlow locale={document.locale} frame={frame} ticker={document.ticker!} productHref={dossierPath(document.locale, document.ticker!)} />;
 }

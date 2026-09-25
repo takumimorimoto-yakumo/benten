@@ -7,4 +7,4 @@
 // Must stay the first import: the SDK modules below read the Buffer global.
 import "./buffer-polyfill";
 
-export { createInstalledPurchase } from "./purchase-island";
+export { createInstalledPurchase, createInstalledSale } from "./purchase-island";

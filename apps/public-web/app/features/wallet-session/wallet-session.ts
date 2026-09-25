@@ -31,7 +31,12 @@ export type WalletSessionState = {
   readonly notice: "rejected" | "failed" | null;
   /** Set by the purchase panel while a purchase must keep its wallet (the panel's own lock rule). */
   readonly disconnectLocked: boolean;
+  /** Which flow holds the lock, for its wording (`purchase` when both do); `null` when unlocked. */
+  readonly disconnectLockHolder: DisconnectLockHolder | null;
 };
+
+/** The flows that may lock Disconnect: the purchase panel and the sale panel. */
+export type DisconnectLockHolder = "purchase" | "sale";
 
 export type WalletSessionAdapter = {
   watchWallets(onChange: (wallets: { supported: WalletOption[]; unsupported: string[] }) => void): () => void;
@@ -59,7 +64,11 @@ export type WalletSession = {
   connect(walletId: string): void;
   /** Disconnect the connected wallet, unless the purchase panel holds the lock. */
   disconnect(): void;
-  setDisconnectLocked(locked: boolean): void;
+  /**
+   * Lock or unlock Disconnect for one holder (the purchase and the sale each
+   * hold their own lock); Disconnect stays locked while any holder locks it.
+   */
+  setDisconnectLocked(locked: boolean, holder?: DisconnectLockHolder): void;
 };
 
 export const INITIAL_WALLET_SESSION: WalletSessionState = {
@@ -69,6 +78,7 @@ export const INITIAL_WALLET_SESSION: WalletSessionState = {
   connection: { kind: "disconnected" },
   notice: null,
   disconnectLocked: false,
+  disconnectLockHolder: null,
 };
 
 export function createWalletSession(adapter: WalletSessionAdapter, initial: WalletSessionState = INITIAL_WALLET_SESSION): WalletSession {
@@ -118,6 +128,7 @@ export function createWalletSession(adapter: WalletSessionAdapter, initial: Wall
     );
   }
 
+  const lockHolders = new Set<DisconnectLockHolder>();
   return {
     getState: () => state,
     subscribe(listener) {
@@ -161,8 +172,12 @@ export function createWalletSession(adapter: WalletSessionAdapter, initial: Wall
       void adapter.disconnectWallet(current.walletId);
       set({ ...state, connection: { kind: "disconnected" }, notice: null });
     },
-    setDisconnectLocked(locked) {
-      if (state.disconnectLocked !== locked) set({ ...state, disconnectLocked: locked });
+    setDisconnectLocked(locked, holder = "purchase") {
+      if (locked) lockHolders.add(holder);
+      else lockHolders.delete(holder);
+      const anyLocked = lockHolders.size > 0;
+      const lockHolder: DisconnectLockHolder | null = lockHolders.has("purchase") ? "purchase" : lockHolders.has("sale") ? "sale" : null;
+      if (state.disconnectLocked !== anyLocked || state.disconnectLockHolder !== lockHolder) set({ ...state, disconnectLocked: anyLocked, disconnectLockHolder: lockHolder });
     },
   };
 }

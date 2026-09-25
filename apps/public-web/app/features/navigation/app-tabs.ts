@@ -31,6 +31,7 @@ export function tabOf(page: PublicPage): AppTab | null {
     case "stock-evidence":
     case "provider-evidence":
     case "buy":
+    case "sell":
     case "about":
     case "learn":
     case "legal":

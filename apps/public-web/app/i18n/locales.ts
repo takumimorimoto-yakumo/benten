@@ -65,6 +65,11 @@ export function buyPath(locale: PublicWebLocale, ticker: string): string {
   return `${dossierPath(locale, ticker)}/buy`;
 }
 
+/** The sell flow of the same product (NVDAx to USDC in the same fixed pool). */
+export function sellPath(locale: PublicWebLocale, ticker: string): string {
+  return `${dossierPath(locale, ticker)}/sell`;
+}
+
 /** A same-page section of this locale's Home, such as the other-provider list. */
 export function homeSectionPath(locale: PublicWebLocale, sectionId: string): string {
   return `${homePath(locale)}#${sectionId}`;
@@ -113,6 +118,7 @@ export type PublicPage =
   | { readonly kind: "stock-evidence"; readonly ticker: string }
   | { readonly kind: "provider-evidence"; readonly provider: string; readonly id: string }
   | { readonly kind: "buy"; readonly ticker: string }
+  | { readonly kind: "sell"; readonly ticker: string }
   | { readonly kind: "about" }
   | { readonly kind: "learn"; readonly topic: LearnTopic }
   | { readonly kind: "legal"; readonly document: LegalDocument };
@@ -140,6 +146,8 @@ export function pagePath(locale: PublicWebLocale, page: PublicPage): string {
       return providerEvidencePath(locale, page.provider, page.id);
     case "buy":
       return buyPath(locale, page.ticker);
+    case "sell":
+      return sellPath(locale, page.ticker);
     case "about":
       return aboutPath(locale);
     case "learn":

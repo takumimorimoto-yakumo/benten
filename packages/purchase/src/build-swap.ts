@@ -1,6 +1,6 @@
 /**
- * Browser-only, unsigned exact-in swap builder for the pinned NVDAx/USDC
- * Meteora DLMM route (gate G-B1, `specs/stocklana-submission-plan-2026-09-23.md`).
+ * Browser-only, unsigned exact-in swap builder for a product's pinned
+ * product/USDC Meteora DLMM route (`routes-table.ts`; default NVDAx) (gate G-B1, `specs/stocklana-submission-plan-2026-09-23.md`).
  *
  * SECURITY INVARIANTS (do not weaken without a security review; mirrors
  * `packages/solana/src/index.ts` and the repository CLAUDE.md):
@@ -12,8 +12,10 @@
  *     (a wallet-connected UI) owns the decision to show it to the user, get a
  *     signature, and send it. This module makes that decision for nobody.
  *  3. The pool, its two mints, and their token-program owners are pinned
- *     constants observed read-only in `docs/route-feasibility-2026-09-14.md`
- *     (main tree) and referenced from `specs/stocklana-submission-plan-2026-09-23.md`.
+ *     constants of the routes table (the NVDAx route observed read-only in
+ *     `docs/route-feasibility-2026-09-14.md` and referenced from
+ *     `specs/stocklana-submission-plan-2026-09-23.md`); the caller names only
+ *     a table key.
  *     They are never derived from caller input. If the pool account read back
  *     from RPC does not match this pinned identity, this module throws
  *     `RoutePoolMismatchError` instead of falling back to whatever the RPC
@@ -34,6 +36,7 @@ import { PublicKey, type Connection, type Transaction, type TransactionInstructi
 import BN from "bn.js";
 
 import { NVDAX_MINT, NVDAX_USDC_POOL, USDC_MINT } from "./route";
+import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
 import { InvalidSwapInputError, RoutePoolMismatchError, readPoolQuote, type RouteQuote } from "./quote";
 
 /** The pinned route identities live in `route.ts` (no SDK import) and are re-exported here. */
@@ -46,6 +49,8 @@ export interface BuildSwapParams {
   connection: Connection;
   /** The wallet that will sign and pay for the swap. Read-only here: never used to sign. */
   userPublicKey: PublicKey;
+  /** The product to buy: a routes-table key (default NVDA). Its pool is read from the table. */
+  product?: ProductTicker;
   /** USDC input amount, in raw integer base units (6 decimals), as a `bigint`. */
   usdcInAmountRaw: bigint;
   /** Allowed slippage in basis points (0-10000) applied to the quoted output. */
@@ -86,8 +91,8 @@ export interface BuildSwapResult {
 }
 
 /**
- * Read the pinned NVDAx/USDC pool, quote an exact-in USDC swap, and build the
- * unsigned swap transaction for it.
+ * Read the product's pinned pool (default NVDAx/USDC), quote an exact-in USDC
+ * swap, and build the unsigned swap transaction for it.
  *
  * The pool read and quote (with their `InvalidSwapInputError` and
  * `RoutePoolMismatchError` checks) are `readPoolQuote` in `quote.ts`. Any
@@ -96,8 +101,9 @@ export interface BuildSwapResult {
  */
 export async function buildNvdaxUsdcExactInSwap(params: BuildSwapParams): Promise<BuildSwapResult> {
   const { connection, userPublicKey, usdcInAmountRaw, slippageBps } = params;
+  const route = productRoute(params.product ?? DEFAULT_PRODUCT);
 
-  const { pool, binArrays, sdkQuote: quote, quote: routeQuote } = await readPoolQuote(connection, usdcInAmountRaw, slippageBps);
+  const { pool, binArrays, sdkQuote: quote, quote: routeQuote } = await readPoolQuote(connection, usdcInAmountRaw, slippageBps, route.ticker);
   const inAmount = new BN(usdcInAmountRaw.toString());
   const indexByAddress = new Map(binArrays.map((binArray) => [binArray.publicKey.toBase58(), BigInt(binArray.account.index.toString())]));
   const binArrayIndexes = quote.binArraysPubkey.map((pubkey: PublicKey) => {
@@ -108,10 +114,10 @@ export async function buildNvdaxUsdcExactInSwap(params: BuildSwapParams): Promis
 
   const transaction = await pool.swap({
     inToken: USDC_MINT,
-    outToken: NVDAX_MINT,
+    outToken: route.productMint,
     inAmount,
     minOutAmount: quote.minOutAmount,
-    lbPair: NVDAX_USDC_POOL,
+    lbPair: route.pool,
     user: userPublicKey,
     binArraysPubkey: quote.binArraysPubkey,
   });

@@ -13,11 +13,30 @@
  * per approval, and nothing is ever re-requested automatically.
  */
 
-import { parsePayTokenInput, type AmountError } from "./amount";
+import { parsePayTokenInput, parseScaledInput, type AmountError, type AmountParse } from "./amount";
 import { PURCHASE_CONFIG } from "./config";
 import { PAY_CONFIG } from "./pay-config";
-import { PAY_TOKEN_UNITS, resolvePayToken, type PayTokenId } from "./token-units";
+import { NVDAX_DECIMALS, PAY_TOKEN_UNITS, resolvePayToken, type PayTokenId } from "./token-units";
+import { DEFAULT_PRODUCT, resolveProductTicker, type ProductTicker } from "./routes-table";
 import type { MeasuredResult } from "./result";
+
+/**
+ * Which way the panel trades on the one fixed pool: `buy` pays a pay token
+ * for NVDAx; `sell` sells NVDAx for USDC (the same route reversed). One
+ * state holds one side for its whole life.
+ */
+export type TradeSide = "buy" | "sell";
+
+/**
+ * What a sale amount is checked against besides the balance: the NVDAx
+ * display multiplier in effect (the field takes display units) and the cap,
+ * the NVDAx amount (raw) the pool quotes at the USDC limit per sale.
+ */
+export type SellTerms =
+  | { kind: "unknown" }
+  | { kind: "loading" }
+  | { kind: "loaded"; multiplier: string; capRaw: bigint }
+  | { kind: "unavailable" };
 
 export interface WalletOption {
   /** Stable key for the session (the wallet's name; Wallet Standard names are unique per page). */
@@ -36,7 +55,7 @@ export interface MultiplierReading {
  * The first leg of a two-leg purchase (SOL or SKR in, USDC out), as quoted.
  * `usdcOutRaw` is the route's USD conversion of the pay amount, which the
  * per-transaction limit is checked against; `usdcMinimumRaw` is what the
- * fixed NVDAx pool then takes as its exact input.
+ * product's pinned pool then takes as its exact input.
  */
 export interface FirstLegTerms {
   pool: string;
@@ -51,6 +70,16 @@ export interface FirstLegTerms {
 export interface PreviewTerms {
   id: number;
   walletAddress: string;
+  /** The product this preview buys (a routes-table key); `outputRaw` and the minimum are in its raw units. */
+  product: ProductTicker;
+  /**
+   * Absent or `buy`: a purchase. `sell`: a sale, where `inputRaw` and
+   * `consumedInputRaw` are raw NVDAx, `outputRaw` and `minimumOutputRaw` raw
+   * USDC, and `payToken` is `USDC` (the token received).
+   */
+  side?: TradeSide;
+  /** A sale may create the wallet's USDC account (a purchase reports `createsNvdaxAccount`). */
+  createsUsdcAccount?: boolean;
   /** The token the wallet pays with; `inputRaw` is in its raw units. */
   payToken: PayTokenId;
   /** `null` when paying with USDC (one leg). */
@@ -65,7 +94,7 @@ export interface PreviewTerms {
   priceImpactPct: string;
   builtAt: number;
   expiresAt: number;
-  /** `null` when the NVDAx display multiplier could not be read. */
+  /** `null` when the product's display multiplier could not be read (named for the first product). */
   nvdaxMultiplier: MultiplierReading | null;
   createsNvdaxAccount: boolean;
   lastValidBlockHeight: number;
@@ -86,6 +115,10 @@ export interface Tracking {
   /** The wallet that approved the transaction; the result is measured for it. */
   walletAddress: string;
   lastValidBlockHeight: number;
+  /** The product the approved preview bought. */
+  product: ProductTicker;
+  /** Absent or `buy`: a purchase; `sell`: a sale (`inputRaw` is raw NVDAx). */
+  side?: TradeSide;
   payToken: PayTokenId;
   inputRaw: bigint;
   steps: TrackingSteps;
@@ -95,12 +128,18 @@ export interface PurchaseResultView extends MeasuredResult {
   nvdaxMultiplier: MultiplierReading | null;
 }
 
-/** `overLimit`: the route quote converts a SOL or SKR amount to more than the per-transaction USDC limit (`details` holds the quoted raw USDC). */
-export type PreviewFailure = "notEnoughSol" | "simulationFailed" | "routeCheck" | "relayBusy" | "relayUnavailable" | "overLimit";
+/**
+ * `overLimit`: the route quote converts a SOL or SKR amount to more than the
+ * per-transaction USDC limit (`details` holds the quoted raw USDC).
+ * `sellTermsChanged` (sales only): the NVDAx display multiplier in effect
+ * differs from the one the amount was converted with; the sale terms are
+ * read again before another preview.
+ */
+export type PreviewFailure = "notEnoughSol" | "simulationFailed" | "routeCheck" | "relayBusy" | "relayUnavailable" | "overLimit" | "sellTermsChanged";
 
 export type Attempt =
   | { phase: "editing" }
-  | { phase: "previewing"; requestId: number; inputRaw: bigint; payToken: PayTokenId }
+  | { phase: "previewing"; requestId: number; inputRaw: bigint; payToken: PayTokenId; product: ProductTicker; sellMultiplier?: string }
   | { phase: "previewFailed"; failure: PreviewFailure; details: string | null; createsNvdaxAccount: boolean }
   | { phase: "reviewReady"; preview: PreviewTerms; notice: "rejected" | null }
   | { phase: "previewExpired"; preview: PreviewTerms }
@@ -125,6 +164,10 @@ export type ConnectionState =
 export type BalanceState = { kind: "unknown" } | { kind: "loading" } | { kind: "loaded"; raw: bigint } | { kind: "unavailable" };
 
 export interface PurchaseState {
+  /** Fixed for the life of the state (`INITIAL_PURCHASE_STATE` or `INITIAL_SELL_STATE`). */
+  side: TradeSide;
+  /** Only used on the sell side: the multiplier and cap the NVDAx field is checked against. */
+  sellTerms: SellTerms;
   detection: "pending" | "done";
   wallets: WalletOption[];
   /** Names of detected wallets that lack the sign-and-send feature or Solana mainnet. */
@@ -133,6 +176,8 @@ export interface PurchaseState {
   connectNotice: "rejected" | "failed" | null;
   /** The token the panel pays with (allowlist: `PAY_TOKEN_IDS`). `balance` is this token's. */
   payToken: PayTokenId;
+  /** The product the panel buys (allowlist: the routes table), set by the buy flow of the product page. */
+  product: ProductTicker;
   balance: BalanceState;
   amountText: string;
   amountError: AmountError | null;
@@ -156,8 +201,12 @@ export type PurchaseAction =
   | { type: "walletDisconnected" }
   | { type: "balanceRequested" }
   | { type: "payTokenSelected"; payToken: string }
+  | { type: "productSelected"; product: string }
   | { type: "balanceLoaded"; address: string; raw: bigint; payToken?: PayTokenId }
   | { type: "balanceFailed"; address: string; payToken?: PayTokenId }
+  | { type: "sellTermsRequested" }
+  | { type: "sellTermsLoaded"; address: string; multiplier: string; capRaw: bigint }
+  | { type: "sellTermsFailed"; address: string }
   | { type: "amountEdited"; text: string }
   | { type: "amountCommitted" }
   | { type: "previewRequested" }
@@ -178,12 +227,15 @@ export type PurchaseAction =
   | { type: "startNew" };
 
 export const INITIAL_PURCHASE_STATE: PurchaseState = {
+  side: "buy",
+  sellTerms: { kind: "unknown" },
   detection: "pending",
   wallets: [],
   unsupportedWallets: [],
   connection: { kind: "disconnected" },
   connectNotice: null,
   payToken: "USDC",
+  product: DEFAULT_PRODUCT,
   balance: { kind: "unknown" },
   amountText: "",
   amountError: null,
@@ -191,6 +243,9 @@ export const INITIAL_PURCHASE_STATE: PurchaseState = {
   nextRequestId: 1,
   unresolvedRequestAddress: null,
 };
+
+/** The sell panel's starting state: the same machine, selling NVDAx for USDC. */
+export const INITIAL_SELL_STATE: PurchaseState = { ...INITIAL_PURCHASE_STATE, side: "sell", product: "NVDA" };
 
 /** Phases after the wallet returned a signature: the known signature keeps being tracked. */
 const POST_SEND_PHASES: ReadonlySet<AttemptPhase> = new Set([
@@ -218,6 +273,19 @@ export function hasUnresolvedEarlierRequest(state: PurchaseState): boolean {
   return state.connection.address === state.unresolvedRequestAddress;
 }
 
+/**
+ * The product the panel shows: the one the attempt is about once there is a
+ * request, preview or sent transaction (it may differ from the page the
+ * panel is on while a sent purchase is tracked), otherwise the selected one.
+ */
+export function attemptProduct(state: Pick<PurchaseState, "product" | "attempt">): ProductTicker {
+  const attempt = state.attempt;
+  if ("tracking" in attempt) return attempt.tracking.product;
+  if ("preview" in attempt) return attempt.preview.product;
+  if (attempt.phase === "previewing") return attempt.product;
+  return state.product;
+}
+
 /** The tracked signature, if the attempt has one. */
 export function trackedSignature(attempt: Attempt): string | null {
   return "tracking" in attempt ? attempt.tracking.signature : null;
@@ -231,12 +299,32 @@ export function spendableRaw(payToken: PayTokenId, balanceRaw: bigint): bigint {
 }
 
 function balanceRawOf(state: PurchaseState): bigint | null {
-  return state.balance.kind === "loaded" ? spendableRaw(state.payToken, state.balance.raw) : null;
+  if (state.balance.kind !== "loaded") return null;
+  return state.side === "sell" ? state.balance.raw : spendableRaw(state.payToken, state.balance.raw);
 }
 
-/** Parse the pay field for the selected token. USDC keeps its raw limit; SOL and SKR are limited in USD terms at preview. */
-export function parsePayAmount(state: Pick<PurchaseState, "payToken" | "amountText">, balanceRaw: bigint | null) {
-  return parsePayTokenInput(state.amountText, state.payToken, balanceRaw);
+/**
+ * The most NVDAx (raw) one sale may use: the smaller of the whole balance and
+ * the cap at the USDC limit. `null` until both are read.
+ */
+export function sellMaxRaw(state: Pick<PurchaseState, "balance" | "sellTerms">): bigint | null {
+  if (state.balance.kind !== "loaded" || state.sellTerms.kind !== "loaded") return null;
+  return state.balance.raw < state.sellTerms.capRaw ? state.balance.raw : state.sellTerms.capRaw;
+}
+
+/**
+ * Parse the amount field. Buying: in the selected pay token (USDC keeps its
+ * raw limit; SOL and SKR are limited in USD terms at preview). Selling: NVDAx
+ * display units through the multiplier read with the cap, checked against the
+ * cap and the balance; `notReady` until both are read.
+ */
+export function parsePayAmount(state: Pick<PurchaseState, "payToken" | "amountText"> & Partial<Pick<PurchaseState, "side" | "sellTerms">>, balanceRaw: bigint | null): AmountParse {
+  if (state.side !== "sell") return parsePayTokenInput(state.amountText, state.payToken, balanceRaw);
+  const display = parseScaledInput(state.amountText, NVDAX_DECIMALS, "1");
+  if (!display.ok && display.error !== "zero") return display;
+  const terms = state.sellTerms;
+  if (!terms || terms.kind !== "loaded" || balanceRaw === null) return { ok: false, error: "notReady" };
+  return parseScaledInput(state.amountText, NVDAX_DECIMALS, terms.multiplier, balanceRaw, terms.capRaw);
 }
 
 function matchesTracking(attempt: Attempt, signature: string): attempt is Extract<Attempt, { tracking: Tracking }> {
@@ -247,11 +335,13 @@ function startPreview(state: PurchaseState): PurchaseState {
   if (state.connection.kind !== "connected") return state;
   const parsed = parsePayAmount(state, balanceRawOf(state));
   if (!parsed.ok) return { ...state, amountError: parsed.error, attempt: { phase: "editing" } };
+  // A sale remembers the multiplier its raw amount was converted with; the preview must be built at the same one.
+  const sellMultiplier = state.side === "sell" && state.sellTerms.kind === "loaded" ? { sellMultiplier: state.sellTerms.multiplier } : {};
   return {
     ...state,
     amountError: null,
     nextRequestId: state.nextRequestId + 1,
-    attempt: { phase: "previewing", requestId: state.nextRequestId, inputRaw: parsed.raw, payToken: state.payToken },
+    attempt: { phase: "previewing", requestId: state.nextRequestId, inputRaw: parsed.raw, payToken: state.payToken, product: state.product, ...sellMultiplier },
   };
 }
 
@@ -267,13 +357,20 @@ function reduceAttempt(state: PurchaseState, action: PurchaseAction): PurchaseSt
     case "previewSucceeded": {
       if (attempt.phase !== "previewing" || attempt.requestId !== action.requestId) return state;
       if (state.connection.kind !== "connected" || action.preview.walletAddress !== state.connection.address) return state;
-      if (action.preview.inputRaw !== attempt.inputRaw || action.preview.payToken !== attempt.payToken) return state;
+      if (action.preview.inputRaw !== attempt.inputRaw || action.preview.payToken !== attempt.payToken || action.preview.product !== attempt.product) return state;
+      if ((action.preview.side ?? "buy") !== state.side) return state;
+      // A sale preview built at another multiplier than the amount's conversion is refused and the terms read again.
+      if (state.side === "sell" && action.preview.nvdaxMultiplier?.value !== attempt.sellMultiplier) {
+        return { ...state, sellTerms: { kind: "unknown" }, attempt: { phase: "previewFailed", failure: "sellTermsChanged", details: null, createsNvdaxAccount: false } };
+      }
       return { ...state, attempt: { phase: "reviewReady", preview: { ...action.preview, id: action.requestId }, notice: null } };
     }
     case "previewFailed": {
       if (attempt.phase !== "previewing" || attempt.requestId !== action.requestId) return state;
       return {
         ...state,
+        // Changed sale terms are read again (the island reloads them from `unknown`) before the next preview.
+        ...(action.failure === "sellTermsChanged" ? { sellTerms: { kind: "unknown" } as const } : {}),
         attempt: { phase: "previewFailed", failure: action.failure, details: action.details ?? null, createsNvdaxAccount: action.createsNvdaxAccount ?? false },
       };
     }
@@ -312,6 +409,8 @@ function reduceAttempt(state: PurchaseState, action: PurchaseAction): PurchaseSt
             signature: action.signature,
             walletAddress: preview.walletAddress,
             lastValidBlockHeight: preview.lastValidBlockHeight,
+            product: preview.product,
+            ...(preview.side === "sell" ? { side: "sell" as const } : {}),
             payToken: preview.payToken,
             inputRaw: preview.inputRaw,
             steps: { reviewedAt: preview.builtAt, approvedAt: attempt.approvedAt, sentAt: action.now, confirmedAt: null, finalizedAt: null },
@@ -365,7 +464,7 @@ function reduceAttempt(state: PurchaseState, action: PurchaseAction): PurchaseSt
     }
     case "startNew": {
       if (!RESTARTABLE_PHASES.has(attempt.phase)) return state;
-      return { ...state, amountText: "", amountError: null, balance: state.connection.kind === "connected" ? { kind: "unknown" } : state.balance, attempt: { phase: "editing" } };
+      return { ...state, amountText: "", amountError: null, balance: state.connection.kind === "connected" ? { kind: "unknown" } : state.balance, sellTerms: { kind: "unknown" }, attempt: { phase: "editing" } };
     }
     default:
       return state;
@@ -386,6 +485,7 @@ export function purchaseReducer(state: PurchaseState, action: PurchaseAction): P
         ...state,
         connection: { kind: "connected", walletId: action.walletId, walletName: action.walletName, address: action.address },
         balance: { kind: "unknown" },
+        sellTerms: { kind: "unknown" },
         amountError: null,
         attempt: isPostSend(state.attempt.phase) ? state.attempt : { phase: "editing" },
       };
@@ -400,6 +500,7 @@ export function purchaseReducer(state: PurchaseState, action: PurchaseAction): P
         ...state,
         connection: { kind: "disconnected" },
         balance: { kind: "unknown" },
+        sellTerms: { kind: "unknown" },
         amountError: null,
         // Before the send the preview is discarded; after it, the known signature keeps being tracked.
         attempt: keepAttempt ? state.attempt : { phase: "editing" },
@@ -409,6 +510,8 @@ export function purchaseReducer(state: PurchaseState, action: PurchaseAction): P
       return state.connection.kind === "connected" ? { ...state, balance: { kind: "loading" } } : state;
     case "payTokenSelected": {
       const payToken = resolvePayToken(action.payToken);
+      // A sale always receives USDC; it has no pay token choice.
+      if (state.side === "sell") return state;
       if (payToken === null || payToken === state.payToken || isAmountLocked(state.attempt.phase)) return state;
       // A different token changes the units: the typed amount, any preview and the balance are discarded.
       return {
@@ -420,6 +523,14 @@ export function purchaseReducer(state: PurchaseState, action: PurchaseAction): P
         attempt: { phase: "editing" },
       };
     }
+    case "productSelected": {
+      const product = resolveProductTicker(action.product);
+      // A sale only sells NVDAx; it has no product choice.
+      if (state.side === "sell") return state;
+      if (product === null || product === state.product || isAmountLocked(state.attempt.phase)) return state;
+      // A different product changes what the preview buys: the typed amount and any preview are discarded; the pay balance stays.
+      return { ...state, product, amountText: "", amountError: null, attempt: { phase: "editing" } };
+    }
     case "balanceLoaded":
       if (state.connection.kind !== "connected" || state.connection.address !== action.address) return state;
       if (action.payToken !== undefined && action.payToken !== state.payToken) return state;
@@ -428,6 +539,15 @@ export function purchaseReducer(state: PurchaseState, action: PurchaseAction): P
       if (state.connection.kind !== "connected" || state.connection.address !== action.address) return state;
       if (action.payToken !== undefined && action.payToken !== state.payToken) return state;
       return { ...state, balance: { kind: "unavailable" } };
+    case "sellTermsRequested":
+      return state.side === "sell" && state.connection.kind === "connected" ? { ...state, sellTerms: { kind: "loading" } } : state;
+    case "sellTermsLoaded":
+      if (state.side !== "sell" || state.connection.kind !== "connected" || state.connection.address !== action.address) return state;
+      if (action.capRaw <= 0n) return { ...state, sellTerms: { kind: "unavailable" } };
+      return { ...state, sellTerms: { kind: "loaded", multiplier: action.multiplier, capRaw: action.capRaw } };
+    case "sellTermsFailed":
+      if (state.side !== "sell" || state.connection.kind !== "connected" || state.connection.address !== action.address) return state;
+      return { ...state, sellTerms: { kind: "unavailable" } };
     case "amountEdited": {
       if (isAmountLocked(state.attempt.phase)) return state;
       // Edits invalidate: any preview or preview error is discarded, never silently re-quoted.

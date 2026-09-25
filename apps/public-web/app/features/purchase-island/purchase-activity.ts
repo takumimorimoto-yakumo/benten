@@ -11,8 +11,9 @@
  * and `paidRaw` come only from the finalized transaction's token balances.
  */
 import { formatScaledUnits } from "@benten/purchase/amount";
-import type { Attempt, PurchaseState } from "@benten/purchase/purchase-machine";
-import { NVDAX_DECIMALS, NVDAX_MINT, NVDAX_USDC_POOL, PAY_TOKENS, type PayTokenId } from "@benten/purchase/route";
+import type { Attempt, PurchaseState, TradeSide } from "@benten/purchase/purchase-machine";
+import { PAY_TOKENS, USDC_MINT, type PayTokenId } from "@benten/purchase/route";
+import { productRoute, SELL_ROUTE, type ProductTicker } from "@benten/purchase/routes-table";
 import { ACTIVITY_CONFIG } from "@/features/activity/activity-config";
 import { activityStore, type ActivityPhase, type ActivityStore, type PurchaseAttemptInput } from "@/features/activity/activity-store";
 
@@ -33,6 +34,8 @@ export type PurchaseActivityWrite = {
   readonly walletAddress: string;
   /** `null` until the wallet returns it. */
   readonly signature: string | null;
+  /** The product's pinned pool (the route the attempt used). */
+  readonly routeId: string;
   readonly inputMint: string;
   readonly outputMint: string;
   /** Pay token asked to pay, raw units of `inputMint`. */
@@ -44,7 +47,7 @@ export type PurchaseActivityWrite = {
   readonly previewExpiresAt: number | null;
   /** Measured from the finalized transaction's token balances; `null` otherwise. */
   readonly receivedRaw: string | null;
-  /** `receivedRaw` in NVDAx display units, with the mint's Scaled UI multiplier read at the result; `null` without it. */
+  /** `receivedRaw` in the product's display units, with its mint's Scaled UI multiplier read at the result; `null` without it. */
   readonly receivedDisplay: string | null;
   readonly paidRaw: string | null;
   readonly phase: PurchaseActivityPhase;
@@ -70,8 +73,6 @@ export function activityAttemptId(attemptKey: string): string | null {
   return match ? `${match[1]}_${match[2]}` : null;
 }
 
-const ROUTE_ID = NVDAX_USDC_POOL.toBase58();
-
 /** The store input for one write; `null` fields of the write are left out, so they keep what the record holds. */
 function attemptInput(write: PurchaseActivityWrite & { readonly phase: ActivityPhase }, attemptId: string): PurchaseAttemptInput {
   const optional = <T>(value: T | null) => (value === null ? undefined : value);
@@ -81,7 +82,7 @@ function attemptInput(write: PurchaseActivityWrite & { readonly phase: ActivityP
     attemptId,
     walletAddress: write.walletAddress,
     genesisHash: ACTIVITY_CONFIG.mainnetGenesisHash,
-    routeId: ROUTE_ID,
+    routeId: write.routeId,
     inputMint: write.inputMint,
     outputMint: write.outputMint,
     inputRaw: write.inputRaw,
@@ -119,10 +120,17 @@ export function recordPurchaseActivity(write: PurchaseActivityWrite, store: Acti
   }
 }
 
-const OUTPUT_MINT = NVDAX_MINT.toBase58();
+const USDC = USDC_MINT.toBase58();
 
-function base(walletAddress: string, reviewedAt: number, payToken: PayTokenId, inputRaw: bigint, at: number) {
-  return { attemptKey: `${walletAddress}:${reviewedAt}`, walletAddress, inputMint: PAY_TOKENS[payToken].mint.toBase58(), outputMint: OUTPUT_MINT, inputRaw: inputRaw.toString(), at: new Date(at).toISOString() };
+/**
+ * A purchase pays `payToken` for the product; a sale (`side: "sell"`) pays
+ * NVDAx for USDC on the one sale route, so its `inputRaw` is raw NVDAx.
+ */
+function base(walletAddress: string, reviewedAt: number, product: ProductTicker, payToken: PayTokenId, inputRaw: bigint, at: number, side: TradeSide | undefined) {
+  const route = side === "sell" ? SELL_ROUTE : productRoute(product);
+  const productMint = route.productMint.toBase58();
+  const [inputMint, outputMint] = side === "sell" ? [productMint, USDC] : [PAY_TOKENS[payToken].mint.toBase58(), productMint];
+  return { attemptKey: `${walletAddress}:${reviewedAt}`, walletAddress, routeId: route.pool.toBase58(), inputMint, outputMint, inputRaw: inputRaw.toString(), at: new Date(at).toISOString() };
 }
 
 /** A write that carries no preview number and no measured amount. */
@@ -143,21 +151,26 @@ export function activityWriteFor(previous: PurchaseState, next: PurchaseState, n
   if (from.phase === to.phase && !(to.phase === "result" && from !== to)) return null;
   if (to.phase === "awaitingWallet" && from.phase === "reviewReady") {
     const preview = to.preview;
-    return { ...base(preview.walletAddress, preview.builtAt, preview.payToken, preview.inputRaw, nowMs), signature: null, expectedOutputRaw: preview.outputRaw.toString(), minimumOutputRaw: preview.minimumOutputRaw.toString(), previewExpiresAt: preview.expiresAt, receivedRaw: null, receivedDisplay: null, paidRaw: null, phase: "opened" };
+    return { ...base(preview.walletAddress, preview.builtAt, preview.product, preview.payToken, preview.inputRaw, nowMs, preview.side), signature: null, expectedOutputRaw: preview.outputRaw.toString(), minimumOutputRaw: preview.minimumOutputRaw.toString(), previewExpiresAt: preview.expiresAt, receivedRaw: null, receivedDisplay: null, paidRaw: null, phase: "opened" };
   }
   if (from.phase === "awaitingWallet" && (to.phase === "reviewReady" || to.phase === "previewExpired" || to.phase === "walletOutcomeUnknown")) {
     const preview = from.preview;
-    return { ...base(preview.walletAddress, preview.builtAt, preview.payToken, preview.inputRaw, nowMs), ...NO_AMOUNTS, signature: null, phase: to.phase === "walletOutcomeUnknown" ? "outcome_unknown" : "rejected" };
+    return { ...base(preview.walletAddress, preview.builtAt, preview.product, preview.payToken, preview.inputRaw, nowMs, preview.side), ...NO_AMOUNTS, signature: null, phase: to.phase === "walletOutcomeUnknown" ? "outcome_unknown" : "rejected" };
   }
   if (!("tracking" in to)) return null;
   const { tracking } = to;
-  const common = { ...base(tracking.walletAddress, tracking.steps.reviewedAt, tracking.payToken, tracking.inputRaw, nowMs), signature: tracking.signature };
+  const common = { ...base(tracking.walletAddress, tracking.steps.reviewedAt, tracking.product, tracking.payToken, tracking.inputRaw, nowMs, tracking.side), signature: tracking.signature };
   if (to.phase === "submitted" && from.phase === "awaitingWallet") {
     return { ...common, ...NO_AMOUNTS, expectedOutputRaw: from.preview.outputRaw.toString(), minimumOutputRaw: from.preview.minimumOutputRaw.toString(), previewExpiresAt: from.preview.expiresAt, phase: "sent" };
   }
+  if (to.phase === "result" && tracking.side === "sell") {
+    // Measured balance changes: USDC arrived (received), NVDAx left (paid). USDC is not a Scaled UI token, so no display amount is kept.
+    const { nvdaxDeltaRaw, usdcPaidRaw } = to.result;
+    return { ...common, ...NO_AMOUNTS, receivedRaw: (-usdcPaidRaw).toString(), paidRaw: (-nvdaxDeltaRaw).toString(), phase: "finalized" };
+  }
   if (to.phase === "result") {
     const { nvdaxDeltaRaw, paidRaw, nvdaxMultiplier } = to.result;
-    const receivedDisplay = nvdaxMultiplier && nvdaxDeltaRaw >= 0n ? formatScaledUnits(nvdaxDeltaRaw, NVDAX_DECIMALS, nvdaxMultiplier.value) : null;
+    const receivedDisplay = nvdaxMultiplier && nvdaxDeltaRaw >= 0n ? formatScaledUnits(nvdaxDeltaRaw, productRoute(tracking.product).decimals, nvdaxMultiplier.value) : null;
     return { ...common, ...NO_AMOUNTS, receivedRaw: nvdaxDeltaRaw.toString(), receivedDisplay, paidRaw: paidRaw === null ? null : paidRaw.toString(), phase: "finalized" };
   }
   const phase = TRACKED_PHASES[to.phase];

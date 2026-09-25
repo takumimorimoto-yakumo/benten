@@ -129,7 +129,7 @@ export function WalletMenu({ locale, variant }: { locale: PublicWebLocale; varia
             {/* Switching keeps the panel open: it shows the wallet list once the current one is disconnected. */}
             <PanelAction onClick={() => session.disconnect()} disabled={state.disconnectLocked} data-wallet-switch="">{copy.switchWallet}</PanelAction>
             <PanelAction onClick={() => { session.disconnect(); close(); }} disabled={state.disconnectLocked} data-wallet-disconnect="">{copy.disconnect}</PanelAction>
-            {state.disconnectLocked ? <p className={NOTE_CLASS}>{copy.disconnectLocked}</p> : null}
+            {state.disconnectLocked ? <p className={NOTE_CLASS}>{state.disconnectLockHolder === "sale" ? copy.disconnectLockedSale : copy.disconnectLocked}</p> : null}
           </div>
         ) : connection.kind === "connecting" ? (
           <p className={NOTE_CLASS}>{copy.connecting}</p>

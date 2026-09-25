@@ -15,6 +15,8 @@ export type { ConversionBasis, FeedBinding, FeedMapEntry, FeedMapV1, FeedRole, P
 export { decodePriceUpdate } from "./price-update.js";
 export type { DecodedPriceUpdate } from "./price-update.js";
 export { PriceRpcError, isFresh, observeFeed, observeFeeds, priceResult } from "./prices.js";
+export { isStaleAt, observeFeedAccounts } from "./observe.js";
+export type { FeedAccounts } from "./observe.js";
 export type { PriceAccountsRpc, PriceObservation, PriceUnavailableReason, PythPriceResult } from "./prices.js";
 export { PRICES_DISCLAIMER, parsePricesResponse } from "./response.js";
 export type { PricesResponse } from "./response.js";

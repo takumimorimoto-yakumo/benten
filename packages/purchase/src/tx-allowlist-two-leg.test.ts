@@ -216,9 +216,9 @@ describe("two-leg amount bounds (independent of the builder's own checks)", () =
   const cases: [string, Partial<TwoLegAuditExpectation>, RegExp][] = [
     ["a USDC minimum above the per-transaction limit", { usdcOutRaw: PURCHASE_CONFIG.maxUsdcInRaw + 1n, usdcMinimumRaw: PURCHASE_CONFIG.maxUsdcInRaw + 1n }, /above the per-transaction limit/],
     ["a zero USDC minimum", { usdcOutRaw: 0n, usdcMinimumRaw: 0n }, /USDC minimum is not positive/],
-    ["a zero NVDAx minimum", { outputRaw: 0n, minimumOutputRaw: 0n }, /NVDAx minimum is not positive/],
+    ["a zero NVDAx minimum", { outputRaw: 0n, minimumOutputRaw: 0n }, /product minimum is not positive/],
     ["a USDC minimum below the slippage floor", { usdcMinimumRaw: USDC_MIN - 1n }, /USDC minimum is below the slippage/],
-    ["an NVDAx minimum below the slippage floor", { minimumOutputRaw: NVDAX_MIN - 1n }, /NVDAx minimum is below the slippage/],
+    ["an NVDAx minimum below the slippage floor", { minimumOutputRaw: NVDAX_MIN - 1n }, /product minimum is below the slippage/],
   ];
   for (const [name, change, reason] of cases) {
     it(`the audit rejects ${name}`, () => {
@@ -241,5 +241,13 @@ describe("composeTwoLegInstructions", () => {
     expect(composed[composed.length - 1].data[0]).toBe(9);
     const result = audit(composed, SOL_EXPECTATION);
     expect(result).toEqual({ ok: true, createsNvdaxAccount: true, createsUsdcAccount: true });
+  });
+});
+
+describe("two-leg wire bytes that are not exactly one transaction (fail closed)", () => {
+  it("refuses a trailing byte after the builder's bytes", () => {
+    const exact = wire(solInstructions());
+    expect(auditTwoLegTransaction(auditShapeOf(exact), SOL_EXPECTATION).ok).toBe(true);
+    expect(auditTwoLegTransaction(auditShapeOf(Uint8Array.from([...exact, 0])), SOL_EXPECTATION)).toEqual({ ok: false, reason: "transaction bytes do not decode to exactly one transaction" });
   });
 });

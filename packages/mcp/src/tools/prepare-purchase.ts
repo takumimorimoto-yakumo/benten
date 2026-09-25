@@ -1,20 +1,26 @@
 /**
- * `prepare_purchase`: facts for a purchase the user explicitly asked for, on
- * the one fixed route (NVDAx for USDC, at most the route's per-transaction
- * limit), paid with USDC, or with SOL or SKR through the same fixed two-leg
- * route as the buy page (the pay token to USDC in its pinned pool, then that
- * USDC to NVDAx; the first leg's USDC is held to the same limit). It returns a current quote read from the pinned pool, when that
- * quote stops being current, and a link to the Benten buy flow with the
- * amount filled in. The user opens the link, the page reads a fresh quote,
- * and the user's own wallet shows and signs the transaction.
+ * `prepare_purchase`: facts for a purchase the user explicitly asked for, of
+ * one xStock Benten can buy (`ticker`, default NVDA), on that product's one
+ * fixed route (the product for USDC in its pinned pool, at most the
+ * per-transaction limit), paid with USDC, or with SOL or SKR through the
+ * same fixed two-leg route as the buy page (the pay token to USDC in its
+ * pinned pool, then that USDC to the product; the first leg's USDC is held
+ * to the same limit). It returns a current quote read from the pinned pool,
+ * when that quote stops being current, and a link to the product's Benten
+ * buy flow with the amount filled in. The user opens the link, the page
+ * reads a fresh quote, and the user's own wallet shows and signs the
+ * transaction.
  *
- * Nothing here builds, signs or sends a transaction. The quote reader is
- * provided by the host (it reads the upstream RPC); this module only checks
- * its answer against a strict schema and resolves the output mint through
- * the registry allowlist before building the link.
+ * Nothing here builds, signs or sends a transaction. The ticker is resolved
+ * through the registry allowlist (`resolveTicker`) before the host's quote
+ * reader sees it; the reader matches it exactly against its routes table
+ * and answers `not_purchasable` for a product it has no route for. This
+ * module checks the reader's answer against a strict schema and resolves
+ * the output mint through the registry allowlist again: the answer must be
+ * for the requested product before the link is built.
  */
 import { z } from "zod";
-import { resolveMint } from "@benten/registry";
+import { resolveMint, resolveTicker } from "@benten/registry";
 import { DISCLAIMER } from "../lib/envelope.js";
 import { isValidSolanaAddress } from "../lib/solana-address.js";
 
@@ -25,8 +31,18 @@ export const PREPARE_PURCHASE_NOTE =
   + "and your wallet shows the final transaction before you approve it. Benten does not sign or send anything.";
 
 export const PREPARE_PURCHASE_ELIGIBILITY =
-  "The issuer does not offer or sell NVDAx to US persons, and transfers may only be made to non-US persons. "
+  "The issuer does not offer or sell xStocks to US persons, and transfers may only be made to non-US persons. "
   + "Benten does not check whether you are eligible.";
+
+/**
+ * The tickers the tool advertises as purchasable. SSOT exception, like the
+ * pay tokens below: the host's quote reader owns the routes table
+ * (`PRODUCT_TICKERS` of `@benten/purchase`, an exact match) and this package
+ * does not depend on it; a public-api test asserts this list equals it.
+ */
+export const PREPARE_PURCHASE_TICKERS = ["NVDA", "META", "MSTR", "GOOGL", "CRCL", "TSLA", "SPY", "HOOD"] as const;
+/** The product when the call names none (the original single route). */
+export const DEFAULT_PURCHASE_TICKER = "NVDA";
 
 const rawInteger = z.string().regex(/^\d+$/);
 const decimalText = z.string().regex(/^\d+\.\d+$/);
@@ -83,7 +99,7 @@ export const purchaseQuoteResultSchema = z.union([
   }),
   z.strictObject({
     ok: z.literal(false),
-    reason: z.enum(["invalid_amount", "invalid_pay_token", "over_limit", "busy", "route_check", "upstream_unavailable"]),
+    reason: z.enum(["invalid_amount", "invalid_pay_token", "not_purchasable", "over_limit", "busy", "route_check", "upstream_unavailable"]),
     max_amount_usdc: decimalText,
     retryable: z.boolean(),
   }),
@@ -91,11 +107,12 @@ export const purchaseQuoteResultSchema = z.union([
 
 export type PurchaseQuoteResult = z.infer<typeof purchaseQuoteResultSchema>;
 /**
- * Reads one quote for an amount text in `payToken` units (omitted: USDC).
- * The reader applies the route's amount checks and matches `payToken`
- * exactly against its pay-token allowlist.
+ * Reads one quote for an amount text in `payToken` units (omitted: USDC),
+ * buying `ticker` (a registry ticker; omitted: NVDA). The reader applies the
+ * route's amount checks, matches `payToken` exactly against its pay-token
+ * allowlist and `ticker` exactly against its routes table.
  */
-export type PurchaseQuoteReader = (amountText: string, payToken?: string) => Promise<PurchaseQuoteResult>;
+export type PurchaseQuoteReader = (amountText: string, payToken?: string, ticker?: string) => Promise<PurchaseQuoteResult>;
 
 export interface PreparePurchaseCapability {
   quote: PurchaseQuoteReader;
@@ -114,6 +131,7 @@ export const preparePurchaseArgs = z.strictObject({
   amount_usdc: amountArg.optional().describe("USDC amount; only with pay_token USDC (the default). Give either amount_usdc or amount."),
   amount: amountArg.optional().describe("Amount in pay_token units (for example 0.02 SOL or 100 SKR). Give either amount or amount_usdc."),
   pay_token: z.string().max(16).optional().describe("Token to pay with; default USDC.").meta({ enum: [...PREPARE_PURCHASE_PAY_TOKENS] }),
+  ticker: z.string().max(16).optional().describe("Registry ticker of the xStock to buy; default NVDA. Only the listed tickers have a fixed route.").meta({ enum: [...PREPARE_PURCHASE_TICKERS] }),
   wallet_address: z.string().max(64).optional(),
 });
 
@@ -132,11 +150,12 @@ export const preparePurchaseInput = z.object({
   amount_usdc: preparePurchaseArgs.shape.amount_usdc.catch(() => INVALID_ARGUMENT as never),
   amount: preparePurchaseArgs.shape.amount.catch(() => INVALID_ARGUMENT as never),
   pay_token: preparePurchaseArgs.shape.pay_token.catch(() => INVALID_ARGUMENT as never),
+  ticker: preparePurchaseArgs.shape.ticker.catch(() => INVALID_ARGUMENT as never),
   wallet_address: preparePurchaseArgs.shape.wallet_address.catch(() => INVALID_ARGUMENT as never),
 }).catchall(z.unknown()).meta({ additionalProperties: false });
 
 const failureReason = z.enum([
-  "invalid_amount", "invalid_pay_token", "over_limit", "invalid_wallet_address", "not_purchasable", "rate_limited", "service_busy", "service_unavailable",
+  "invalid_amount", "invalid_pay_token", "invalid_ticker", "over_limit", "invalid_wallet_address", "not_purchasable", "rate_limited", "service_busy", "service_unavailable",
 ]);
 
 export const preparePurchaseOutput = z.strictObject({
@@ -228,6 +247,7 @@ function amountText(value: string | number): string {
 const READER_FAILURE: Record<Extract<PurchaseQuoteResult, { ok: false }>["reason"], FailureReason> = {
   invalid_amount: "invalid_amount",
   invalid_pay_token: "invalid_pay_token",
+  not_purchasable: "not_purchasable",
   over_limit: "over_limit",
   busy: "service_busy",
   route_check: "service_unavailable",
@@ -243,13 +263,16 @@ interface CheckedArgs {
   amountText: string;
   /** Exactly as given (the reader matches it exactly), or omitted for the default. */
   payToken: string | undefined;
+  /** As given, or omitted for the default product; resolved through the registry before the reader sees it. */
+  ticker: string | undefined;
   walletAddress: string | null;
 }
 
 /**
  * Check the tool arguments against `preparePurchaseArgs`. A wallet address
- * that does not match answers `invalid_wallet_address`, then a pay token that
- * is not a short string `invalid_pay_token`; any other mismatch (a missing,
+ * that does not match answers `invalid_wallet_address`, a ticker that is not
+ * a short string `invalid_ticker`, then a pay token that is not a short
+ * string `invalid_pay_token`; any other mismatch (a missing,
  * mistyped or doubled amount, `amount_usdc` with a pay token other than USDC,
  * an unknown argument) answers `invalid_amount`.
  */
@@ -258,15 +281,16 @@ function checkedArgs(args: unknown): CheckedArgs | FailureReason {
   if (!checked.success) {
     const fields = new Set(checked.error.issues.map((issue) => issue.path[0]));
     if (fields.has("wallet_address")) return "invalid_wallet_address";
+    if (fields.has("ticker")) return "invalid_ticker";
     return fields.has("pay_token") ? "invalid_pay_token" : "invalid_amount";
   }
-  const { amount_usdc: amountUsdc, amount, pay_token: payToken, wallet_address: walletAddress } = checked.data;
+  const { amount_usdc: amountUsdc, amount, pay_token: payToken, ticker, wallet_address: walletAddress } = checked.data;
   if ((amountUsdc === undefined) === (amount === undefined)) return "invalid_amount";
   if (amountUsdc !== undefined && payToken !== undefined && payToken !== DEFAULT_PAY_TOKEN) {
     // `amount_usdc` is a USDC amount; an unknown token is still reported as such.
     return (PREPARE_PURCHASE_PAY_TOKENS as readonly string[]).includes(payToken) ? "invalid_amount" : "invalid_pay_token";
   }
-  return { amountText: amountText((amountUsdc ?? amount)!), payToken, walletAddress: walletAddress ?? null };
+  return { amountText: amountText((amountUsdc ?? amount)!), payToken, ticker, walletAddress: walletAddress ?? null };
 }
 
 type ReaderLeg = NonNullable<Extract<PurchaseQuoteResult, { ok: true }>["first_leg"]>;
@@ -292,9 +316,14 @@ export async function preparePurchase(args: unknown, capability: PreparePurchase
   if (typeof input === "string") return preparePurchaseFailure(input);
   const { walletAddress } = input;
   if (walletAddress !== null && !isValidSolanaAddress(walletAddress)) return preparePurchaseFailure("invalid_wallet_address");
+  // The product is named only through the registry allowlist; the reader then matches the canonical ticker against its routes.
+  const requested = resolveTicker(input.ticker ?? DEFAULT_PURCHASE_TICKER);
+  if (!requested) return preparePurchaseFailure("invalid_ticker");
   let answer: PurchaseQuoteResult;
   try {
-    const raw = input.payToken === undefined ? capability.quote(input.amountText) : capability.quote(input.amountText, input.payToken);
+    const raw = input.ticker === undefined
+      ? (input.payToken === undefined ? capability.quote(input.amountText) : capability.quote(input.amountText, input.payToken))
+      : capability.quote(input.amountText, input.payToken, requested.ticker);
     answer = purchaseQuoteResultSchema.parse(await raw);
   } catch {
     return preparePurchaseFailure("service_unavailable", true);
@@ -309,6 +338,8 @@ export async function preparePurchase(args: unknown, capability: PreparePurchase
   // The link names a product only through the registry allowlist; an unknown mint is not purchasable here.
   const product = resolveMint(answer.route.output_mint);
   if (!product || product.mint !== answer.route.output_mint) return preparePurchaseFailure("not_purchasable");
+  // The answer must be for the requested product.
+  if (product.ticker !== requested.ticker || product.mint !== requested.mint) return preparePurchaseFailure("service_unavailable", true);
   const path = `${buyFlowPath(product.ticker)}${answer.buy_query}`;
   return envelope({
     prepared: true,

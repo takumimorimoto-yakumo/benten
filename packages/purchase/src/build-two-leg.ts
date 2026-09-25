@@ -1,8 +1,8 @@
 /**
  * Browser-only, unsigned two-leg exact-in purchase builder: pay with SOL or
  * SKR, swap it to USDC in one pinned Meteora DLMM pool, and swap exactly that
- * leg's USDC minimum to NVDAx in the fixed NVDAx/USDC pool, all in one
- * transaction.
+ * leg's USDC minimum to the product in its pinned product/USDC pool
+ * (`routes-table.ts`; default NVDAx), all in one transaction.
  *
  * SECURITY INVARIANTS (same as `build-swap.ts`):
  *  1. Builds and returns one unsigned `Transaction`. Never asks a wallet to
@@ -23,16 +23,17 @@ import BN from "bn.js";
 // eslint-disable-next-line import/no-named-as-default -- the SDK's default export is the DLMM pool class.
 import DLMM from "@meteora-ag/dlmm";
 
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
+import { TOKEN_PROGRAM_ID } from "@benten/solana";
 
 import { PAY_CONFIG } from "./pay-config";
 import { composeTwoLegInstructions } from "./two-leg-compose";
-import { NVDAX_MINT, NVDAX_USDC_POOL, PAY_TOKENS, USDC_MINT, type PayLeg, type PayTokenId } from "./route";
+import { PAY_TOKENS, USDC_MINT, type PayLeg, type PayTokenId } from "./route";
+import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
 
 const MAX_SLIPPAGE_BPS = 10_000;
 /** The pay token is token X of its first pool: that leg swaps X for Y. */
 const LEG_SWAP_FOR_Y = true;
-/** USDC is token Y of the fixed pool and NVDAx token X: the second leg swaps Y for X. */
+/** USDC is token Y of every product pool and the product token X: the second leg swaps Y for X. */
 const NVDAX_SWAP_FOR_Y = false;
 
 export class TwoLegRouteMismatchError extends Error {
@@ -65,6 +66,8 @@ export interface BuildTwoLegParams {
   connection: Connection;
   /** The wallet that will sign and pay. Read-only here: never used to sign. */
   userPublicKey: PublicKey;
+  /** The product to buy: a routes-table key (default NVDA). Its pool is the second leg. */
+  product?: ProductTicker;
   /** A pay token with a pinned first leg (not USDC). */
   payToken: Exclude<PayTokenId, "USDC">;
   /** Pay token input, raw integer base units (lamports for SOL). */
@@ -92,7 +95,7 @@ export interface BuildTwoLegResult {
   input: { payToken: PayTokenId; mint: string; amountRaw: string };
   /** Pay token -> USDC. Its `minimumOutputRaw` is the second leg's exact USDC input. */
   firstLeg: LegQuote;
-  /** USDC -> NVDAx in the fixed pool. */
+  /** USDC -> the product in its pinned pool. */
   secondLeg: LegQuote;
   lastValidBlockHeight: number;
   /** The unsigned transaction itself. Never signed or sent by this module. */
@@ -143,6 +146,7 @@ function legQuote(pool: DlmmPool, binArrays: PoolBinArrays, quote: SdkQuote): Le
 export async function buildTwoLegExactInSwap(params: BuildTwoLegParams): Promise<BuildTwoLegResult> {
   const { connection, userPublicKey, payToken, inAmountRaw, slippageBps, maxUsdcRaw } = params;
   const route = PAY_TOKENS[payToken];
+  const product = productRoute(params.product ?? DEFAULT_PRODUCT);
   const leg: PayLeg | null = route?.leg ?? null;
   if (!leg) throw new TwoLegInputError("the pay token has no pinned first leg");
   if (inAmountRaw <= 0n) throw new TwoLegInputError("inAmountRaw must be a positive integer");
@@ -152,7 +156,7 @@ export async function buildTwoLegExactInSwap(params: BuildTwoLegParams): Promise
 
   const [legPool, nvdaxPool] = await Promise.all([
     loadPool(connection, leg.pool, leg.tokenXMint, leg.tokenYMint, TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID),
-    loadPool(connection, NVDAX_USDC_POOL, NVDAX_MINT, USDC_MINT, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID),
+    loadPool(connection, product.pool, product.productMint, USDC_MINT, product.tokenProgram, TOKEN_PROGRAM_ID),
   ]);
   const slippage = new BN(slippageBps);
   const inAmount = new BN(inAmountRaw.toString());
@@ -170,7 +174,7 @@ export async function buildTwoLegExactInSwap(params: BuildTwoLegParams): Promise
 
   const [legTransaction, nvdaxTransaction] = await Promise.all([
     legPool.swap({ inToken: leg.tokenXMint, outToken: USDC_MINT, inAmount, minOutAmount: usdcMinimum, lbPair: leg.pool, user: userPublicKey, binArraysPubkey: first.binArraysPubkey }),
-    nvdaxPool.swap({ inToken: USDC_MINT, outToken: NVDAX_MINT, inAmount: usdcMinimum, minOutAmount: second.minOutAmount, lbPair: NVDAX_USDC_POOL, user: userPublicKey, binArraysPubkey: second.binArraysPubkey }),
+    nvdaxPool.swap({ inToken: USDC_MINT, outToken: product.productMint, inAmount: usdcMinimum, minOutAmount: second.minOutAmount, lbPair: product.pool, user: userPublicKey, binArraysPubkey: second.binArraysPubkey }),
   ]);
 
   // Tracking decides "dropped" from this height; without it the transaction must not be offered.

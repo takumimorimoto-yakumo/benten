@@ -20,10 +20,10 @@ export function tokenText(raw: bigint, decimals: number, locale: string): string
   return groupDecimalForLocale(formatRawUnits(raw, decimals), locale);
 }
 
-/** NVDAx display amount with the read multiplier, or `null` when only raw units can be shown. */
-export function nvdaxText(raw: bigint, multiplier: MultiplierReading | null, locale: string): string | null {
+/** A product's display amount with the read multiplier, or `null` when only raw units can be shown. `decimals` defaults to NVDAx's. */
+export function nvdaxText(raw: bigint, multiplier: MultiplierReading | null, locale: string, decimals: number = NVDAX_DECIMALS): string | null {
   if (!multiplier) return null;
-  const scaled = formatScaledUnits(raw, NVDAX_DECIMALS, multiplier.value);
+  const scaled = formatScaledUnits(raw, decimals, multiplier.value);
   return scaled === null ? null : groupDecimalForLocale(scaled, locale);
 }
 

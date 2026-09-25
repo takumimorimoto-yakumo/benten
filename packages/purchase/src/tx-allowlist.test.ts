@@ -207,3 +207,21 @@ describe("auditSwapTransaction rejects anything else before the wallet", () => {
     expect(audit([swapInstruction(keys)]).ok).toBe(false);
   });
 });
+
+describe("wire bytes that are not exactly one transaction (fail closed)", () => {
+  const exact = () => wire([LIMIT(), swapInstruction()]);
+  it("decodes the builder's bytes, which re-serialize to themselves", () => {
+    expect(auditSwapTransaction(auditShapeOf(exact()), EXPECTATION).ok).toBe(true);
+  });
+  const cases: [string, () => Uint8Array][] = [
+    ["one trailing byte", () => Uint8Array.from([...exact(), 7])],
+    ["a trailing copy of the transaction", () => Uint8Array.from([...exact(), ...exact()])],
+    ["undecodable bytes", () => exact().subarray(0, 40)],
+  ];
+  for (const [name, bytes] of cases) {
+    it(`refuses ${name}`, () => {
+      expect(auditShapeOf(bytes())).toBeNull();
+      expect(auditSwapTransaction(auditShapeOf(bytes()), EXPECTATION)).toEqual({ ok: false, reason: "transaction bytes do not decode to exactly one transaction" });
+    });
+  }
+});

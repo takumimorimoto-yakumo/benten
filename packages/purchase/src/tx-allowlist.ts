@@ -6,7 +6,9 @@
  * only the compute-budget, associated-token-account and Meteora DLMM
  * programs; exactly one DLMM `swap2` instruction, last, whose every account
  * sits at its expected position and is either a pinned constant or derived
- * from the pinned pool and the connected wallet; the swap's encoded input and
+ * from the one pool the routes table pins for the product being bought
+ * (`routes-table.ts`; any other product's pool, or a pool not in the table,
+ * fails) and the connected wallet; the swap's encoded input and
  * minimum output equal the amounts the user reviews; no transfer-hook or other
  * extra accounts; the connected wallet as the only signer and fee payer.
  * Anything else fails closed with a reason, and the panel stops before the
@@ -15,19 +17,18 @@
  * Pure and deterministic: no RPC, no wallet, no clock.
  */
 
-import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
-import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
+import { PublicKey, SystemProgram, Transaction, VersionedMessage } from "@solana/web3.js";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@benten/solana";
 
 import {
   COMPUTE_BUDGET_PROGRAM_ID,
   DLMM_PROGRAM_ID,
   MEMO_PROGRAM_ID,
-  NVDAX_MINT,
-  NVDAX_USDC_POOL,
   PAY_TOKENS,
   USDC_MINT,
   type PayTokenId,
 } from "./route";
+import { DEFAULT_PRODUCT, PRODUCT_ROUTES, resolveProductTicker, SELL_ROUTE, type ProductRoute, type ProductTicker } from "./routes-table";
 import { BPS_DENOMINATOR, PURCHASE_CONFIG } from "./config";
 import { PAY_CONFIG } from "./pay-config";
 
@@ -51,16 +52,23 @@ export interface AuditTransaction {
 export interface AuditExpectation {
   /** The connected wallet, base58. */
   user: string;
+  /**
+   * The product being bought (a routes-table key; default NVDA). The audit
+   * reads its pool, mint and token program from the table itself, never from
+   * the caller.
+   */
+  product?: ProductTicker;
   /** Raw USDC input the user reviews. */
   inputRaw: bigint;
-  /** Raw NVDAx minimum output the user reviews. */
+  /** Raw product minimum output the user reviews. */
   minimumOutputRaw: bigint;
-  /** Indexes of the bin arrays the quote used; each must derive from the pinned pool. */
+  /** Indexes of the bin arrays the quote used; each must derive from the product's pinned pool. */
   binArrayIndexes: readonly bigint[];
   /** Whether the pool has a bin-array bitmap extension account (read from the pool). */
   hasBitmapExtension: boolean;
 }
 
+/** `createsNvdaxAccount`: whether the transaction creates the wallet's token account of the product being bought (named for the first product). */
 export type AuditResult =
   | { ok: true; createsNvdaxAccount: boolean; createsUsdcAccount: boolean }
   | { ok: false; reason: string };
@@ -70,7 +78,7 @@ const SWAP2_DISCRIMINATOR = Uint8Array.from([0x41, 0x4b, 0x3f, 0x4c, 0xeb, 0x5b,
 /**
  * `swap2` data after the discriminator: amount_in u64, min_amount_out u64, then
  * the remaining-accounts info. The only accepted info is two empty slices
- * (transfer hook X and transfer hook Y, zero accounts each): the NVDAx mint's
+ * (transfer hook X and transfer hook Y, zero accounts each): every listed product mint's
  * transfer-hook program is unset, so no hook account may be appended.
  */
 const SWAP2_REMAINING_ACCOUNTS_INFO = Uint8Array.from([2, 0, 0, 0, 0, 0, 1, 0]);
@@ -109,20 +117,29 @@ export function associatedTokenAddress(owner: PublicKey, mint: PublicKey, tokenP
   return pda([owner.toBytes(), tokenProgram.toBytes(), mint.toBytes()], ASSOCIATED_TOKEN_PROGRAM_ID);
 }
 
-/** Accounts of the pinned pool that are fully determined by its address (DLMM program PDAs). */
-export function derivedPoolAccounts(): { reserveX: string; reserveY: string; oracle: string; eventAuthority: string; bitmapExtension: string } {
-  const pool = NVDAX_USDC_POOL.toBytes();
-  return {
-    reserveX: pda([pool, NVDAX_MINT.toBytes()], DLMM_PROGRAM_ID),
-    reserveY: pda([pool, USDC_MINT.toBytes()], DLMM_PROGRAM_ID),
-    oracle: pda([new TextEncoder().encode("oracle"), pool], DLMM_PROGRAM_ID),
-    eventAuthority: pda([new TextEncoder().encode("__event_authority")], DLMM_PROGRAM_ID),
-    bitmapExtension: pda([new TextEncoder().encode("bitmap"), pool], DLMM_PROGRAM_ID),
-  };
+/** The table route of a product key, or `null` for anything that is not a table key. */
+function routeOf(product: ProductTicker | undefined): ProductRoute | null {
+  const ticker = resolveProductTicker(product ?? DEFAULT_PRODUCT);
+  return ticker === null ? null : PRODUCT_ROUTES[ticker];
 }
 
-export function binArrayAddress(index: bigint): string {
-  return pda([new TextEncoder().encode("bin_array"), NVDAX_USDC_POOL.toBytes(), i64LittleEndian(index)], DLMM_PROGRAM_ID);
+/** The product's pinned pool as a `PoolSpec`: product token X (its own token program), USDC token Y. */
+function productPoolSpec(route: ProductRoute): PoolSpec {
+  return { pool: route.pool, mintX: route.productMint, mintY: USDC_MINT, programX: route.tokenProgram, programY: TOKEN_PROGRAM_ID };
+}
+
+/** Accounts of a product's pinned pool that are fully determined by its address (DLMM program PDAs). Default NVDA. */
+export function derivedPoolAccounts(product: ProductTicker = DEFAULT_PRODUCT): { reserveX: string; reserveY: string; oracle: string; eventAuthority: string; bitmapExtension: string } {
+  const route = routeOf(product);
+  if (!route) throw new Error("product has no pinned route");
+  return poolAccounts(productPoolSpec(route));
+}
+
+/** A bin array of a product's pinned pool. Default NVDA. */
+export function binArrayAddress(index: bigint, product: ProductTicker = DEFAULT_PRODUCT): string {
+  const route = routeOf(product);
+  if (!route) throw new Error("product has no pinned route");
+  return poolBinArrayAddress(route.pool, index);
 }
 
 /**
@@ -156,11 +173,11 @@ function auditComputeBudget(instruction: AuditInstruction, seen: Set<number>, ma
   return null;
 }
 
-function auditAccountCreation(instruction: AuditInstruction, user: PublicKey, created: Set<string>): string | null {
+function auditAccountCreation(instruction: AuditInstruction, user: PublicKey, created: Set<string>, product: ProductRoute): string | null {
   if (!bytesEqual(instruction.data, Uint8Array.from([ATA_CREATE_IDEMPOTENT]))) return "token account: only idempotent creation is allowed";
   const mint = instruction.keys[3]?.pubkey;
-  const route = mint === NVDAX_MINT.toBase58()
-    ? { mint: NVDAX_MINT, program: TOKEN_2022_PROGRAM_ID }
+  const route = mint === product.productMint.toBase58()
+    ? { mint: product.productMint, program: product.tokenProgram }
     : mint === USDC_MINT.toBase58()
       ? { mint: USDC_MINT, program: TOKEN_PROGRAM_ID }
       : null;
@@ -179,7 +196,7 @@ function auditAccountCreation(instruction: AuditInstruction, user: PublicKey, cr
   return null;
 }
 
-function auditSwap(instruction: AuditInstruction, user: PublicKey, expectation: AuditExpectation): string | null {
+function auditSwap(instruction: AuditInstruction, user: PublicKey, expectation: AuditExpectation, product: ProductRoute): string | null {
   const data = instruction.data;
   if (data.length !== SWAP2_DATA_LENGTH || !bytesEqual(data.subarray(0, SWAP2_DISCRIMINATOR.length), SWAP2_DISCRIMINATOR)) {
     return "swap: not the expected swap instruction";
@@ -193,39 +210,49 @@ function auditSwap(instruction: AuditInstruction, user: PublicKey, expectation: 
   }
   if (expectation.binArrayIndexes.length === 0) return "swap: no bin arrays";
 
-  const derived = derivedPoolAccounts();
+  const derived = poolAccounts(productPoolSpec(product));
   const program = DLMM_PROGRAM_ID.toBase58();
   const fixed: Expected[] = [
-    { pubkey: NVDAX_USDC_POOL.toBase58(), signer: false, writable: true },
+    { pubkey: product.pool.toBase58(), signer: false, writable: true },
     { pubkey: expectation.hasBitmapExtension ? derived.bitmapExtension : program, signer: false, writable: null },
     { pubkey: derived.reserveX, signer: false, writable: true },
     { pubkey: derived.reserveY, signer: false, writable: true },
     { pubkey: associatedTokenAddress(user, USDC_MINT, TOKEN_PROGRAM_ID), signer: false, writable: true },
-    { pubkey: associatedTokenAddress(user, NVDAX_MINT, TOKEN_2022_PROGRAM_ID), signer: false, writable: true },
-    { pubkey: NVDAX_MINT.toBase58(), signer: false, writable: false },
+    { pubkey: associatedTokenAddress(user, product.productMint, product.tokenProgram), signer: false, writable: true },
+    { pubkey: product.productMint.toBase58(), signer: false, writable: false },
     { pubkey: USDC_MINT.toBase58(), signer: false, writable: false },
     { pubkey: derived.oracle, signer: false, writable: true },
     // Host fee account: none. Anchor encodes an absent optional account as the program id.
     { pubkey: program, signer: false, writable: false },
     { pubkey: user.toBase58(), signer: true, writable: null },
-    { pubkey: TOKEN_2022_PROGRAM_ID.toBase58(), signer: false, writable: false },
+    { pubkey: product.tokenProgram.toBase58(), signer: false, writable: false },
     { pubkey: TOKEN_PROGRAM_ID.toBase58(), signer: false, writable: false },
     { pubkey: MEMO_PROGRAM_ID.toBase58(), signer: false, writable: false },
     { pubkey: derived.eventAuthority, signer: false, writable: false },
     { pubkey: program, signer: false, writable: false },
   ];
-  const binArrays: Expected[] = expectation.binArrayIndexes.map((index) => ({ pubkey: binArrayAddress(index), signer: false, writable: true }));
+  const binArrays: Expected[] = expectation.binArrayIndexes.map((index) => ({ pubkey: poolBinArrayAddress(product.pool, index), signer: false, writable: true }));
   return checkAccounts(instruction.keys, [...fixed, ...binArrays], "swap");
 }
 
+/** Reason an audit gives for bytes that are not exactly one decodable transaction. */
+const NOT_ONE_TRANSACTION = "transaction bytes do not decode to exactly one transaction";
+
+function sameBytes(left: Uint8Array, right: Uint8Array): boolean {
+  return left.byteLength === right.byteLength && left.every((byte, index) => byte === right[index]);
+}
+
 /** Audit the transaction the wallet would be asked to approve. */
-export function auditSwapTransaction(transaction: AuditTransaction, expectation: AuditExpectation): AuditResult {
+export function auditSwapTransaction(transaction: AuditTransaction | null, expectation: AuditExpectation): AuditResult {
+  if (!transaction) return { ok: false, reason: NOT_ONE_TRANSACTION };
   let user: PublicKey;
   try {
     user = new PublicKey(expectation.user);
   } catch {
     return { ok: false, reason: "wallet address is not valid" };
   }
+  const product = routeOf(expectation.product);
+  if (!product) return { ok: false, reason: "product has no pinned route" };
   if (transaction.feePayer !== user.toBase58()) return { ok: false, reason: "fee payer is not the connected wallet" };
   const instructions = transaction.instructions;
   if (instructions.length === 0) return { ok: false, reason: "no instructions" };
@@ -241,10 +268,10 @@ export function auditSwapTransaction(transaction: AuditTransaction, expectation:
     if (instruction.programId === COMPUTE_BUDGET_PROGRAM_ID.toBase58()) {
       failure = auditComputeBudget(instruction, computeBudgetSeen, null);
     } else if (instruction.programId === ASSOCIATED_TOKEN_PROGRAM_ID.toBase58()) {
-      failure = auditAccountCreation(instruction, user, createdAccounts);
+      failure = auditAccountCreation(instruction, user, createdAccounts, product);
     } else if (instruction.programId === DLMM_PROGRAM_ID.toBase58()) {
       swapCount += 1;
-      failure = index === instructions.length - 1 ? auditSwap(instruction, user, expectation) : "swap: must be the last instruction";
+      failure = index === instructions.length - 1 ? auditSwap(instruction, user, expectation, product) : "swap: must be the last instruction";
     } else {
       failure = "program is not allowed";
     }
@@ -253,14 +280,27 @@ export function auditSwapTransaction(transaction: AuditTransaction, expectation:
   if (swapCount !== 1) return { ok: false, reason: "expected exactly one swap instruction" };
   return {
     ok: true,
-    createsNvdaxAccount: createdAccounts.has(NVDAX_MINT.toBase58()),
+    createsNvdaxAccount: createdAccounts.has(product.productMint.toBase58()),
     createsUsdcAccount: createdAccounts.has(USDC_MINT.toBase58()),
   };
 }
 
-/** Decode unsigned wire bytes into the neutral shape the audit reads. */
-export function auditShapeOf(wire: Uint8Array): AuditTransaction {
-  const decoded = Transaction.from(wire);
+/**
+ * Decode unsigned wire bytes into the neutral shape the audit reads, or
+ * `null` when they do not decode or are not exactly the transaction they
+ * decode to. Decoding stops at the end of the message and ignores anything
+ * after it, so the decoded transaction is serialized again and must equal
+ * the input byte for byte: trailing bytes, or a non-canonical length
+ * encoding, never reach the wallet under an audit of different bytes.
+ */
+export function auditShapeOf(wire: Uint8Array): AuditTransaction | null {
+  let decoded: Transaction;
+  try {
+    decoded = Transaction.from(wire);
+    if (!sameBytes(decoded.serialize({ requireAllSignatures: false, verifySignatures: false }), wire)) return null;
+  } catch {
+    return null;
+  }
   return {
     feePayer: decoded.feePayer?.toBase58() ?? null,
     instructions: decoded.instructions.map((instruction) => ({
@@ -273,7 +313,7 @@ export function auditShapeOf(wire: Uint8Array): AuditTransaction {
 
 // ---------------------------------------------------------------------------
 // Two-leg purchases (pay with SOL or SKR): pay token -> USDC in a pinned first
-// pool, then exactly that leg's USDC minimum -> NVDAx in the fixed pool.
+// pool, then exactly that leg's USDC minimum -> the product in its pinned pool.
 // ---------------------------------------------------------------------------
 
 /** One DLMM pool of a route, with every account the swap may name. */
@@ -297,6 +337,8 @@ interface LegSpec extends PoolSpec {
 export interface TwoLegAuditExpectation {
   /** The connected wallet, base58. */
   user: string;
+  /** The product being bought (a routes-table key; default NVDA): its pinned pool is the second leg. */
+  product?: ProductTicker;
   payToken: Exclude<PayTokenId, "USDC">;
   /** Raw pay token input the user reviews (lamports for SOL). */
   inputRaw: bigint;
@@ -304,9 +346,9 @@ export interface TwoLegAuditExpectation {
   usdcOutRaw: bigint;
   /** The first leg's USDC minimum: also the second leg's exact USDC input. */
   usdcMinimumRaw: bigint;
-  /** The second leg's quoted NVDAx output. */
+  /** The second leg's quoted product output. */
   outputRaw: bigint;
-  /** Raw NVDAx minimum output the user reviews. */
+  /** Raw product minimum output the user reviews. */
   minimumOutputRaw: bigint;
   firstLeg: { binArrayIndexes: readonly bigint[]; hasBitmapExtension: boolean };
   secondLeg: { binArrayIndexes: readonly bigint[]; hasBitmapExtension: boolean };
@@ -329,16 +371,16 @@ function slippageFloor(outputRaw: bigint): bigint {
 /**
  * Bounds of a two-leg purchase's amounts that hold whatever the builder
  * returned: the USDC minimum (the second leg's exact input) is positive and
- * within the per-transaction limit, the NVDAx minimum is positive, and each
+ * within the per-transaction limit, the product minimum is positive, and each
  * leg's minimum is no lower than its quoted output less the fixed slippage.
  * Returns the first violation, or `null`.
  */
 export function twoLegAmountFailure(amounts: TwoLegAmounts): string | null {
   if (amounts.usdcMinimumRaw <= 0n) return "amounts: the USDC minimum is not positive";
   if (amounts.usdcMinimumRaw > PURCHASE_CONFIG.maxUsdcInRaw) return "amounts: the USDC minimum is above the per-transaction limit";
-  if (amounts.minimumOutputRaw <= 0n) return "amounts: the NVDAx minimum is not positive";
+  if (amounts.minimumOutputRaw <= 0n) return "amounts: the product minimum is not positive";
   if (amounts.usdcMinimumRaw < slippageFloor(amounts.usdcOutRaw)) return "amounts: the USDC minimum is below the slippage tolerance";
-  if (amounts.minimumOutputRaw < slippageFloor(amounts.outputRaw)) return "amounts: the NVDAx minimum is below the slippage tolerance";
+  if (amounts.minimumOutputRaw < slippageFloor(amounts.outputRaw)) return "amounts: the product minimum is below the slippage tolerance";
   return null;
 }
 
@@ -424,19 +466,20 @@ function auditTwoLegAccountCreation(instruction: AuditInstruction, user: PublicK
  * Audit a two-leg purchase transaction. Accepted shape, in order:
  *  1. setup: at most one compute-unit limit no higher than
  *     `PAY_CONFIG.twoLegComputeUnitLimit` (no compute-unit price), idempotent creation of
- *     the wallet's pay-token / USDC / NVDAx accounts, and for SOL exactly one
+ *     the wallet's pay-token / USDC / product accounts, and for SOL exactly one
  *     System transfer of `inputRaw` lamports from the wallet to its own
  *     wrapped-SOL account followed by one `SyncNative` of that account;
  *  2. the first-leg swap in the pinned pay-token pool (`inputRaw` in, USDC
  *     minimum out, wallet's pay-token account to its USDC account);
  *  3. optional idempotent account creation, then the second-leg swap in the
- *     fixed pool (exactly the USDC minimum in, NVDAx minimum out);
+ *     product's pinned pool (exactly the USDC minimum in, product minimum out);
  *  4. for SOL, and only for SOL, exactly one `CloseAccount` of the wallet's
  *     wrapped-SOL account back to the wallet, as the last instruction.
  * Nothing else: no other program, signer, account or amount. The reviewed
  * amounts must also pass `twoLegAmountFailure`.
  */
-export function auditTwoLegTransaction(transaction: AuditTransaction, expectation: TwoLegAuditExpectation): AuditResult {
+export function auditTwoLegTransaction(transaction: AuditTransaction | null, expectation: TwoLegAuditExpectation): AuditResult {
+  if (!transaction) return { ok: false, reason: NOT_ONE_TRANSACTION };
   let user: PublicKey;
   try {
     user = new PublicKey(expectation.user);
@@ -445,27 +488,29 @@ export function auditTwoLegTransaction(transaction: AuditTransaction, expectatio
   }
   const route = PAY_TOKENS[expectation.payToken];
   if (!route?.leg) return { ok: false, reason: "pay token has no pinned route" };
+  const product = routeOf(expectation.product);
+  if (!product) return { ok: false, reason: "product has no pinned route" };
   if (transaction.feePayer !== user.toBase58()) return { ok: false, reason: "fee payer is not the connected wallet" };
   const amountFailure = twoLegAmountFailure(expectation);
   if (amountFailure) return { ok: false, reason: amountFailure };
   const native = route.native;
   const payAccount = associatedTokenAddress(user, route.mint, TOKEN_PROGRAM_ID);
   const usdcAccount = associatedTokenAddress(user, USDC_MINT, TOKEN_PROGRAM_ID);
-  const nvdaxAccount = associatedTokenAddress(user, NVDAX_MINT, TOKEN_2022_PROGRAM_ID);
+  const productAccount = associatedTokenAddress(user, product.productMint, product.tokenProgram);
   const first: LegSpec = {
     pool: route.leg.pool, mintX: route.leg.tokenXMint, mintY: route.leg.tokenYMint, programX: TOKEN_PROGRAM_ID, programY: TOKEN_PROGRAM_ID,
     userTokenIn: payAccount, userTokenOut: usdcAccount, amountIn: expectation.inputRaw, minimumOut: expectation.usdcMinimumRaw,
     binArrayIndexes: expectation.firstLeg.binArrayIndexes, hasBitmapExtension: expectation.firstLeg.hasBitmapExtension,
   };
   const second: LegSpec = {
-    pool: NVDAX_USDC_POOL, mintX: NVDAX_MINT, mintY: USDC_MINT, programX: TOKEN_2022_PROGRAM_ID, programY: TOKEN_PROGRAM_ID,
-    userTokenIn: usdcAccount, userTokenOut: nvdaxAccount, amountIn: expectation.usdcMinimumRaw, minimumOut: expectation.minimumOutputRaw,
+    ...productPoolSpec(product),
+    userTokenIn: usdcAccount, userTokenOut: productAccount, amountIn: expectation.usdcMinimumRaw, minimumOut: expectation.minimumOutputRaw,
     binArrayIndexes: expectation.secondLeg.binArrayIndexes, hasBitmapExtension: expectation.secondLeg.hasBitmapExtension,
   };
   const mints = new Map<string, PublicKey>([
     [route.mint.toBase58(), TOKEN_PROGRAM_ID],
     [USDC_MINT.toBase58(), TOKEN_PROGRAM_ID],
-    [NVDAX_MINT.toBase58(), TOKEN_2022_PROGRAM_ID],
+    [product.productMint.toBase58(), product.tokenProgram],
   ]);
 
   const instructions = transaction.instructions;
@@ -526,5 +571,137 @@ export function auditTwoLegTransaction(transaction: AuditTransaction, expectatio
   }
   if (swaps !== 2) return { ok: false, reason: "expected exactly two swap instructions" };
   if (native && !closed) return { ok: false, reason: "wrapped SOL is not closed" };
-  return { ok: true, createsNvdaxAccount: created.has(NVDAX_MINT.toBase58()), createsUsdcAccount: created.has(USDC_MINT.toBase58()) };
+  return { ok: true, createsNvdaxAccount: created.has(product.productMint.toBase58()), createsUsdcAccount: created.has(USDC_MINT.toBase58()) };
+}
+
+// ---------------------------------------------------------------------------
+// Selling NVDAx for USDC: the fixed purchase route reversed, in the same one
+// pinned pool (NVDAx in, USDC out, back to the connected wallet).
+// ---------------------------------------------------------------------------
+
+/** The amounts of a sale the user reviews, as the builder quoted them. */
+export interface SellAmounts {
+  /** Raw NVDAx the wallet sells (the swap's exact input). */
+  inputRaw: bigint;
+  /** The quoted USDC output, raw. */
+  usdcOutRaw: bigint;
+  /** The USDC minimum the swap encodes, raw. */
+  minimumUsdcOutRaw: bigint;
+}
+
+export interface SellAuditExpectation extends SellAmounts {
+  /** The connected wallet, base58. */
+  user: string;
+  /** Indexes of the bin arrays the quote used; each must derive from the pinned pool. */
+  binArrayIndexes: readonly bigint[];
+  /** Whether the pool has a bin-array bitmap extension account (read from the pool). */
+  hasBitmapExtension: boolean;
+}
+
+/**
+ * Bounds of a sale's amounts that hold whatever the builder returned: a
+ * positive NVDAx input, a positive quoted USDC output no higher than the
+ * per-transaction limit, and a USDC minimum that is positive, no higher than
+ * the quoted output and no lower than the floor recomputed here from the
+ * fixed slippage (never taken from the builder). Returns the first violation,
+ * or `null`.
+ */
+export function sellAmountFailure(amounts: SellAmounts): string | null {
+  if (amounts.inputRaw <= 0n) return "amounts: the NVDAx input is not positive";
+  if (amounts.usdcOutRaw <= 0n) return "amounts: the quoted USDC output is not positive";
+  if (amounts.usdcOutRaw > PURCHASE_CONFIG.maxUsdcOutRaw) return "amounts: the quoted USDC output is above the per-sale limit";
+  if (amounts.minimumUsdcOutRaw <= 0n) return "amounts: the USDC minimum is not positive";
+  if (amounts.minimumUsdcOutRaw > amounts.usdcOutRaw) return "amounts: the USDC minimum is above the quoted output";
+  if (amounts.minimumUsdcOutRaw < slippageFloor(amounts.usdcOutRaw)) return "amounts: the USDC minimum is below the slippage tolerance";
+  return null;
+}
+
+/**
+ * Audit a sale transaction. Accepted shape, in order:
+ *  1. exactly one compute-unit limit, no higher than
+ *     `PURCHASE_CONFIG.sellComputeUnitLimit` (a compute-unit price, or any
+ *     other compute-budget instruction, is refused);
+ *  2. optionally, idempotent creation of the wallet's own USDC account, paid
+ *     by and owned by the wallet (never an NVDAx account: the wallet sells
+ *     from the one it already has);
+ *  3. exactly one DLMM `swap2` in the pinned pool, last: the wallet's NVDAx
+ *     account in, the wallet's own USDC account out, `inputRaw` in and
+ *     `minimumUsdcOutRaw` out, every account at its expected position.
+ * Nothing else: no other program, signer, account or amount. The wallet is
+ * the fee payer and the only signer, and the reviewed amounts must also pass
+ * `sellAmountFailure`.
+ */
+export function auditSellTransaction(transaction: AuditTransaction | null, expectation: SellAuditExpectation): AuditResult {
+  if (!transaction) return { ok: false, reason: NOT_ONE_TRANSACTION };
+  let user: PublicKey;
+  try {
+    user = new PublicKey(expectation.user);
+  } catch {
+    return { ok: false, reason: "wallet address is not valid" };
+  }
+  if (transaction.feePayer !== user.toBase58()) return { ok: false, reason: "fee payer is not the connected wallet" };
+  const amountFailure = sellAmountFailure(expectation);
+  if (amountFailure) return { ok: false, reason: amountFailure };
+  const swap: LegSpec = {
+    ...productPoolSpec(SELL_ROUTE),
+    userTokenIn: associatedTokenAddress(user, SELL_ROUTE.productMint, SELL_ROUTE.tokenProgram),
+    userTokenOut: associatedTokenAddress(user, USDC_MINT, TOKEN_PROGRAM_ID),
+    amountIn: expectation.inputRaw, minimumOut: expectation.minimumUsdcOutRaw,
+    binArrayIndexes: expectation.binArrayIndexes, hasBitmapExtension: expectation.hasBitmapExtension,
+  };
+  // Only the output account may be created: the wallet already holds the NVDAx it sells.
+  const creatable = new Map<string, PublicKey>([[USDC_MINT.toBase58(), TOKEN_PROGRAM_ID]]);
+
+  const instructions = transaction.instructions;
+  if (instructions.length === 0) return { ok: false, reason: "no instructions" };
+  const computeBudgetSeen = new Set<number>();
+  const created = new Set<string>();
+  let swaps = 0;
+  for (const [index, instruction] of instructions.entries()) {
+    for (const key of instruction.keys) {
+      if (key.isSigner && key.pubkey !== user.toBase58()) return { ok: false, reason: `instruction ${index}: unexpected signer` };
+    }
+    let failure: string | null;
+    const program = instruction.programId;
+    if (program === COMPUTE_BUDGET_PROGRAM_ID.toBase58()) {
+      failure = swaps === 0 ? auditComputeBudget(instruction, computeBudgetSeen, PURCHASE_CONFIG.sellComputeUnitLimit) : "compute budget: must precede the swap";
+    } else if (program === ASSOCIATED_TOKEN_PROGRAM_ID.toBase58()) {
+      failure = swaps === 0 ? auditTwoLegAccountCreation(instruction, user, creatable, created) : "token account: must precede the swap";
+    } else if (program === DLMM_PROGRAM_ID.toBase58()) {
+      swaps += 1;
+      failure = index !== instructions.length - 1 ? "swap: must be the last instruction" : auditLegSwap(instruction, user, swap, "swap");
+    } else {
+      failure = "program is not allowed";
+    }
+    if (failure) return { ok: false, reason: `instruction ${index}: ${failure}` };
+  }
+  if (swaps !== 1) return { ok: false, reason: "expected exactly one swap instruction" };
+  if (!computeBudgetSeen.has(COMPUTE_UNIT_LIMIT.tag)) return { ok: false, reason: "compute budget: the compute-unit limit is missing" };
+  return { ok: true, createsNvdaxAccount: false, createsUsdcAccount: created.has(USDC_MINT.toBase58()) };
+}
+
+/**
+ * Decode wire bytes as a legacy transaction only, for the sale audit. A
+ * versioned message (which could load accounts from a lookup table the audit
+ * never sees), bytes that do not decode, and bytes that are not exactly the
+ * one transaction they decode to (`auditShapeOf`) return `null`.
+ */
+export function legacyAuditShapeOf(wire: Uint8Array): AuditTransaction | null {
+  try {
+    const signatureCount = wire[0];
+    // The message starts after the compact-u16 signature count (one byte below 128) and the signatures.
+    if (signatureCount === undefined || signatureCount >= 0x80) return null;
+    const message = wire.subarray(1 + signatureCount * 64);
+    if (VersionedMessage.deserializeMessageVersion(message) !== "legacy") return null;
+    return auditShapeOf(wire);
+  } catch {
+    return null;
+  }
+}
+
+/** Decode (legacy only) and audit the exact bytes a sale would hand to the wallet. Fails closed on anything that does not decode. */
+export function auditSellWire(wire: Uint8Array, expectation: SellAuditExpectation): AuditResult {
+  const shape = legacyAuditShapeOf(wire);
+  if (!shape) return { ok: false, reason: "transaction is not a decodable legacy transaction" };
+  return auditSellTransaction(shape, expectation);
 }

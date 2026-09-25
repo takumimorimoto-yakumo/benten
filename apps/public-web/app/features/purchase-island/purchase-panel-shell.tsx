@@ -35,6 +35,12 @@ export type PurchaseFrame = {
   readonly walletReserve: WalletReserveCopy;
 };
 
+/** The sale flow's frame: the same pool, its own heading, route line and "Before you sell" heading. */
+export function saleFrameFrom(copy: PurchaseCopy, pool: string): PurchaseFrame {
+  const frame = purchaseFrameFrom(copy, pool);
+  return { ...frame, heading: copy.sell.heading, routeLine: copy.sell.routeLine(shortenAddress(pool)), noScript: copy.sell.noScript, notice: { ...copy.notice, heading: copy.sell.noticeHeading } };
+}
+
 export type WalletReserveCopy = { readonly title: string; readonly body: string };
 
 /** The frame for one locale's purchase copy and the pinned pool. */
@@ -73,8 +79,8 @@ export function WalletStepReserve({ reserve, children }: { reserve: WalletReserv
  * and hidden from assistive technology, because without JavaScript it would
  * do nothing.
  */
-export function PurchasePanelShell({ frame, locale, phase, copyable = true, flow, children }: { frame: PurchaseFrame; locale: PublicWebLocale; phase: string; copyable?: boolean; flow?: PurchaseFlowChrome; children?: ReactNode }) {
-  if (flow) return <PurchaseFlowShell frame={frame} locale={locale} phase={phase} copyable={copyable} flow={flow}>{children}</PurchaseFlowShell>;
+export function PurchasePanelShell({ frame, locale, phase, copyable = true, flow, side = "buy", children }: { frame: PurchaseFrame; locale: PublicWebLocale; phase: string; copyable?: boolean; flow?: PurchaseFlowChrome; side?: "buy" | "sell"; children?: ReactNode }) {
+  if (flow) return <PurchaseFlowShell frame={frame} locale={locale} phase={phase} copyable={copyable} flow={flow} side={side}>{children}</PurchaseFlowShell>;
   return (
     <section id={PURCHASE_SECTION_ID} aria-labelledby={PURCHASE_HEADING_ID} data-purchase-panel="" data-phase={phase} lang={locale}>
       {/* Default card size and title scale, like every other card on the Dossier. */}
@@ -122,9 +128,9 @@ function RouteLine({ frame, copyable }: { frame: PurchaseFrame; copyable: boolea
  * scrolls; the actions are pinned to its bottom by the `data-purchase-variant`
  * rule in `static.css`, above the bottom safe area.
  */
-function PurchaseFlowShell({ frame, locale, phase, copyable, flow, children }: { frame: PurchaseFrame; locale: PublicWebLocale; phase: string; copyable: boolean; flow: PurchaseFlowChrome; children?: ReactNode }) {
+function PurchaseFlowShell({ frame, locale, phase, copyable, flow, side, children }: { frame: PurchaseFrame; locale: PublicWebLocale; phase: string; copyable: boolean; flow: PurchaseFlowChrome; side: "buy" | "sell"; children?: ReactNode }) {
   return (
-    <section id={PURCHASE_SECTION_ID} aria-labelledby={PURCHASE_HEADING_ID} data-purchase-panel="" data-purchase-variant="flow" data-phase={phase} lang={locale} className="flex min-h-full flex-col">
+    <section id={PURCHASE_SECTION_ID} aria-labelledby={PURCHASE_HEADING_ID} data-purchase-panel="" data-purchase-variant="flow" data-phase={phase} lang={locale} data-trade-side={side} className="flex min-h-full flex-col">
       <div data-purchase-flow-bar="" className="sticky top-0 z-10 flex min-h-(--app-header-height) items-center gap-2 border-b bg-background ps-2 pe-(--flow-inline-padding) pt-(--safe-area-top)">
         {flow.leading}
         <h2 id={PURCHASE_HEADING_ID} tabIndex={-1} className="min-w-0 font-heading text-base font-medium">{frame.heading}</h2>

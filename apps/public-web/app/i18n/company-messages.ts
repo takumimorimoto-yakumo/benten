@@ -20,7 +20,8 @@ export type CompanyCopy = {
   buyInBenten: string;
   explore: {
     title: string; description: string; heading: string;
-    capability: (symbol: string, name: string) => string; noBuyable: string;
+    /** `symbols`: the buyable tokens' symbols as one list, already joined for the locale (`Intl.ListFormat`). */
+    capability: (symbols: string) => string; noBuyable: string;
     search: {
       label: string; placeholder: string; listLabel: string; count: (count: string) => string; single: string;
       chooseOne: (count: string) => string; noMatch: (query: string) => string; seeAll: string; noScript: string;
@@ -69,7 +70,7 @@ const en: CompanyCopy = {
   explore: {
     title: "Explore", description: "See which companies you can hold on Solana, in your own wallet.",
     heading: "See which companies you can hold on Solana, in your own wallet.",
-    capability: (symbol, name) => `You can buy one token inside Benten: ${symbol} (${name}). Everything else is shown so you can check it.`,
+    capability: (symbols) => `You can buy these tokens inside Benten: ${symbols}. Everything else is shown so you can check it.`,
     noBuyable: "Everything here is shown so you can check it.",
     search: {
       label: "Search a company or ticker", placeholder: "NVIDIA, OpenAI, TSLA", listLabel: "Suggestions",
@@ -131,7 +132,7 @@ const ja: CompanyCopy = {
   explore: {
     title: "探す", description: "Solanaで、自分のウォレットに保有できる企業を探します。",
     heading: "Solanaで、自分のウォレットに保有できる企業を探す。",
-    capability: (symbol, name) => `Benten内で購入できるのは1つのトークンだけです：${symbol}（${name}）。そのほかは確認のために表示しています。`,
+    capability: (symbols) => `Benten内で購入できるトークンは次のとおりです：${symbols}。そのほかは確認のために表示しています。`,
     noBuyable: "ここに表示している内容は、確認のためのものです。",
     search: {
       label: "企業名またはティッカーで検索", placeholder: "NVIDIA、OpenAI、TSLA", listLabel: "候補",
@@ -193,7 +194,7 @@ const ko: CompanyCopy = {
   explore: {
     title: "탐색", description: "Solana에서 내 지갑으로 보유할 수 있는 기업을 찾아보세요.",
     heading: "Solana에서 내 지갑으로 보유할 수 있는 기업을 찾아보세요.",
-    capability: (symbol, name) => `Benten 안에서 구매할 수 있는 토큰은 ${symbol}(${name}) 하나입니다. 나머지는 확인할 수 있도록 보여 줍니다.`,
+    capability: (symbols) => `Benten 안에서 구매할 수 있는 토큰은 ${symbols}입니다. 나머지는 확인할 수 있도록 보여 줍니다.`,
     noBuyable: "여기에 보이는 내용은 확인할 수 있도록 보여 주는 것입니다.",
     search: {
       label: "기업명 또는 티커 검색", placeholder: "NVIDIA, OpenAI, TSLA", listLabel: "후보",
@@ -255,7 +256,7 @@ const zhHans: CompanyCopy = {
   explore: {
     title: "探索", description: "看看哪些公司可以在 Solana 上用你自己的钱包持有。",
     heading: "看看哪些公司可以在 Solana 上用你自己的钱包持有。",
-    capability: (symbol, name) => `在 Benten 内只能购买一种代币：${symbol}（${name}）。其余内容仅供你核对。`,
+    capability: (symbols) => `在 Benten 内可以购买的代币：${symbols}。其余内容仅供你核对。`,
     noBuyable: "这里显示的内容仅供你核对。",
     search: {
       label: "搜索公司或代码", placeholder: "NVIDIA、OpenAI、TSLA", listLabel: "候选",
@@ -317,7 +318,7 @@ const zhHant: CompanyCopy = {
   explore: {
     title: "探索", description: "看看哪些公司可以在 Solana 上用你自己的錢包持有。",
     heading: "看看哪些公司可以在 Solana 上用你自己的錢包持有。",
-    capability: (symbol, name) => `在 Benten 內只能購買一種代幣：${symbol}（${name}）。其餘內容僅供你核對。`,
+    capability: (symbols) => `在 Benten 內可以購買的代幣：${symbols}。其餘內容僅供你核對。`,
     noBuyable: "這裡顯示的內容僅供你核對。",
     search: {
       label: "搜尋公司或代碼", placeholder: "NVIDIA、OpenAI、TSLA", listLabel: "候選",

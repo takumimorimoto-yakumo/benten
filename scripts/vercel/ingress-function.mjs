@@ -26,14 +26,14 @@ function platformClientAddress(request) {
 }
 
 /**
- * The read-only quote reader of the fixed purchase route (MCP
- * `prepare_purchase`), bundled from source into its own chunk and loaded on
+ * The read-only quote reader of the fixed purchase routes (MCP
+ * `prepare_purchase`; one pinned pool per product, the ticker is passed through), bundled from source into its own chunk and loaded on
  * the first quote: it carries the Solana and pool SDKs, which no other route
  * (relay, prices, facts, 404) needs, so their cold start does not load it.
  * One reader per instance; a failed load is retried on the next quote.
  */
 let quoteReader;
-export async function purchaseQuote(amountText, payToken) {
+export async function purchaseQuote(amountText, payToken, ticker) {
   quoteReader ??= import("../../packages/purchase/src/server-quote.ts").then(
     ({ createServerQuoteReader }) => createServerQuoteReader({ env: process.env }),
     (error) => {
@@ -41,7 +41,7 @@ export async function purchaseQuote(amountText, payToken) {
       throw error;
     },
   );
-  return (await quoteReader)(amountText, payToken);
+  return (await quoteReader)(amountText, payToken, ticker);
 }
 
 export default createHostedIngress({

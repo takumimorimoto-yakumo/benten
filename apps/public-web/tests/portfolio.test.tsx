@@ -12,6 +12,7 @@ import { PORTFOLIO_MESSAGES } from "../app/i18n/holdings-messages.ts";
 import { PUBLIC_WEB_LOCALES } from "../app/i18n/locales.ts";
 import { SHELL_MESSAGES } from "../app/i18n/shell-messages.ts";
 import { createActivityCatalog, createHoldingsProducts } from "../app/lib/portfolio-catalog.server.ts";
+import { PRODUCT_ROUTES, PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
 
 const products = new Map(createHoldingsProducts("en").map((product) => [product.mint, product]));
 const catalog = createActivityCatalog("en");
@@ -31,7 +32,7 @@ describe("Holdings labels built at prerender", () => {
   it("labels every supported product, links its page, and offers Buy only where the route exists", () => {
     expect(products.size).toBeGreaterThan(150);
     const buyable = [...products.values()].filter((product) => product.buyHref !== null);
-    expect(buyable.map((product) => [product.symbol, product.buyHref])).toEqual([["NVDAx", "/stock/NVDA/buy"]]);
+    expect(buyable.map((product) => [product.symbol, product.buyHref]).sort()).toEqual(PRODUCT_TICKERS.map((ticker) => [PRODUCT_ROUTES[ticker].symbol, `/stock/${ticker}/buy`]).sort());
     expect(products.get(NVDAX_MINT)).toMatchObject({ symbol: "NVDAx", href: "/stock/NVDA" });
     const ja = createHoldingsProducts("ja").find((product) => product.mint === NVDAX_MINT);
     expect(ja?.buyHref).toBe("/ja/stock/NVDA/buy");

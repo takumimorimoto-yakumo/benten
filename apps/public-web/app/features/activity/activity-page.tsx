@@ -146,7 +146,7 @@ export function ActivityPage({ locale, catalog = EMPTY_ACTIVITY_CATALOG, store =
                 record={record}
                 locale={locale}
                 tokens={tokens}
-                productHref={catalog.productHrefs[record.outputMint] ?? null}
+                productHref={catalog.productHrefs[record.outputMint] ?? catalog.productHrefs[record.inputMint] ?? null}
                 connected={record.walletAddress === connectedAddress}
                 check={checks.get(record.id) ?? IDLE}
                 onCheck={runCheck}

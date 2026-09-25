@@ -30,7 +30,7 @@ export function DossierPage({ view, locale, purchaseFrame = null, purchaseFixtur
     <div className="grid gap-6 lg:grid-cols-(--dossier-columns) lg:items-start">
       <div className="flex flex-col gap-3 lg:col-span-2">
         <DossierHeader view={view} locale={locale} />
-        {view.purchase === "fixed_route" ? <PurchaseJumpLink locale={locale} /> : null}
+        {view.purchase === "fixed_route" ? <PurchaseJumpLink locale={locale} symbol={view.identity.symbol} /> : null}
       </div>
       <div className="min-w-0 lg:col-start-1 lg:row-start-2"><RegistryRecordSection view={view} locale={locale} /></div>
       <StickyAside label={copy.purchase.heading}>

@@ -4,9 +4,9 @@ import { DEV_CATALOG_ENABLED } from "./lib/dev-catalog-flag.js";
 const publicRoutes = [
   index("routes/home.tsx"),
   // Product pages; the buy flow is the product page's child, so it opens over the page (app IA section 5.1).
-  route("stock/:ticker", "routes/dossier.tsx", [route("buy", "routes/buy.tsx")]),
+  route("stock/:ticker", "routes/dossier.tsx", [route("buy", "routes/buy.tsx"), route("sell", "routes/sell.tsx")]),
   route(":locale", "routes/locale-home.tsx"),
-  route(":locale/stock/:ticker", "routes/locale-dossier.tsx", [route("buy", "routes/locale-buy.tsx")]),
+  route(":locale/stock/:ticker", "routes/locale-dossier.tsx", [route("buy", "routes/locale-buy.tsx"), route("sell", "routes/locale-sell.tsx")]),
   route("provider/:provider/:id", "routes/provider.tsx"),
   route(":locale/provider/:provider/:id", "routes/locale-provider.tsx"),
   // Evidence pages (app IA section 4.6).

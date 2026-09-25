@@ -5,6 +5,7 @@ import { findCompany, listedCompanyMap, productXStockEntries, resolveTicker } fr
 import { buildCompanySearchIndex } from "../../../packages/registry/src/search-index-source.ts";
 import indexJson from "../../../packages/registry/src/company-search-index-v1.json" with { type: "json" };
 import { NVDAX_MINT } from "../../../packages/purchase/src/route.ts";
+import { PRODUCT_ROUTES, PRODUCT_TICKERS } from "../../../packages/purchase/src/routes-table.ts";
 import { createCompanyView, isPublishedCompany, publishedCompanies } from "../app/lib/company.server.ts";
 import { createCompaniesView, createExploreView } from "../app/lib/directory.server.ts";
 import { createStaticFoundationDocument } from "../app/lib/static-document.server.ts";
@@ -74,12 +75,13 @@ describe("directory views", () => {
     for (const withheld of ["SPCX", "VCX"]) expect(placed).not.toContain(withheld);
   });
 
-  it("list rows A to Z, never by a value, and mark only the fixed-route product", () => {
+  it("list rows A to Z, never by a value, and mark only the fixed-route products", () => {
     expect(directory.usListed.map((row) => row.slug)).toEqual([...directory.usListed.map((row) => row.slug)].sort());
     const names = directory.funds.map((row) => row.name.toLowerCase());
     expect(names).toEqual([...names].sort());
-    expect([...directory.private, ...directory.usListed].filter((row) => row.buyInBenten).map((row) => row.slug)).toEqual(["nvidia"]);
-    expect([...directory.unlinked, ...directory.funds].some((row) => row.buyInBenten)).toBe(false);
+    expect([...directory.private, ...directory.usListed].filter((row) => row.buyInBenten).map((row) => row.slug)).toEqual(["alphabet", "circle-internet-group", "meta-platforms", "nvidia", "robinhood-markets", "strategy", "tesla"]);
+    // SPYx is the one fund with a route; no unlinked token has one.
+    expect([...directory.unlinked, ...directory.funds].filter((row) => row.buyInBenten).map((row) => row.ticker)).toEqual(["SPY"]);
     for (const row of [...directory.private, ...directory.usListed]) expect(Object.keys(row).sort()).toEqual(["buyInBenten", "name", "products", "slug"]);
     for (const row of [...directory.unlinked, ...directory.funds]) expect(Object.keys(row).sort()).toEqual(["buyInBenten", "name", "symbol", "ticker"]);
   });
@@ -90,7 +92,9 @@ describe("directory views", () => {
     expect(explore.usListed.count).toBe(129);
     expect(explore.usListed.rows.map((row) => row.slug)).toEqual(directory.usListed.slice(0, 5).map((row) => row.slug));
     expect(explore.funds).toEqual({ count: 23, examples: directory.funds.slice(0, 3).map((row) => row.name) });
-    expect(explore.buyable).toEqual({ symbol: "NVDAx", name: "NVIDIA xStock" });
+    // Every routes-table product, in registry order, named from its registry record.
+    expect(explore.buyable).toEqual(productXStockEntries.filter((entry) => PRODUCT_TICKERS.includes(entry.ticker as never)).map((entry) => ({ symbol: entry.symbol, name: entry.name })));
+    expect(explore.buyable.map((token) => token.symbol).sort()).toEqual(PRODUCT_TICKERS.map((ticker) => PRODUCT_ROUTES[ticker].symbol).sort());
     expect(resolveTicker("NVDA")?.mint).toBe(NVDAX_MINT.toBase58());
   });
 
@@ -140,8 +144,8 @@ describe("Explore search", () => {
     expect([nextActive(-1, 1, 3), nextActive(2, 1, 3), nextActive(-1, -1, 3), nextActive(0, -1, 3)]).toEqual([0, -1, 2, -1]);
   });
 
-  it("tags the buyable company's suggestion as in the lists, and no other", () => {
-    expect(explore.suggestions.filter((label) => label.buyInBenten).map((label) => label.slug ?? label.ticker)).toEqual(["nvidia"]);
+  it("tags the buyable companies' and tokens' suggestions as in the lists, and no other", () => {
+    expect(explore.suggestions.filter((label) => label.buyInBenten).map((label) => label.slug ?? label.ticker).sort()).toEqual([...["alphabet", "circle-internet-group", "meta-platforms", "nvidia", "robinhood-markets", "strategy", "tesla"], "SPY"].sort());
     expect(suggestionsFor("nvidia", labels)[0]?.buyInBenten).toBe(true);
   });
 
@@ -167,7 +171,7 @@ describe("company page", () => {
     expect(nvidia.products).toEqual([expect.objectContaining({ symbol: "NVDAx", buyable: true, mint: NVDAX_MINT.toBase58() })]);
     expect(nvidia.facts.kind).toBe("verified");
     expect(createCompanyView("openai").products).toEqual([expect.objectContaining({ provider: "prestocks", routeKey: "OPENAI", buyable: false })]);
-    expect(publishedCompanies().filter((company) => createCompanyView(company.slug).products.some((product) => product.buyable)).map((company) => company.slug)).toEqual(["nvidia"]);
+    expect(publishedCompanies().filter((company) => createCompanyView(company.slug).products.some((product) => product.buyable)).map((company) => company.slug).sort()).toEqual(["alphabet", "circle-internet-group", "meta-platforms", "nvidia", "robinhood-markets", "strategy", "tesla"]);
     expect(purchaseEntryPath("ja", "NVDA")).toBe("/ja/stock/NVDA/buy");
   });
 

@@ -40,9 +40,9 @@ describe("two-leg preview bounds the reviewed amounts before the audit", () => {
 
   const cases: [string, ReturnType<typeof leg>, ReturnType<typeof leg>, RegExp][] = [
     ["a USDC minimum above the per-transaction limit", leg(PURCHASE_CONFIG.maxUsdcInRaw + 1n, PURCHASE_CONFIG.maxUsdcInRaw + 1n), leg(100n, 99n), /above the per-transaction limit/],
-    ["a zero NVDAx minimum", leg(1_000_000n, 990_000n), leg(0n, 0n), /NVDAx minimum is not positive/],
+    ["a zero NVDAx minimum", leg(1_000_000n, 990_000n), leg(0n, 0n), /product minimum is not positive/],
     ["a USDC minimum below the slippage floor", leg(1_000_000n, 989_999n), leg(100n, 99n), /USDC minimum is below the slippage/],
-    ["an NVDAx minimum below the slippage floor", leg(1_000_000n, 990_000n), leg(1_000n, 989n), /NVDAx minimum is below the slippage/],
+    ["an NVDAx minimum below the slippage floor", leg(1_000_000n, 990_000n), leg(1_000n, 989n), /product minimum is below the slippage/],
   ];
   for (const [name, firstLeg, secondLeg, reason] of cases) {
     it(`fails closed on ${name} without simulating`, async () => {

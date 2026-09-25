@@ -75,11 +75,11 @@ type PurchaseNotice = { readonly heading: string; readonly usPersons: string; re
  * purchase catalog; `tests/static-pages.test.tsx` requires both to be equal.
  */
 export const PURCHASE_NOTICE_COPY: Record<PublicWebLocale, PurchaseNotice> = {
-  en: { heading: "Before you buy", usPersons: "The issuer does not offer or sell NVDAx to US persons, and transfers may only be made to non-US persons.", noEligibilityCheck: "Benten does not check whether you are eligible.", noAvailabilityGuarantee: "Availability from any country is not guaranteed.", notAdvice: "This is not investment advice." },
-  ja: { heading: "購入の前に", usPersons: "発行体は米国人にNVDAxを提供・販売しません。引き渡しは米国人でない人にだけ行います。", noEligibilityCheck: "Bentenはあなたに購入資格があるかを確認しません。", noAvailabilityGuarantee: "どの国からの利用も保証されていません。", notAdvice: "これは投資助言ではありません。" },
-  ko: { heading: "구매 전에", usPersons: "발행사는 미국인에게 NVDAx를 제공하거나 판매하지 않으며, 인도는 미국인이 아닌 사람에게만 이루어집니다.", noEligibilityCheck: "Benten은 귀하의 구매 자격을 확인하지 않습니다.", noAvailabilityGuarantee: "어느 국가에서든 이용 가능성은 보장되지 않습니다.", notAdvice: "이것은 투자 자문이 아닙니다." },
-  "zh-Hans": { heading: "购买之前", usPersons: "发行人不向美国人士发售或出售 NVDAx，只能交付给非美国人士。", noEligibilityCheck: "Benten 不会核实你是否具备购买资格。", noAvailabilityGuarantee: "不保证在任何国家或地区均可使用。", notAdvice: "这不是投资建议。" },
-  "zh-Hant": { heading: "購買之前", usPersons: "發行人不向美國人士發售或出售 NVDAx，只能交付給非美國人士。", noEligibilityCheck: "Benten 不會核實你是否具備購買資格。", noAvailabilityGuarantee: "不保證在任何國家或地區皆可使用。", notAdvice: "這不是投資建議。" },
+  en: { heading: "Before you buy", usPersons: "The issuer does not offer or sell xStocks to US persons, and transfers may only be made to non-US persons.", noEligibilityCheck: "Benten does not check whether you are eligible.", noAvailabilityGuarantee: "Availability from any country is not guaranteed.", notAdvice: "This is not investment advice." },
+  ja: { heading: "購入の前に", usPersons: "発行体は米国人にxStocksを提供・販売しません。引き渡しは米国人でない人にだけ行います。", noEligibilityCheck: "Bentenはあなたに購入資格があるかを確認しません。", noAvailabilityGuarantee: "どの国からの利用も保証されていません。", notAdvice: "これは投資助言ではありません。" },
+  ko: { heading: "구매 전에", usPersons: "발행사는 미국인에게 xStocks를 제공하거나 판매하지 않으며, 인도는 미국인이 아닌 사람에게만 이루어집니다.", noEligibilityCheck: "Benten은 귀하의 구매 자격을 확인하지 않습니다.", noAvailabilityGuarantee: "어느 국가에서든 이용 가능성은 보장되지 않습니다.", notAdvice: "이것은 투자 자문이 아닙니다." },
+  "zh-Hans": { heading: "购买之前", usPersons: "发行人不向美国人士发售或出售 xStocks，只能交付给非美国人士。", noEligibilityCheck: "Benten 不会核实你是否具备购买资格。", noAvailabilityGuarantee: "不保证在任何国家或地区均可使用。", notAdvice: "这不是投资建议。" },
+  "zh-Hant": { heading: "購買之前", usPersons: "發行人不向美國人士發售或出售 xStocks，只能交付給非美國人士。", noEligibilityCheck: "Benten 不會核實你是否具備購買資格。", noAvailabilityGuarantee: "不保證在任何國家或地區皆可使用。", notAdvice: "這不是投資建議。" },
 };
 
 export type PagesCopy = {
@@ -108,7 +108,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "For each company it lists the Solana tokens that reference it, each with its provider and a short statement of what the token gives you.",
           "It shows facts with their sources: SEC filings for US-listed companies, and the provider's own statements where there are no filings.",
           "It shows each token's exact identity, its mint address, so you can check it in your wallet.",
-          purchase("It lets you buy one token, NVIDIA (NVDAx), through one fixed route. You approve and send the purchase in your own wallet."),
+          purchase("It lets you buy eight xStocks (NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx and HOODx), each through one fixed route. You approve and send the purchase in your own wallet."),
         ],
       },
       {
@@ -150,7 +150,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "In Claude, open Settings, then Connectors, choose Add custom connector, and paste the address.",
           "In ChatGPT, turn on developer mode under Settings, Apps and connectors, Advanced. Then create a connector with the address and no authentication.",
         ],
-        after: [purchase("When you ask the chat to buy NVDAx, it can give you a link to the Benten buy page with your amount filled in. You connect your own wallet and approve there. The chat never signs or sends anything.")],
+        after: [purchase("When you ask the chat to buy one of those xStocks, it can give you a link to the Benten buy page with your amount filled in. You connect your own wallet and approve there. The chat never signs or sends anything.")],
       },
       {
         id: "source-code",
@@ -199,7 +199,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "xStocks in Benten",
-          body: [purchase("Benten lists the xStocks in its registry and lets you buy one of them, NVDAx. Every other xStock is shown so you can check it.")],
+          body: [purchase("Benten lists the xStocks in its registry and lets you buy eight of them: NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx and HOODx. Every other xStock is shown so you can check it.")],
         },
       ],
     },
@@ -342,7 +342,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "Terms of use",
       lead: ["This page describes how Benten can be used as it works today. It is a plain summary, not a reviewed legal agreement, and it can change."],
       sections: [
-        { id: "service", heading: "What Benten provides", body: ["Benten is an information and tooling service. It shows public data about companies and Solana tokens, and it can prepare a swap to NVDAx, paid with USDC, SOL or SKR, for your own wallet to approve."] },
+        { id: "service", heading: "What Benten provides", body: ["Benten is an information and tooling service. It shows public data about companies and Solana tokens, and it can prepare a swap to one of eight xStocks, paid with USDC, SOL or SKR, for your own wallet to approve."] },
         { id: "no-warranty", heading: "No warranty", body: ["Benten is provided as it is, without any warranty. Its data comes from public sources that Benten does not verify, audit or guarantee, and it can be incomplete, delayed, wrong or corrected later. Any part of the service can change, pause or stop at any time."] },
         { id: "not-advice", heading: negation("Not investment advice"), body: [negation("Nothing in Benten is investment advice, a recommendation, a valuation or an offer to buy or sell any asset.")] },
         {
@@ -350,7 +350,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "Where Benten can be used",
           body: [
             "Benten does not guarantee that it can be used from any country, and it does not check whether you may hold a token where you live.",
-            "Token issuers set their own restrictions. The issuer of NVDAx does not allow it to be sold or delivered to US persons. You are responsible for the rules that apply to you.",
+            "Token issuers set their own restrictions. The issuer of xStocks does not allow them to be sold or delivered to US persons. You are responsible for the rules that apply to you.",
           ],
         },
         {
@@ -457,7 +457,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "企業ごとに、その企業を参照するSolanaのトークンを並べ、提供元と、そのトークンで何が得られるかの短い説明を示します。",
           "事実を出典とともに示します。米国上場企業はSECへの提出書類、提出書類がない場合は提供元自身の説明です。",
           "各トークンの正確な識別情報であるミントアドレスを示すので、ウォレットで確かめられます。",
-          purchase("1つのトークン、NVIDIA（NVDAx）だけを、1つの固定経路で購入できます。購入はご自身のウォレットで承認し、送信します。"),
+          purchase("8つのxStocks（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx）を、それぞれ1つの固定経路で購入できます。購入はご自身のウォレットで承認し、送信します。"),
         ],
       },
       {
@@ -499,7 +499,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "Claudeでは、設定のコネクタを開き、カスタムコネクタを追加を選んで、アドレスを貼り付けます。",
           "ChatGPTでは、設定のアプリとコネクタにある詳細設定で開発者モードをオンにします。次に、アドレスを指定して認証なしのコネクタを作成します。",
         ],
-        after: [purchase("チャットでNVDAxの購入を頼むと、金額を入力済みのBentenの購入画面へのリンクを受け取れます。ウォレットの接続と承認は、その画面で自分で行います。チャットが署名や送信をすることはありません。")],
+        after: [purchase("チャットでこれらのxStocksの購入を頼むと、金額を入力済みのBentenの購入画面へのリンクを受け取れます。ウォレットの接続と承認は、その画面で自分で行います。チャットが署名や送信をすることはありません。")],
       },
       {
         id: "source-code",
@@ -548,7 +548,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "BentenでのxStocks",
-          body: [purchase("BentenはレジストリにあるxStocksを一覧にし、そのうちNVDAxだけを購入できるようにしています。ほかのxStockは確認のために表示しています。")],
+          body: [purchase("BentenはレジストリにあるxStocksを一覧にし、そのうち8つ（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx）を購入できるようにしています。ほかのxStockは確認のために表示しています。")],
         },
       ],
     },
@@ -691,7 +691,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "利用条件",
       lead: ["このページは、現在の動作に即してBentenをどう利用できるかを説明するものです。法的な確認を経た契約文ではなく、平易な要約であり、変更されることがあります。"],
       sections: [
-        { id: "service", heading: "Bentenが提供するもの", body: ["Bentenは情報とツールを提供するサービスです。企業とSolanaのトークンについて公開データを示し、USDC、SOLまたはSKRで支払うNVDAxへのスワップを、あなたのウォレットが承認するために用意できます。"] },
+        { id: "service", heading: "Bentenが提供するもの", body: ["Bentenは情報とツールを提供するサービスです。企業とSolanaのトークンについて公開データを示し、USDC、SOLまたはSKRで支払う、8つのxStocksのいずれかへのスワップを、あなたのウォレットが承認するために用意できます。"] },
         { id: "no-warranty", heading: "無保証", body: ["Bentenは現状のまま、いかなる保証もなく提供されます。データはBentenが検証、監査、保証しない公開情報に由来し、不完全、遅延、誤り、後日の訂正がありえます。サービスのどの部分も、いつでも変更、一時停止、終了されることがあります。"] },
         { id: "not-advice", heading: negation("投資助言ではありません"), body: [negation("Bentenのどの内容も、投資助言、推奨、評価、または資産の売買の申し込みではありません。")] },
         {
@@ -699,7 +699,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "利用できる地域",
           body: [
             "Bentenは、どの国からでも利用できることを保証しません。また、お住まいの地域であなたがトークンを保有できるかも確認しません。",
-            "トークンの発行体はそれぞれ制限を定めています。NVDAxの発行体は、米国人への販売と引き渡しを認めていません。あなたに適用される規則に従うのは、あなた自身の責任です。",
+            "トークンの発行体はそれぞれ制限を定めています。xStocksの発行体は、米国人への販売と引き渡しを認めていません。あなたに適用される規則に従うのは、あなた自身の責任です。",
           ],
         },
         {
@@ -806,7 +806,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "기업마다 그 기업을 참조하는 Solana 토큰을 나열하고, 각 토큰의 제공사와 그 토큰으로 무엇을 얻는지에 대한 짧은 설명을 보여 줍니다.",
           "사실을 출처와 함께 보여 줍니다. 미국 상장 기업은 SEC 제출 서류이고, 제출 서류가 없으면 제공사 자신의 설명입니다.",
           "각 토큰의 정확한 식별 정보인 민트 주소를 보여 주므로 지갑에서 확인할 수 있습니다.",
-          purchase("하나의 토큰, NVIDIA(NVDAx)만 하나의 고정 경로로 구매할 수 있습니다. 구매는 본인의 지갑에서 승인하고 전송합니다."),
+          purchase("8개의 xStocks(NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx, HOODx)를 각각 하나의 고정 경로로 구매할 수 있습니다. 구매는 본인의 지갑에서 승인하고 전송합니다."),
         ],
       },
       {
@@ -848,7 +848,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "Claude에서는 설정의 커넥터를 열고 사용자 지정 커넥터 추가를 선택한 뒤 주소를 붙여 넣습니다.",
           "ChatGPT에서는 설정의 앱 및 커넥터에 있는 고급 설정에서 개발자 모드를 켭니다. 그런 다음 주소를 입력하고 인증 없이 커넥터를 만듭니다.",
         ],
-        after: [purchase("채팅에서 NVDAx 구매를 요청하면 금액이 입력된 Benten 구매 화면 링크를 받을 수 있습니다. 지갑 연결과 승인은 그 화면에서 직접 합니다. 채팅은 서명하거나 전송하지 않습니다.")],
+        after: [purchase("채팅에서 이 xStocks 중 하나의 구매를 요청하면 금액이 입력된 Benten 구매 화면 링크를 받을 수 있습니다. 지갑 연결과 승인은 그 화면에서 직접 합니다. 채팅은 서명하거나 전송하지 않습니다.")],
       },
       {
         id: "source-code",
@@ -897,7 +897,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten의 xStocks",
-          body: [purchase("Benten은 레지스트리에 있는 xStocks를 나열하고, 그중 NVDAx만 구매할 수 있게 합니다. 다른 xStock은 확인할 수 있도록 보여 줍니다.")],
+          body: [purchase("Benten은 레지스트리에 있는 xStocks를 나열하고, 그중 8개(NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx, HOODx)를 구매할 수 있게 합니다. 다른 xStock은 확인할 수 있도록 보여 줍니다.")],
         },
       ],
     },
@@ -1040,7 +1040,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "이용 조건",
       lead: ["이 페이지는 현재 작동 방식에 따라 Benten을 어떻게 이용할 수 있는지 설명합니다. 법적 검토를 거친 계약서가 아니라 알기 쉬운 요약이며, 바뀔 수 있습니다."],
       sections: [
-        { id: "service", heading: "Benten이 제공하는 것", body: ["Benten은 정보와 도구를 제공하는 서비스입니다. 기업과 Solana 토큰에 대한 공개 데이터를 보여 주고, USDC, SOL 또는 SKR로 지불하는 NVDAx로의 스왑을 본인의 지갑이 승인하도록 준비할 수 있습니다."] },
+        { id: "service", heading: "Benten이 제공하는 것", body: ["Benten은 정보와 도구를 제공하는 서비스입니다. 기업과 Solana 토큰에 대한 공개 데이터를 보여 주고, USDC, SOL 또는 SKR로 지불하는, 8개의 xStocks 중 하나로의 스왑을 본인의 지갑이 승인하도록 준비할 수 있습니다."] },
         { id: "no-warranty", heading: "보증 없음", body: ["Benten은 있는 그대로, 어떠한 보증도 없이 제공됩니다. 데이터는 Benten이 검증, 감사, 보증하지 않는 공개 출처에서 나오며, 불완전하거나 늦거나 틀리거나 나중에 정정될 수 있습니다. 서비스의 어느 부분이든 언제든 바뀌거나 일시 중지되거나 종료될 수 있습니다."] },
         { id: "not-advice", heading: negation("투자 자문이 아닙니다"), body: [negation("Benten의 어떤 내용도 투자 자문, 추천, 가치평가, 또는 자산을 사고팔자는 제안이 아닙니다.")] },
         {
@@ -1048,7 +1048,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "이용할 수 있는 지역",
           body: [
             "Benten은 어느 국가에서든 이용할 수 있다고 보장하지 않으며, 거주하는 곳에서 귀하가 토큰을 보유할 수 있는지도 확인하지 않습니다.",
-            "토큰 발행사는 각자 제한을 정합니다. NVDAx의 발행사는 미국인에게 판매하거나 인도하는 것을 허용하지 않습니다. 귀하에게 적용되는 규칙을 따르는 것은 귀하의 책임입니다.",
+            "토큰 발행사는 각자 제한을 정합니다. xStocks의 발행사는 미국인에게 판매하거나 인도하는 것을 허용하지 않습니다. 귀하에게 적용되는 규칙을 따르는 것은 귀하의 책임입니다.",
           ],
         },
         {
@@ -1155,7 +1155,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "为每家公司列出引用它的 Solana 代币，并注明每种代币的提供方，以及一句话说明这种代币给你什么。",
           "展示附带来源的事实：美国上市公司来自 SEC 文件；没有文件时，来自提供方自己的说明。",
           "显示每种代币的准确身份，即它的铸币地址，便于你在钱包中核对。",
-          purchase("只允许你通过一条固定路径购买一种代币：NVIDIA（NVDAx）。购买由你在自己的钱包中批准并发送。"),
+          purchase("可以购买 8 种 xStocks（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx），每种通过一条固定路径。购买由你在自己的钱包中批准并发送。"),
         ],
       },
       {
@@ -1197,7 +1197,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "在 Claude 中，打开设置中的连接器，选择添加自定义连接器，然后粘贴该地址。",
           "在 ChatGPT 中，在设置的应用与连接器下的高级设置里开启开发者模式，然后用该地址创建一个无需身份验证的连接器。",
         ],
-        after: [purchase("当你在聊天中要求购买 NVDAx 时，它可以给你一个已填好金额的 Benten 购买页面链接。你在该页面自行连接钱包并批准。聊天不会签名或发送任何内容。")],
+        after: [purchase("当你在聊天中要求购买其中一种 xStocks 时，它可以给你一个已填好金额的 Benten 购买页面链接。你在该页面自行连接钱包并批准。聊天不会签名或发送任何内容。")],
       },
       {
         id: "source-code",
@@ -1246,7 +1246,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten 中的 xStocks",
-          body: [purchase("Benten 列出其登记册中的 xStocks，其中只有 NVDAx 可以购买。其他 xStock 仅供你查看。")],
+          body: [purchase("Benten 列出其登记册中的 xStocks，其中 8 种可以购买：NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx。其他 xStock 仅供你查看。")],
         },
       ],
     },
@@ -1389,7 +1389,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "使用条件",
       lead: ["本页按照 Benten 当前的运作方式，说明可以如何使用它。它是一份简明的摘要，不是经过法律审阅的协议，并且可能会变更。"],
       sections: [
-        { id: "service", heading: "Benten 提供什么", body: ["Benten 是一项提供信息和工具的服务。它显示关于公司和 Solana 代币的公开数据，并可以准备一种兑换（用 USDC、SOL 或 SKR 支付，兑换为 NVDAx），供你自己的钱包批准。"] },
+        { id: "service", heading: "Benten 提供什么", body: ["Benten 是一项提供信息和工具的服务。它显示关于公司和 Solana 代币的公开数据，并可以准备一种兑换（用 USDC、SOL 或 SKR 支付，兑换为 8 种 xStocks 之一），供你自己的钱包批准。"] },
         { id: "no-warranty", heading: "不作保证", body: ["Benten 按现状提供，不附带任何保证。其数据来自 Benten 不核实、不审计、不保证的公开来源，可能不完整、有延迟、有误或之后被更正。服务的任何部分都可能随时变更、暂停或终止。"] },
         { id: "not-advice", heading: negation("不是投资建议"), body: [negation("Benten 中的任何内容都不是投资建议、推荐、估值，也不是买入或卖出任何资产的要约。")] },
         {
@@ -1397,7 +1397,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "可以在哪里使用",
           body: [
             "Benten 不保证在任何国家或地区都可以使用，也不核实你在居住地是否可以持有某种代币。",
-            "代币发行人各自设定限制。NVDAx 的发行人不允许将其出售或交付给美国人士。遵守适用于你的规则是你自己的责任。",
+            "代币发行人各自设定限制。xStocks 的发行人不允许将其出售或交付给美国人士。遵守适用于你的规则是你自己的责任。",
           ],
         },
         {
@@ -1504,7 +1504,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "為每家公司列出參照它的 Solana 代幣，並註明每種代幣的提供方，以及一句話說明這種代幣給你什麼。",
           "展示附有來源的事實：美國上市公司來自 SEC 文件；沒有文件時，來自提供方自己的說明。",
           "顯示每種代幣的準確身分，也就是它的鑄幣地址，方便你在錢包中核對。",
-          purchase("只讓你透過一條固定路徑購買一種代幣：NVIDIA（NVDAx）。購買由你在自己的錢包中核准並傳送。"),
+          purchase("可以購買 8 種 xStocks（NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx），每種透過一條固定路徑。購買由你在自己的錢包中核准並傳送。"),
         ],
       },
       {
@@ -1546,7 +1546,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "在 Claude 中，開啟設定中的連接器，選擇新增自訂連接器，然後貼上該網址。",
           "在 ChatGPT 中，於設定的應用程式與連接器下的進階設定開啟開發者模式，然後用該網址建立一個不需要驗證的連接器。",
         ],
-        after: [purchase("當你在聊天中要求購買 NVDAx 時，它可以提供一個已填好金額的 Benten 購買頁面連結。你在該頁面自行連接錢包並核准。聊天不會簽署或傳送任何內容。")],
+        after: [purchase("當你在聊天中要求購買其中一種 xStocks 時，它可以提供一個已填好金額的 Benten 購買頁面連結。你在該頁面自行連接錢包並核准。聊天不會簽署或傳送任何內容。")],
       },
       {
         id: "source-code",
@@ -1595,7 +1595,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten 中的 xStocks",
-          body: [purchase("Benten 列出其登記冊中的 xStocks，其中只有 NVDAx 可以購買。其他 xStock 僅供你查看。")],
+          body: [purchase("Benten 列出其登記冊中的 xStocks，其中 8 種可以購買：NVDAx、METAx、MSTRx、GOOGLx、CRCLx、TSLAx、SPYx、HOODx。其他 xStock 僅供你查看。")],
         },
       ],
     },
@@ -1738,7 +1738,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "使用條件",
       lead: ["本頁依照 Benten 目前的運作方式，說明可以如何使用它。它是一份簡明的摘要，不是經過法律審閱的協議，並且可能會變更。"],
       sections: [
-        { id: "service", heading: "Benten 提供什麼", body: ["Benten 是一項提供資訊和工具的服務。它顯示關於公司和 Solana 代幣的公開資料，並可以準備一種兌換（用 USDC、SOL 或 SKR 支付，兌換為 NVDAx），供你自己的錢包核准。"] },
+        { id: "service", heading: "Benten 提供什麼", body: ["Benten 是一項提供資訊和工具的服務。它顯示關於公司和 Solana 代幣的公開資料，並可以準備一種兌換（用 USDC、SOL 或 SKR 支付，兌換為 8 種 xStocks 之一），供你自己的錢包核准。"] },
         { id: "no-warranty", heading: "不作保證", body: ["Benten 按現狀提供，不附帶任何保證。其資料來自 Benten 不核實、不稽核、不保證的公開來源，可能不完整、有延遲、有誤或之後被更正。服務的任何部分都可能隨時變更、暫停或終止。"] },
         { id: "not-advice", heading: negation("不是投資建議"), body: [negation("Benten 中的任何內容都不是投資建議、推薦、估值，也不是買入或賣出任何資產的要約。")] },
         {
@@ -1746,7 +1746,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "可以在哪裡使用",
           body: [
             "Benten 不保證在任何國家或地區皆可使用，也不核實你在居住地是否可以持有某種代幣。",
-            "代幣發行人各自設定限制。NVDAx 的發行人不允許將其出售或交付給美國人士。遵守適用於你的規則是你自己的責任。",
+            "代幣發行人各自設定限制。xStocks 的發行人不允許將其出售或交付給美國人士。遵守適用於你的規則是你自己的責任。",
           ],
         },
         {

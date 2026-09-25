@@ -13,15 +13,9 @@
 import { PRICING_CONFIG } from "./config.js";
 import { formatExact, fromScaledInteger } from "./decimal.js";
 import { FEED_MAP, feedEntry, type FeedMapEntry, type FeedRole } from "./feed-map.js";
-import { decodePriceUpdate, type DecodedPriceUpdate } from "./price-update.js";
+import { isStaleAt, observeFeedAccounts, type PriceObservation, type PriceUnavailableReason } from "./observe.js";
 
-export type PriceUnavailableReason =
-  | "not_in_feed_map"
-  | "no_price_account"
-  | "malformed_price_account"
-  | "future_publish_time"
-  | "upstream_unavailable"
-  | "upstream_timeout";
+export type { PriceObservation, PriceUnavailableReason } from "./observe.js";
 
 interface PriceBase {
   kind: "pyth_reference";
@@ -60,11 +54,6 @@ export type PythPriceResult =
 /** A read-only accounts transport: base64 data and program owner per address, `null` when absent. */
 export type PriceAccountsRpc = (addresses: string[]) => Promise<Array<{ owner: string; data: Uint8Array } | null>>;
 
-/** What one read established about one feed, before staleness is judged. */
-export type PriceObservation =
-  | { ok: true; update: DecodedPriceUpdate; account: string; shard: number; observedAtMs: number }
-  | { ok: false; reason: PriceUnavailableReason; observedAtMs: number };
-
 export class PriceRpcError extends Error {
   constructor(readonly reason: "upstream_unavailable" | "upstream_timeout") {
     super(reason);
@@ -82,28 +71,7 @@ export function observeFeed(
   accounts: ReadonlyArray<{ owner: string; data: Uint8Array } | null>,
   observedAtMs: number,
 ): PriceObservation {
-  let best: { update: DecodedPriceUpdate; account: string; shard: number } | null = null;
-  let sawAccount = false;
-  let malformed = false;
-  let future = false;
-  for (const [index, ref] of entry.price_accounts.entries()) {
-    const account = accounts[index];
-    if (!account) continue;
-    sawAccount = true;
-    const update = account.owner === FEED_MAP.source.receiver_program ? decodePriceUpdate(account.data) : null;
-    if (!update || update.feedId !== entry.feed_id) {
-      malformed = true;
-      continue;
-    }
-    if (Number(update.publishTime) > observedAtMs / 1000 + PRICING_CONFIG.maxFutureSkewSeconds) {
-      future = true;
-      continue;
-    }
-    if (!best || update.publishTime > best.update.publishTime) best = { update, account: ref.address, shard: ref.shard };
-  }
-  if (best) return { ok: true, ...best, observedAtMs };
-  const reason: PriceUnavailableReason = !sawAccount ? "no_price_account" : future ? "future_publish_time" : malformed ? "malformed_price_account" : "no_price_account";
-  return { ok: false, reason, observedAtMs };
+  return observeFeedAccounts({ feedId: entry.feed_id, priceAccounts: entry.price_accounts, receiverProgram: FEED_MAP.source.receiver_program }, accounts, observedAtMs);
 }
 
 /** Turn an observation into the public result, judging staleness at `nowMs`. */
@@ -121,10 +89,9 @@ export function priceResult(feedId: string, observation: PriceObservation | null
   if (!observation.ok) return { ...base, status: "unavailable", reason: observation.reason };
   const { update } = observation;
   const publishUnix = Number(update.publishTime);
-  const ageSeconds = nowMs / 1000 - publishUnix;
   return {
     ...base,
-    status: ageSeconds > PRICING_CONFIG.staleAfterSeconds ? "stale" : "fresh",
+    status: isStaleAt(publishUnix, nowMs) ? "stale" : "fresh",
     price: formatExact(fromScaledInteger(update.price, update.exponent)),
     confidence: formatExact(fromScaledInteger(update.confidence, update.exponent)),
     exponent: update.exponent,

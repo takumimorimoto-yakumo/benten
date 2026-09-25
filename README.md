@@ -7,12 +7,14 @@ a company through a Solana token. The investor starts from the company, not
 the token: Benten shows which tokens on Solana reference that company, which
 exact mint each one is, what the provider says the holder owns, where each
 statement comes from, and a live Pyth reference price where a reviewed feed
-exists. For one token, NVIDIA's xStock (NVDAx), the investor can buy with
-USDC, SOL or SKR from their own wallet inside the app — SOL and SKR swap
-through one fixed two-leg route to USDC first, and every purchase is capped
-at 10 USDC's worth — and then check that the tokens arrived. Benten's server
-never holds a key and never signs; the investor's own wallet signs and sends
-every transaction. Benten gives no advice, ranking or recommendation.
+exists. For eight xStocks (NVDAx, METAx, MSTRx, GOOGLx, CRCLx, TSLAx, SPYx
+and HOODx), each through one fixed pool, the investor can buy with USDC, SOL
+or SKR from their own wallet inside the app — SOL and SKR swap through one
+fixed two-leg route to USDC first, and every purchase is capped at 10 USDC's
+worth — and then check that the tokens arrived. NVDAx can also be sold back
+to USDC through its same fixed pool. Benten's server never holds a key and
+never signs; the investor's own wallet signs and sends every transaction.
+Benten gives no advice, ranking or recommendation.
 
 The name comes from Benzaiten (Benten) / Saraswati: the goddess of knowledge
 and wealth.
@@ -32,9 +34,10 @@ stdio server and the chat-connector steps.
 | Company | `/company/{slug}` | Every Solana token Benten covers for that company, each with its provider, a one-line rights summary and its Pyth reference price where a feed exists; SEC-sourced facts for US-listed issuers |
 | Product | `/stock/{ticker}`, `/provider/prestocks/{id}` | One token: exact mint, provider, what the holder owns, reference price, and whether Benten can buy it |
 | Evidence | `/stock/{ticker}/evidence`, `/provider/prestocks/{id}/evidence` | The registry record, sources, filing references, digests and explicit unknowns behind each statement |
-| Buy | `/stock/NVDA/buy` | Swap USDC, SOL or SKR for NVDAx in the user's own wallet, with a full preview before approval and status tracking to finalized |
+| Buy | `/stock/{ticker}/buy` for NVDA, META, MSTR, GOOGL, CRCL, TSLA, SPY, HOOD | Swap USDC (or SOL / SKR through USDC) for that xStock in the user's own wallet, with a full preview before approval and status tracking to finalized |
+| Sell | `/stock/NVDA/sell` | Swap NVDAx for USDC in the same fixed NVDAx pool, in the user's own wallet, with a full preview before approval and status tracking to finalized |
 | Holdings | `/holdings` | After an explicit refresh, the covered tokens the connected wallet holds, read from its token accounts, valued at the Pyth reference price where the feed is approved for valuation |
-| Activity | `/activity` | Purchases made from this browser, with their final status and the NVDAx amount measured from the finalized transaction |
+| Activity | `/activity` | Purchases made from this browser, with their final status and the token amount measured from the finalized transaction |
 
 Every page exists in five locales: English (unprefixed), Japanese (`/ja`),
 Korean (`/ko`), Simplified Chinese (`/zh-Hans`) and Traditional Chinese
@@ -69,12 +72,31 @@ Reading needs no wallet; only Buy and Holdings ask for one.
     reviewed feed map only, read with one `getMultipleAccounts` of the map's
     price accounts.
   - `POST /api/mcp`: the remote MCP endpoint. Its `prepare_purchase` tool
-    reads the route mints and the pinned pool (and, paying with SOL or SKR,
-    that token's mint and pinned first-leg pool) from the same upstream and
-    quotes each amount locally from that reading, which one function instance
-    reuses for 5 seconds (one refresh at a time per reading, and at most one
-    attempt a second after a failure); it builds no transaction. Its other
-    tools read the snapshots.
+    reads the requested product's route mints and pinned pool (and, paying
+    with SOL or SKR, that token's mint and pinned first-leg pool) from the
+    same upstream and quotes each amount locally from that reading, which one
+    function instance reuses for 5 seconds (one refresh at a time per
+    reading; after a failure it waits 1 second, doubling with each
+    consecutive failure up to 30 seconds); it builds no transaction. Its
+    other tools read the snapshots.
+  - Upstream bound of `prepare_purchase`, per function instance and whatever
+    the number of callers: the reader keeps 10 independent readings (one per
+    product route, 8, and one per two-leg pay token, 2). One refresh of a
+    reading was measured on mainnet at 5 upstream requests (2026-09-25; one
+    `getMultipleAccounts` for the mints, or `getAccountInfo` for a pay mint,
+    then 4 reads of the pool and its bin arrays). Every upstream request of
+    every reading draws on one shared budget: a token bucket refilled at 300
+    requests a minute that holds at most 50 (one cold refresh of all 10
+    readings). A refresh that finds the budget spent answers `busy` without
+    reaching the upstream. The worst case, whatever the callers and whether
+    the readings succeed or fail, is 350 requests in any one minute (the
+    50 saved plus 300 refilled) and 300 a minute sustained. Without the
+    budget, readings that keep succeeding would refresh every 5 seconds
+    (10 x 12 x 5 = 600 a minute). An upstream 429, or any response with
+    `Retry-After`, pauses every reading at once: for `Retry-After`, or 1
+    second doubling over consecutive 429s, at most 30 seconds; during the
+    pause `prepare_purchase` answers `busy` unless the reading is still
+    current.
 - The relay and prices routes accept same-origin callers only (or the exact origins in
   `SOLANA_RPC_RELAY_ALLOWED_ORIGINS`); the MCP endpoint also accepts callers
   without `Origin` (connectors). All three apply a per-client rate limit, bound
@@ -86,32 +108,55 @@ Reading needs no wallet; only Buy and Holdings ask for one.
 
 ## Purchase limits
 
-- One product, one destination: NVDAx
-  (`Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh`). Pay with USDC through the
-  one fixed Meteora DLMM pool
-  (`F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a`), or pay with SOL or SKR
-  through that token's own pinned first-leg pool into USDC, then the same
-  fixed NVDAx pool. No other token can be bought in Benten, and no router or
-  other pool is used for either leg.
-- At most 10 USDC per transaction — or the SOL/SKR amount whose first leg
-  quotes at most 10 USDC — because the fixed NVDAx pool holds only about $428
-  of liquidity. Slippage is fixed at 100 bps on every leg, and a preview
-  expires after 30 seconds.
+- Eight tokens, one route each, for USDC through one fixed Meteora DLMM pool
+  per token (`packages/purchase/src/routes-table.ts`). Each pool was read on
+  mainnet on 2026-09-25: owned by the DLMM program, token X the xStock mint
+  (Token-2022, 8 decimals, Scaled UI Amount, no transfer hook), token Y USDC.
+
+  | Token | Mint | Pool | Liquidity (2026-09-25) |
+  |---|---|---|---:|
+  | NVDAx | `Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh` | `F4inHs4RQARpASmvLpj45QjGLdkukeGQrtQ22pimVy2a` | about $430 |
+  | METAx | `Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu` | `D8pGWVN3vWeyexBtMZjyyPbcLhM1oeTEMibE9h3nNRYL` | about $10,100 |
+  | MSTRx | `XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ` | `CK751YkvVdjWF6cC3Mcs6ibb16DQ417ohXDZ52CRC4xS` | about $4,900 |
+  | GOOGLx | `XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN` | `HgerAhee6opeBQZSLYALL87kBAe9sa3gXM3qj7S4Jdk5` | about $2,200 |
+  | CRCLx | `XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1` | `DUJM3UvCd9o7CtQ771JR8x5ecn9AsbiH1GnEZAWwCinT` | about $1,400 |
+  | TSLAx | `XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB` | `BCZLEgknvcyCsJ9ERRN38U4gBTNn4ftU11fEtV3XHnK2` | about $1,300 |
+  | SPYx | `XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W` | `6uAw2iue69CTGsENLS3j2ur4NnBtbmGptFZ1ZZUje5PJ` | about $1,100 |
+  | HOODx | `XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg` | `AiKXdE3vAtCQTD9REbMEwNnuUfxHAZtBaHoVHdQirBUU` | about $810 |
+
+  Pay with USDC through that token's pool, or pay with SOL or SKR through
+  that pay token's own pinned first-leg pool into USDC, then the same fixed
+  token pool. No other token can be bought in Benten, and no router or
+  other pool is used for either leg. The pre-approval audit accepts a
+  purchase of one token only through that token's pool; another token's
+  pool fails.
+- At most 10 USDC per transaction for every token — or the SOL/SKR amount
+  whose first leg quotes at most 10 USDC — because the thinnest pool (NVDAx)
+  holds only about $430 of liquidity. Slippage is fixed at 100 bps on every
+  leg, and a preview expires after 30 seconds.
+- Selling is NVDAx only, back to USDC through the same fixed NVDAx pool, at
+  most 10 USDC per sale. The NVDAx sold is also valued at the Pyth NVDA/USD
+  reference price, and the sale is refused when that value is more than 3%
+  above the limit, when the pool quotes more than 3% below that value, or
+  when the reference price is not current.
 - Before approval the flow shows the raw and display pay-token input, each
-  leg's expected and minimum output, fees, slippage and the expiry. The
-  Token-2022 scaled-amount multiplier is read at quote time, never from a
-  stored value.
-- The flow sends once and never retries automatically. It tracks the
-  signature to finalized and reports the NVDAx change from the transaction's
-  token balances. Benten's server builds and quotes the swap; it never signs
+  leg's expected and minimum output, fees, slippage and the expiry. Each token's
+  Token-2022 scaled-amount multiplier is read from its own mint account at
+  quote time, never from a stored value.
+- The flow sends once and never retries automatically. It tracks the signature
+  to finalized and reports the token change from the transaction's token
+  balances. Benten's server builds and quotes the swap; it never signs
   — the investor's own wallet signs and sends.
-- The issuer does not offer or sell NVDAx to US persons, and transfers may
+- The issuer does not offer or sell xStocks to US persons, and transfers may
   only be made to non-US persons. Benten does not check eligibility, and
   availability from any country is not guaranteed.
 - A no-funds browser check passed: the swap was built for 1 USDC and an
   unsigned `simulateTransaction` through the relay succeeded, with the
-  simulated NVDAx balance change equal to the quoted output. A funded
-  purchase has not been recorded in this repository.
+  simulated NVDAx balance change equal to the quoted output. On 2026-09-25 a
+  read-only mainnet check built, audited and simulated (unsigned) a 2 USDC
+  purchase of each of the eight tokens, and a 0.01 SOL two-leg purchase of
+  METAx and TSLAx; all passed. A funded purchase has not been recorded in
+  this repository.
 
 ## Data sources and dates
 
@@ -314,7 +359,7 @@ The remote endpoint adds one tool the stdio server does not have:
 
 | Tool | Description |
 |---|---|
-| `prepare_purchase` | For a purchase the user explicitly asked for, on the one fixed route to NVDAx. Pay with USDC (the default; `amount_usdc` above 0 and at most 10), or set `pay_token` to `SOL` or `SKR` and give `amount` in that token's units: the quote then covers the same fixed two-leg route as the buy page (the token to USDC in its pinned pool, then that leg's USDC minimum to NVDAx), and a first leg quoted above 10 USDC answers `over_limit`. It returns the pay token, each leg's quote (output, minimum output after the fixed slippage, fees, price impact; `first_leg` is `null` for USDC), when the quote stops being current, and `purchase_url`, the Benten buy page with the pay token and amount filled in (`/stock/NVDA/buy?amount=5.00`, or `?amount=0.02&pay=sol`). Benten builds, signs and sends nothing: the page reads a fresh quote and the user's own wallet shows and approves the transaction. It carries the US-persons statement and the disclaimer |
+| `prepare_purchase` | For a purchase the user explicitly asked for, of one of the eight buyable xStocks (`ticker`: NVDA, META, MSTR, GOOGL, CRCL, TSLA, SPY or HOOD; default NVDA, so a call without `ticker` works as before), on that token's one fixed route. The ticker is resolved through the registry allowlist (`invalid_ticker` otherwise), then matched exactly against the routes table (`not_purchasable` for any other registry product). Pay with USDC (the default; `amount_usdc` above 0 and at most 10), or set `pay_token` to `SOL` or `SKR` and give `amount` in that token's units: the quote then covers the same fixed two-leg route as the buy page (the token to USDC in its pinned pool, then that leg's USDC minimum to the token), and a first leg quoted above 10 USDC answers `over_limit`. It returns the pay token, each leg's quote (output, minimum output after the fixed slippage, fees, price impact; `first_leg` is `null` for USDC), when the quote stops being current, and `purchase_url`, the token's Benten buy page with the pay token and amount filled in (`/stock/META/buy?amount=5.00`, or `?amount=0.02&pay=sol`). Benten builds, signs and sends nothing: the page reads a fresh quote and the user's own wallet shows and approves the transaction. It carries the US-persons statement and the disclaimer |
 
 The buy page accepts the `pay` parameter only as an exact lower-case pay token
 id (`usdc`, `sol`, `skr`; anything else ignores the whole link), selects that
@@ -341,8 +386,8 @@ contract is in [public data v2](./specs/contracts/public-data-v2.md), the
 
 ## Known limits
 
-- Only NVDAx is buyable in Benten. Every other product, including all
-  PreStocks tokens, is shown for reading and checking only.
+- Only the eight tokens above are buyable in Benten. Every other product,
+  including all PreStocks tokens, is shown for reading and checking only.
 - No funded purchase has been recorded in this repository.
 - Activity lists only purchases made from the same browser. A wallet's in-app
   browser keeps its own records.

@@ -92,11 +92,10 @@ function suggestionLabels(view: CompaniesView): SuggestionLabel[] {
 
 export function createExploreView(): ExploreView {
   const view = directory();
-  const buyable = [...view.private, ...view.usListed].filter((row) => row.buyInBenten);
+  // Registry order, like every other list; exact mint match against the routes table.
   const buyableTokens = productXStockEntries.filter((entry) => isPurchasableMint(entry.mint));
-  if (buyable.length > 1 || buyableTokens.length > 1) throw new Error("Explore states exactly one buyable token");
   return {
-    buyable: buyableTokens[0] ? { symbol: buyableTokens[0].symbol, name: buyableTokens[0].name } : null,
+    buyable: buyableTokens.map((entry) => ({ symbol: entry.symbol, name: entry.name })),
     private: { count: view.private.length, rows: view.private },
     usListed: { count: view.usListed.length, rows: view.usListed.slice(0, EXPLORE_US_LISTED_ROWS) },
     funds: { count: view.funds.length, examples: view.funds.slice(0, EXPLORE_FUND_EXAMPLES).map((row) => row.name) },

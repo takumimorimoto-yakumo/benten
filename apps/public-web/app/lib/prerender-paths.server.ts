@@ -7,6 +7,7 @@
  */
 
 import { aboutPath, activityPath, companiesPath, holdingsPath, LEARN_TOPICS, learnPath, LEGAL_DOCUMENTS, legalPath, localePrefix, PUBLIC_WEB_LOCALES } from "../i18n/locales.js";
+import { SELL_ROUTE } from "@benten/purchase/routes-table";
 
 export { PUBLIC_WEB_LOCALES, type PublicWebLocale } from "../i18n/locales.js";
 
@@ -96,7 +97,8 @@ export function buildDirectoryPrerenderPaths(): readonly string[] {
 /**
  * Product subpages in every locale (app IA sections 4.6 and 5.1): an
  * evidence page for every xStock and provider instrument, and the buy flow
- * frame for the products that have a route. `buyableTickers` must come from
+ * frame for the products that have a route (and the sell flow frame for the
+ * one sale route). `buyableTickers` must come from
  * the exact mint comparison against the pinned route constant.
  */
 export function buildProductSubpagePrerenderPaths(catalog: PublicCatalog, providers: ProviderCatalog, buyableTickers: readonly string[]): readonly string[] {
@@ -108,6 +110,8 @@ export function buildProductSubpagePrerenderPaths(catalog: PublicCatalog, provid
     ...[...tickers].sort().map((ticker) => `/stock/${ticker}/evidence`),
     ...providers.items.map(({ provider, provider_asset_id: id }) => `/provider/${provider}/${id}/evidence`),
     ...[...buyableTickers].sort().map((ticker) => `/stock/${ticker}/buy`),
+    // Selling is NVDAx only: one sell flow frame, and only while its product is buyable.
+    ...buyableTickers.filter((ticker) => ticker === SELL_ROUTE.ticker).map((ticker) => `/stock/${ticker}/sell`),
   ];
   return PUBLIC_WEB_LOCALES.flatMap((locale) => suffixes.map((suffix) => `${localePrefix(locale)}${suffix}`));
 }

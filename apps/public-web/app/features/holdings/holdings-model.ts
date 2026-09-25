@@ -27,6 +27,8 @@ export type HoldingsProduct = {
   readonly href: string;
   /** This locale's buy flow, only for a product with a verified route. */
   readonly buyHref: string | null;
+  /** This locale's sell flow, only for a product with a verified route (shown only while the wallet holds some). */
+  readonly sellHref: string | null;
 };
 
 export type HoldingValueReason = ValuationUnavailableReason | "price_confidence_too_wide" | "price_too_old";

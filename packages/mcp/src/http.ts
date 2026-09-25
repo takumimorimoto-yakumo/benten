@@ -13,7 +13,7 @@ import { createServer, type ServerOptions } from "./server.js";
 
 export type { ServerOptions } from "./server.js";
 export type { PurchaseQuoteReader, PurchaseQuoteResult } from "./tools/prepare-purchase.js";
-export { PREPARE_PURCHASE_PAY_TOKENS } from "./tools/prepare-purchase.js";
+export { PREPARE_PURCHASE_PAY_TOKENS, PREPARE_PURCHASE_TICKERS } from "./tools/prepare-purchase.js";
 
 export async function handleMcpHttpRequest(request: Request, parsedBody: unknown, options: ServerOptions = {}): Promise<Response> {
   const server = createServer(options);

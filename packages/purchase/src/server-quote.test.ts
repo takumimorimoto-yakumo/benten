@@ -312,3 +312,73 @@ describe("server-side quote reader", () => {
     expect(upstream).toHaveBeenCalledTimes(36);
   });
 });
+
+const { PRODUCT_ROUTES, PRODUCT_TICKERS } = await import("./routes-table");
+const { SERVER_QUOTE_STATE_COUNT } = await import("./server-quote");
+
+describe("server-side quote reader per product", () => {
+  it.each([...PRODUCT_TICKERS])("quotes %s through its own pinned pool and names its mint and symbol", async (ticker) => {
+    resetPool();
+    const upstream = mintsUpstream();
+    const read = createServerQuoteReader({ env: {}, fetchImpl: upstream as unknown as typeof fetch });
+    const result = await read("2", "USDC", ticker);
+    const route = PRODUCT_ROUTES[ticker];
+    expect(result).toMatchObject({ ok: true, route: { pool: route.pool.toBase58(), output_mint: route.productMint.toBase58(), output_symbol: route.symbol, output_decimals: 8 } });
+    expect(readPoolState).toHaveBeenCalledWith(expect.anything(), { product: ticker });
+    // The mint read asks for exactly USDC and this product's mint.
+    const mintCall = upstream.mock.calls.map(([, init]) => JSON.parse(String(init?.body))).find((call) => call.method === "getMultipleAccounts");
+    expect(mintCall.params[0]).toEqual([USDC_MINT.toBase58(), route.productMint.toBase58()]);
+  });
+
+  it("quotes the two-leg route into the named product", async () => {
+    resetPool();
+    const read = createServerQuoteReader({ env: {}, fetchImpl: mintsUpstream() as unknown as typeof fetch });
+    const result = await read("0.01", "SOL", "TSLA");
+    expect(result).toMatchObject({ ok: true, pay_token: "SOL", route: { pool: PRODUCT_ROUTES.TSLA.pool.toBase58(), output_symbol: "TSLAx" }, first_leg: { route: { pool: SOL_USDC_POOL.toBase58() } } });
+    expect(readPoolState).toHaveBeenCalledWith(expect.anything(), { product: "TSLA" });
+  });
+
+  it("defaults to NVDA, and answers not_purchasable for anything that is not a table key, before any upstream read", async () => {
+    resetPool();
+    const upstream = mintsUpstream();
+    const read = createServerQuoteReader({ env: {}, fetchImpl: upstream as unknown as typeof fetch });
+    await expect(read("2")).resolves.toMatchObject({ ok: true, route: { output_mint: NVDAX_MINT.toBase58() } });
+    const readsAfterDefault = upstream.mock.calls.length;
+    for (const ticker of ["AMZN", "meta", "METAx", "", " META"]) {
+      await expect(read("2", "USDC", ticker)).resolves.toEqual({ ok: false, reason: "not_purchasable", max_amount_usdc: "10.00", retryable: false });
+    }
+    expect(upstream.mock.calls.length).toBe(readsAfterDefault);
+  });
+
+  it("keeps one independent state per product: each is refreshed on its own, and a failing pool does not block another", async () => {
+    resetPool();
+    let now = 1_000_000;
+    readPoolState.mockImplementation(async (_connection: unknown, { product }: { product: string }) => {
+      if (product === "HOOD") throw new Error("pool unreachable");
+      return POOL_STATE;
+    });
+    const read = createServerQuoteReader({ env: {}, fetchImpl: mintsUpstream() as unknown as typeof fetch, now: () => now });
+    await expect(read("2", "USDC", "HOOD")).resolves.toMatchObject({ ok: false, reason: "upstream_unavailable" });
+    await expect(read("2", "USDC", "META")).resolves.toMatchObject({ ok: true });
+    await read("3", "USDC", "META");
+    now += 500;
+    await read("2", "USDC", "HOOD");
+    // META read once (cached), HOOD read once (its failure is answered for the minimum interval).
+    expect(readPoolState.mock.calls.map(([, options]) => options.product)).toEqual(["HOOD", "META"]);
+  });
+
+  it("stays within SERVER_QUOTE_STATE_COUNT x 60 refreshes a minute when every state fails every call", async () => {
+    resetPool();
+    let now = 0;
+    readPoolState.mockRejectedValue(new Error("down"));
+    readLegPoolState.mockRejectedValue(new Error("down"));
+    const read = createServerQuoteReader({ env: {}, fetchImpl: mintsUpstream() as unknown as typeof fetch, now: () => now });
+    for (let call = 0; call < 6_000; call += 1) {
+      const ticker = PRODUCT_TICKERS[call % PRODUCT_TICKERS.length]!;
+      await read("1", ["USDC", "SOL", "SKR"][call % 3], ticker);
+      now += 10;
+    }
+    expect(SERVER_QUOTE_STATE_COUNT).toBe(PRODUCT_TICKERS.length + 2);
+    expect(readPoolState.mock.calls.length + readLegPoolState.mock.calls.length).toBeLessThanOrEqual(SERVER_QUOTE_STATE_COUNT * 60);
+  });
+});

@@ -26,6 +26,7 @@ function run(actions: PurchaseAction[], from: PurchaseState = INITIAL_PURCHASE_S
 function previewTerms(overrides: Partial<Omit<PreviewTerms, "id">> = {}): Omit<PreviewTerms, "id"> {
   return {
     walletAddress: ADDRESS,
+    product: "NVDA",
     payToken: "USDC",
     firstLeg: null,
     inputRaw: 1_000_000n,
@@ -133,7 +134,7 @@ describe("amount and preview", () => {
   });
 
   it("moves previewing -> reviewReady and ignores stale or mismatched results", () => {
-    expect(PREVIEWING.attempt).toEqual({ phase: "previewing", requestId: 1, inputRaw: 1_000_000n, payToken: "USDC" });
+    expect(PREVIEWING.attempt).toEqual({ phase: "previewing", requestId: 1, inputRaw: 1_000_000n, payToken: "USDC", product: "NVDA" });
     expect(REVIEW_READY.attempt.phase).toBe("reviewReady");
     expect(purchaseReducer(PREVIEWING, { type: "previewSucceeded", requestId: 99, preview: previewTerms() })).toBe(PREVIEWING);
     expect(purchaseReducer(PREVIEWING, { type: "previewSucceeded", requestId: 1, preview: previewTerms({ walletAddress: OTHER_ADDRESS }) })).toBe(PREVIEWING);

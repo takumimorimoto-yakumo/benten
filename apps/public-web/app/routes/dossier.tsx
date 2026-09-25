@@ -8,13 +8,14 @@ import { xStockChartData } from "../lib/chart.server.js";
 import { createStockProductView } from "../lib/product.server.js";
 import { createStaticFoundationDocument } from "../lib/static-document.server.js";
 
-/** The one child of this route (app IA section 5.1). */
-const BUY_SUFFIX = "/buy";
+/** The children of this route: the buy flow (app IA section 5.1) and the sell flow. */
+const FLOW_SUFFIXES = ["/buy", "/sell"] as const;
 
 export function loader({ params, request }: LoaderFunctionArgs) {
   const pathname = new URL(request.url).pathname;
   // The product page also renders under its buy flow child; the product's own document is the path without it.
-  const productPathname = pathname.endsWith(BUY_SUFFIX) ? pathname.slice(0, -BUY_SUFFIX.length) : pathname;
+  const suffix = FLOW_SUFFIXES.find((candidate) => pathname.endsWith(candidate));
+  const productPathname = suffix ? pathname.slice(0, -suffix.length) : pathname;
   const document = createStaticFoundationDocument({
     locale: params.locale,
     pathname: productPathname,

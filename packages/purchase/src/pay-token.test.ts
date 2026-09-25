@@ -82,12 +82,12 @@ describe("pay token in the purchase reducer", () => {
     const sol = run([{ type: "payTokenSelected", payToken: "SOL" }, { type: "balanceLoaded", address: ADDRESS, raw: balance, payToken: "SOL" }, { type: "amountEdited", text: "0.1" }, { type: "previewRequested" }], CONNECTED);
     expect(sol.amountError).toBe("overBalance");
     const fits = run([{ type: "payTokenSelected", payToken: "SOL" }, { type: "balanceLoaded", address: ADDRESS, raw: balance, payToken: "SOL" }, { type: "amountEdited", text: "0.09" }, { type: "previewRequested" }], CONNECTED);
-    expect(fits.attempt).toEqual({ phase: "previewing", requestId: 1, inputRaw: 90_000_000n, payToken: "SOL" });
+    expect(fits.attempt).toEqual({ phase: "previewing", requestId: 1, inputRaw: 90_000_000n, payToken: "SOL", product: "NVDA" });
   });
 
   it("does not apply the USDC raw limit to SOL or SKR (they are limited in USD at preview)", () => {
     const skr = run([{ type: "payTokenSelected", payToken: "SKR" }, { type: "balanceLoaded", address: ADDRESS, raw: 10_000_000_000n, payToken: "SKR" }, { type: "amountEdited", text: "400" }, { type: "previewRequested" }], CONNECTED);
-    expect(skr.attempt).toEqual({ phase: "previewing", requestId: 1, inputRaw: 400_000_000n, payToken: "SKR" });
+    expect(skr.attempt).toEqual({ phase: "previewing", requestId: 1, inputRaw: 400_000_000n, payToken: "SKR", product: "NVDA" });
   });
 });
 

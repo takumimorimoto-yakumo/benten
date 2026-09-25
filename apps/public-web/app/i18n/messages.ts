@@ -55,7 +55,7 @@ export type Messages = {
     registry: { heading: string; note: string; source: string; asOf: (date: string) => string; underlyingTicker: string; secRegistrant: string; secRegistrantValue: (name: string, cik: string) => string; tokenSymbol: string; tokenName: string; mint: string; issuer: string; issuerVerified: string; tokenDecimals: string; yes: string; no: string };
     exclusion: { heading: string; labels: Record<ExclusionKey, string>; explanations: Record<ExclusionKey, string> };
     noData: { heading: string; body: (ticker: string) => string };
-    purchase: { heading: string; jumpLink: string; unsupportedHeading: (symbol: string) => string; unsupportedBody: string };
+    purchase: { heading: string; jumpLink: (symbol: string) => string; unsupportedHeading: (symbol: string) => string; unsupportedBody: string };
   };
 };
 
@@ -81,7 +81,7 @@ const en: Messages = {
     registry: { heading: "Registry record", note: "Static registry facts about the token itself, from the Benten xStocks registry.", source: "Registry source", asOf: (date) => `As of ${date}`, underlyingTicker: "Underlying ticker", secRegistrant: "SEC registrant", secRegistrantValue: (name, cik) => `${name} (CIK ${cik})`, tokenSymbol: "Token symbol", tokenName: "Token name", mint: "Mint", issuer: "Issuer", issuerVerified: "Issuer verified", tokenDecimals: "Token decimals", yes: "Yes", no: "No" },
     exclusion: { heading: "No current Benten financial coverage", labels: { etf: "Exchange-traded fund", non_sec_listing: "Non-SEC listing", private: "Private company", preferred: "Preferred share class", unspecified: "Unspecified" }, explanations: { etf: "Exchange-traded fund — this ticker has no company-level SEC financial statements in current Benten coverage.", non_sec_listing: "Listed outside the SEC reporting regime covered by Benten.", private: "Private company — no Benten SEC filing coverage is currently available.", preferred: "Preferred share class without its own filing set in current Benten coverage.", unspecified: "No SEC financial statement coverage is currently available in Benten for this ticker." } },
     noData: { heading: "No current financial row", body: (ticker) => `${ticker} is filing-eligible, but the current Benten snapshot has no financial row for it.` },
-    purchase: { heading: "Purchase", jumpLink: "Buy NVDAx", unsupportedHeading: (symbol) => `Purchase not available for ${symbol}`, unsupportedBody: "Benten supports buying only NVDAx, through one fixed pool. Benten offers no purchase for this token." },
+    purchase: { heading: "Purchase", jumpLink: (symbol) => `Buy ${symbol}`, unsupportedHeading: (symbol) => `Purchase not available for ${symbol}`, unsupportedBody: "Benten supports buying only a fixed list of xStocks, each through one fixed pool. Benten offers no purchase for this token." },
   },
 };
 
@@ -105,7 +105,7 @@ const ja: Messages = {
     registry: { heading: "レジストリの登録情報", note: "Benten xStocksレジストリに収録された、トークン自体に関する静的な登録情報です。", source: "レジストリの出典", asOf: (date) => `${date} 時点`, underlyingTicker: "原資産のティッカー", secRegistrant: "SEC登録名", secRegistrantValue: (name, cik) => `${name}（CIK ${cik}）`, tokenSymbol: "トークンシンボル", tokenName: "トークン名", mint: "Mint", issuer: "発行者", issuerVerified: "発行者確認済み", tokenDecimals: "トークンの小数桁数", yes: "はい", no: "いいえ" },
     exclusion: { heading: "現在のBenten財務カバレッジなし", labels: { etf: "上場投資信託（ETF）", non_sec_listing: "SEC 報告制度対象外の上場銘柄", private: "非公開企業", preferred: "優先株式クラス", unspecified: "未指定" }, explanations: { etf: "上場投資信託です。このティッカーに対応する会社単位のSEC財務諸表は、現在のBenten収録対象にありません。", non_sec_listing: "Bentenが対象とするSEC報告制度の範囲外で上場しています。", private: "非公開企業です。現在Bentenで利用できるSEC提出書類の収録対象ではありません。", preferred: "現在のBenten収録対象に独自の提出書類セットがない優先株式クラスです。", unspecified: "このティッカーに対するSEC財務諸表は、現在のBenten収録対象にありません。" } },
     noData: { heading: "現在の財務データなし", body: (ticker) => `${ticker} は提出書類の収録対象ですが、現在のBentenスナップショットには財務データがありません。` },
-    purchase: { heading: "購入", jumpLink: "NVDAxを購入", unsupportedHeading: (symbol) => `${symbol} は購入できません`, unsupportedBody: "Bentenが対応している購入は、1つの固定プールを通じてNVDAxを購入することだけです。このトークンの購入は提供していません。" },
+    purchase: { heading: "購入", jumpLink: (symbol) => `${symbol}を購入`, unsupportedHeading: (symbol) => `${symbol} は購入できません`, unsupportedBody: "Bentenが対応している購入は、決められた一部のxStocksを、それぞれ1つの固定プールを通じて購入することだけです。このトークンの購入は提供していません。" },
   },
 };
 
@@ -129,7 +129,7 @@ const ko: Messages = {
     registry: { heading: "레지스트리 등록 정보", note: "Benten xStocks 레지스트리에 수록된 토큰 자체에 관한 정적 등록 정보입니다.", source: "레지스트리 출처", asOf: (date) => `${date} 기준`, underlyingTicker: "기초자산 티커", secRegistrant: "SEC 등록명", secRegistrantValue: (name, cik) => `${name} (CIK ${cik})`, tokenSymbol: "토큰 심볼", tokenName: "토큰 이름", mint: "Mint", issuer: "발행자", issuerVerified: "발행자 확인됨", tokenDecimals: "토큰 소수 자릿수", yes: "예", no: "아니요" },
     exclusion: { heading: "현재 Benten 재무 데이터 없음", labels: { etf: "상장지수펀드(ETF)", non_sec_listing: "SEC 보고 제도 대상 외 상장 종목", private: "비공개 기업", preferred: "우선주 종류", unspecified: "미지정" }, explanations: { etf: "상장지수펀드입니다. 이 티커의 기업 단위 SEC 재무제표는 현재 Benten 수록 대상에 없습니다.", non_sec_listing: "Benten이 다루는 SEC 보고 제도의 범위 밖에 상장된 종목입니다.", private: "비공개 기업입니다. 현재 Benten에서 이용 가능한 SEC 제출 공시 수록 대상이 아닙니다.", preferred: "현재 Benten 수록 대상에 독립적인 제출 공시 묶음이 없는 우선주 종류입니다.", unspecified: "이 티커의 SEC 재무제표는 현재 Benten 수록 대상에 없습니다." } },
     noData: { heading: "현재 재무 데이터 없음", body: (ticker) => `${ticker}는 공시 수록 대상이지만 현재 Benten 스냅샷에는 해당 재무 데이터가 없습니다.` },
-    purchase: { heading: "구매", jumpLink: "NVDAx 구매", unsupportedHeading: (symbol) => `${symbol}은(는) 구매할 수 없습니다`, unsupportedBody: "Benten은 하나의 고정된 풀을 통해 NVDAx를 구매하는 것만 지원합니다. 이 토큰의 구매는 제공하지 않습니다." },
+    purchase: { heading: "구매", jumpLink: (symbol) => `${symbol} 구매`, unsupportedHeading: (symbol) => `${symbol}은(는) 구매할 수 없습니다`, unsupportedBody: "Benten은 정해진 일부 xStocks를 각각 하나의 고정된 풀을 통해 구매하는 것만 지원합니다. 이 토큰의 구매는 제공하지 않습니다." },
   },
 };
 
@@ -153,7 +153,7 @@ const zhHans: Messages = {
     registry: { heading: "注册表记录", note: "来自 Benten xStocks 注册表、有关代币本身的静态登记信息。", source: "注册表来源", asOf: (date) => `截至 ${date}`, underlyingTicker: "底层资产代码", secRegistrant: "SEC 注册名称", secRegistrantValue: (name, cik) => `${name}（CIK ${cik}）`, tokenSymbol: "代币符号", tokenName: "代币名称", mint: "Mint", issuer: "发行方", issuerVerified: "已确认发行方", tokenDecimals: "代币小数位数", yes: "是", no: "否" },
     exclusion: { heading: "当前无 Benten 财务数据", labels: { etf: "交易所交易基金（ETF）", non_sec_listing: "SEC 报告制度范围外的上市标的", private: "非上市公司", preferred: "优先股类别", unspecified: "未指定" }, explanations: { etf: "这是交易所交易基金，此代码的企业层面 SEC 财务报表不在当前 Benten 收录范围内。", non_sec_listing: "该标的在 Benten 覆盖的 SEC 报告制度范围之外上市。", private: "这是非上市公司，当前不在 Benten 的 SEC 披露文件收录范围内。", preferred: "该优先股类别在当前 Benten 收录范围内没有独立披露文件集。", unspecified: "此代码的 SEC 财务报表当前不在 Benten 收录范围内。" } },
     noData: { heading: "当前无财务记录", body: (ticker) => `${ticker} 属于披露文件收录范围，但当前 Benten 快照中没有其财务记录。` },
-    purchase: { heading: "购买", jumpLink: "购买 NVDAx", unsupportedHeading: (symbol) => `${symbol} 不提供购买`, unsupportedBody: "Benten 仅支持通过一个固定池购买 NVDAx，不提供此代币的购买。" },
+    purchase: { heading: "购买", jumpLink: (symbol) => `购买 ${symbol}`, unsupportedHeading: (symbol) => `${symbol} 不提供购买`, unsupportedBody: "Benten 仅支持通过各自的一个固定池购买指定的几种 xStocks，不提供此代币的购买。" },
   },
 };
 
@@ -177,7 +177,7 @@ const zhHant: Messages = {
     registry: { heading: "登錄表紀錄", note: "來自 Benten xStocks 登錄表、有關代幣本身的靜態登錄資訊。", source: "登錄表來源", asOf: (date) => `截至 ${date}`, underlyingTicker: "底層資產代碼", secRegistrant: "SEC 登記名稱", secRegistrantValue: (name, cik) => `${name}（CIK ${cik}）`, tokenSymbol: "代幣符號", tokenName: "代幣名稱", mint: "Mint", issuer: "發行方", issuerVerified: "已確認發行方", tokenDecimals: "代幣小數位數", yes: "是", no: "否" },
     exclusion: { heading: "目前無 Benten 財務資料", labels: { etf: "交易所交易基金（ETF）", non_sec_listing: "SEC 報告制度範圍外的上市標的", private: "非上市公司", preferred: "特別股類別", unspecified: "未指定" }, explanations: { etf: "這是交易所交易基金，此代碼的企業層級 SEC 財務報表不在目前 Benten 收錄範圍內。", non_sec_listing: "該標的在 Benten 涵蓋的 SEC 報告制度範圍之外上市。", private: "這是非上市公司，目前不在 Benten 的 SEC 揭露文件收錄範圍內。", preferred: "該特別股類別在目前 Benten 收錄範圍內沒有獨立揭露文件集。", unspecified: "此代碼的 SEC 財務報表目前不在 Benten 收錄範圍內。" } },
     noData: { heading: "目前無財務紀錄", body: (ticker) => `${ticker} 屬於揭露文件收錄範圍，但目前 Benten 快照中沒有其財務紀錄。` },
-    purchase: { heading: "購買", jumpLink: "購買 NVDAx", unsupportedHeading: (symbol) => `${symbol} 不提供購買`, unsupportedBody: "Benten 僅支援透過一個固定池購買 NVDAx，不提供此代幣的購買。" },
+    purchase: { heading: "購買", jumpLink: (symbol) => `購買 ${symbol}`, unsupportedHeading: (symbol) => `${symbol} 不提供購買`, unsupportedBody: "Benten 僅支援透過各自的一個固定池購買指定的幾種 xStocks，不提供此代幣的購買。" },
   },
 };
 

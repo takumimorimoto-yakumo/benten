@@ -10,8 +10,8 @@ import { PURCHASE_SLOT_ID } from "./purchase-slot";
  * name. The link targets the slot; its heading is prerendered with the
  * frame, so focus moves to it before and after the island has loaded.
  */
-export function PurchaseJumpLink({ locale }: { locale: PublicWebLocale }) {
-  const label = messagesFor(locale).dossier.purchase.jumpLink;
+export function PurchaseJumpLink({ locale, symbol }: { locale: PublicWebLocale; symbol: string }) {
+  const label = messagesFor(locale).dossier.purchase.jumpLink(symbol);
   function jump(event: MouseEvent<HTMLAnchorElement>) {
     const heading = document.getElementById(PURCHASE_HEADING_ID);
     if (!heading) return;

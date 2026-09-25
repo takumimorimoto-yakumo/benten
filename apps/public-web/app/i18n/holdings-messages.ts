@@ -42,6 +42,8 @@ export type HoldingsCopy = {
   readingPrices: string;
   reasons: Record<HoldingValueReason, string>;
   buy: (symbol: string) => string;
+  /** The sell flow link (Holdings) and a sale record's heading (Activity). */
+  sell: (symbol: string) => string;
   /** `unidentified`: some accounts could not be read far enough to tell whether they hold a covered token. */
   partial: { metadata: string; limit: string; transport: string; unidentified: string };
   errors: {
@@ -57,8 +59,12 @@ export type HoldingsCopy = {
 export type ActivityCopy = {
   listLabel: string;
   buy: (symbol: string) => string;
+  /** The sell flow link (Holdings) and a sale record's heading (Activity). */
+  sell: (symbol: string) => string;
   phase: Record<ActivityPhase, string>;
   phaseNote: Record<ActivityPhase, string>;
+  /** A sale record's notes where they differ from a purchase's (the phases that warn against trading again). */
+  salePhaseNote: Partial<Record<ActivityPhase, string>>;
   wallet: (address: string) => string;
   thisWallet: string;
   started: (time: string) => string;
@@ -142,6 +148,7 @@ const en: PortfolioCopy = {
       multiplier_unavailable: "No value: Benten could not read this token's display multiplier",
     },
     buy: (symbol) => `Buy ${symbol}`,
+    sell: (symbol) => `Sell ${symbol}`,
     partial: {
       metadata: "Some token details could not be read, so some quantities or values are not shown.",
       limit: "This wallet holds more kinds of covered tokens than Benten reads at once; details are not shown.",
@@ -162,6 +169,7 @@ const en: PortfolioCopy = {
   activity: {
     listLabel: "Purchases from this browser",
     buy: (symbol) => `Buy ${symbol}`,
+    sell: (symbol) => `Sell ${symbol}`,
     phase: {
       opened: "Outcome unknown",
       outcome_unknown: "Outcome unknown",
@@ -181,6 +189,13 @@ const en: PortfolioCopy = {
       finalized: "",
       failed: "The transaction was processed and failed, so the swap did not happen.",
       dropped: "The transaction expired without being processed, so the swap did not happen.",
+    },
+    salePhaseNote: {
+      opened: "Approval was requested in your wallet, and Benten has no signature for it. Check your wallet's activity before you sell again.",
+      outcome_unknown: "Your wallet reported an error, and Benten cannot tell whether it sent the transaction. Check your wallet's activity before you sell again.",
+      sent: "Do not sell again until you have checked.",
+      confirmed: "Do not sell again until you have checked.",
+      not_finalized: "Do not sell again until you have checked.",
     },
     wallet: (address) => `Wallet ${address}`,
     thisWallet: "connected",
@@ -279,6 +294,7 @@ const ja: PortfolioCopy = {
       multiplier_unavailable: "評価額なし: トークンの表示倍率を読み取れませんでした",
     },
     buy: (symbol) => `${symbol}を購入`,
+    sell: (symbol) => `${symbol}を売却`,
     partial: {
       metadata: "一部のトークン情報を読み取れなかったため、一部の数量または評価額を表示していません。",
       limit: "このウォレットには、Bentenが一度に読み取れる数を超える種類の対象トークンがあるため、詳細を表示していません。",
@@ -299,6 +315,7 @@ const ja: PortfolioCopy = {
   activity: {
     listLabel: "このブラウザで行った購入",
     buy: (symbol) => `${symbol}を購入`,
+    sell: (symbol) => `${symbol}を売却`,
     phase: {
       opened: "結果不明",
       outcome_unknown: "結果不明",
@@ -318,6 +335,13 @@ const ja: PortfolioCopy = {
       finalized: "",
       failed: "トランザクションは処理されましたが失敗したため、スワップは行われていません。",
       dropped: "トランザクションは処理されないまま期限切れになったため、スワップは行われていません。",
+    },
+    salePhaseNote: {
+      opened: "ウォレットに承認を依頼しましたが、Bentenには署名がありません。もう一度売却する前に、ウォレットの履歴を確認してください。",
+      outcome_unknown: "ウォレットがエラーを報告しており、トランザクションが送信されたかどうかBentenには判断できません。もう一度売却する前に、ウォレットの履歴を確認してください。",
+      sent: "確認するまで、もう一度売却しないでください。",
+      confirmed: "確認するまで、もう一度売却しないでください。",
+      not_finalized: "確認するまで、もう一度売却しないでください。",
     },
     wallet: (address) => `ウォレット ${address}`,
     thisWallet: "接続中",
@@ -416,6 +440,7 @@ const ko: PortfolioCopy = {
       multiplier_unavailable: "평가액 없음: 토큰의 표시 배율을 읽을 수 없었습니다",
     },
     buy: (symbol) => `${symbol} 구매`,
+    sell: (symbol) => `${symbol} 판매`,
     partial: {
       metadata: "일부 토큰 정보를 읽을 수 없어 일부 수량이나 평가액을 표시하지 않습니다.",
       limit: "이 지갑에는 Benten이 한 번에 읽는 수보다 많은 종류의 대상 토큰이 있어 세부 정보를 표시하지 않습니다.",
@@ -436,6 +461,7 @@ const ko: PortfolioCopy = {
   activity: {
     listLabel: "이 브라우저에서 한 구매",
     buy: (symbol) => `${symbol} 구매`,
+    sell: (symbol) => `${symbol} 판매`,
     phase: {
       opened: "결과 알 수 없음",
       outcome_unknown: "결과 알 수 없음",
@@ -455,6 +481,13 @@ const ko: PortfolioCopy = {
       finalized: "",
       failed: "트랜잭션이 처리되었지만 실패하여 스왑은 이루어지지 않았습니다.",
       dropped: "트랜잭션이 처리되지 않은 채 만료되어 스왑은 이루어지지 않았습니다.",
+    },
+    salePhaseNote: {
+      opened: "지갑에 승인을 요청했지만 Benten에는 서명이 없습니다. 다시 판매하기 전에 지갑의 활동을 확인하세요.",
+      outcome_unknown: "지갑이 오류를 보고했으며, 트랜잭션이 전송되었는지 Benten은 알 수 없습니다. 다시 판매하기 전에 지갑의 활동을 확인하세요.",
+      sent: "확인하기 전까지 다시 판매하지 마세요.",
+      confirmed: "확인하기 전까지 다시 판매하지 마세요.",
+      not_finalized: "확인하기 전까지 다시 판매하지 마세요.",
     },
     wallet: (address) => `지갑 ${address}`,
     thisWallet: "연결됨",
@@ -553,6 +586,7 @@ const zhHans: PortfolioCopy = {
       multiplier_unavailable: "无价值：无法读取该代币的显示倍数",
     },
     buy: (symbol) => `购买 ${symbol}`,
+    sell: (symbol) => `卖出 ${symbol}`,
     partial: {
       metadata: "部分代币信息无法读取，因此部分数量或价值未显示。",
       limit: "此钱包中 Benten 涵盖的代币种类超过单次读取上限，因此未显示详情。",
@@ -573,6 +607,7 @@ const zhHans: PortfolioCopy = {
   activity: {
     listLabel: "在此浏览器中进行的购买",
     buy: (symbol) => `购买 ${symbol}`,
+    sell: (symbol) => `卖出 ${symbol}`,
     phase: {
       opened: "结果未知",
       outcome_unknown: "结果未知",
@@ -592,6 +627,13 @@ const zhHans: PortfolioCopy = {
       finalized: "",
       failed: "交易已被处理但失败，因此兑换没有发生。",
       dropped: "交易未被处理就已过期，因此兑换没有发生。",
+    },
+    salePhaseNote: {
+      opened: "已在钱包中请求批准，但 Benten 没有它的签名。再次卖出前，请先查看钱包的活动记录。",
+      outcome_unknown: "钱包报告了错误，Benten 无法判断交易是否已发送。再次卖出前，请先查看钱包的活动记录。",
+      sent: "确认之前请不要再次卖出。",
+      confirmed: "确认之前请不要再次卖出。",
+      not_finalized: "确认之前请不要再次卖出。",
     },
     wallet: (address) => `钱包 ${address}`,
     thisWallet: "已连接",
@@ -690,6 +732,7 @@ const zhHant: PortfolioCopy = {
       multiplier_unavailable: "無價值：無法讀取該代幣的顯示倍數",
     },
     buy: (symbol) => `購買 ${symbol}`,
+    sell: (symbol) => `賣出 ${symbol}`,
     partial: {
       metadata: "部分代幣資訊無法讀取，因此部分數量或價值未顯示。",
       limit: "此錢包中 Benten 涵蓋的代幣種類超過單次讀取上限，因此未顯示詳情。",
@@ -710,6 +753,7 @@ const zhHant: PortfolioCopy = {
   activity: {
     listLabel: "在此瀏覽器中進行的購買",
     buy: (symbol) => `購買 ${symbol}`,
+    sell: (symbol) => `賣出 ${symbol}`,
     phase: {
       opened: "結果未知",
       outcome_unknown: "結果未知",
@@ -729,6 +773,13 @@ const zhHant: PortfolioCopy = {
       finalized: "",
       failed: "交易已被處理但失敗，因此兌換沒有發生。",
       dropped: "交易未被處理就已過期，因此兌換沒有發生。",
+    },
+    salePhaseNote: {
+      opened: "已在錢包中請求核准，但 Benten 沒有它的簽章。再次賣出前，請先查看錢包的活動紀錄。",
+      outcome_unknown: "錢包回報了錯誤，Benten 無法判斷交易是否已傳送。再次賣出前，請先查看錢包的活動紀錄。",
+      sent: "確認之前請不要再次賣出。",
+      confirmed: "確認之前請不要再次賣出。",
+      not_finalized: "確認之前請不要再次賣出。",
     },
     wallet: (address) => `錢包 ${address}`,
     thisWallet: "已連接",

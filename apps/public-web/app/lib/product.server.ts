@@ -6,7 +6,7 @@
 import { companyForXStock } from "@benten/registry";
 import { formatBpsAsPercent } from "@benten/purchase/amount";
 import { PURCHASE_CONFIG } from "@benten/purchase/config";
-import { NVDAX_USDC_POOL } from "@benten/purchase/route";
+import { productRouteForMint } from "@benten/purchase/routes-table";
 import type { StockProductView } from "../features/product/product-view";
 import type { PublicWebLocale } from "../i18n/locales";
 import { isPublishedCompany } from "./company.server.js";
@@ -19,13 +19,15 @@ export function createStockProductView(ticker: string, locale: PublicWebLocale):
   const view = createDossierView(ticker);
   const found = companyForXStock(view.identity.ticker);
   const company = found && isPublishedCompany(found.slug) ? { slug: found.slug, displayName: found.display_name } : null;
-  const route = view.purchase === "fixed_route"
-    ? { routeLine: createPurchaseFrame(locale).routeLine, pool: NVDAX_USDC_POOL.toBase58(), slippage: `${formatBpsAsPercent(PURCHASE_CONFIG.slippageBps)}%` }
+  // The product's own pinned pool from the routes table, matched by exact mint.
+  const pinned = view.purchase === "fixed_route" ? productRouteForMint(view.identity.mint) : null;
+  const route = pinned
+    ? { routeLine: createPurchaseFrame(locale, pinned.ticker).routeLine, pool: pinned.pool.toBase58(), slippage: `${formatBpsAsPercent(PURCHASE_CONFIG.slippageBps)}%` }
     : null;
   return { identity: view.identity, purchase: view.purchase, route, company };
 }
 
-export type ProductSubpage = "evidence" | "buy";
+export type ProductSubpage = "evidence" | "buy" | "sell";
 
 export type ProductSubpageDocument = StaticFoundationDocument & { readonly subpage: ProductSubpage };
 

@@ -42,8 +42,8 @@ export type SuggestionLabel = {
 };
 
 export type ExploreView = {
-  /** The one buyable product, named from its registry record; null when no product has a route. */
-  readonly buyable: { readonly symbol: string; readonly name: string } | null;
+  /** The buyable products, named from their registry records, in registry order; empty when no product has a route. */
+  readonly buyable: readonly { readonly symbol: string; readonly name: string }[];
   readonly private: { readonly count: number; readonly rows: readonly CompanyRow[] };
   /** `rows` is the first few, A to Z; `count` is all of them. */
   readonly usListed: { readonly count: number; readonly rows: readonly CompanyRow[] };

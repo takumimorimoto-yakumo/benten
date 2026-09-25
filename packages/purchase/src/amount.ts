@@ -10,7 +10,8 @@
 import { PURCHASE_CONFIG } from "./config";
 import { PAY_TOKEN_UNITS, USDC_DECIMALS, type PayTokenId } from "./token-units";
 
-export type AmountError = "empty" | "format" | "precision" | "zero" | "overLimit" | "overBalance";
+/** `notReady`: a sale amount cannot be checked yet (the balance, the display multiplier or the limit is not read). */
+export type AmountError = "empty" | "format" | "precision" | "zero" | "overLimit" | "overBalance" | "notReady";
 
 export type AmountParse = { ok: true; raw: bigint } | { ok: false; error: AmountError };
 
@@ -62,6 +63,27 @@ export function parseTokenInput(text: string, decimals: number, balanceRaw?: big
 export function parsePayTokenInput(text: string, payToken: PayTokenId, balanceRaw?: bigint | null): AmountParse {
   const maxRaw = payToken === "USDC" ? PURCHASE_CONFIG.maxUsdcInRaw : null;
   return parseTokenInput(text, PAY_TOKEN_UNITS[payToken].decimals, balanceRaw, maxRaw);
+}
+
+/**
+ * Parse a Token-2022 Scaled UI display amount (what the wallet shows, at most
+ * `decimals` fraction digits) into raw units of the mint:
+ * `raw = floor(display × 10^decimals ÷ multiplier)`, integer arithmetic only.
+ * Truncating keeps the raw amount at or below what was typed, so
+ * `formatScaledUnits(raw)` never exceeds the typed amount. `maxRaw` is
+ * checked before `balanceRaw` (the limit wins when both apply). A multiplier
+ * that is not a positive finite decimal gives `notReady`.
+ */
+export function parseScaledInput(text: string, decimals: number, multiplier: string, balanceRaw: bigint | null = null, maxRaw: bigint | null = null): AmountParse {
+  const display = parseTokenInput(text, decimals);
+  if (!display.ok) return display;
+  const parsed = parseDecimal(multiplier);
+  if (!parsed || parsed.negative || parsed.digits === 0n) return { ok: false, error: "notReady" };
+  const raw = (display.raw * pow10(parsed.scale)) / parsed.digits;
+  if (raw === 0n) return { ok: false, error: "zero" };
+  if (maxRaw !== null && raw > maxRaw) return { ok: false, error: "overLimit" };
+  if (balanceRaw !== null && raw > balanceRaw) return { ok: false, error: "overBalance" };
+  return { ok: true, raw };
 }
 
 /**

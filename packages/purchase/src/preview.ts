@@ -14,7 +14,8 @@ import { buildNvdaxUsdcExactInSwap, RoutePoolMismatchError } from "./build-swap"
 import { buildTwoLegExactInSwap, QuoteOverLimitError, TwoLegRouteMismatchError } from "./build-two-leg";
 import { PURCHASE_CONFIG } from "./config";
 import { previewExpiry, type PreviewFailure, type PreviewTerms } from "./purchase-machine";
-import { NVDAX_DECIMALS, PAY_TOKENS, USDC_DECIMALS, type PayTokenId } from "./route";
+import { PAY_TOKENS, USDC_DECIMALS, type PayTokenId } from "./route";
+import { DEFAULT_PRODUCT, productRoute, type ProductTicker } from "./routes-table";
 import { createRelayConnection, multiplierReading, readPayMint, readRouteMints, relayFailureOf, type RelayConnection } from "./rpc";
 import { classifySimulationError } from "./simulation";
 import { auditShapeOf, auditSwapTransaction, auditTwoLegTransaction, twoLegAmountFailure } from "./tx-allowlist";
@@ -33,13 +34,19 @@ function relayOutcome(error: unknown, relay: RelayConnection, createsNvdaxAccoun
   return { ok: false, failure: "simulationFailed", details: error instanceof Error ? error.message : null, createsNvdaxAccount };
 }
 
-export async function preparePreview(walletAddress: string, inputRaw: bigint, now: () => number = Date.now, payToken: PayTokenId = "USDC"): Promise<PreviewOutcome> {
-  if (payToken !== "USDC") return prepareTwoLegPreview(walletAddress, payToken, inputRaw, now);
+/**
+ * `product` is a routes-table key (default NVDA): the pool, mint, decimals
+ * and token program all come from the table, and the audit re-derives every
+ * account from the same entry.
+ */
+export async function preparePreview(walletAddress: string, inputRaw: bigint, now: () => number = Date.now, payToken: PayTokenId = "USDC", product: ProductTicker = DEFAULT_PRODUCT): Promise<PreviewOutcome> {
+  const route = productRoute(product);
+  if (payToken !== "USDC") return prepareTwoLegPreview(walletAddress, payToken, inputRaw, now, route.ticker);
   const relay = createRelayConnection();
   let createsNvdaxAccount = false;
   try {
-    const mints = await readRouteMints(relay);
-    if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== NVDAX_DECIMALS) {
+    const mints = await readRouteMints(relay, route.ticker);
+    if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== route.decimals) {
       return { ok: false, failure: "routeCheck", details: "route mint decimals or token program differ from the verified route", createsNvdaxAccount };
     }
     const nvdaxMultiplier = multiplierReading(mints.nvdax, now());
@@ -47,6 +54,7 @@ export async function preparePreview(walletAddress: string, inputRaw: bigint, no
     const built = await buildNvdaxUsdcExactInSwap({
       connection: relay.connection,
       userPublicKey: new PublicKey(walletAddress),
+      product: route.ticker,
       usdcInAmountRaw: inputRaw,
       slippageBps: PURCHASE_CONFIG.slippageBps,
     });
@@ -56,6 +64,7 @@ export async function preparePreview(walletAddress: string, inputRaw: bigint, no
     // Audit the exact bytes the wallet would receive, not the builder's object.
     const audit = auditSwapTransaction(auditShapeOf(wireTransaction), {
       user: walletAddress,
+      product: route.ticker,
       inputRaw,
       minimumOutputRaw,
       binArrayIndexes: built.binArrayIndexes,
@@ -82,6 +91,7 @@ export async function preparePreview(walletAddress: string, inputRaw: bigint, no
       ok: true,
       preview: {
         walletAddress,
+        product: route.ticker,
         payToken: "USDC",
         firstLeg: null,
         inputRaw,
@@ -106,17 +116,18 @@ export async function preparePreview(walletAddress: string, inputRaw: bigint, no
 }
 
 /**
- * Two-leg preview (pay with SOL or SKR): read the route mints and the pay
+ * Two-leg preview (pay with SOL or SKR): read the product route mints and the pay
  * mint, build the unsigned two-leg transaction (which refuses a first-leg
  * quote above the USDC limit), audit the exact wire bytes, and simulate.
  */
-async function prepareTwoLegPreview(walletAddress: string, payToken: Exclude<PayTokenId, "USDC">, inputRaw: bigint, now: () => number): Promise<PreviewOutcome> {
+async function prepareTwoLegPreview(walletAddress: string, payToken: Exclude<PayTokenId, "USDC">, inputRaw: bigint, now: () => number, product: ProductTicker): Promise<PreviewOutcome> {
   const relay = createRelayConnection();
   let createsNvdaxAccount = false;
   try {
     const route = PAY_TOKENS[payToken];
-    const [mints, payMint] = await Promise.all([readRouteMints(relay), readPayMint(relay, payToken)]);
-    if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== NVDAX_DECIMALS || !payMint || payMint.decimals !== route.decimals) {
+    const productEntry = productRoute(product);
+    const [mints, payMint] = await Promise.all([readRouteMints(relay, product), readPayMint(relay, payToken)]);
+    if (!mints || mints.usdc.decimals !== USDC_DECIMALS || mints.nvdax.decimals !== productEntry.decimals || !payMint || payMint.decimals !== route.decimals) {
       return { ok: false, failure: "routeCheck", details: "route mint decimals or token program differ from the verified route", createsNvdaxAccount };
     }
     const nvdaxMultiplier = multiplierReading(mints.nvdax, now());
@@ -124,6 +135,7 @@ async function prepareTwoLegPreview(walletAddress: string, payToken: Exclude<Pay
     const built = await buildTwoLegExactInSwap({
       connection: relay.connection,
       userPublicKey: new PublicKey(walletAddress),
+      product,
       payToken,
       inAmountRaw: inputRaw,
       slippageBps: PURCHASE_CONFIG.slippageBps,
@@ -140,6 +152,7 @@ async function prepareTwoLegPreview(walletAddress: string, payToken: Exclude<Pay
 
     const audit = auditTwoLegTransaction(auditShapeOf(wireTransaction), {
       user: walletAddress,
+      product,
       payToken,
       inputRaw,
       usdcOutRaw,
@@ -170,6 +183,7 @@ async function prepareTwoLegPreview(walletAddress: string, payToken: Exclude<Pay
       ok: true,
       preview: {
         walletAddress,
+        product,
         payToken,
         firstLeg: {
           pool: built.firstLeg.pool,
