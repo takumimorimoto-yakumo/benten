@@ -69,7 +69,7 @@ const en: CompanyCopy = {
   explore: {
     title: "Explore", description: "See which companies you can hold on Solana, in your own wallet.",
     heading: "See which companies you can hold on Solana, in your own wallet.",
-    capability: (symbol, name) => `You can buy one token inside Benten: ${symbol} (${name}), with USDC. Everything else is shown so you can check it.`,
+    capability: (symbol, name) => `You can buy one token inside Benten: ${symbol} (${name}). Everything else is shown so you can check it.`,
     noBuyable: "Everything here is shown so you can check it.",
     search: {
       label: "Search a company or ticker", placeholder: "NVIDIA, OpenAI, TSLA", listLabel: "Suggestions",
@@ -103,7 +103,7 @@ const en: CompanyCopy = {
       rights: { unknownBoth: "Ownership and voting rights are unknown.", noEquityUnknownVoting: "It is not a share. Voting rights are unknown.", unknownEquityNoVoting: "Ownership is unknown. It gives no voting rights.", neither: "It is not a share and gives no voting rights." },
       notVerified: "Benten has not verified this.",
     },
-    capability: { buy: "Buy in Benten with USDC.", compare: "Compare only. Benten cannot build a swap for this token." },
+    capability: { buy: "Buy in Benten.", compare: "Compare only. Benten cannot build a swap for this token." },
     cta: (symbol) => `Buy ${symbol}`,
     facts: { heading: "From SEC filings", notVerified: (name) => `SEC facts for ${name} are not yet verified by Benten.`, record: (symbol) => `See the ${symbol} token record` },
     sources: { heading: "Primary sources", private: (name) => `Benten has no SEC filing coverage for ${name}, a private company.` },
@@ -131,7 +131,7 @@ const ja: CompanyCopy = {
   explore: {
     title: "探す", description: "Solanaで、自分のウォレットに保有できる企業を探します。",
     heading: "Solanaで、自分のウォレットに保有できる企業を探す。",
-    capability: (symbol, name) => `Benten内で購入できるのは1つのトークンだけです：${symbol}（${name}）をUSDCで。そのほかは確認のために表示しています。`,
+    capability: (symbol, name) => `Benten内で購入できるのは1つのトークンだけです：${symbol}（${name}）。そのほかは確認のために表示しています。`,
     noBuyable: "ここに表示している内容は、確認のためのものです。",
     search: {
       label: "企業名またはティッカーで検索", placeholder: "NVIDIA、OpenAI、TSLA", listLabel: "候補",
@@ -165,7 +165,7 @@ const ja: CompanyCopy = {
       rights: { unknownBoth: "所有権と議決権があるかは不明です。", noEquityUnknownVoting: "株式ではありません。議決権は不明です。", unknownEquityNoVoting: "所有権は不明です。議決権はありません。", neither: "株式ではなく、議決権もありません。" },
       notVerified: "Bentenはこの内容を確認していません。",
     },
-    capability: { buy: "BentenでUSDCを使って購入できます。", compare: "比較のみ。Bentenはこのトークンのスワップを作成できません。" },
+    capability: { buy: "Bentenで購入できます。", compare: "比較のみ。Bentenはこのトークンのスワップを作成できません。" },
     cta: (symbol) => `${symbol}を購入`,
     facts: { heading: "SECの提出書類から", notVerified: (name) => `${name}のSECの財務データは、Bentenでまだ確認していません。`, record: (symbol) => `${symbol}のトークン情報を見る` },
     sources: { heading: "一次情報", private: (name) => `${name}は非上場企業のため、BentenにはSECの提出書類がありません。` },
@@ -193,7 +193,7 @@ const ko: CompanyCopy = {
   explore: {
     title: "탐색", description: "Solana에서 내 지갑으로 보유할 수 있는 기업을 찾아보세요.",
     heading: "Solana에서 내 지갑으로 보유할 수 있는 기업을 찾아보세요.",
-    capability: (symbol, name) => `Benten 안에서 구매할 수 있는 토큰은 ${symbol}(${name}) 하나이며, USDC로 구매합니다. 나머지는 확인할 수 있도록 보여 줍니다.`,
+    capability: (symbol, name) => `Benten 안에서 구매할 수 있는 토큰은 ${symbol}(${name}) 하나입니다. 나머지는 확인할 수 있도록 보여 줍니다.`,
     noBuyable: "여기에 보이는 내용은 확인할 수 있도록 보여 주는 것입니다.",
     search: {
       label: "기업명 또는 티커 검색", placeholder: "NVIDIA, OpenAI, TSLA", listLabel: "후보",
@@ -227,7 +227,7 @@ const ko: CompanyCopy = {
       rights: { unknownBoth: "소유권과 의결권이 있는지는 알 수 없습니다.", noEquityUnknownVoting: "주식이 아닙니다. 의결권은 알 수 없습니다.", unknownEquityNoVoting: "소유권은 알 수 없습니다. 의결권은 없습니다.", neither: "주식이 아니며 의결권도 없습니다." },
       notVerified: "Benten은 이 내용을 확인하지 않았습니다.",
     },
-    capability: { buy: "Benten에서 USDC로 구매할 수 있습니다.", compare: "비교만 가능합니다. Benten은 이 토큰의 스왑을 만들 수 없습니다." },
+    capability: { buy: "Benten에서 구매할 수 있습니다.", compare: "비교만 가능합니다. Benten은 이 토큰의 스왑을 만들 수 없습니다." },
     cta: (symbol) => `${symbol} 구매`,
     facts: { heading: "SEC 제출 공시에서", notVerified: (name) => `Benten은 아직 ${name}의 SEC 재무 데이터를 확인하지 않았습니다.`, record: (symbol) => `${symbol} 토큰 기록 보기` },
     sources: { heading: "1차 출처", private: (name) => `${name}은(는) 비상장 기업이므로 Benten에 SEC 제출 공시가 없습니다.` },
@@ -255,7 +255,7 @@ const zhHans: CompanyCopy = {
   explore: {
     title: "探索", description: "看看哪些公司可以在 Solana 上用你自己的钱包持有。",
     heading: "看看哪些公司可以在 Solana 上用你自己的钱包持有。",
-    capability: (symbol, name) => `在 Benten 内只能购买一种代币：用 USDC 购买 ${symbol}（${name}）。其余内容仅供你核对。`,
+    capability: (symbol, name) => `在 Benten 内只能购买一种代币：${symbol}（${name}）。其余内容仅供你核对。`,
     noBuyable: "这里显示的内容仅供你核对。",
     search: {
       label: "搜索公司或代码", placeholder: "NVIDIA、OpenAI、TSLA", listLabel: "候选",
@@ -289,7 +289,7 @@ const zhHans: CompanyCopy = {
       rights: { unknownBoth: "是否具有所有权和投票权不明。", noEquityUnknownVoting: "它不是股票。投票权不明。", unknownEquityNoVoting: "所有权不明。没有投票权。", neither: "它不是股票，也没有投票权。" },
       notVerified: "Benten 未核实此内容。",
     },
-    capability: { buy: "可在 Benten 用 USDC 购买。", compare: "仅供比较。Benten 无法为此代币构建兑换。" },
+    capability: { buy: "可在 Benten 购买。", compare: "仅供比较。Benten 无法为此代币构建兑换。" },
     cta: (symbol) => `购买 ${symbol}`,
     facts: { heading: "来自 SEC 披露文件", notVerified: (name) => `Benten 尚未核实 ${name} 的 SEC 财务数据。`, record: (symbol) => `查看 ${symbol} 代币记录` },
     sources: { heading: "原始来源", private: (name) => `${name} 是非上市公司，Benten 没有其 SEC 披露文件。` },
@@ -317,7 +317,7 @@ const zhHant: CompanyCopy = {
   explore: {
     title: "探索", description: "看看哪些公司可以在 Solana 上用你自己的錢包持有。",
     heading: "看看哪些公司可以在 Solana 上用你自己的錢包持有。",
-    capability: (symbol, name) => `在 Benten 內只能購買一種代幣：以 USDC 購買 ${symbol}（${name}）。其餘內容僅供你核對。`,
+    capability: (symbol, name) => `在 Benten 內只能購買一種代幣：${symbol}（${name}）。其餘內容僅供你核對。`,
     noBuyable: "這裡顯示的內容僅供你核對。",
     search: {
       label: "搜尋公司或代碼", placeholder: "NVIDIA、OpenAI、TSLA", listLabel: "候選",
@@ -351,7 +351,7 @@ const zhHant: CompanyCopy = {
       rights: { unknownBoth: "是否具有所有權與投票權不明。", noEquityUnknownVoting: "它不是股票。投票權不明。", unknownEquityNoVoting: "所有權不明。沒有投票權。", neither: "它不是股票，也沒有投票權。" },
       notVerified: "Benten 未核實此內容。",
     },
-    capability: { buy: "可在 Benten 以 USDC 購買。", compare: "僅供比較。Benten 無法為此代幣建立兌換。" },
+    capability: { buy: "可在 Benten 購買。", compare: "僅供比較。Benten 無法為此代幣建立兌換。" },
     cta: (symbol) => `購買 ${symbol}`,
     facts: { heading: "來自 SEC 揭露文件", notVerified: (name) => `Benten 尚未核實 ${name} 的 SEC 財務資料。`, record: (symbol) => `查看 ${symbol} 代幣紀錄` },
     sources: { heading: "原始來源", private: (name) => `${name} 是非上市公司，Benten 沒有其 SEC 揭露文件。` },

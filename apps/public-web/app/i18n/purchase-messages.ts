@@ -32,10 +32,10 @@ export type PurchaseCopy = {
 };
 
 const purchaseEn: PurchaseCopy = {
-  heading: "Buy NVDAx with USDC", jumpLink: "Buy NVDAx with USDC",
+  heading: "Buy NVDAx", jumpLink: "Buy NVDAx",
   routeLine: (pool) => `One fixed route: Meteora DLMM pool ${pool}. You approve and send in your own wallet. Benten never signs or holds funds.`, poolLabel: "Pool address", noScript: "Buying requires JavaScript and a wallet.",
   copyValue: { copy: "Copy address", copied: "Copied", unavailable: "Copy unavailable" }, opensNewTab: "(opens in a new tab)",
-  unsupported: { heading: (symbol) => `Purchase not available for ${symbol}`, body: "Benten supports buying only NVDAx with USDC, through one fixed pool. Benten offers no purchase for this token." },
+  unsupported: { heading: (symbol) => `Purchase not available for ${symbol}`, body: "Benten supports buying only NVDAx, through one fixed pool. Benten offers no purchase for this token." },
   notice: { heading: "Before you buy", usPersons: "The issuer does not offer or sell NVDAx to US persons, and transfers may only be made to non-US persons.", noEligibilityCheck: "Benten does not check whether you are eligible.", noAvailabilityGuarantee: "Availability from any country is not guaranteed.", notAdvice: "This is not investment advice." },
   wallet: { detecting: "Looking for a Solana wallet...", notDetectedTitle: "No Solana wallet found", notDetectedBody: "This browser has no Solana wallet that supports Wallet Standard. Install or unlock one, then reload this page.", listLabel: "Wallets found in this browser", connect: "Connect wallet", connectNamed: (name) => `Connect ${name}`, connecting: "Waiting for your wallet...", connected: "Wallet connected", address: (address) => `Address ${address}`, disconnect: "Disconnect", unsupported: (name) => `${name} cannot send Solana mainnet transactions from this page. Choose another wallet.`, connectRejected: "Connection was cancelled in your wallet. Nothing changed.", connectFailed: "Your wallet did not connect. Nothing changed. Try again or choose another wallet." },
   balance: { usdc: (amount) => `USDC balance ${amount}`, loading: "Reading your USDC balance...", unavailable: "Your USDC balance could not be read." },
@@ -70,10 +70,10 @@ const purchaseEn: PurchaseCopy = {
 };
 
 const purchaseJa: PurchaseCopy = {
-  heading: "USDCでNVDAxを購入", jumpLink: "USDCでNVDAxを購入",
+  heading: "NVDAxを購入", jumpLink: "NVDAxを購入",
   routeLine: (pool) => `固定ルートは1つです: Meteora DLMM プール ${pool}。承認と送信はご自身のウォレットで行います。Bentenは署名せず、資金を預かりません。`, poolLabel: "プールアドレス", noScript: "購入にはJavaScriptとウォレットが必要です。",
   copyValue: { copy: "アドレスをコピー", copied: "コピーしました", unavailable: "コピーできません" }, opensNewTab: "（新しいタブで開きます）",
-  unsupported: { heading: (symbol) => `${symbol} は購入できません`, body: "Bentenが対応している購入は、1つの固定プールを通じてUSDCでNVDAxを購入することだけです。このトークンの購入は提供していません。" },
+  unsupported: { heading: (symbol) => `${symbol} は購入できません`, body: "Bentenが対応している購入は、1つの固定プールを通じてNVDAxを購入することだけです。このトークンの購入は提供していません。" },
   notice: { heading: "購入の前に", usPersons: "発行体は米国人にNVDAxを提供・販売しません。引き渡しは米国人でない人にだけ行います。", noEligibilityCheck: "Bentenはあなたに購入資格があるかを確認しません。", noAvailabilityGuarantee: "どの国からの利用も保証されていません。", notAdvice: "これは投資助言ではありません。" },
   wallet: { detecting: "Solanaウォレットを探しています…", notDetectedTitle: "Solanaウォレットが見つかりません", notDetectedBody: "このブラウザにWallet Standard対応のSolanaウォレットがありません。ウォレットをインストールまたはロック解除してから、このページを再読み込みしてください。", listLabel: "このブラウザで見つかったウォレット", connect: "ウォレットを接続", connectNamed: (name) => `${name}を接続`, connecting: "ウォレットの応答を待っています…", connected: "ウォレット接続済み", address: (address) => `アドレス ${address}`, disconnect: "接続を解除", unsupported: (name) => `${name}はこのページからSolanaメインネットのトランザクションを送信できません。別のウォレットを選んでください。`, connectRejected: "ウォレットで接続がキャンセルされました。何も変更されていません。", connectFailed: "ウォレットが接続されませんでした。何も変更されていません。もう一度試すか、別のウォレットを選んでください。" },
   balance: { usdc: (amount) => `USDC残高 ${amount}`, loading: "USDC残高を読み取っています…", unavailable: "USDC残高を読み取れませんでした。" },
@@ -108,10 +108,10 @@ const purchaseJa: PurchaseCopy = {
 };
 
 const purchaseKo: PurchaseCopy = {
-  heading: "USDC로 NVDAx 구매", jumpLink: "USDC로 NVDAx 구매",
+  heading: "NVDAx 구매", jumpLink: "NVDAx 구매",
   routeLine: (pool) => `고정된 경로 하나: Meteora DLMM 풀 ${pool}. 승인과 전송은 본인의 지갑에서 합니다. Benten은 서명하지 않으며 자금을 보관하지 않습니다.`, poolLabel: "풀 주소", noScript: "구매하려면 JavaScript와 지갑이 필요합니다.",
   copyValue: { copy: "주소 복사", copied: "복사했습니다", unavailable: "복사할 수 없습니다" }, opensNewTab: "(새 탭에서 열림)",
-  unsupported: { heading: (symbol) => `${symbol}은(는) 구매할 수 없습니다`, body: "Benten은 하나의 고정된 풀을 통해 USDC로 NVDAx를 구매하는 것만 지원합니다. 이 토큰의 구매는 제공하지 않습니다." },
+  unsupported: { heading: (symbol) => `${symbol}은(는) 구매할 수 없습니다`, body: "Benten은 하나의 고정된 풀을 통해 NVDAx를 구매하는 것만 지원합니다. 이 토큰의 구매는 제공하지 않습니다." },
   notice: { heading: "구매 전에", usPersons: "발행사는 미국인에게 NVDAx를 제공하거나 판매하지 않으며, 인도는 미국인이 아닌 사람에게만 이루어집니다.", noEligibilityCheck: "Benten은 귀하의 구매 자격을 확인하지 않습니다.", noAvailabilityGuarantee: "어느 국가에서든 이용 가능성은 보장되지 않습니다.", notAdvice: "이것은 투자 자문이 아닙니다." },
   wallet: { detecting: "Solana 지갑을 찾는 중…", notDetectedTitle: "Solana 지갑을 찾을 수 없습니다", notDetectedBody: "이 브라우저에 Wallet Standard를 지원하는 Solana 지갑이 없습니다. 지갑을 설치하거나 잠금을 해제한 뒤 이 페이지를 새로고침하세요.", listLabel: "이 브라우저에서 찾은 지갑", connect: "지갑 연결", connectNamed: (name) => `${name} 연결`, connecting: "지갑의 응답을 기다리는 중…", connected: "지갑 연결됨", address: (address) => `주소 ${address}`, disconnect: "연결 해제", unsupported: (name) => `${name}은(는) 이 페이지에서 Solana 메인넷 트랜잭션을 보낼 수 없습니다. 다른 지갑을 선택하세요.`, connectRejected: "지갑에서 연결이 취소되었습니다. 아무것도 바뀌지 않았습니다.", connectFailed: "지갑이 연결되지 않았습니다. 아무것도 바뀌지 않았습니다. 다시 시도하거나 다른 지갑을 선택하세요." },
   balance: { usdc: (amount) => `USDC 잔액 ${amount}`, loading: "USDC 잔액을 읽는 중…", unavailable: "USDC 잔액을 읽을 수 없습니다." },
@@ -146,10 +146,10 @@ const purchaseKo: PurchaseCopy = {
 };
 
 const purchaseZhHans: PurchaseCopy = {
-  heading: "用 USDC 购买 NVDAx", jumpLink: "用 USDC 购买 NVDAx",
+  heading: "购买 NVDAx", jumpLink: "购买 NVDAx",
   routeLine: (pool) => `唯一的固定路径：Meteora DLMM 池 ${pool}。你在自己的钱包中批准并发送。Benten 从不签名，也不持有资金。`, poolLabel: "池地址", noScript: "购买需要 JavaScript 和钱包。",
   copyValue: { copy: "复制地址", copied: "已复制", unavailable: "无法复制" }, opensNewTab: "（在新标签页中打开）",
-  unsupported: { heading: (symbol) => `${symbol} 不提供购买`, body: "Benten 仅支持通过一个固定池用 USDC 购买 NVDAx，不提供此代币的购买。" },
+  unsupported: { heading: (symbol) => `${symbol} 不提供购买`, body: "Benten 仅支持通过一个固定池购买 NVDAx，不提供此代币的购买。" },
   notice: { heading: "购买之前", usPersons: "发行人不向美国人士发售或出售 NVDAx，只能交付给非美国人士。", noEligibilityCheck: "Benten 不会核实你是否具备购买资格。", noAvailabilityGuarantee: "不保证在任何国家或地区均可使用。", notAdvice: "这不是投资建议。" },
   wallet: { detecting: "正在查找 Solana 钱包…", notDetectedTitle: "未找到 Solana 钱包", notDetectedBody: "此浏览器中没有支持 Wallet Standard 的 Solana 钱包。请安装或解锁钱包，然后重新加载此页面。", listLabel: "在此浏览器中找到的钱包", connect: "连接钱包", connectNamed: (name) => `连接 ${name}`, connecting: "正在等待钱包响应…", connected: "钱包已连接", address: (address) => `地址 ${address}`, disconnect: "断开连接", unsupported: (name) => `${name} 无法从此页面发送 Solana 主网交易。请选择其他钱包。`, connectRejected: "已在钱包中取消连接。未做任何更改。", connectFailed: "钱包未能连接。未做任何更改。请重试或选择其他钱包。" },
   balance: { usdc: (amount) => `USDC 余额 ${amount}`, loading: "正在读取 USDC 余额…", unavailable: "无法读取 USDC 余额。" },
@@ -184,10 +184,10 @@ const purchaseZhHans: PurchaseCopy = {
 };
 
 const purchaseZhHant: PurchaseCopy = {
-  heading: "用 USDC 購買 NVDAx", jumpLink: "用 USDC 購買 NVDAx",
+  heading: "購買 NVDAx", jumpLink: "購買 NVDAx",
   routeLine: (pool) => `唯一的固定路徑：Meteora DLMM 池 ${pool}。你在自己的錢包中核准並傳送。Benten 從不簽署，也不持有資金。`, poolLabel: "池地址", noScript: "購買需要 JavaScript 與錢包。",
   copyValue: { copy: "複製位址", copied: "已複製", unavailable: "無法複製" }, opensNewTab: "（在新分頁中開啟）",
-  unsupported: { heading: (symbol) => `${symbol} 不提供購買`, body: "Benten 僅支援透過一個固定池以 USDC 購買 NVDAx，不提供此代幣的購買。" },
+  unsupported: { heading: (symbol) => `${symbol} 不提供購買`, body: "Benten 僅支援透過一個固定池購買 NVDAx，不提供此代幣的購買。" },
   notice: { heading: "購買之前", usPersons: "發行人不向美國人士發售或出售 NVDAx，只能交付給非美國人士。", noEligibilityCheck: "Benten 不會核實你是否具備購買資格。", noAvailabilityGuarantee: "不保證在任何國家或地區皆可使用。", notAdvice: "這不是投資建議。" },
   wallet: { detecting: "正在尋找 Solana 錢包…", notDetectedTitle: "找不到 Solana 錢包", notDetectedBody: "此瀏覽器中沒有支援 Wallet Standard 的 Solana 錢包。請安裝或解鎖錢包，然後重新載入此頁面。", listLabel: "在此瀏覽器中找到的錢包", connect: "連接錢包", connectNamed: (name) => `連接 ${name}`, connecting: "正在等待錢包回應…", connected: "錢包已連接", address: (address) => `地址 ${address}`, disconnect: "中斷連接", unsupported: (name) => `${name} 無法從此頁面傳送 Solana 主網交易。請選擇其他錢包。`, connectRejected: "已在錢包中取消連接。未做任何變更。", connectFailed: "錢包未能連接。未做任何變更。請重試或選擇其他錢包。" },
   balance: { usdc: (amount) => `USDC 餘額 ${amount}`, loading: "正在讀取 USDC 餘額…", unavailable: "無法讀取 USDC 餘額。" },

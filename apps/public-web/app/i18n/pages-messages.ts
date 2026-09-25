@@ -108,7 +108,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "For each company it lists the Solana tokens that reference it, each with its provider and a short statement of what the token gives you.",
           "It shows facts with their sources: SEC filings for US-listed companies, and the provider's own statements where there are no filings.",
           "It shows each token's exact identity, its mint address, so you can check it in your wallet.",
-          purchase("It lets you buy one token, NVIDIA (NVDAx), with USDC through one fixed route. You approve and send the purchase in your own wallet."),
+          purchase("It lets you buy one token, NVIDIA (NVDAx), through one fixed route. You approve and send the purchase in your own wallet."),
         ],
       },
       {
@@ -199,7 +199,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "xStocks in Benten",
-          body: [purchase("Benten lists the xStocks in its registry and lets you buy one of them, NVDAx, with USDC. Every other xStock is shown so you can check it.")],
+          body: [purchase("Benten lists the xStocks in its registry and lets you buy one of them, NVDAx. Every other xStock is shown so you can check it.")],
         },
       ],
     },
@@ -342,7 +342,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "Terms of use",
       lead: ["This page describes how Benten can be used as it works today. It is a plain summary, not a reviewed legal agreement, and it can change."],
       sections: [
-        { id: "service", heading: "What Benten provides", body: ["Benten is an information and tooling service. It shows public data about companies and Solana tokens, and it can prepare one kind of swap, USDC to NVDAx, for your own wallet to approve."] },
+        { id: "service", heading: "What Benten provides", body: ["Benten is an information and tooling service. It shows public data about companies and Solana tokens, and it can prepare a swap to NVDAx, paid with USDC, SOL or SKR, for your own wallet to approve."] },
         { id: "no-warranty", heading: "No warranty", body: ["Benten is provided as it is, without any warranty. Its data comes from public sources that Benten does not verify, audit or guarantee, and it can be incomplete, delayed, wrong or corrected later. Any part of the service can change, pause or stop at any time."] },
         { id: "not-advice", heading: negation("Not investment advice"), body: [negation("Nothing in Benten is investment advice, a recommendation, a valuation or an offer to buy or sell any asset.")] },
         {
@@ -391,7 +391,7 @@ const en = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "What passes through Benten's server",
           body: ["Two kinds of requests pass through Benten's server:"],
           items: [
-            purchase("Solana reads: your USDC balance, the swap preview, your holdings and the status of a purchase. The server forwards each read to a Solana RPC provider. These requests contain your wallet address, and a transaction's signature when one is checked."),
+            purchase("Solana reads: the balance of the token you pay with, the swap preview, your holdings and the status of a purchase. The server forwards each read to a Solana RPC provider. These requests contain your wallet address, and a transaction's signature when one is checked."),
             price("Reference prices: the page asks the server for the Pyth feeds it shows, and the server reads them from Solana. These requests contain no wallet information."),
           ],
           after: [
@@ -457,7 +457,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "企業ごとに、その企業を参照するSolanaのトークンを並べ、提供元と、そのトークンで何が得られるかの短い説明を示します。",
           "事実を出典とともに示します。米国上場企業はSECへの提出書類、提出書類がない場合は提供元自身の説明です。",
           "各トークンの正確な識別情報であるミントアドレスを示すので、ウォレットで確かめられます。",
-          purchase("1つのトークン、NVIDIA（NVDAx）だけを、1つの固定経路を通じてUSDCで購入できます。購入はご自身のウォレットで承認し、送信します。"),
+          purchase("1つのトークン、NVIDIA（NVDAx）だけを、1つの固定経路で購入できます。購入はご自身のウォレットで承認し、送信します。"),
         ],
       },
       {
@@ -548,7 +548,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "BentenでのxStocks",
-          body: [purchase("BentenはレジストリにあるxStocksを一覧にし、そのうちNVDAxだけをUSDCで購入できるようにしています。ほかのxStockは確認のために表示しています。")],
+          body: [purchase("BentenはレジストリにあるxStocksを一覧にし、そのうちNVDAxだけを購入できるようにしています。ほかのxStockは確認のために表示しています。")],
         },
       ],
     },
@@ -691,7 +691,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "利用条件",
       lead: ["このページは、現在の動作に即してBentenをどう利用できるかを説明するものです。法的な確認を経た契約文ではなく、平易な要約であり、変更されることがあります。"],
       sections: [
-        { id: "service", heading: "Bentenが提供するもの", body: ["Bentenは情報とツールを提供するサービスです。企業とSolanaのトークンについて公開データを示し、USDCからNVDAxへの1種類のスワップを、あなたのウォレットが承認するために用意できます。"] },
+        { id: "service", heading: "Bentenが提供するもの", body: ["Bentenは情報とツールを提供するサービスです。企業とSolanaのトークンについて公開データを示し、USDC、SOLまたはSKRで支払うNVDAxへのスワップを、あなたのウォレットが承認するために用意できます。"] },
         { id: "no-warranty", heading: "無保証", body: ["Bentenは現状のまま、いかなる保証もなく提供されます。データはBentenが検証、監査、保証しない公開情報に由来し、不完全、遅延、誤り、後日の訂正がありえます。サービスのどの部分も、いつでも変更、一時停止、終了されることがあります。"] },
         { id: "not-advice", heading: negation("投資助言ではありません"), body: [negation("Bentenのどの内容も、投資助言、推奨、評価、または資産の売買の申し込みではありません。")] },
         {
@@ -740,7 +740,7 @@ const ja = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "Bentenのサーバーを通るもの",
           body: ["次の2種類の要求がBentenのサーバーを通ります。"],
           items: [
-            purchase("Solanaの読み取り: USDC残高、スワッププレビュー、保有トークン、購入の状態。サーバーは各読み取りをSolanaのRPC提供者に中継します。これらの要求にはウォレットアドレスが含まれ、状態を確認するときはトランザクションの署名も含まれます。"),
+            purchase("Solanaの読み取り: 支払いに使うトークンの残高、スワッププレビュー、保有トークン、購入の状態。サーバーは各読み取りをSolanaのRPC提供者に中継します。これらの要求にはウォレットアドレスが含まれ、状態を確認するときはトランザクションの署名も含まれます。"),
             price("参考価格: ページが表示するPythのフィードをサーバーに要求し、サーバーがSolanaから読み取ります。これらの要求にウォレットの情報は含まれません。"),
           ],
           after: [
@@ -806,7 +806,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "기업마다 그 기업을 참조하는 Solana 토큰을 나열하고, 각 토큰의 제공사와 그 토큰으로 무엇을 얻는지에 대한 짧은 설명을 보여 줍니다.",
           "사실을 출처와 함께 보여 줍니다. 미국 상장 기업은 SEC 제출 서류이고, 제출 서류가 없으면 제공사 자신의 설명입니다.",
           "각 토큰의 정확한 식별 정보인 민트 주소를 보여 주므로 지갑에서 확인할 수 있습니다.",
-          purchase("하나의 토큰, NVIDIA(NVDAx)만 하나의 고정 경로를 통해 USDC로 구매할 수 있습니다. 구매는 본인의 지갑에서 승인하고 전송합니다."),
+          purchase("하나의 토큰, NVIDIA(NVDAx)만 하나의 고정 경로로 구매할 수 있습니다. 구매는 본인의 지갑에서 승인하고 전송합니다."),
         ],
       },
       {
@@ -897,7 +897,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten의 xStocks",
-          body: [purchase("Benten은 레지스트리에 있는 xStocks를 나열하고, 그중 NVDAx만 USDC로 구매할 수 있게 합니다. 다른 xStock은 확인할 수 있도록 보여 줍니다.")],
+          body: [purchase("Benten은 레지스트리에 있는 xStocks를 나열하고, 그중 NVDAx만 구매할 수 있게 합니다. 다른 xStock은 확인할 수 있도록 보여 줍니다.")],
         },
       ],
     },
@@ -1040,7 +1040,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "이용 조건",
       lead: ["이 페이지는 현재 작동 방식에 따라 Benten을 어떻게 이용할 수 있는지 설명합니다. 법적 검토를 거친 계약서가 아니라 알기 쉬운 요약이며, 바뀔 수 있습니다."],
       sections: [
-        { id: "service", heading: "Benten이 제공하는 것", body: ["Benten은 정보와 도구를 제공하는 서비스입니다. 기업과 Solana 토큰에 대한 공개 데이터를 보여 주고, USDC에서 NVDAx로의 한 가지 스왑을 본인의 지갑이 승인하도록 준비할 수 있습니다."] },
+        { id: "service", heading: "Benten이 제공하는 것", body: ["Benten은 정보와 도구를 제공하는 서비스입니다. 기업과 Solana 토큰에 대한 공개 데이터를 보여 주고, USDC, SOL 또는 SKR로 지불하는 NVDAx로의 스왑을 본인의 지갑이 승인하도록 준비할 수 있습니다."] },
         { id: "no-warranty", heading: "보증 없음", body: ["Benten은 있는 그대로, 어떠한 보증도 없이 제공됩니다. 데이터는 Benten이 검증, 감사, 보증하지 않는 공개 출처에서 나오며, 불완전하거나 늦거나 틀리거나 나중에 정정될 수 있습니다. 서비스의 어느 부분이든 언제든 바뀌거나 일시 중지되거나 종료될 수 있습니다."] },
         { id: "not-advice", heading: negation("투자 자문이 아닙니다"), body: [negation("Benten의 어떤 내용도 투자 자문, 추천, 가치평가, 또는 자산을 사고팔자는 제안이 아닙니다.")] },
         {
@@ -1089,7 +1089,7 @@ const ko = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "Benten 서버를 거치는 것",
           body: ["다음 두 종류의 요청이 Benten 서버를 거칩니다."],
           items: [
-            purchase("Solana 읽기: USDC 잔액, 스왑 미리보기, 보유 토큰, 구매 상태. 서버는 각 읽기를 Solana RPC 제공자에게 중계합니다. 이 요청에는 지갑 주소가 들어 있고, 상태를 확인할 때는 트랜잭션의 서명도 들어 있습니다."),
+            purchase("Solana 읽기: 결제에 사용하는 토큰의 잔액, 스왑 미리보기, 보유 토큰, 구매 상태. 서버는 각 읽기를 Solana RPC 제공자에게 중계합니다. 이 요청에는 지갑 주소가 들어 있고, 상태를 확인할 때는 트랜잭션의 서명도 들어 있습니다."),
             price("참고 가격: 페이지가 보여 주는 Pyth 피드를 서버에 요청하고, 서버가 Solana에서 읽습니다. 이 요청에는 지갑 정보가 들어 있지 않습니다."),
           ],
           after: [
@@ -1155,7 +1155,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "为每家公司列出引用它的 Solana 代币，并注明每种代币的提供方，以及一句话说明这种代币给你什么。",
           "展示附带来源的事实：美国上市公司来自 SEC 文件；没有文件时，来自提供方自己的说明。",
           "显示每种代币的准确身份，即它的铸币地址，便于你在钱包中核对。",
-          purchase("只允许你通过一条固定路径用 USDC 购买一种代币：NVIDIA（NVDAx）。购买由你在自己的钱包中批准并发送。"),
+          purchase("只允许你通过一条固定路径购买一种代币：NVIDIA（NVDAx）。购买由你在自己的钱包中批准并发送。"),
         ],
       },
       {
@@ -1246,7 +1246,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten 中的 xStocks",
-          body: [purchase("Benten 列出其登记册中的 xStocks，其中只有 NVDAx 可以用 USDC 购买。其他 xStock 仅供你查看。")],
+          body: [purchase("Benten 列出其登记册中的 xStocks，其中只有 NVDAx 可以购买。其他 xStock 仅供你查看。")],
         },
       ],
     },
@@ -1389,7 +1389,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "使用条件",
       lead: ["本页按照 Benten 当前的运作方式，说明可以如何使用它。它是一份简明的摘要，不是经过法律审阅的协议，并且可能会变更。"],
       sections: [
-        { id: "service", heading: "Benten 提供什么", body: ["Benten 是一项提供信息和工具的服务。它显示关于公司和 Solana 代币的公开数据，并可以准备一种兑换（USDC 兑换为 NVDAx），供你自己的钱包批准。"] },
+        { id: "service", heading: "Benten 提供什么", body: ["Benten 是一项提供信息和工具的服务。它显示关于公司和 Solana 代币的公开数据，并可以准备一种兑换（用 USDC、SOL 或 SKR 支付，兑换为 NVDAx），供你自己的钱包批准。"] },
         { id: "no-warranty", heading: "不作保证", body: ["Benten 按现状提供，不附带任何保证。其数据来自 Benten 不核实、不审计、不保证的公开来源，可能不完整、有延迟、有误或之后被更正。服务的任何部分都可能随时变更、暂停或终止。"] },
         { id: "not-advice", heading: negation("不是投资建议"), body: [negation("Benten 中的任何内容都不是投资建议、推荐、估值，也不是买入或卖出任何资产的要约。")] },
         {
@@ -1438,7 +1438,7 @@ const zhHans = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "经过 Benten 服务器的内容",
           body: ["有两类请求经过 Benten 的服务器："],
           items: [
-            purchase("Solana 读取：你的 USDC 余额、兑换预览、你的持仓以及购买的状态。服务器将每次读取转发给一个 Solana RPC 提供方。这些请求包含你的钱包地址；查看状态时，还包含交易的签名。"),
+            purchase("Solana 读取：你用于支付的代币余额、兑换预览、你的持仓以及购买的状态。服务器将每次读取转发给一个 Solana RPC 提供方。这些请求包含你的钱包地址；查看状态时，还包含交易的签名。"),
             price("参考价格：页面向服务器请求其显示的 Pyth 价格源，服务器从 Solana 读取。这些请求不包含任何钱包信息。"),
           ],
           after: [
@@ -1504,7 +1504,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
           "為每家公司列出參照它的 Solana 代幣，並註明每種代幣的提供方，以及一句話說明這種代幣給你什麼。",
           "展示附有來源的事實：美國上市公司來自 SEC 文件；沒有文件時，來自提供方自己的說明。",
           "顯示每種代幣的準確身分，也就是它的鑄幣地址，方便你在錢包中核對。",
-          purchase("只讓你透過一條固定路徑用 USDC 購買一種代幣：NVIDIA（NVDAx）。購買由你在自己的錢包中核准並傳送。"),
+          purchase("只讓你透過一條固定路徑購買一種代幣：NVIDIA（NVDAx）。購買由你在自己的錢包中核准並傳送。"),
         ],
       },
       {
@@ -1595,7 +1595,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
         {
           id: "in-benten",
           heading: "Benten 中的 xStocks",
-          body: [purchase("Benten 列出其登記冊中的 xStocks，其中只有 NVDAx 可以用 USDC 購買。其他 xStock 僅供你查看。")],
+          body: [purchase("Benten 列出其登記冊中的 xStocks，其中只有 NVDAx 可以購買。其他 xStock 僅供你查看。")],
         },
       ],
     },
@@ -1738,7 +1738,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
       heading: "使用條件",
       lead: ["本頁依照 Benten 目前的運作方式，說明可以如何使用它。它是一份簡明的摘要，不是經過法律審閱的協議，並且可能會變更。"],
       sections: [
-        { id: "service", heading: "Benten 提供什麼", body: ["Benten 是一項提供資訊和工具的服務。它顯示關於公司和 Solana 代幣的公開資料，並可以準備一種兌換（USDC 兌換為 NVDAx），供你自己的錢包核准。"] },
+        { id: "service", heading: "Benten 提供什麼", body: ["Benten 是一項提供資訊和工具的服務。它顯示關於公司和 Solana 代幣的公開資料，並可以準備一種兌換（用 USDC、SOL 或 SKR 支付，兌換為 NVDAx），供你自己的錢包核准。"] },
         { id: "no-warranty", heading: "不作保證", body: ["Benten 按現狀提供，不附帶任何保證。其資料來自 Benten 不核實、不稽核、不保證的公開來源，可能不完整、有延遲、有誤或之後被更正。服務的任何部分都可能隨時變更、暫停或終止。"] },
         { id: "not-advice", heading: negation("不是投資建議"), body: [negation("Benten 中的任何內容都不是投資建議、推薦、估值，也不是買入或賣出任何資產的要約。")] },
         {
@@ -1787,7 +1787,7 @@ const zhHant = (f: PageFacts, l: PageLabels): PagesCopy => ({
           heading: "經過 Benten 伺服器的內容",
           body: ["有兩類請求經過 Benten 的伺服器："],
           items: [
-            purchase("Solana 讀取：你的 USDC 餘額、兌換預覽、你持有的代幣以及購買的狀態。伺服器將每次讀取轉送給一個 Solana RPC 提供方。這些請求包含你的錢包地址；查看狀態時，還包含交易的簽章。"),
+            purchase("Solana 讀取：你用於支付的代幣餘額、兌換預覽、你持有的代幣以及購買的狀態。伺服器將每次讀取轉送給一個 Solana RPC 提供方。這些請求包含你的錢包地址；查看狀態時，還包含交易的簽章。"),
             price("參考價格：頁面向伺服器請求其顯示的 Pyth 價格來源，伺服器從 Solana 讀取。這些請求不包含任何錢包資訊。"),
           ],
           after: [
